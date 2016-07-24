@@ -18,7 +18,7 @@ namespace ViewWorld.Controllers
 
         public ActionResult About()
         {
-
+            
             return View();
         }
 
@@ -30,8 +30,8 @@ namespace ViewWorld.Controllers
         }
         public ActionResult TestMethods()
         {
-            var c = Tools.GenerateId_M1();
-            return Content(c);
+            Tools.WriteLog("试错", "不知道", "看看啥问题");
+            return Content("test");
         }
     }
 }

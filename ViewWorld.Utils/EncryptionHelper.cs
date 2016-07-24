@@ -66,7 +66,7 @@ namespace ViewWorld.Utils
             {
                 sBuilder.Append(data[i].ToString("x2"));
             }
-            md5Hasher.Dispose();
+            md5Hasher.Clear();
             return sBuilder.ToString();
         }
     }

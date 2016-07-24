@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using AspNet.Identity.RethinkDB;
 using RethinkDb.Driver;
 using RethinkDb.Driver.Ast;
@@ -11,7 +9,7 @@ namespace ViewWorld.App_Start
 {
     public class ApplicationIdentityContext : IdentityContext, IDisposable
     {
-        private const string DB_NAME = "ViewWorld";
+        private const string DB_NAME = Core.Config.db_name;
 
         public ApplicationIdentityContext(IConnection conn, Db db)
             : base(conn, db)
@@ -23,7 +21,7 @@ namespace ViewWorld.App_Start
             // Load connection data from Web.config
             //IConnectionFactory connectionFactory = ConfigurationAssembler.CreateConnectionFactory("dbcluster");
             // Get the connection to the database server(s)
-            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname("127.0.0.1").Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
+            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(Core.Config.host_name).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             // Get an object to use the database
             //IDatabaseQuery DB = Query.Db(DB_NAME);
             Db DB = RethinkDB.R.Db(DB_NAME);

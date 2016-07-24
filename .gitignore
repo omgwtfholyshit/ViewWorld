@@ -1,6 +1,7 @@
 packages/
 ViewWorld/bin/
 ViewWorld/obj/
+ViewWorld/logs/
 ViewWorld.Core/obj/
 ViewWorld.Core/bin/
 ViewWorld.Utils/obj/

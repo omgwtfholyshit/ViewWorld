@@ -42,14 +42,15 @@ namespace ViewWorld
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationIdentityContext>()));
-            // Konfigurieren der Überprüfungslogik für Benutzernamen.
+
+            // 配置用户名的验证逻辑
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
-            // Konfigurieren der Überprüfungslogik für Kennwörter.
+            // 配置密码的验证逻辑
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -59,21 +60,21 @@ namespace ViewWorld
                 RequireUppercase = true,
             };
 
-            // Standardeinstellungen für Benutzersperren konfigurieren
+            // 配置用户锁定默认值
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
 
-            // Registrieren von Anbietern für zweistufige Authentifizierung. Diese Anwendung verwendet telefonische und E-Mail-Nachrichten zum Empfangen eines Codes zum Überprüfen des Benutzers.
-            // Sie können Ihren eigenen Anbieter erstellen und hier einfügen.
-            manager.RegisterTwoFactorProvider("Telefoncode", new PhoneNumberTokenProvider<ApplicationUser>
+            // 注册双重身份验证提供程序。此应用程序使用手机和电子邮件作为接收用于验证用户的代码的一个步骤
+            // 你可以编写自己的提供程序并将其插入到此处。
+            manager.RegisterTwoFactorProvider("电话代码", new PhoneNumberTokenProvider<ApplicationUser>
             {
-                MessageFormat = "Ihr Sicherheitscode lautet {0}"
+                MessageFormat = "你的安全代码是 {0}"
             });
-            manager.RegisterTwoFactorProvider("E-Mail-Code", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("电子邮件代码", new EmailTokenProvider<ApplicationUser>
             {
-                Subject = "Sicherheitscode",
-                BodyFormat = "Ihr Sicherheitscode lautet {0}"
+                Subject = "安全代码",
+                BodyFormat = "你的安全代码是 {0}"
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();

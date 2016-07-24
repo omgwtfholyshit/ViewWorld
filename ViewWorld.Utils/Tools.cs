@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using ViewWorld.Core;
 namespace ViewWorld.Utils
 {
     public class Tools
@@ -152,5 +153,27 @@ namespace ViewWorld.Utils
             return (int)(randomResult % numSeeds);
         }
         #endregion
+
+        #region 日志
+        public static void WriteLog(string type, string className, string content)
+        {
+            if (!Directory.Exists(Config.logPath))//如果日志目录不存在就创建
+            {
+                Directory.CreateDirectory(Config.logPath);
+            }
+
+            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");//获取当前系统时间
+            string filename = Config.logPath + "/" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";//用日期对日志文件命名
+
+            //创建或打开日志文件，向日志文件末尾追加记录
+            using (StreamWriter mySw = File.AppendText(filename))
+            {
+                string write_content = time + " " + type + " " + className + ": " + content;
+                mySw.WriteLine(write_content);
+            }
+           
+        }
+        #endregion
+
     }
 }
