@@ -7,7 +7,13 @@ namespace Website.Core
     {
         public static string host_name { get; private set; }
         public static int db_port { get; private set; }
-
+        public static string db_name
+        {
+            get
+            {
+                return "ViewWorld";
+            }
+        }
         static Config()
         {
             host_name = ConfigurationManager.AppSettings["dbHostName"];

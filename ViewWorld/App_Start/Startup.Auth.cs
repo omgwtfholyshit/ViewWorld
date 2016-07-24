@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using ViewWorld.Models;
+using ViewWorld.App_Start;
 
 namespace ViewWorld
 {
@@ -15,7 +16,7 @@ namespace ViewWorld
         public void ConfigureAuth(IAppBuilder app)
         {
             // 配置数据库上下文、用户管理器和登录管理器，以便为每个请求使用单个实例
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(ApplicationIdentityContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

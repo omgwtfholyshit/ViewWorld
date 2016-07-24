@@ -1,5 +1,7 @@
 packages/
 ViewWorld/bin/
 ViewWorld/obj/
-ViewWorld.Core/bin/
 ViewWorld.Core/obj/
+ViewWorld.Core/bin/
+ViewWorld.Utils/obj/
+ViewWorld.Utils/bin/

@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using System.Security.Claims;
+using AspNet.Identity.RethinkDB;
 using ViewWorld.Models;
+using ViewWorld.App_Start;
 
 namespace ViewWorld
 {
@@ -40,17 +39,17 @@ namespace ViewWorld
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
-            // 配置用户名的验证逻辑
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationIdentityContext>()));
+            // Konfigurieren der Überprüfungslogik für Benutzernamen.
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
-            // 配置密码的验证逻辑
+            // Konfigurieren der Überprüfungslogik für Kennwörter.
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -60,28 +59,28 @@ namespace ViewWorld
                 RequireUppercase = true,
             };
 
-            // 配置用户锁定默认值
+            // Standardeinstellungen für Benutzersperren konfigurieren
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
 
-            // 注册双重身份验证提供程序。此应用程序使用手机和电子邮件作为接收用于验证用户的代码的一个步骤
-            // 你可以编写自己的提供程序并将其插入到此处。
-            manager.RegisterTwoFactorProvider("电话代码", new PhoneNumberTokenProvider<ApplicationUser>
+            // Registrieren von Anbietern für zweistufige Authentifizierung. Diese Anwendung verwendet telefonische und E-Mail-Nachrichten zum Empfangen eines Codes zum Überprüfen des Benutzers.
+            // Sie können Ihren eigenen Anbieter erstellen und hier einfügen.
+            manager.RegisterTwoFactorProvider("Telefoncode", new PhoneNumberTokenProvider<ApplicationUser>
             {
-                MessageFormat = "你的安全代码是 {0}"
+                MessageFormat = "Ihr Sicherheitscode lautet {0}"
             });
-            manager.RegisterTwoFactorProvider("电子邮件代码", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("E-Mail-Code", new EmailTokenProvider<ApplicationUser>
             {
-                Subject = "安全代码",
-                BodyFormat = "你的安全代码是 {0}"
+                Subject = "Sicherheitscode",
+                BodyFormat = "Ihr Sicherheitscode lautet {0}"
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;

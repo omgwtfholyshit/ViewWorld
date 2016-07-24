@@ -9,6 +9,8 @@ namespace ViewWorld.Controllers
 {
     public class BaseController : Controller
     {
+
+        #region Json Override
         protected override JsonResult Json(object data, string contentType,
            Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -25,7 +27,7 @@ namespace ViewWorld.Controllers
         {
             var data2 = new
             {
-                status = 200,
+                status = "200",
                 message = "",
                 data = data
             };
@@ -81,7 +83,7 @@ namespace ViewWorld.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
+        #endregion
         protected string UserId
         {
             get

@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using ViewWorld.Models;
+using ViewWorld.Utils;
 namespace ViewWorld.Controllers
 {
     public class HomeController : Controller
@@ -15,7 +18,6 @@ namespace ViewWorld.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
 
             return View();
         }
@@ -25,6 +27,11 @@ namespace ViewWorld.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        public ActionResult TestMethods()
+        {
+            var c = Tools.GenerateId_M1();
+            return Content(c);
         }
     }
 }
