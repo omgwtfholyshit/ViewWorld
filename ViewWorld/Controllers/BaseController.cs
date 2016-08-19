@@ -3,13 +3,13 @@ using PagedList;
 using System;
 using System.Text;
 using System.Web.Mvc;
+using ViewWorld.App_Start;
 using ViewWorld.Core;
 
 namespace ViewWorld.Controllers
 {
     public class BaseController : Controller
     {
-
         #region Json Override
         protected override JsonResult Json(object data, string contentType,
            Encoding contentEncoding, JsonRequestBehavior behavior)
