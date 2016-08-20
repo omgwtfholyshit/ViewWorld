@@ -84,6 +84,8 @@ namespace ViewWorld.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        protected ApplicationIdentityContext db = ApplicationIdentityContext.Create();
         protected string UserId
         {
             get

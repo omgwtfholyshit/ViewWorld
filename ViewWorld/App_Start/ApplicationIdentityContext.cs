@@ -25,8 +25,15 @@ namespace ViewWorld.App_Start
             // Get an object to use the database
             //IDatabaseQuery DB = Query.Db(DB_NAME);
             Db DB = RethinkDB.R.Db(DB_NAME);
-
-#if DEBUG
+            initDatabase();
+            return new ApplicationIdentityContext(databaseConnection, DB);
+        }
+        public static void initDatabase()
+        {
+            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(Core.Config.host_name).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
+            // Get an object to use the database
+            //IDatabaseQuery DB = Query.Db(DB_NAME);
+            Db DB = RethinkDB.R.Db(DB_NAME);
             // Create DB if it does not exist
             //if (!databaseConnection.Run(Query.DbList()).Contains(DB_NAME))
             //	databaseConnection.Run(Query.DbCreate(DB_NAME));
@@ -35,22 +42,22 @@ namespace ViewWorld.App_Start
             {
                 RethinkDB.R.DbCreate(DB_NAME).Run(databaseConnection);
             }
-
-
-
             result = RethinkDB.R.Db(DB_NAME).TableList().RunResult<List<string>>(databaseConnection);
             if (!result.Contains("IdentityRoles"))
                 RethinkDB.R.Db(DB_NAME).TableCreate("IdentityRoles").Run(databaseConnection);
             if (!result.Contains("IdentityUsers"))
                 RethinkDB.R.Db(DB_NAME).TableCreate("IdentityUsers").Run(databaseConnection);
+            if(!result.Contains("Trips"))
+                RethinkDB.R.Db(DB_NAME).TableCreate("Trips").Run(databaseConnection);
+            if (!result.Contains("Sceneries"))
+                RethinkDB.R.Db(DB_NAME).TableCreate("Sceneries").Run(databaseConnection);
+            if (!result.Contains("StartingPoints"))
+                RethinkDB.R.Db(DB_NAME).TableCreate("StartingPoints").Run(databaseConnection);
 
-            // CREATE ADDITIONAL TABLES ETC.
-#endif
-            return new ApplicationIdentityContext(databaseConnection, DB);
         }
-
         public void Dispose()
         {
+
         }
     }
 }

@@ -52,7 +52,6 @@
     <Compile Include="Config.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Location.cs" />
-    <Compile Include="Models\Statistic\UserTripPreference.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
     <Compile Include="Models\Trip\Schedule.cs" />
     <Compile Include="Models\Trip\StartingPoint.cs" />
@@ -68,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enum\" />
+    <Folder Include="Models\Statistic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

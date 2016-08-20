@@ -18,6 +18,10 @@ namespace ViewWorld.Core.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        //出发时间
+        public string DepartAt { get; set; }
+        //1,2,3,4,5,6,7 代表周一到周日
+        public string AvailableDate { get; set; }
         public GeoPoint Coordinate { get; set; }
         public Location Location { get; set; }
         //统计该起点的热门度

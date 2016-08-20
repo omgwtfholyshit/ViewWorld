@@ -155,6 +155,12 @@ namespace ViewWorld.Utils
         #endregion
 
         #region 日志
+        /// <summary>
+        /// 写入日志
+        /// </summary>
+        /// <param name="type">错误种类 eg 微信</param>
+        /// <param name="className">类别名称 eg 支付</param>
+        /// <param name="content">具体信息 eg 错误信息</param>
         public static void WriteLog(string type, string className, string content)
         {
             if (!Directory.Exists(Config.logPath))//如果日志目录不存在就创建
