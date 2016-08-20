@@ -86,6 +86,11 @@ namespace ViewWorld.Utils
             byte[] buffer = Guid.NewGuid().ToByteArray();
             return BitConverter.ToInt64(buffer, 0).ToString();
         }
+        public static string GenerateId_M2(string Prefix)
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();
+            return Prefix + "_" + BitConverter.ToInt64(buffer, 0).ToString();
+        }
         /// <summary>
         /// ID形式类似"1607230000"+id
         /// </summary>

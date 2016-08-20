@@ -50,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Enum\CurrencyType.cs" />
+    <Compile Include="Enum\DiscountType.cs" />
+    <Compile Include="Enum\TripPlanType.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
@@ -66,7 +69,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Enum\" />
     <Folder Include="Models\Statistic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
