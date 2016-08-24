@@ -64,7 +64,9 @@ namespace ViewWorld.Controllers
                 Modificator = "刘震",
             };
             scene.Id = Tools.GenerateId_M2();
-            var a = db.DB.Table("Sceneries").Insert(scene).Run(db.Connection);
+            scene.AddToDatabase(scene, db);
+            var items = db.DB.Table("ViewWorld").RunCursor<Scenery>(db.Connection);
+            var i2 = db.DB.Table("ViewWorld").RunAtom<Scenery>(db.Connection);
             return Json(scene);
         }
     }
