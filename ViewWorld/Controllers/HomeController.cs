@@ -13,11 +13,22 @@ using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Linq;
+using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Controllers
 {
     public class HomeController : BaseController
     {
+        TripManager tripManager;
+        public HomeController()
+            :this(new TripManager())
+        {
+
+        }
+        public HomeController(TripManager _tripManager)
+        {
+            tripManager = _tripManager;
+        }
         public ActionResult Index()
         {
             return View();
@@ -64,10 +75,23 @@ namespace ViewWorld.Controllers
                 Modificator = "刘震",
             };
             scene.Id = Tools.GenerateId_M2();
-            scene.AddToDatabase(scene, db);
-            var items = db.DB.Table("ViewWorld").RunCursor<Scenery>(db.Connection);
-            var i2 = db.DB.Table("ViewWorld").RunAtom<Scenery>(db.Connection);
-            return Json(scene);
+            Scenery scene2 = new Scenery()
+            {
+                Coordinate = geo,
+                LastUpdateAt = DateTime.Now,
+                Location = loc,
+                Name = "天安门旅行",
+                Popularity = 0,
+                Publisher = "刘震",
+                PublishedAt = DateTime.Now,
+                Modificator = "S2",
+            };
+            scene2.Id = Tools.GenerateId_M2();
+            Scenery[] itemlist = new Scenery[2];
+            itemlist[0] = scene;
+            itemlist[1] = scene2;
+            var items = db.DB.Table("Sceneries").Insert(itemlist).Run<Scenery>(db.Connection);
+            return Json(items);
         }
     }
 }

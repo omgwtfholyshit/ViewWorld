@@ -259,9 +259,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IDBOperational.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Trip\Scenery.cs" />
+    <Compile Include="Models\Trip\Schedule.cs" />
+    <Compile Include="Models\Trip\StartingPoint.cs" />
+    <Compile Include="Models\Trip\Trip.cs" />
+    <Compile Include="Models\Trip\TripManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
