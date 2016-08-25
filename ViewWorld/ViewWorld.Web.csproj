@@ -265,6 +265,7 @@
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
+    <Compile Include="Models\Trip\SceneryManager.cs" />
     <Compile Include="Models\Trip\Schedule.cs" />
     <Compile Include="Models\Trip\StartingPoint.cs" />
     <Compile Include="Models\Trip\Trip.cs" />

@@ -14,20 +14,23 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Linq;
 using ViewWorld.Models.Trip;
+using RethinkDb.Driver.Model;
 
 namespace ViewWorld.Controllers
 {
     public class HomeController : BaseController
     {
         TripManager tripManager;
+        SceneryManager sceneryManager;
         public HomeController()
-            :this(new TripManager())
+            :this(new TripManager(),new SceneryManager())
         {
 
         }
-        public HomeController(TripManager _tripManager)
+        public HomeController(TripManager _tripManager,SceneryManager _sceneryManager)
         {
             tripManager = _tripManager;
+            sceneryManager = _sceneryManager;
         }
         public ActionResult Index()
         {
@@ -45,6 +48,10 @@ namespace ViewWorld.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+        public Scenery CustQuery()
+        {
+            return db.DB.Table("Sceneries").Get("4800564445081176863").RunAtom<Scenery>(db.Connection);
         }
         public ActionResult TestMethods()
         {
@@ -87,11 +94,12 @@ namespace ViewWorld.Controllers
                 Modificator = "S2",
             };
             scene2.Id = Tools.GenerateId_M2();
-            Scenery[] itemlist = new Scenery[2];
-            itemlist[0] = scene;
-            itemlist[1] = scene2;
-            var items = db.DB.Table("Sceneries").Insert(itemlist).Run<Scenery>(db.Connection);
-            return Json(items);
+            List<Scenery> scenelist = new List<Scenery>();
+            scenelist.Add(scene);
+            scenelist.Add(scene2);
+            var ts = sceneryManager.AddScenery(scenelist, db);
+            
+            return Json("hello");
         }
     }
 }
