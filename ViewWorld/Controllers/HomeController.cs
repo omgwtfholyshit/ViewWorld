@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using RethinkDb.Driver.Linq;
 using ViewWorld.Models.Trip;
 using RethinkDb.Driver.Model;
+using static ViewWorld.Models.Trip.SceneryManager;
 
 namespace ViewWorld.Controllers
 {
@@ -97,8 +98,8 @@ namespace ViewWorld.Controllers
             List<Scenery> scenelist = new List<Scenery>();
             scenelist.Add(scene);
             scenelist.Add(scene2);
-            var ts = sceneryManager.AddScenery(scenelist, db);
-            
+            //var ts = sceneryManager.AddScenery(scenelist, db);
+            var tss = sceneryManager.GetScenery(delegate { return db.DB.Table("Sceneries").Get("4800564445081176863").RunAtom<Scenery>(db.Connection); });
             return Json("hello");
         }
     }

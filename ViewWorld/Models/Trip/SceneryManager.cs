@@ -13,8 +13,7 @@ namespace ViewWorld.Models.Trip
 {
     public class SceneryManager : Controller
     {
-        public delegate Scenery CustomQueryDelegate();
-        public CustomQueryDelegate queryDelegate;
+        public delegate dynamic CustomQueryDelegate();
         public Scenery GetScenery(string sceneId,ApplicationIdentityContext db)
         {
             if (!string.IsNullOrWhiteSpace(sceneId))
@@ -23,7 +22,7 @@ namespace ViewWorld.Models.Trip
             }
             return null;
         }
-        public Scenery GetScenery(CustomQueryDelegate queryDelegate)
+        public dynamic GetScenery(CustomQueryDelegate queryDelegate)
         {
             return queryDelegate.Invoke();
         }
