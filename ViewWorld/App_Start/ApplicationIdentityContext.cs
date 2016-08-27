@@ -58,7 +58,10 @@ namespace ViewWorld.App_Start
                 RethinkDB.R.Db(DB_NAME).TableCreate("StartingPoints").Run(databaseConnection);
             if (!result.Contains("Regions"))
                 RethinkDB.R.Db(DB_NAME).TableCreate("Regions").Run(databaseConnection);
-            DataInitializer.Init();
+
+            var dataCount = RethinkDB.R.Db(DB_NAME).Table("Sceneries").Count().Run<int>(databaseConnection);
+            if (dataCount == 0)
+                DataInitializer.Init();
         }
         public void Dispose()
         {
