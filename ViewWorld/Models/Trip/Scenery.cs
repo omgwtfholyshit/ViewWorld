@@ -5,6 +5,7 @@ using RethinkDb.Driver.Net;
 using System.Collections.Generic;
 using ViewWorld.App_Start;
 using System.Threading.Tasks;
+using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Core.Models
 {
@@ -12,20 +13,29 @@ namespace ViewWorld.Core.Models
     /// 景点信息
     /// </summary>
     /// 
-
     public class Scenery
     {
+        public Scenery()
+        {
+            PublishedAt = DateTime.Now;
+            LastUpdateAt = DateTime.Now;
+            Popularity = 0;
+            Publisher = "Admin";
+            Modificator = "Admin";
+        }
         [JsonProperty("id")]
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string EnglishName { get; set; }
         public GeoPoint Coordinate { get; set; }
-        public Location Location { get; set; }
+        public Region Region { get; set; }
         //统计该景点热门度
         public string Publisher { get; set; }
         public DateTime PublishedAt { get; set; }
         public string Modificator { get; set; }
         public DateTime LastUpdateAt { get; set; }
+        public string Initial { get; set; }
         public int Popularity { get; set; }
 
     }

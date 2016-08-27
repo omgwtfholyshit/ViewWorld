@@ -247,6 +247,7 @@
   <ItemGroup>
     <Compile Include="App_Start\ApplicationIdentityContext.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DataInitializer.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Trip\Region.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
     <Compile Include="Models\Trip\SceneryManager.cs" />
     <Compile Include="Models\Trip\Schedule.cs" />

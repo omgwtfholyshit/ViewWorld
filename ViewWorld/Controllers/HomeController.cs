@@ -75,7 +75,7 @@ namespace ViewWorld.Controllers
             {
                 Coordinate = geo,
                 LastUpdateAt = DateTime.Now,
-                Location = loc,
+                //Location = loc,
                 Name = "天安门旅行",
                 Popularity = 0,
                 Publisher = "刘震",
@@ -87,7 +87,7 @@ namespace ViewWorld.Controllers
             {
                 Coordinate = geo,
                 LastUpdateAt = DateTime.Now,
-                Location = loc,
+               // Location = loc,
                 Name = "天安门旅行",
                 Popularity = 0,
                 Publisher = "刘震",

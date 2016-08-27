@@ -21,27 +21,30 @@ namespace ViewWorld.App_Start
             // Load connection data from Web.config
             //IConnectionFactory connectionFactory = ConfigurationAssembler.CreateConnectionFactory("dbcluster");
             // Get the connection to the database server(s)
-            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(Core.Config.host_name).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
+            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             // Get an object to use the database
             //IDatabaseQuery DB = Query.Db(DB_NAME);
             Db DB = RethinkDB.R.Db(DB_NAME);
-            initDatabase();
             return new ApplicationIdentityContext(databaseConnection, DB);
         }
         public static void initDatabase()
         {
-            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(Core.Config.host_name).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
+            IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             // Get an object to use the database
             //IDatabaseQuery DB = Query.Db(DB_NAME);
             Db DB = RethinkDB.R.Db(DB_NAME);
+
             // Create DB if it does not exist
             //if (!databaseConnection.Run(Query.DbList()).Contains(DB_NAME))
             //	databaseConnection.Run(Query.DbCreate(DB_NAME));
+
             List<string> result = RethinkDB.R.DbList().RunResult<List<string>>(databaseConnection);
+           
             if (!result.Contains(DB_NAME))
             {
                 RethinkDB.R.DbCreate(DB_NAME).Run(databaseConnection);
             }
+
             result = RethinkDB.R.Db(DB_NAME).TableList().RunResult<List<string>>(databaseConnection);
             if (!result.Contains("IdentityRoles"))
                 RethinkDB.R.Db(DB_NAME).TableCreate("IdentityRoles").Run(databaseConnection);
@@ -53,7 +56,9 @@ namespace ViewWorld.App_Start
                 RethinkDB.R.Db(DB_NAME).TableCreate("Sceneries").Run(databaseConnection);
             if (!result.Contains("StartingPoints"))
                 RethinkDB.R.Db(DB_NAME).TableCreate("StartingPoints").Run(databaseConnection);
-
+            if (!result.Contains("Regions"))
+                RethinkDB.R.Db(DB_NAME).TableCreate("Regions").Run(databaseConnection);
+            DataInitializer.Init();
         }
         public void Dispose()
         {

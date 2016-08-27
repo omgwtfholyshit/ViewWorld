@@ -21,7 +21,7 @@ namespace ViewWorld.Core
         public const string db_name = "ViewWorld";
         static Config()
         {
-            host_name = ConfigurationManager.AppSettings["dbHostName"];
+            host_name = "127.0.0.1";//ConfigurationManager.AppSettings["dbHostName"];
             db_port = Convert.ToInt32(ConfigurationManager.AppSettings["dbPort"]);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using ViewWorld.App_Start;
 
 namespace ViewWorld
 {
@@ -12,6 +13,9 @@ namespace ViewWorld
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ApplicationIdentityContext.initDatabase();
+            
         }
     }
 }

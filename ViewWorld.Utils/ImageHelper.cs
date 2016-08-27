@@ -78,7 +78,7 @@ namespace ViewWorld.Utils
             }
             catch (System.Exception e)
             {
-                throw e;
+                Tools.WriteLog("切图", originalPhotoPath, e.Message);
             }
             finally
             {
