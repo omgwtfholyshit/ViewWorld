@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 优瞰旅行</title>
+    @Styles.Render("~/Content/antd")
+</head>
+<body>
+    <div id="react-content" class="react-content">
+
+    </div>
+    <div class="container body-content">
+                @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/react")
+    @Scripts.Render("~/bundles/reactDom")
+    @Scripts.Render("~/bundles/antd")
+    <script>
+        function loadjscssfile(filename, filetype) {
+
+            if (filetype == "js") {
+                var fileref = document.createElement('script');
+                fileref.setAttribute("type", "text/javascript");
+                fileref.setAttribute("src", filename);
+            } else if (filetype == "css") {
+
+                var fileref = document.createElement('link');
+                fileref.setAttribute("rel", "stylesheet");
+                fileref.setAttribute("type", "text/css");
+                fileref.setAttribute("href", filename);
+            }
+            if (typeof fileref != "undefined") {
+                document.getElementsByTagName("head")[0].appendChild(fileref);
+            }
+
+        }
+    </script>
+    <script src="@Url.Content("~/Scripts/layout.jsx")"></script>
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Optimization;
-
+using ViewWorld.App_Start;
 namespace ViewWorld
 {
     public class BundleConfig
@@ -31,6 +31,21 @@ namespace ViewWorld
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            #region 后端
+            var react = new ScriptBundle("~/bundles/react", "https://unpkg.com/react@15.3.1/dist/react.min.js").Include("~/Lib/React/react.js");
+            react.CdnFallbackExpression = "window.react";
+            bundles.Add(react);
+            var reactDom = new ScriptBundle("~/bundles/reactDom", "https://unpkg.com/react-dom@15.3.1/dist/react-dom.min.js").Include("~/Lib/React/react-dom.js");
+            reactDom.CdnFallbackExpression = "window.reactDom";
+            bundles.Add(reactDom);
+            var antd = new ScriptBundle("~/bundles/antd", "https://unpkg.com/antd/dist/antd.js").Include("~/Lib/AntDesign/antd.js");
+            antd.CdnFallbackExpression = "window.antd";
+            bundles.Add(antd);
+            var antCss = new StyleBundle("~/Content/antd", "https://unpkg.com/antd/dist/antd.css")
+                .IncludeFallback("~/Lib/AntDesign/antd.css", "react-content", "width","10px");
+            bundles.Add(antCss);
+            #endregion
         }
     }
 }
