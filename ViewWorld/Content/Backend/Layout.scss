@@ -1,7 +1,7 @@
 ﻿/******************
  Global Settings
 ******************/
-.ui,.ui.input input{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;}
+.ui,.ui.input input,.ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"]{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;}
 .grey{color:#999}
 .bgblack{background-color:#404040!important}
 .silver{color:#cccccc}
@@ -79,6 +79,7 @@ body{
           padding-right:1rem;
           .ui.breadcrumb{
               padding-top:0.9rem;
+              padding-bottom:0.9rem;
               .active.section{
                   color:#666;
               }
@@ -127,4 +128,29 @@ body{
         p{font-size:0.6em;color:#ccc;padding-top:5px;} 
     }
 
+}
+
+/******************
+   UserProfile
+******************/
+
+.user-profile{
+    .content-left,.content-right{
+        vertical-align:top;
+        display:inline-block;
+        float:left;
+        padding-top:2rem;
+    }
+    .content-left{
+        width:50%;
+        padding-right:2rem;
+        .ui.card{
+            float:right;
+        }
+    }
+    .content-right{
+        .ui.form .field > label{
+            font-weight:normal;
+        }
+    }
 }

@@ -2,7 +2,7 @@
 /******************
  Global Settings
 ******************/
-.ui, .ui.input input {
+.ui, .ui.input input, .ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"] {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important; }
 
 .grey {
@@ -82,7 +82,8 @@ body {
       padding-left: 1rem;
       padding-right: 1rem; }
       .wrapper .body-wrapper .content-body .ui.breadcrumb {
-        padding-top: 0.9rem; }
+        padding-top: 0.9rem;
+        padding-bottom: 0.9rem; }
         .wrapper .body-wrapper .content-body .ui.breadcrumb .active.section {
           color: #666; }
         .wrapper .body-wrapper .content-body .ui.breadcrumb a {
@@ -120,4 +121,22 @@ body {
       font-size: 0.6em;
       color: #ccc;
       padding-top: 5px; }
+
+/******************
+   UserProfile
+******************/
+.user-profile .content-left, .user-profile .content-right {
+  vertical-align: top;
+  display: inline-block;
+  float: left;
+  padding-top: 2rem; }
+
+.user-profile .content-left {
+  width: 50%;
+  padding-right: 2rem; }
+  .user-profile .content-left .ui.card {
+    float: right; }
+
+.user-profile .content-right .ui.form .field > label {
+  font-weight: normal; }
 

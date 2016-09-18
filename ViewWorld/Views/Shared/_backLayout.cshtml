@@ -14,6 +14,7 @@
      @Styles.Render("~/Content/semantic")
     <link href="~/Content/components/container.css" rel="stylesheet" />   
     <link href="~/Content/Backend/Layout.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="wrapper">
@@ -30,7 +31,7 @@
                         账户管理
                         <i class="dropdown icon"></i>
                         <div class="menu transition">
-                            <a class="item"><i class="grid user icon"></i> 我的账号</a>
+                            <a class="item" href="UserProfile"><i class="grid user icon"></i> 我的账号</a>
                             <a class="item"><i class="grid lock icon"></i> 修改密码</a>
                         </div>
                     </div>
@@ -98,7 +99,7 @@
 
                         </div>
                     </div>
-                    <div class="container content-body">
+                    <div class="content-body">
                         <div class="ui breadcrumb">
                             <a class="section">账户管理</a>
                             <div class="divider"> | </div>
@@ -116,10 +117,20 @@
         <div class="message-container">
            
         </div>
-        
+        <div class="ui demo page dimmer">
+            <div class="content">
+                <div class="center">
+                    <h2 class="ui inverted icon header">
+                        <i class="send icon yellow"></i>
+                        优瞰世界
+                        <div class="sub header">You Can Do It !</div>
+                    </h2>
+                </div>
+            </div>
+        </div>
     </div>
    
-    @Scripts.Render("~/bundles/jquery")
+   
     @Scripts.Render("~/bundles/semantic")
     <script src="~/Scripts/Backend/common.js"></script>
     <script src="~/Scripts/Backend/Layout.js"></script>

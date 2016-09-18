@@ -344,6 +344,7 @@
     <Content Include="Content\components\breadcrumb.min.css" />
     <Content Include="Content\components\button.css" />
     <Content Include="Content\components\button.min.css" />
+    <Content Include="Content\components\calendar.css" />
     <Content Include="Content\components\card.css" />
     <Content Include="Content\components\card.min.css" />
     <Content Include="Content\components\checkbox.css" />
@@ -478,6 +479,8 @@
     <Content Include="Content\themes\basic\assets\fonts\icons.svg" />
     <Content Include="Content\themes\default\assets\fonts\icons.svg" />
     <Content Include="Content\themes\default\assets\images\flags.png" />
+    <Content Include="Content\themes\github\assets\fonts\octicons.svg" />
+    <Content Include="Content\themes\material\assets\fonts\icons.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -491,6 +494,7 @@
     <Content Include="Lib\React\react.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\Backend\Account\UserProfile.js" />
     <Content Include="Scripts\Backend\common.js" />
     <Content Include="Scripts\Backend\Layout.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -512,10 +516,22 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="Content\themes\github\assets\fonts\octicons-local.ttf" />
+    <Content Include="Content\themes\github\assets\fonts\octicons.ttf" />
+    <Content Include="Content\themes\github\assets\fonts\octicons.woff" />
+    <Content Include="Content\themes\material\assets\fonts\icons.eot" />
+    <Content Include="Content\themes\material\assets\fonts\icons.ttf" />
+    <Content Include="Content\themes\material\assets\fonts\icons.woff" />
+    <Content Include="Content\components\calendar.min.css" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\calendar.js" />
+    <Content Include="Scripts\calendar.min.js" />
+    <Content Include="Scripts\calendar.zh-cn.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.1.0.js" />
+    <Content Include="Scripts\jquery-3.1.0.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -564,6 +580,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_backLayout.cshtml" />
     <Content Include="Views\Page\Index.cshtml" />
+    <Content Include="Views\Page\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

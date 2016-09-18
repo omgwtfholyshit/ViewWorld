@@ -13,5 +13,9 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        public ActionResult UserProfile()
+        {
+            return View();
+        }
     }
 }

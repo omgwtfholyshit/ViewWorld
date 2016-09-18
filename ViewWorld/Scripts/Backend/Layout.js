@@ -13,6 +13,7 @@
 
             });
         })
+
     }
     function adjustLayout() {
         var result = 100 - (1920 - window.innerWidth) / coefficient;
@@ -24,6 +25,8 @@
         bindEvents()
         adjustLayout()
         window.onresize = adjustLayout;
+        //$('.ui.dimmer').dimmer('toggle');
+        //setTimeout(function () { $('.ui.dimmer').dimmer('hide'); }, 2000);
     }
     initPage()
 })
