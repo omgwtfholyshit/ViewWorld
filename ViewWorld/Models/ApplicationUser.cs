@@ -17,6 +17,10 @@ namespace ViewWorld.Models
 
         [DataMember]
         public DateTime RegisteredAt { get; set; }
+        [DataMember]
+        public string WechatOpenId { get; set; }
+        [DataMember]
+        public string WechatUnionId { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

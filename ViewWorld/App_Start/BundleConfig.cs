@@ -39,12 +39,12 @@ namespace ViewWorld
             var reactDom = new ScriptBundle("~/bundles/reactDom", "https://unpkg.com/react-dom@15.3.1/dist/react-dom.min.js").Include("~/Lib/React/react-dom.js");
             reactDom.CdnFallbackExpression = "window.reactDom";
             bundles.Add(reactDom);
-            var antd = new ScriptBundle("~/bundles/antd", "https://unpkg.com/antd/dist/antd.js").Include("~/Lib/AntDesign/antd.js");
-            antd.CdnFallbackExpression = "window.antd";
-            bundles.Add(antd);
-            var antCss = new StyleBundle("~/Content/antd", "https://unpkg.com/antd/dist/antd.css")
-                .IncludeFallback("~/Lib/AntDesign/antd.css", "react-content", "width","10px");
-            bundles.Add(antCss);
+            var semantic = new ScriptBundle("~/bundles/semantic", "https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js").Include("~/Scripts/semantic.js");
+            semantic.CdnFallbackExpression = "window.semantic";
+            bundles.Add(semantic);
+            var semanticCss = new StyleBundle("~/Content/semantic", "https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css")
+                .IncludeFallback("~/Content/semantic.css", "layout-header", "width","10px");
+            bundles.Add(semanticCss);
             #endregion
         }
     }
