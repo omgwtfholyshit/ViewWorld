@@ -494,6 +494,7 @@
     <Content Include="Images\Backend\Login\background.png" />
     <Content Include="Images\Backend\Login\logo.png" />
     <Content Include="Images\Backend\Login\logo_393-73.png" />
+    <Content Include="Images\Backend\Login\logo_393-73_white.png" />
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\infinity.jpg" />
     <Content Include="Images\DefaultImages\male.jpg" />
@@ -547,6 +548,8 @@
     <Content Include="Content\themes\material\assets\fonts\icons.woff" />
     <Content Include="Content\components\calendar.min.css" />
     <Content Include="Content\Backend\Login.scss" />
+    <Content Include="Lib\PageEffect\jquery.logosDistort.map" />
+    <Content Include="Lib\PageEffect\jquery.logosDistort.min.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\calendar.min.js" />
