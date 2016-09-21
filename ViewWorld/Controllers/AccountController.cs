@@ -9,6 +9,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ViewWorld.Models;
+using ViewWorld.Utils;
+using ViewWorld.Core.Models;
+using System.Collections;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace ViewWorld.Controllers
 {
@@ -17,7 +22,7 @@ namespace ViewWorld.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        #region 初始化
         public AccountController()
         {
         }
@@ -51,7 +56,8 @@ namespace ViewWorld.Controllers
                 _userManager = value;
             }
         }
-
+        #endregion
+        #region 默认方法
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -393,11 +399,10 @@ namespace ViewWorld.Controllers
         //
         // POST: /Account/LogOff
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return SuccessJson();
         }
 
         //
@@ -427,7 +432,7 @@ namespace ViewWorld.Controllers
 
             base.Dispose(disposing);
         }
-
+        #endregion
         #region 帮助程序
         // 用于在添加外部登录名时提供 XSRF 保护
         private const string XsrfKey = "XsrfId";
@@ -483,6 +488,55 @@ namespace ViewWorld.Controllers
                     properties.Dictionary[XsrfKey] = UserId;
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+            }
+        }
+        #endregion
+
+        #region 修改用户信息
+        public ActionResult UploadUserAvatar()
+        {
+            AvatarUploadResult result = new AvatarUploadResult()
+            {
+                avatarUrls = new ArrayList(),
+                success = false,
+            };
+            try
+            {
+                HttpPostedFileBase file;
+                string[] avatars = new string[1] { "__avatar1" };
+                int avatar_number = 1;
+                int avatars_length = avatars.Length;
+
+                for (int i = 0; i < avatars_length; i++)
+                {
+                    file = Request.Files[avatars[i]];
+                    string savePath = string.Format("/Upload/User/{0}/Avatar/", this.UserId);
+
+                    if (!Directory.Exists(Server.MapPath(savePath)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(savePath));
+                    }
+                    string imagePath = string.Format("/Upload/User/{0}/Avatar/{1}", this.UserId, "Head.jpg");
+                    result.avatarUrls.Add(imagePath);
+                    imagePath = Server.MapPath(imagePath);
+                    file.SaveAs(imagePath);
+                    ImageHelper.MakeThumbnail(imagePath, imagePath.Replace(".jpg", "_thumb.jpg"), 56, 56);
+                    /*
+                     *	可在此将 virtualPath 储存到数据库，如果有需要的话。
+                     *	Save to database...
+                     */
+                    avatar_number++;
+                }
+                //upload_url中传递的额外的参数，如果定义的method为get请将下面的context.Request.Form换为context.Request.QueryString
+                result.success = true;
+                result.msg = "Success!";
+                //返回图片的保存结果（返回内容为json字符串，可自行构造，该处使用Newtonsoft.Json构造）
+                return Content(JsonConvert.SerializeObject(result));
+            }
+            catch (Exception e)
+            {
+                result.msg = e.Message;
+                return Content(JsonConvert.SerializeObject(result));
             }
         }
         #endregion

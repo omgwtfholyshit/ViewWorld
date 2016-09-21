@@ -1,0 +1,78 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优瞰旅行后台登录</title>
+    <link href="~/Lib/PageEffect/perspectiveRules.css" rel="stylesheet" />
+    <link href="~/Lib/PageEffect/style.css" rel="stylesheet" />
+    <link href="~/Content/components/form.min.css" rel="stylesheet" />
+    <link href="~/Content/components/input.min.css" rel="stylesheet" />
+    <link href="~/Content/components/icon.min.css" rel="stylesheet" />
+    <link href="~/Content/components/button.min.css" rel="stylesheet" />
+    <link href="~/Content/components/checkbox.css" rel="stylesheet" />
+    <link href="~/Content/Backend/Login.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="background">
+        <img alt="background" src="~/Images/Backend/Login/background.png" style="width:100%" />
+        <div id="particle-target"></div>
+    </div>
+    <div id="login-form">
+        <div class="logo-container">
+            <img src="~/Images/Backend/Login/logo_393-73.png" />
+        </div>
+        <form class="ui form">
+            @Html.AntiForgeryToken()
+            <div class="field">
+                <div class="ui grey left icon input">
+                    <input type="text" name="username" onfocus="if(this.value=='输入邮箱或手机号登录') this.value=''" value="输入邮箱或手机号登录"
+                           onblur="if (this.value == '') this.value = '输入邮箱或手机号登录'" id="username">
+                    <i class="user icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui grey left icon input">
+                    <label class="login_password">请输入密码</label>
+                    <input type="password" name="password" onfocus="$('.login_password').hide()"
+                           onblur="if(this.value=='') $('.login_password').show()" value="" id="password">
+                    <i class="lock icon"></i>
+                </div>
+
+            </div>
+            <div class="field">
+                <div class="ui action input">
+                    <input type="text" placeholder="验证码...">
+                    <image class="ui button"></image>
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui checkbox">
+                    <input type="checkbox" name="rememberMe" id="rememberMe">
+                    <label id="label">记住我?</label>
+                </div>
+            </div>
+
+            <button class="ui fluid basic grey submit button" type="button" id="login">登录</button>
+            <div class="ui error message" id="error-message">
+                <ul class="list"></ul>
+            </div>
+        </form>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Lib/PageEffect/jquery.particleground.min.js"></script>
+    <script src="~/Lib/PageEffect/jquery.logosDistort.min.js"></script>
+    <script src="~/Content/components/form.min.js"></script>
+    <script src="~/Content/components/checkbox.min.js"></script>
+    <script src="~/Scripts/Backend/common.js"></script>
+    <script src="~/Scripts/Backend/Login.js"></script>
+
+</body>
+</html>

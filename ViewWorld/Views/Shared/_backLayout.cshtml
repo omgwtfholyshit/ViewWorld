@@ -1,0 +1,140 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 优瞰旅行</title>
+    <script data-pace-options='{ "ajax": false }' src="~/Lib/Pace/pace.js"></script>
+     @Styles.Render("~/Content/semantic")
+    <link href="~/Content/components/container.css" rel="stylesheet" />   
+    <link href="~/Content/Backend/Layout.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body>
+    <div class="wrapper">
+        <div class="ui grid">
+            <div class="row">
+                <div class="column ui vertical menu layout-nav inverted bgblack">
+                    <div class="item">
+                        <div class="logo">
+                            <i class="send icon yellow"></i>  优瞰世界
+                            <p>You Can Do It!</p>
+                        </div>
+                    </div>
+                    <div class="ui dropdown item ">
+                        账户管理
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition">
+                            <a class="item" href="UserProfile"><i class="grid user icon"></i> 我的账号</a>
+                            <a class="item"><i class="grid lock icon"></i> 修改密码</a>
+                        </div>
+                    </div>
+                    <div class="ui dropdown item ">
+                        旅游管理
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition">
+                            <a class="item"><i class="browser icon"></i> 旅游产品分类</a>
+                            <a class="item"><i class="globe icon"></i> 行程管理</a>
+                            <a class="item"><i class="location arrow icon"></i> 景点管理</a>
+                            <a class="item"><i class="marker icon"></i> 出发地管理</a>
+                        </div>
+                    </div>
+                    <div class="ui dropdown item ">
+                        订单管理
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition">
+                            <a class="item"><i class="edit icon"></i> 旅行团订单</a>
+                            <a class="item"><i class="plane icon"></i> 机票订单-二期</a>
+                        </div>
+                    </div>
+                    <div class="ui dropdown item ">
+                        会员管理
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition">
+                            <a class="item"><i class="users icon"></i> 会员列表</a>
+                            <a class="item"><i class="credit card alternative icon"></i> 信用卡信息</a>
+                            <a class="item"><i class="Trophy icon"></i> 优惠券管理</a>
+                        </div>
+                    </div>
+                    <a class="item" href="#">
+                        <i class="grid spy icon"></i> 供应商管理
+                    </a>
+                    <a class="item" href="#">
+                        <i class="grid setting icon"></i> 系统设置
+                    </a>
+                </div>
+                <div class="row body-wrapper">
+                    <div class="header">
+                        <div class="header-left">
+                            <div class="ui search">
+                                <div class="ui icon input">
+                                    <input class="prompt" type="text" placeholder="搜索">
+                                    <i class="search icon"></i>
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <div class="ui compact menu">
+                                <a class="item">
+                                    <i class="icon mail"></i> 
+                                    <div class="floating ui red label">22</div>
+                                </a>
+                                <div class="ui simple dropdown item">
+                                    <img class="ui avatar image" src="~/Images/DefaultImages/female.jpg">
+                                    <span>李语菥</span>
+                                    <div class="menu">
+                                        <div class="item log-out">注销</div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                    <div class="content-body">
+                        <div class="ui breadcrumb">
+                            <a class="section">账户管理</a>
+                            <div class="divider"> | </div>
+                            <a class="section active">我的账号</a>
+                        </div>
+                        <div class="content-wrapper">
+                            @RenderBody()
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="message-container">
+           
+        </div>
+        <div class="ui demo page dimmer">
+            <div class="content">
+                <div class="center">
+                    <h2 class="ui inverted icon header">
+                        <i class="send icon yellow"></i>
+                        优瞰世界
+                        <div class="sub header">You Can Do It !</div>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   
+    @Scripts.Render("~/bundles/semantic")
+    <script src="~/Scripts/Backend/common.js"></script>
+    <script src="~/Scripts/Backend/Layout.js"></script>
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

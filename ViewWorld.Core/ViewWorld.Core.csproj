@@ -54,6 +54,7 @@
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\TripPlanType.cs" />
     <Compile Include="JsonNetResult.cs" />
+    <Compile Include="Models\AvatarUploadResult.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

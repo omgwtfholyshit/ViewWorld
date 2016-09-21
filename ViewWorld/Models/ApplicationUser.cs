@@ -17,7 +17,22 @@ namespace ViewWorld.Models
 
         [DataMember]
         public DateTime RegisteredAt { get; set; }
-
+        [DataMember]
+        public string WechatOpenId { get; set; }
+        [DataMember]
+        public string WechatUnionId { get; set; }
+        [DataMember]
+        public string Country { get; set; }
+        [DataMember]
+        public string Province { get; set; }
+        [DataMember]
+        public string City { get; set; }
+        [DataMember]
+        public string District { get; set; }
+        [DataMember]
+        public string Address { get; set; }
+        [DataMember]
+        public DateTime DOB { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

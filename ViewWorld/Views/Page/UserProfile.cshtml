@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "我的账号";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+<link href="~/Content/components/calendar.min.css" rel="stylesheet" />
+
+<div class="ui container user-profile">
+    <div class="content-left">
+        <div class="ui card">
+            <div class="blurring dimmable image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="center">
+                            <div class="ui inverted button edit-avatar" >修改头像</div>
+                        </div>
+                    </div>
+                </div>
+                <img src="~/Images/DefaultImages/female.jpg" />
+            </div>
+            <div class="content">
+                <h3>Kristy <i class="woman icon user-role pink" data-content="我是女生"></i></h3>
+                <div class="meta">
+                    <span class="date">注册时间 : 2003年</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <a>
+                    管理员
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="content-right">
+        <form class="ui form" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="field">
+                <label>您的姓名</label>
+                <input type="text" name="nickname" placeholder="您的姓名">
+            </div>
+            <div class="field">
+                <label>您的电话</label>
+                <div class="ui action input">
+                    <input type="text" name="mobile" placeholder="您的电话" value="13800000001" readonly>
+                    <button class="ui basic right icon button change-mobile">
+                        <i class="edit icon"></i>
+                    </button>
+                </div>
+                
+            </div>
+            <div class="field">
+                <label>您的邮箱</label>
+                <div class="ui action input">
+                    <input type="text" name="email" placeholder="您的邮箱" value="liuzhen122087@msn.com" readonly>
+                    <button class="ui basic right icon button change-email">
+                        <i class="edit icon"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="field">
+                <label>出生日期</label>
+                <div class="ui calendar" id="DOB">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" name="dob" placeholder="出生日期">
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+
+            </div>
+           
+            <button class="ui basic button">
+                <i class="icon save"></i>
+                保存
+            </button>
+        </form>
+        
+    </div>
+    <div class="ui modal avatar-editor">
+        <i class="close icon"></i>
+        <div class="header">
+            修改头像
+        </div>
+        <div class="image content center">
+            <div id="editor">
+                <div class="description">
+                    本组件需要安装Flash Player后才可使用，请从
+                    <a href="http://www.adobe.com/go/getflashplayer">这里</a>
+                    下载安装。
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui grey deny right labeled icon button">
+                Cancel
+                <i class="cancel icon"></i>
+            </div>
+            <div class="ui positive right labeled icon button" id="upload">
+                Save
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/calendar.min.js"></script>
+<script src="~/Scripts/calendar.zh-cn.js"></script>
+<script src="~/Scripts/Backend/Account/UserProfile.js"></script>
+<script src="~/Lib/FullAvatarEditor/swfobject.js"></script>
+<script src="~/Lib/FullAvatarEditor/fullAvatarEditor.js"></script>
