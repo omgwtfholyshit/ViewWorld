@@ -11,6 +11,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>优瞰旅行后台登录</title>
+
+    <script data-pace-options='{ "ajax": false }' src="~/Lib/Pace/pace.js"></script>
+    <script>
+        Pace.on('hide', function (e) {
+            $("#background").css({ opacity: 1 })
+            setTimeout(function () {
+                $('#login-form').animate({ 'top': '20%', 'opacity': 1 }, 800);
+            },500)
+        })
+    </script>
     <link href="~/Lib/PageEffect/perspectiveRules.css" rel="stylesheet" />
     <link href="~/Lib/PageEffect/style.css" rel="stylesheet" />
     <link href="~/Content/components/form.min.css" rel="stylesheet" />
