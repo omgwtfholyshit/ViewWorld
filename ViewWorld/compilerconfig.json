@@ -2,5 +2,9 @@
   {
     "outputFile": "Content/Backend/Layout.css",
     "inputFile": "Content/Backend/Layout.scss"
+  },
+  {
+    "outputFile": "Content/Backend/Login.css",
+    "inputFile": "Content/Backend/Login.scss"
   }
 ]

@@ -30,5 +30,11 @@
         }
 
     }
-    $.extend({ tip: tip });
+    function checkEmail(email) {
+        return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email);
+    }
+    function checkMobile(mobile) {
+        return /^0?(13|14|15|17|18)[0-9]{9}$/.test(mobile);
+    }
+    $.extend({ tip: tip,checkEmail:checkEmail,checkMobile:checkMobile });
 })(window, document, jQuery);

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace ViewWorld.Utils
 {
-    class ImageHelper
+    public class ImageHelper
     {
         /// <summary>
         /// 按照定义的宽度和高度截取图片
@@ -31,7 +31,7 @@ namespace ViewWorld.Utils
             int x = 0;
             int y = 0;
             //如果是长图
-            if (divisor > percent)
+            if (divisor >= percent)
             {
                 newWidth = height * currentImg.Width / currentImg.Height;
                 newHeight = height;

@@ -7,9 +7,16 @@
 
 <div class="ui container user-profile">
     <div class="content-left">
-        <div class="ui card large">
-            <div class="image">
-                <img src="http://semantic-ui.com/images/avatar2/large/kristy.png">
+        <div class="ui card">
+            <div class="blurring dimmable image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="center">
+                            <div class="ui inverted button edit-avatar" >修改头像</div>
+                        </div>
+                    </div>
+                </div>
+                <img src="~/Images/DefaultImages/female.jpg" />
             </div>
             <div class="content">
                 <h3>Kristy <i class="woman icon user-role pink" data-content="我是女生"></i></h3>
@@ -29,15 +36,27 @@
             @Html.AntiForgeryToken()
             <div class="field">
                 <label>您的姓名</label>
-                <input type="text" name="nick-name" placeholder="您的姓名">
+                <input type="text" name="nickname" placeholder="您的姓名">
             </div>
             <div class="field">
                 <label>您的电话</label>
                 <div class="ui action input">
-                    <input type="text" name="nick-name" placeholder="您的电话" value="13800000001" readonly>
-                    <button class="ui button change-mobile">修改手机</button>
+                    <input type="text" name="mobile" placeholder="您的电话" value="13800000001" readonly>
+                    <button class="ui basic right icon button change-mobile">
+                        <i class="edit icon"></i>
+                    </button>
                 </div>
                 
+            </div>
+            <div class="field">
+                <label>您的邮箱</label>
+                <div class="ui action input">
+                    <input type="text" name="email" placeholder="您的邮箱" value="liuzhen122087@msn.com" readonly>
+                    <button class="ui basic right icon button change-email">
+                        <i class="edit icon"></i>
+                    </button>
+                </div>
+
             </div>
             <div class="field">
                 <label>出生日期</label>
@@ -48,67 +67,10 @@
                     </div>
                 </div>
             </div>
-            <div class="three fields">
-                
-                <div class="field">
-                    <label>国家</label>
-                    <div class="ui fluid dropdown selection" tabindex="0">
-                        <select>
-                            <option value="">城市</option>
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="DC">District Of Columbia</option>
-                            <option value="FL">Florida</option>
-                        </select><i class="dropdown icon"></i><div class="default text">国家</div><div class="menu transition hidden" tabindex="-1"><div class="item" data-value="AL">Alabama</div><div class="item" data-value="AK">Alaska</div><div class="item" data-value="AZ">Arizona</div><div class="item" data-value="AR">Arkansas</div><div class="item" data-value="CA">California</div><div class="item" data-value="CO">Colorado</div><div class="item" data-value="CT">Connecticut</div><div class="item" data-value="DE">Delaware</div><div class="item" data-value="DC">District Of Columbia</div><div class="item" data-value="FL">Florida</div><div class="item" data-value="GA">Georgia</div><div class="item" data-value="HI">Hawaii</div><div class="item" data-value="ID">Idaho</div><div class="item" data-value="IL">Illinois</div><div class="item" data-value="IN">Indiana</div><div class="item" data-value="IA">Iowa</div><div class="item" data-value="KS">Kansas</div><div class="item" data-value="KY">Kentucky</div><div class="item" data-value="LA">Louisiana</div><div class="item" data-value="ME">Maine</div><div class="item" data-value="MD">Maryland</div><div class="item" data-value="MA">Massachusetts</div><div class="item" data-value="MI">Michigan</div><div class="item" data-value="MN">Minnesota</div><div class="item" data-value="MS">Mississippi</div><div class="item" data-value="MO">Missouri</div><div class="item" data-value="MT">Montana</div><div class="item" data-value="NE">Nebraska</div><div class="item" data-value="NV">Nevada</div><div class="item" data-value="NH">New Hampshire</div><div class="item" data-value="NJ">New Jersey</div><div class="item" data-value="NM">New Mexico</div><div class="item" data-value="NY">New York</div><div class="item" data-value="NC">North Carolina</div><div class="item" data-value="ND">North Dakota</div><div class="item" data-value="OH">Ohio</div><div class="item" data-value="OK">Oklahoma</div><div class="item" data-value="OR">Oregon</div><div class="item" data-value="PA">Pennsylvania</div><div class="item" data-value="RI">Rhode Island</div><div class="item" data-value="SC">South Carolina</div><div class="item" data-value="SD">South Dakota</div><div class="item" data-value="TN">Tennessee</div><div class="item" data-value="TX">Texas</div><div class="item" data-value="UT">Utah</div><div class="item" data-value="VT">Vermont</div><div class="item" data-value="VA">Virginia</div><div class="item" data-value="WA">Washington</div><div class="item" data-value="WV">West Virginia</div><div class="item" data-value="WI">Wisconsin</div><div class="item" data-value="WY">Wyoming</div></div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>省份</label>
-                    <div class="ui fluid dropdown selection" tabindex="0">
-                        <select>
-                            <option value="">省份</option>
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="DC">District Of Columbia</option>
-                            <option value="FL">Florida</option>
-                        </select><i class="dropdown icon"></i><div class="default text">省份</div><div class="menu transition hidden" tabindex="-1"><div class="item" data-value="AL">Alabama</div><div class="item" data-value="AK">Alaska</div><div class="item" data-value="AZ">Arizona</div><div class="item" data-value="AR">Arkansas</div><div class="item" data-value="CA">California</div><div class="item" data-value="CO">Colorado</div><div class="item" data-value="CT">Connecticut</div><div class="item" data-value="DE">Delaware</div><div class="item" data-value="DC">District Of Columbia</div><div class="item" data-value="FL">Florida</div><div class="item" data-value="GA">Georgia</div><div class="item" data-value="HI">Hawaii</div><div class="item" data-value="ID">Idaho</div><div class="item" data-value="IL">Illinois</div><div class="item" data-value="IN">Indiana</div><div class="item" data-value="IA">Iowa</div><div class="item" data-value="KS">Kansas</div><div class="item" data-value="KY">Kentucky</div><div class="item" data-value="LA">Louisiana</div><div class="item" data-value="ME">Maine</div><div class="item" data-value="MD">Maryland</div><div class="item" data-value="MA">Massachusetts</div><div class="item" data-value="MI">Michigan</div><div class="item" data-value="MN">Minnesota</div><div class="item" data-value="MS">Mississippi</div><div class="item" data-value="MO">Missouri</div><div class="item" data-value="MT">Montana</div><div class="item" data-value="NE">Nebraska</div><div class="item" data-value="NV">Nevada</div><div class="item" data-value="NH">New Hampshire</div><div class="item" data-value="NJ">New Jersey</div><div class="item" data-value="NM">New Mexico</div><div class="item" data-value="NY">New York</div><div class="item" data-value="NC">North Carolina</div><div class="item" data-value="ND">North Dakota</div><div class="item" data-value="OH">Ohio</div><div class="item" data-value="OK">Oklahoma</div><div class="item" data-value="OR">Oregon</div><div class="item" data-value="PA">Pennsylvania</div><div class="item" data-value="RI">Rhode Island</div><div class="item" data-value="SC">South Carolina</div><div class="item" data-value="SD">South Dakota</div><div class="item" data-value="TN">Tennessee</div><div class="item" data-value="TX">Texas</div><div class="item" data-value="UT">Utah</div><div class="item" data-value="VT">Vermont</div><div class="item" data-value="VA">Virginia</div><div class="item" data-value="WA">Washington</div><div class="item" data-value="WV">West Virginia</div><div class="item" data-value="WI">Wisconsin</div><div class="item" data-value="WY">Wyoming</div></div>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>城市</label>
-                    <div class="ui fluid dropdown selection" tabindex="0">
-                        <select>
-                            <option value="">城市</option>
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="DC">District Of Columbia</option>
-                            <option value="FL">Florida</option>
-                        </select><i class="dropdown icon"></i><div class="default text">城市</div><div class="menu transition hidden" tabindex="-1"><div class="item" data-value="AL">Alabama</div><div class="item" data-value="AK">Alaska</div><div class="item" data-value="AZ">Arizona</div><div class="item" data-value="AR">Arkansas</div><div class="item" data-value="CA">California</div><div class="item" data-value="CO">Colorado</div><div class="item" data-value="CT">Connecticut</div><div class="item" data-value="DE">Delaware</div><div class="item" data-value="DC">District Of Columbia</div><div class="item" data-value="FL">Florida</div><div class="item" data-value="GA">Georgia</div><div class="item" data-value="HI">Hawaii</div><div class="item" data-value="ID">Idaho</div><div class="item" data-value="IL">Illinois</div><div class="item" data-value="IN">Indiana</div><div class="item" data-value="IA">Iowa</div><div class="item" data-value="KS">Kansas</div><div class="item" data-value="KY">Kentucky</div><div class="item" data-value="LA">Louisiana</div><div class="item" data-value="ME">Maine</div><div class="item" data-value="MD">Maryland</div><div class="item" data-value="MA">Massachusetts</div><div class="item" data-value="MI">Michigan</div><div class="item" data-value="MN">Minnesota</div><div class="item" data-value="MS">Mississippi</div><div class="item" data-value="MO">Missouri</div><div class="item" data-value="MT">Montana</div><div class="item" data-value="NE">Nebraska</div><div class="item" data-value="NV">Nevada</div><div class="item" data-value="NH">New Hampshire</div><div class="item" data-value="NJ">New Jersey</div><div class="item" data-value="NM">New Mexico</div><div class="item" data-value="NY">New York</div><div class="item" data-value="NC">North Carolina</div><div class="item" data-value="ND">North Dakota</div><div class="item" data-value="OH">Ohio</div><div class="item" data-value="OK">Oklahoma</div><div class="item" data-value="OR">Oregon</div><div class="item" data-value="PA">Pennsylvania</div><div class="item" data-value="RI">Rhode Island</div><div class="item" data-value="SC">South Carolina</div><div class="item" data-value="SD">South Dakota</div><div class="item" data-value="TN">Tennessee</div><div class="item" data-value="TX">Texas</div><div class="item" data-value="UT">Utah</div><div class="item" data-value="VT">Vermont</div><div class="item" data-value="VA">Virginia</div><div class="item" data-value="WA">Washington</div><div class="item" data-value="WV">West Virginia</div><div class="item" data-value="WI">Wisconsin</div><div class="item" data-value="WY">Wyoming</div></div>
-                    </div>
-                </div>
-            </div>
             <div class="field">
-                <label>详细地址</label>
-                <input type="text" name="address" placeholder="您的姓名">
+
             </div>
+           
             <button class="ui basic button">
                 <i class="icon save"></i>
                 保存
@@ -116,8 +78,35 @@
         </form>
         
     </div>
+    <div class="ui modal avatar-editor">
+        <i class="close icon"></i>
+        <div class="header">
+            修改头像
+        </div>
+        <div class="image content center">
+            <div id="editor">
+                <div class="description">
+                    本组件需要安装Flash Player后才可使用，请从
+                    <a href="http://www.adobe.com/go/getflashplayer">这里</a>
+                    下载安装。
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui grey deny right labeled icon button">
+                Cancel
+                <i class="cancel icon"></i>
+            </div>
+            <div class="ui positive right labeled icon button" id="upload">
+                Save
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="~/Scripts/calendar.min.js"></script>
 <script src="~/Scripts/calendar.zh-cn.js"></script>
 <script src="~/Scripts/Backend/Account/UserProfile.js"></script>
+<script src="~/Lib/FullAvatarEditor/swfobject.js"></script>
+<script src="~/Lib/FullAvatarEditor/fullAvatarEditor.js"></script>

@@ -43,7 +43,7 @@ namespace ViewWorld
             semantic.CdnFallbackExpression = "window.semantic";
             bundles.Add(semantic);
             var semanticCss = new StyleBundle("~/Content/semantic", "https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css")
-                .IncludeFallback("~/Content/semantic.css", "layout-header", "width","10px");
+                .IncludeFallback("~/Content/semantic.css", "ui grid", "margin-top","-14px");
             bundles.Add(semanticCss);
             #endregion
         }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -42,7 +40,6 @@ namespace ViewWorld
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationIdentityContext>()));
-
             // 配置用户名的验证逻辑
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {

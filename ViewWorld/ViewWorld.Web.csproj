@@ -485,11 +485,27 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Images\IMG_0602.JPG" />
+    <Content Include="Images\Backend\Login\background.png" />
+    <Content Include="Images\Backend\Login\logo.png" />
+    <Content Include="Images\Backend\Login\logo_393-73.png" />
+    <Content Include="Images\DefaultImages\female.jpg" />
+    <Content Include="Images\DefaultImages\infinity.jpg" />
+    <Content Include="Images\DefaultImages\male.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
     <Content Include="Lib\AntDesign\antd.js" />
     <Content Include="Lib\AspNet.Identity.RethinkDB.dll" />
+    <Content Include="Lib\FullAvatarEditor\crossdomain.xml" />
+    <Content Include="Lib\FullAvatarEditor\expressInstall.swf" />
+    <Content Include="Lib\FullAvatarEditor\fullAvatarEditor.js" />
+    <Content Include="Lib\FullAvatarEditor\fullAvatarEditor.swf" />
+    <Content Include="Lib\FullAvatarEditor\swfobject.js" />
     <Content Include="Lib\Pace\pace.js" />
+    <Content Include="Lib\PageEffect\jquery.logosDistort.js" />
+    <Content Include="Lib\PageEffect\jquery.logosDistort.min.js" />
+    <Content Include="Lib\PageEffect\jquery.particleground.min.js" />
+    <Content Include="Lib\PageEffect\perspectiveRules.css" />
+    <Content Include="Lib\PageEffect\perspectiveRules.min.css" />
+    <Content Include="Lib\PageEffect\style.css" />
     <Content Include="Lib\React\react-dom.js" />
     <Content Include="Lib\React\react.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -497,6 +513,7 @@
     <Content Include="Scripts\Backend\Account\UserProfile.js" />
     <Content Include="Scripts\Backend\common.js" />
     <Content Include="Scripts\Backend\Layout.js" />
+    <Content Include="Scripts\Backend\Login.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -581,6 +598,7 @@
     <Content Include="Views\Shared\_backLayout.cshtml" />
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\Page\UserProfile.cshtml" />
+    <Content Include="Views\Page\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -627,7 +645,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>5964</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5964/</IISUrl>
+          <IISUrl>http://192.168.1.106:5964/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

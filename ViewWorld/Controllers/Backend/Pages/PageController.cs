@@ -17,5 +17,9 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        public ActionResult Login()
+        {
+            return View();
+        }
     }
 }

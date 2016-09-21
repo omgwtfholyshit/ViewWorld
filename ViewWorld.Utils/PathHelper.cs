@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 
 namespace ViewWorld.Utils
@@ -29,5 +30,6 @@ namespace ViewWorld.Utils
                 return System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, strPath);
             }
         }
+        
     }
 }

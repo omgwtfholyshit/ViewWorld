@@ -40,7 +40,7 @@ namespace ViewWorld.Controllers
 
         public ActionResult About()
         {
-            
+            HttpHelper.RequestUserLocation("118.19.3.42");
             return View();
         }
 
