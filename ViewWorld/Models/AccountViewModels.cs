@@ -49,14 +49,16 @@ namespace ViewWorld.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "电子邮件")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "用户名")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "密码")]
         public string Password { get; set; }
+
+        [MaxLength(5)]
+        public string VerificationCode { get; set; }
 
         [Display(Name = "记住我?")]
         public bool RememberMe { get; set; }

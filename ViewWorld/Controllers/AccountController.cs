@@ -80,7 +80,7 @@ namespace ViewWorld.Controllers
             }
             // 这不会计入到为执行帐户锁定而统计的登录失败次数中
             // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -96,6 +96,48 @@ namespace ViewWorld.Controllers
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserLogin(LoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                foreach(var key in ModelState.Keys)
+                {
+                    var error = ModelState[key].Errors;
+                    if (error.Count() > 0)
+                    {
+                        return ErrorJson(error[0].ErrorMessage);
+                    }
+                }
+            }
+            // 这不会计入到为执行帐户锁定而统计的登录失败次数中
+            // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    if (string.IsNullOrWhiteSpace(returnUrl))
+                    {
+                        if (this.User.IsInRole(UserRole.Sales) || this.User.IsInRole(UserRole.Admin))
+                        {
+                            returnUrl = "/Page/Index";
+                        }else
+                        {
+                            returnUrl = "/Home/Index";
+                        }
+                    }
+                    return Json(returnUrl);
+                case SignInStatus.LockedOut:
+                    return Json("/Account/Lockout");
+                case SignInStatus.RequiresVerification:
+                    return ErrorJson("请输入验证码");
+                case SignInStatus.Failure:
+                default:
+                    return ErrorJson("用户名或密码错误");
+            }
+        }
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

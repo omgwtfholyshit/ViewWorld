@@ -23,51 +23,71 @@
             });
         }
     }
-    function SubmitForm() {
-        var username = $('#username').val(), $errorMessage = $('#error-message');
-        if (!$.checkEmail(username)) {
-            $errorMessage.html('<ul class="list"><li>邮箱错误</li></ul>');
-            return false;
-        } else if (!$.checkMobile(username)) {
-            $errorMessage.html('<ul class="list"><li>手机号错误</li></ul>');
-            return false;
+    function ValidateInput(username, password) {
+        var errorMessage = '', status = true;
+        //检测用户名
+        if (username == '' || username == '输入邮箱或手机号登录') {
+            status = false;
+            errorMessage += '<li>用户名不能为空</li>'
         } else {
-            return false;
-        }
-    }
-    function bindEvents() {
-        $('#login').on('click', function (event) {
-            var username = $('#username').val(), password = $('#password').val(), $errorMessage = $('#error-message ul');
-            var errorMessage = '', status = true;
-            //检测用户名
-            if (username == '' || username == '输入邮箱或手机号登录') {
-                status = false;
-                errorMessage += '<li>用户名不能为空</li>'
+            if (!isNaN(username)) {
+                if (!$.checkMobile(username)) {
+                    status = false;
+                    errorMessage += '<li>手机号错误</li>'
+                }
             } else {
-                if (!isNaN(username)) {
-                    if (!$.checkMobile(username)) {
-                        status = false;
-                        errorMessage += '<li>手机号错误</li>'
-                    }
-                } else {
-                    if (!$.checkEmail(username)) {
-                        status = false;
-                        errorMessage +='<li>邮箱错误</li>';
-                    }
+                if (!$.checkEmail(username)) {
+                    status = false;
+                    errorMessage += '<li>邮箱错误</li>';
                 }
             }
-            //检测密码
-            if (password == '') {
-                status = false;
-                errorMessage += '<li>密码不能为空</li>';
-            }
-            if (!status) {
-                $errorMessage.html(errorMessage);
+        }
+        //检测密码
+        if (password == '') {
+            status = false;
+            errorMessage += '<li>密码不能为空</li>';
+        }
+        return data = { Status: status, Message: errorMessage };
+    }
+    function SubmitForm(username, password, verificationCode, rememberMe) {
+        var loginModel = {
+            UserName: username,
+            Password: password,
+            VerificationCode: verificationCode,
+            RememberMe: rememberMe
+        }, token = $('.ui.form input[name="__RequestVerificationToken"]').val();
+        $.ajax({
+            url: "/Account/UserLogin",
+            method: 'post',
+            data: {
+                model: loginModel,
+                __RequestVerificationToken: token,
+            },
+            success: function (data) {
+                if (data.status == 200) {
+                    location.href = data.message;
+                } else {
+                    $('#error-message').css({ display: 'block' });
+                    $('#error-message ul').html(data.message);
+                }
+
+            },
+            error: function (data) { $.tip("服务器超时，请稍后重试！"); }
+        });
+    }
+    
+    function bindEvents() {
+        $('#login').on('click', function (event) {
+            var username = $('#username').val(), password = $('#password').val(), verificationCode = $('#verificationCode').val(),
+            rememberMe = $('#rememberMe').prop('checked'), $errorMessage = $('#error-message ul');
+            var result = ValidateInput(username,password);
+            if (!result.Status) {
+                $errorMessage.html(result.Message);
                 $('#error-message').css({ display: 'block' });
                 return false;
             } else {
                 $('#error-message').css({ display: 'none' });
-                return false;
+                SubmitForm(username, password, verificationCode, rememberMe);
             }
         });
     }
