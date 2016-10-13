@@ -18,6 +18,7 @@ using RethinkDb.Driver.Model;
 using static ViewWorld.Models.Trip.SceneryManager;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace ViewWorld.Controllers
 {
@@ -54,7 +55,8 @@ namespace ViewWorld.Controllers
         }
         public Scenery CustQuery()
         {            
-            return db.DB.Table("Sceneries").Get("4800564445081176863").RunAtom<Scenery>(db.Connection);
+            var entity = db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == "4800564445081176863").FirstOrDefault();
+            return entity;            
         }
         public ActionResult TestMethods()
         {
@@ -101,7 +103,7 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene);
             scenelist.Add(scene2);
             //var ts = sceneryManager.AddScenery(scenelist, db);
-            var tss = sceneryManager.GetScenery(delegate { return db.DB.Table("Sceneries").Get("4800564445081176863").RunAtom<Scenery>(db.Connection); });
+            var tss = sceneryManager.GetScenery(delegate { return db.DB.GetCollection<Scenery>("Seneries").Find(document => document.Id == "4800564445081176863").FirstOrDefault(); });
             return Json("hello");
         }
     }

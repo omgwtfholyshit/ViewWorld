@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core.Models;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace ViewWorld.Models.Trip
 {
@@ -18,7 +20,7 @@ namespace ViewWorld.Models.Trip
         {
             if (!string.IsNullOrWhiteSpace(sceneId))
             {
-                return db.DB.Table("Sceneries").Get(sceneId).RunAtom<Scenery>(db.Connection);
+                return db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == sceneId).FirstOrDefault();
             }
             return null;
         }
@@ -30,7 +32,7 @@ namespace ViewWorld.Models.Trip
         {
             if (!string.IsNullOrWhiteSpace(SceneId))
             {
-                return await db.DB.Table("Sceneries").Get(SceneId).RunAtomAsync<Scenery>(db.Connection);
+                return await db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == SceneId).SingleAsync();
             }
             return null;
         }
@@ -38,7 +40,7 @@ namespace ViewWorld.Models.Trip
         {
             if (ModelState.IsValid)
             {
-                return db.DB.Table("Sceneries").Insert(scene).RunAtom<Scenery>(db.Connection);
+                db.DB.GetCollection<Scenery>("Sceneries").InsertOne(scene);
             }
             return scene;
         }
@@ -47,7 +49,7 @@ namespace ViewWorld.Models.Trip
         {
             if (sceneList.Count() > 0)
             {
-                return db.DB.Table("Sceneries").Insert(sceneList.ToArray()).RunResult<Result>(db.Connection);
+                db.DB.GetCollection<Scenery>("Sceneries").InsertMany(sceneList.ToArray());
             }
             return null;
         }

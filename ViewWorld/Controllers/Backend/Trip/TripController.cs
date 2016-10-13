@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
-using RethinkDb.Driver.Linq;
+using MongoDB.Driver;
 
 namespace ViewWorld.Controllers.Trip
 {
@@ -18,7 +18,7 @@ namespace ViewWorld.Controllers.Trip
 
         public ActionResult TestMethod()
         {
-            var scene = db.DB.Table<Scenery>("Sceneries", db.Connection).Where(s => s.Popularity == 0).ToList();
+            var scene = db.DB.GetCollection<Scenery>("Sceneries").Find(s => s.Popularity == 0).ToList();
             return Json(scene);
         }
     }

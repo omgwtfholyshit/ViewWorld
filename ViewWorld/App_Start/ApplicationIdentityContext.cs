@@ -9,19 +9,20 @@ namespace ViewWorld.App_Start
 {
     public class ApplicationIdentityContext : IDisposable
     {        
-        private const string DB_NAME = Core.Config.db_name;        
-
+        private const string DB_NAME = Core.Config.db_name;
+        public IMongoDatabase DB;
         public ApplicationIdentityContext(IMongoClient c, IMongoDatabase db)
         {
+            this.DB = db;
         }
 
         public static ApplicationIdentityContext Create()
         {
             IMongoClient _client;
-            IMongoDatabase DB;
+            IMongoDatabase db;
             _client = new MongoClient();
-            DB = _client.GetDatabase("test");            
-            return new ApplicationIdentityContext(_client, DB);
+            db = _client.GetDatabase("test");            
+            return new ApplicationIdentityContext(_client, db);
         }
 
         public static void initDatabase()
@@ -36,7 +37,7 @@ namespace ViewWorld.App_Start
             db.GetCollection<BsonDocument>("Sceneries");
             db.GetCollection<BsonDocument>("StartingPoints");
             db.GetCollection<BsonDocument>("Regions");
-                        
+                                    
             //IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             //// Get an object to use the database
             ////IDatabaseQuery DB = Query.Db(DB_NAME);
