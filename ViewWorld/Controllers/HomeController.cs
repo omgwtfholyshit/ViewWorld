@@ -16,6 +16,8 @@ using RethinkDb.Driver.Linq;
 using ViewWorld.Models.Trip;
 using RethinkDb.Driver.Model;
 using static ViewWorld.Models.Trip.SceneryManager;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace ViewWorld.Controllers
 {
@@ -51,7 +53,7 @@ namespace ViewWorld.Controllers
             return View();
         }
         public Scenery CustQuery()
-        {
+        {            
             return db.DB.Table("Sceneries").Get("4800564445081176863").RunAtom<Scenery>(db.Connection);
         }
         public ActionResult TestMethods()
