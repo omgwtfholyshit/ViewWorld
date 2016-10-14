@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
@@ -9,23 +11,11 @@ namespace ViewWorld.Models.Trip
     public class SceneryManager : Controller
     {
         public delegate dynamic CustomQueryDelegate();
-        public Scenery GetScenery(string sceneId,ApplicationIdentityContext db)
-        {
-            if (!string.IsNullOrWhiteSpace(sceneId))
-            {
-                throw new NotImplementedException();
-            }
-            return null;
-        }
-        public dynamic GetScenery(CustomQueryDelegate queryDelegate)
-        {
-            return queryDelegate.Invoke();
-        }
         public async Task<Scenery> GetSceneryAsync(string SceneId, ApplicationIdentityContext db)
         {
             if (!string.IsNullOrWhiteSpace(SceneId))
             {
-                throw new NotImplementedException();
+                return await db.DB.GetCollection<Scenery>("id").AsQueryable().Where(s => s.Id == SceneId).FirstAsync();
             }
             return null;
         }
