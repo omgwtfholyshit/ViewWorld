@@ -42,17 +42,17 @@ namespace ViewWorld.Controllers
                 _userManager = value;
             }
         }
-        private SignInHelper SignInManager;
+        private SignInHelper _signinManager;
 
-        private SignInHelper SignInHelper
+        private SignInHelper SignInManager
         {
             get
             {
-                if (SignInManager == null)
+                if (_signinManager == null)
                 {
-                    SignInManager = new SignInHelper(UserManager, AuthenticationManager);
+                    _signinManager = new SignInHelper(UserManager, AuthenticationManager);
                 }
-                return SignInManager;
+                return _signinManager;
             }
         }
         #endregion
@@ -462,11 +462,6 @@ namespace ViewWorld.Controllers
                 {
                     _userManager.Dispose();
                     _userManager = null;
-                }
-
-                if (SignInManager != null)
-                {
-                    SignInManager = null;
                 }
             }
 
