@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -37,14 +38,33 @@ namespace ViewWorld.App_Start
             IMongoClient c;
             IMongoDatabase db;
             c = new MongoClient();
-            db = c.GetDatabase("test");
-            db.GetCollection<BsonDocument>("IdentityRoles");
-            db.GetCollection<BsonDocument>("IdentityUsers");
-            db.GetCollection<BsonDocument>("Trips");
-            db.GetCollection<BsonDocument>("Sceneries");
-            db.GetCollection<BsonDocument>("StartingPoints");
-            db.GetCollection<BsonDocument>("Regions");
-                                    
+            db = c.GetDatabase(DB_NAME);
+                        
+            if (!CollectionExists(db, "IdentityRoles"))
+            {
+                db.CreateCollection("IdentityRoles");
+            }
+            if (!CollectionExists(db, "IdentityUsers"))
+            {
+                db.CreateCollection("IdentityUsers");
+            }
+            if (!CollectionExists(db, "Trips"))
+            {
+                db.CreateCollection("Trips");
+            }
+            if (!CollectionExists(db, "Sceneries"))
+            {
+                db.CreateCollection("Sceneries");
+            }
+            if (!CollectionExists(db, "StartingPoints"))
+            {
+                db.CreateCollection("StartingPoints");
+            }
+            if (!CollectionExists(db, "Regions"))
+            {
+                db.CreateCollection("Regions");
+            }
+
             //IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             //// Get an object to use the database
             ////IDatabaseQuery DB = Query.Db(DB_NAME);
@@ -78,6 +98,14 @@ namespace ViewWorld.App_Start
             //var dataCount = RethinkDB.R.Db(DB_NAME).Table("Sceneries").Count().Run<int>(databaseConnection);
             //if (dataCount == 0)
             //    DataInitializer.Init();
+        }
+        private static bool CollectionExists(IMongoDatabase db, string collectionName)
+        {
+            var filter = new BsonDocument("name", collectionName);
+            //filter by collection name
+            var collections = db.ListCollections(new ListCollectionsOptions { Filter = filter });
+            //check for existence
+            return collections.ToList().Any();
         }
         public void Dispose()
         {

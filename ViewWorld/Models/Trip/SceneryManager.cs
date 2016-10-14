@@ -15,7 +15,7 @@ namespace ViewWorld.Models.Trip
         {
             if (!string.IsNullOrWhiteSpace(SceneId))
             {
-                return await db.DB.GetCollection<Scenery>("id").AsQueryable().Where(s => s.Id == SceneId).FirstAsync();
+                return await db.DB.GetCollection<Scenery>("Sceneries").AsQueryable().Where(s => s.Id == SceneId).FirstAsync();
             }
             return null;
         }
