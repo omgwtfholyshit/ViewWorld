@@ -1,24 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
-using ViewWorld.Models;
 using ViewWorld.Utils;
-using RethinkDb.Driver;
-using System.Web.Script.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RethinkDb.Driver.Linq;
 using ViewWorld.Models.Trip;
-using RethinkDb.Driver.Model;
-using static ViewWorld.Models.Trip.SceneryManager;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace ViewWorld.Controllers
 {
@@ -52,11 +40,6 @@ namespace ViewWorld.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-        public Scenery CustQuery()
-        {            
-            var entity = db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == "4800564445081176863").FirstOrDefault();
-            return entity;            
         }
         public ActionResult TestMethods()
         {
@@ -103,7 +86,6 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene);
             scenelist.Add(scene2);
             //var ts = sceneryManager.AddScenery(scenelist, db);
-            var tss = sceneryManager.GetScenery(delegate { return db.DB.GetCollection<Scenery>("Seneries").Find(document => document.Id == "4800564445081176863").FirstOrDefault(); });
             return Json("hello");
         }
     }

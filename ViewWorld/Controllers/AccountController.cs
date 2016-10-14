@@ -20,31 +20,17 @@ namespace ViewWorld.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
         #region 初始化
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager)
         {
             UserManager = userManager;
-            SignInManager = signInManager;
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
+        private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
             get
@@ -54,6 +40,19 @@ namespace ViewWorld.Controllers
             private set
             {
                 _userManager = value;
+            }
+        }
+        private SignInHelper SignInManager;
+
+        private SignInHelper SignInHelper
+        {
+            get
+            {
+                if (SignInManager == null)
+                {
+                    SignInManager = new SignInHelper(UserManager, AuthenticationManager);
+                }
+                return SignInManager;
             }
         }
         #endregion
@@ -87,7 +86,7 @@ namespace ViewWorld.Controllers
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
+                case SignInStatus.RequiresTwoFactorAuthentication:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
@@ -131,7 +130,7 @@ namespace ViewWorld.Controllers
                     return Json(returnUrl);
                 case SignInStatus.LockedOut:
                     return Json("/Account/Lockout");
-                case SignInStatus.RequiresVerification:
+                case SignInStatus.RequiresTwoFactorAuthentication:
                     return ErrorJson("请输入验证码");
                 case SignInStatus.Failure:
                 default:
@@ -389,7 +388,7 @@ namespace ViewWorld.Controllers
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.RequiresVerification:
+                case SignInStatus.RequiresTwoFactorAuthentication:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
@@ -465,10 +464,9 @@ namespace ViewWorld.Controllers
                     _userManager = null;
                 }
 
-                if (_signInManager != null)
+                if (SignInManager != null)
                 {
-                    _signInManager.Dispose();
-                    _signInManager = null;
+                    SignInManager = null;
                 }
             }
 

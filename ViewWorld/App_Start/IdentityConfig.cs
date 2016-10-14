@@ -1,35 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using System.Security.Claims;
-using AspNet.Identity.RethinkDB;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
+using AspNet.Identity.MongoDB;
 using ViewWorld.Models;
 using ViewWorld.App_Start;
 
 namespace ViewWorld
 {
-    public class EmailService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // 在此处插入电子邮件服务可发送电子邮件。
-            return Task.FromResult(0);
-        }
-    }
+    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-            // 在此处插入 SMS 服务可发送短信。
-            return Task.FromResult(0);
-        }
-    }
-
-    // 配置此应用程序中使用的应用程序用户管理器。UserManager 在 ASP.NET Identity 中定义，并由此应用程序使用。
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
@@ -39,15 +25,14 @@ namespace ViewWorld
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationIdentityContext>()));
-            // 配置用户名的验证逻辑
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationIdentityContext>().Users));
+            // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
-
-            // 配置密码的验证逻辑
+            // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -56,51 +41,268 @@ namespace ViewWorld
                 RequireLowercase = true,
                 RequireUppercase = true,
             };
-
-            // 配置用户锁定默认值
+            // Configure user lockout defaults
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-
-            // 注册双重身份验证提供程序。此应用程序使用手机和电子邮件作为接收用于验证用户的代码的一个步骤
-            // 你可以编写自己的提供程序并将其插入到此处。
-            manager.RegisterTwoFactorProvider("电话代码", new PhoneNumberTokenProvider<ApplicationUser>
+            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
+            // You can write your own provider and plug in here.
+            manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<ApplicationUser>
             {
-                MessageFormat = "你的安全代码是 {0}"
+                MessageFormat = "Your security code is: {0}"
             });
-            manager.RegisterTwoFactorProvider("电子邮件代码", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("EmailCode", new EmailTokenProvider<ApplicationUser>
             {
-                Subject = "安全代码",
-                BodyFormat = "你的安全代码是 {0}"
+                Subject = "SecurityCode",
+                BodyFormat = "Your security code is {0}"
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
+            return manager;
+        }
+
+        /// <summary>
+        /// Method to add user to multiple roles
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <param name="roles">list of role names</param>
+        /// <returns></returns>
+        public virtual async Task<IdentityResult> AddUserToRolesAsync(string userId, IList<string> roles)
+        {
+            var userRoleStore = (IUserRoleStore<ApplicationUser, string>)Store;
+
+            var user = await FindByIdAsync(userId).ConfigureAwait(false);
+            if (user == null)
+            {
+                throw new InvalidOperationException("Invalid user Id");
+            }
+
+            var userRoles = await userRoleStore.GetRolesAsync(user).ConfigureAwait(false);
+            // Add user to each role using UserRoleStore
+            foreach (var role in roles.Where(role => !userRoles.Contains(role)))
+            {
+                await userRoleStore.AddToRoleAsync(user, role).ConfigureAwait(false);
+            }
+
+            // Call update once when all roles are added
+            return await UpdateAsync(user).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Remove user from multiple roles
+        /// </summary>
+        /// <param name="userId">user id</param>
+        /// <param name="roles">list of role names</param>
+        /// <returns></returns>
+        public virtual async Task<IdentityResult> RemoveUserFromRolesAsync(string userId, IList<string> roles)
+        {
+            var userRoleStore = (IUserRoleStore<ApplicationUser, string>)Store;
+
+            var user = await FindByIdAsync(userId).ConfigureAwait(false);
+            if (user == null)
+            {
+                throw new InvalidOperationException("Invalid user Id");
+            }
+
+            var userRoles = await userRoleStore.GetRolesAsync(user).ConfigureAwait(false);
+            // Remove user to each role using UserRoleStore
+            foreach (var role in roles.Where(userRoles.Contains))
+            {
+                await userRoleStore.RemoveFromRoleAsync(user, role).ConfigureAwait(false);
+            }
+
+            // Call update once when all roles are removed
+            return await UpdateAsync(user).ConfigureAwait(false);
+        }
+    }
+
+    // Configure the RoleManager used in the application. RoleManager is defined in the ASP.NET Identity core assembly
+    public class ApplicationRoleManager : RoleManager<IdentityRole>
+    {
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            var manager = new ApplicationRoleManager(new RoleStore<IdentityRole>(context.Get<ApplicationIdentityContext>().Roles));
+
             return manager;
         }
     }
 
-    // 配置要在此应用程序中使用的应用程序登录管理器。
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+    public class EmailService : IIdentityMessageService
     {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
-            : base(userManager, authenticationManager)
+        public Task SendAsync(IdentityMessage message)
         {
+            // Plug in your email service here to send an email.
+            return Task.FromResult(0);
+        }
+    }
+
+    public class SmsService : IIdentityMessageService
+    {
+        public Task SendAsync(IdentityMessage message)
+        {
+            // Plug in your sms service here to send a text message.
+            return Task.FromResult(0);
+        }
+    }
+
+    public enum SignInStatus
+    {
+        Success,
+        LockedOut,
+        RequiresTwoFactorAuthentication,
+        Failure
+    }
+
+    // These help with sign and two factor (will possibly be moved into identity framework itself)
+    public class SignInHelper
+    {
+        public SignInHelper(ApplicationUserManager userManager, IAuthenticationManager authManager)
+        {
+            UserManager = userManager;
+            AuthenticationManager = authManager;
         }
 
-        public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
+        public ApplicationUserManager UserManager { get; private set; }
+        public IAuthenticationManager AuthenticationManager { get; private set; }
+
+        public async Task SignInAsync(ApplicationUser user, bool isPersistent, bool rememberBrowser)
         {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+            // Clear any partial cookies from external or two factor partial sign ins
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
+            var userIdentity = await user.GenerateUserIdentityAsync(UserManager);
+            if (rememberBrowser)
+            {
+                var rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(user.Id);
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity, rememberBrowserIdentity);
+            }
+            else
+            {
+                AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, userIdentity);
+            }
         }
 
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+        public async Task<bool> SendTwoFactorCodeAsync(string provider)
         {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+            var userId = await GetVerifiedUserIdAsync();
+            if (userId == null)
+            {
+                return false;
+            }
+
+            var token = await UserManager.GenerateTwoFactorTokenAsync(userId, provider);
+            // See IdentityConfig.cs to plug in Email/SMS services to actually send the code
+            await UserManager.NotifyTwoFactorTokenAsync(userId, provider, token);
+            return true;
         }
+
+        public async Task<string> GetVerifiedUserIdAsync()
+        {
+            var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.TwoFactorCookie);
+            if (result != null && result.Identity != null && !String.IsNullOrEmpty(result.Identity.GetUserId()))
+            {
+                return result.Identity.GetUserId();
+            }
+            return null;
+        }
+
+        public async Task<bool> HasBeenVerifiedAsync()
+        {
+            return await GetVerifiedUserIdAsync() != null;
+        }
+
+        public async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
+        {
+            var userId = await GetVerifiedUserIdAsync();
+            if (userId == null)
+            {
+                return SignInStatus.Failure;
+            }
+            var user = await UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return SignInStatus.Failure;
+            }
+            if (await UserManager.IsLockedOutAsync(user.Id))
+            {
+                return SignInStatus.LockedOut;
+            }
+            if (await UserManager.VerifyTwoFactorTokenAsync(user.Id, provider, code))
+            {
+                // When token is verified correctly, clear the access failed count used for lockout
+                await UserManager.ResetAccessFailedCountAsync(user.Id);
+                await SignInAsync(user, isPersistent, rememberBrowser);
+                return SignInStatus.Success;
+            }
+            // If the token is incorrect, record the failure which also may cause the user to be locked out
+            await UserManager.AccessFailedAsync(user.Id);
+            return SignInStatus.Failure;
+        }
+
+        public async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
+        {
+            var user = await UserManager.FindAsync(loginInfo.Login);
+            if (user == null)
+            {
+                return SignInStatus.Failure;
+            }
+            if (await UserManager.IsLockedOutAsync(user.Id))
+            {
+                return SignInStatus.LockedOut;
+            }
+            return await SignInOrTwoFactor(user, isPersistent);
+        }
+
+        private async Task<SignInStatus> SignInOrTwoFactor(ApplicationUser user, bool isPersistent)
+        {
+            if (await UserManager.GetTwoFactorEnabledAsync(user.Id) &&
+                !await AuthenticationManager.TwoFactorBrowserRememberedAsync(user.Id))
+            {
+                var identity = new ClaimsIdentity(DefaultAuthenticationTypes.TwoFactorCookie);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                AuthenticationManager.SignIn(identity);
+                return SignInStatus.RequiresTwoFactorAuthentication;
+            }
+            await SignInAsync(user, isPersistent, false);
+            return SignInStatus.Success;
+
+        }
+
+        public async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        {
+            var user = await UserManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                return SignInStatus.Failure;
+            }
+            if (await UserManager.IsLockedOutAsync(user.Id))
+            {
+                return SignInStatus.LockedOut;
+            }
+            if (await UserManager.CheckPasswordAsync(user, password))
+            {
+                return await SignInOrTwoFactor(user, isPersistent);
+            }
+            if (shouldLockout)
+            {
+                // If lockout is requested, increment access failed count which might lock out the user
+                await UserManager.AccessFailedAsync(user.Id);
+                if (await UserManager.IsLockedOutAsync(user.Id))
+                {
+                    return SignInStatus.LockedOut;
+                }
+            }
+            return SignInStatus.Failure;
+        }
+
     }
 }

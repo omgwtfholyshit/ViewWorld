@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ViewWorld.Models;
+using AspNet.Identity.MongoDB;
 
 namespace ViewWorld.App_Start
 {
     public class ApplicationIdentityContext : IDisposable
     {        
         private const string DB_NAME = Core.Config.db_name;
-        public IMongoDatabase DB;
-        public ApplicationIdentityContext(IMongoClient c, IMongoDatabase db)
+        public IMongoCollection<IdentityRole> Roles { get; set; }
+        public IMongoCollection<ApplicationUser> Users { get; set; }
+        private ApplicationIdentityContext(IMongoCollection<ApplicationUser> users, IMongoCollection<IdentityRole> roles)
         {
-            this.DB = db;
+            Users = users;
+            Roles = roles;
         }
 
         public static ApplicationIdentityContext Create()
         {
-            IMongoClient _client;
-            IMongoDatabase db;
-            _client = new MongoClient();
-            db = _client.GetDatabase("test");            
-            return new ApplicationIdentityContext(_client, db);
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase(DB_NAME);
+            var users = database.GetCollection<ApplicationUser>("users");
+            var roles = database.GetCollection<IdentityRole>("roles");
+            return new ApplicationIdentityContext(users, roles);
         }
 
         public static void initDatabase()

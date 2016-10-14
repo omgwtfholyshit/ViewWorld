@@ -18,8 +18,8 @@ namespace ViewWorld.Controllers.Trip
 
         public ActionResult TestMethod()
         {
-            var scene = db.DB.GetCollection<Scenery>("Sceneries").Find(s => s.Popularity == 0).ToList();
-            return Json(scene);
+           
+            return Json("1");
         }
     }
 }

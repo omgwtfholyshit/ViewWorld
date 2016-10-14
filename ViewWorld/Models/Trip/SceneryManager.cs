@@ -1,15 +1,8 @@
-﻿using RethinkDb.Driver.Model;
-using RethinkDb.Driver.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core.Models;
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace ViewWorld.Models.Trip
 {
@@ -20,7 +13,7 @@ namespace ViewWorld.Models.Trip
         {
             if (!string.IsNullOrWhiteSpace(sceneId))
             {
-                return db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == sceneId).FirstOrDefault();
+                throw new NotImplementedException();
             }
             return null;
         }
@@ -32,7 +25,7 @@ namespace ViewWorld.Models.Trip
         {
             if (!string.IsNullOrWhiteSpace(SceneId))
             {
-                return await db.DB.GetCollection<Scenery>("Sceneries").Find(document => document.Id == SceneId).SingleAsync();
+                throw new NotImplementedException();
             }
             return null;
         }
@@ -40,18 +33,10 @@ namespace ViewWorld.Models.Trip
         {
             if (ModelState.IsValid)
             {
-                db.DB.GetCollection<Scenery>("Sceneries").InsertOne(scene);
+                throw new NotImplementedException();
             }
             return scene;
         }
 
-        public Result AddScenery(List<Scenery> sceneList, ApplicationIdentityContext db)
-        {
-            if (sceneList.Count() > 0)
-            {
-                db.DB.GetCollection<Scenery>("Sceneries").InsertMany(sceneList.ToArray());
-            }
-            return null;
-        }
     }
 }

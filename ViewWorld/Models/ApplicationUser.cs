@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AspNet.Identity.RethinkDB;
+using AspNet.Identity.MongoDB;
 using Microsoft.AspNet.Identity;
 
 namespace ViewWorld.Models

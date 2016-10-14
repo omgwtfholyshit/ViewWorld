@@ -166,14 +166,6 @@
       <HintPath>..\packages\Remotion.Linq.2.1.1\lib\net45\Remotion.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RethinkDb.Driver, Version=2.3.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RethinkDb.Driver.2.3.9\lib\net45\RethinkDb.Driver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RethinkDb.Driver.Linq, Version=2.3.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RethinkDb.Driver.Linq.2.3.9\lib\net45\RethinkDb.Driver.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />

@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
-using RethinkDb.Driver.Net;
-using System.Collections.Generic;
-using ViewWorld.App_Start;
-using System.Threading.Tasks;
 using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Core.Models
