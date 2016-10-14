@@ -5,6 +5,8 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using ViewWorld.Models;
 using AspNet.Identity.MongoDB;
+using ViewWorld.Core.Models;
+using System.Linq;
 
 namespace ViewWorld.App_Start
 {
@@ -31,20 +33,36 @@ namespace ViewWorld.App_Start
             var roles = database.GetCollection<IdentityRole>("roles");
             return new ApplicationIdentityContext(client, database,users,roles);
         }
+        public static bool CollectionExists(string collectionName, IMongoDatabase database)
+        {
+            var filter = new BsonDocument("name", collectionName);
+            var collections = database.ListCollections(new ListCollectionsOptions { Filter = filter });
+            return (collections.ToList()).Any();
+        }
+        public async Task<bool> CollectionExistsAsync(string collectionName,IMongoDatabase database)
+        {
+            var filter = new BsonDocument("name", collectionName);
+            //filter by collection name
+            var collections = await database.ListCollectionsAsync(new ListCollectionsOptions { Filter = filter });
+            //check for existence
+            return (await collections.ToListAsync()).Any();
+        }
 
         public static void initDatabase()
         {
-            IMongoClient c;
-            IMongoDatabase db;
-            c = new MongoClient();
-            db = c.GetDatabase("test");
-            db.GetCollection<BsonDocument>("IdentityRoles");
-            db.GetCollection<BsonDocument>("IdentityUsers");
-            db.GetCollection<BsonDocument>("Trips");
-            db.GetCollection<BsonDocument>("Sceneries");
-            db.GetCollection<BsonDocument>("StartingPoints");
-            db.GetCollection<BsonDocument>("Regions");
-                                    
+            var client = new MongoClient("mongodb://localhost:27017");
+            var database = client.GetDatabase("test");
+            if(CollectionExists("Trips", database))
+            {
+                //do whatever here
+            }
+            //db.GetCollection<BsonDocument>("IdentityRoles");
+            //db.GetCollection<BsonDocument>("IdentityUsers");
+            //db.GetCollection<BsonDocument>("Trips");
+            //db.GetCollection<BsonDocument>("Sceneries");
+            //db.GetCollection<BsonDocument>("StartingPoints");
+            //db.GetCollection<BsonDocument>("Regions");
+
             //IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
             //// Get an object to use the database
             ////IDatabaseQuery DB = Query.Db(DB_NAME);
