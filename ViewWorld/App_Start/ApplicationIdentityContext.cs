@@ -11,21 +11,21 @@ namespace ViewWorld.App_Start
     public class ApplicationIdentityContext : IDisposable
     {        
         private const string DB_NAME = Core.Config.db_name;
-        public IMongoCollection<IdentityRole> Roles { get; set; }
-        public IMongoCollection<ApplicationUser> Users { get; set; }
-        private ApplicationIdentityContext(IMongoCollection<ApplicationUser> users, IMongoCollection<IdentityRole> roles)
+        public IMongoClient Client { get; set; }
+        public IMongoDatabase DB { get; set; }
+        private ApplicationIdentityContext(IMongoClient client, IMongoDatabase db)
         {
-            Users = users;
-            Roles = roles;
+            Client = client;
+            DB = db;
         }
 
         public static ApplicationIdentityContext Create()
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var database = client.GetDatabase(DB_NAME);
-            var users = database.GetCollection<ApplicationUser>("users");
-            var roles = database.GetCollection<IdentityRole>("roles");
-            return new ApplicationIdentityContext(users, roles);
+            //var users = database.GetCollection<ApplicationUser>("users");
+            //var roles = database.GetCollection<IdentityRole>("roles");
+            return new ApplicationIdentityContext(client, database);
         }
 
         public static void initDatabase()
