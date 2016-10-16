@@ -26,8 +26,8 @@ namespace ViewWorld.App_Start
 
         public static ApplicationIdentityContext Create()
         {
-            var client = new MongoClient("mongodb://localhost:27017");
-            var database = client.GetDatabase(DB_NAME);
+            IMongoClient client = new MongoClient("mongodb://localhost:27017");
+            IMongoDatabase database = client.GetDatabase(DB_NAME);
             var users = database.GetCollection<ApplicationUser>("users");
             var roles = database.GetCollection<IdentityRole>("roles");
             return new ApplicationIdentityContext(client, database,users,roles);

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Mongo Test";
+}
+<h2>Mongo Test</h2>
+
+<div>
+    Test Find all, total: @ViewBag.Total : <br/> @ViewBag.FindAll;
+</div>
+<br/>
+<div>
+    Test find all after inserting one, total: @ViewBag.TotalInsertOne : <br/> @ViewBag.InsertOne;
+</div>
+<br/>
+<div>
+    Test find all after inserting many, total: @ViewBag.TotalInsertMany : <br /> @ViewBag.InsertMany;
+</div>
+<br/>
+<div>
+    Test find with filter (Publisher: @ViewBag.Publisher) : <br/> @ViewBag.FindFilter
+</div>
+<br/>
+<div>
+    Updated documents (modified: @ViewBag.UpdateSceneryTotalModified) : <br/> @ViewBag.FindFilterAfterUpdate;
+</div>

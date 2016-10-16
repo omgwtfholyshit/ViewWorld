@@ -96,7 +96,7 @@ namespace ViewWorld.Controllers
             return Json(collection.ToList().Count());
         }
 
-        public ActionResult TestInsert()
+        public void InsertOne(string name)
         {
             GeoPoint geo = new GeoPoint()
             {
@@ -120,16 +120,15 @@ namespace ViewWorld.Controllers
                 //Location = loc,
                 Name = "天安门旅行",
                 Popularity = 0,
-                Publisher = "刘震",
+                Publisher = name,
                 PublishedAt = DateTime.Now,
-                Modificator = "刘震",
+                Modificator = name,
             };
             scene.Id = Tools.GenerateId_M2();
-            db.DB.GetCollection<Scenery>("Sceneries").InsertOne(scene);
-            return Json("insert");
+            db.DB.GetCollection<Scenery>("Sceneries").InsertOne(scene);            
         }
 
-        public ActionResult TestInsertMany()
+        public void InsertMany()
         {
             GeoPoint geo = new GeoPoint()
             {
@@ -174,13 +173,51 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene);
             scenelist.Add(scene2);
             db.DB.GetCollection<Scenery>("Sceneries").InsertMany(scenelist);
-            return Json("insert many");
+        }        
+
+        public List<Scenery> FindAll()
+        {
+            var list = db.DB.GetCollection<Scenery>("Sceneries").Find(new BsonDocument()).ToList();
+            return list;
         }
 
-        public ActionResult TestGet()
+        public List<Scenery> FindFilter(string name)
+        {            
+            var filter = Builders<Scenery>.Filter.Eq("Publisher", name);
+            var sort = Builders<Scenery>.Sort.Descending("PublishedAt");
+            var document = db.DB.GetCollection<Scenery>("Sceneries").Find(filter).Sort(sort).ToList();
+            return document;
+        }
+
+        public long updateScenery(string publisher, string attraction, string EnglishAttraction)
         {
-            var scene = db.DB.GetCollection<Scenery>("Sceneries").Find(s => s.Id == "4710071634216500243").FirstOrDefault();            
-            return Json(scene);
+            var filter = Builders<Scenery>.Filter.Eq("Publisher", publisher);
+            var update = Builders<Scenery>.Update.Set("Name", attraction).Set("EnglishName", EnglishAttraction).CurrentDate("LastUpdateAt");            
+            long modifiedCount = db.DB.GetCollection<Scenery>("Sceneries").UpdateMany(filter, update).ModifiedCount;
+            return modifiedCount;
+        }
+
+        public ActionResult MongoTest()
+        {
+            var list = FindAll();
+            ViewBag.FindAll = list.ToJson();
+            ViewBag.Total = list.Count();
+
+            InsertOne("Kevin");
+            ViewBag.InsertOne = FindAll().ToJson();
+            ViewBag.TotalInsertOne = db.DB.GetCollection<Scenery>("Sceneries").Count(new BsonDocument());
+
+            InsertMany();
+            ViewBag.InsertMany = FindAll().ToJson();
+            ViewBag.TotalInsertMany = db.DB.GetCollection<Scenery>("Sceneries").Count(new BsonDocument());
+
+            // uncomment the following code when you have documents in Scenery colleciton.
+            ViewBag.Publisher = "Kevin";
+            ViewBag.FindFilter = FindFilter("Kevin").ToJson();
+
+            ViewBag.UpdateSceneryTotalModified = updateScenery("Kevin", "悉尼歌剧院", "Opera House");
+            ViewBag.FindFilterAfterUpdate = FindFilter("Kevin").ToJson();
+            return View();
         }
     }
 }
