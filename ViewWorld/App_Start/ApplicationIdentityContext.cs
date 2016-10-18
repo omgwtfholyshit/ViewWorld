@@ -32,7 +32,7 @@ namespace ViewWorld.App_Start
             var roles = database.GetCollection<IdentityRole>("roles");
             return new ApplicationIdentityContext(client, database,users,roles);
         }
-
+        [Obsolete]
         public static void initDatabase()
         {
             IMongoClient c;

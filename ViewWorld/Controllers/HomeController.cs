@@ -100,7 +100,7 @@ namespace ViewWorld.Controllers
             return Json(collection.ToList().Count());
         }
 
-        public async Task<ActionResult> InsertOne(string name)
+        public async Task InsertOne(string name)
         {
             GeoPoint geo = new GeoPoint()
             {
@@ -129,8 +129,7 @@ namespace ViewWorld.Controllers
                 Modificator = name,
             };
             scene.Id = Tools.GenerateId_M2();
-            var result = await repo.AddOne<Scenery>(scene);
-            return Content(result.Success.ToString());
+            await repo.AddOne(scene);
         }
 
         public void InsertMany()
@@ -177,12 +176,12 @@ namespace ViewWorld.Controllers
             List<Scenery> scenelist = new List<Scenery>();
             scenelist.Add(scene);
             scenelist.Add(scene2);
-            db.DB.GetCollection<Scenery>("Sceneries").InsertMany(scenelist);
+            db.DB.GetCollection<Scenery>("Scenerys").InsertMany(scenelist);
         }        
 
         public List<Scenery> FindAll()
         {
-            var list = db.DB.GetCollection<Scenery>("Sceneries").Find(new BsonDocument()).ToList();
+            var list = db.DB.GetCollection<Scenery>("Scenerys").Find(new BsonDocument()).ToList();
             return list;
         }
 
@@ -190,7 +189,7 @@ namespace ViewWorld.Controllers
         {            
             var filter = Builders<Scenery>.Filter.Eq("Publisher", name);
             var sort = Builders<Scenery>.Sort.Descending("PublishedAt");
-            var document = db.DB.GetCollection<Scenery>("Sceneries").Find(filter).Sort(sort).ToList();
+            var document = db.DB.GetCollection<Scenery>("Scenerys").Find(filter).Sort(sort).ToList();
             return document;
         }
 
@@ -198,30 +197,38 @@ namespace ViewWorld.Controllers
         {
             var filter = Builders<Scenery>.Filter.Eq("Publisher", publisher);
             var update = Builders<Scenery>.Update.Set("Name", attraction).Set("EnglishName", EnglishAttraction).CurrentDate("LastUpdateAt");            
-            long modifiedCount = db.DB.GetCollection<Scenery>("Sceneries").UpdateMany(filter, update).ModifiedCount;
+            long modifiedCount = db.DB.GetCollection<Scenery>("Scenerys").UpdateMany(filter, update).ModifiedCount;
             return modifiedCount;
         }
 
-        public ActionResult MongoTest()
+        public async Task<ActionResult> MongoTest()
         {
             var list = FindAll();
             ViewBag.FindAll = list.ToJson();
             ViewBag.Total = list.Count();
 
-            InsertOne("Kevin");
+           // await InsertOne("");
             ViewBag.InsertOne = FindAll().ToJson();
-            ViewBag.TotalInsertOne = db.DB.GetCollection<Scenery>("Sceneries").Count(new BsonDocument());
+            ViewBag.TotalInsertOne = db.DB.GetCollection<Scenery>("Scenerys").Count(new BsonDocument());
+            var repoTotal =await repo.Count<Scenery>(new BsonDocument());
 
-            InsertMany();
+            //InsertMany();
             ViewBag.InsertMany = FindAll().ToJson();
-            ViewBag.TotalInsertMany = db.DB.GetCollection<Scenery>("Sceneries").Count(new BsonDocument());
-
+            ViewBag.TotalInsertMany = db.DB.GetCollection<Scenery>("Scenerys").Count(new BsonDocument());
+            var repoMany =await repo.Count<Scenery>(new BsonDocument());
             // uncomment the following code when you have documents in Scenery colleciton.
-            ViewBag.Publisher = "Kevin";
-            ViewBag.FindFilter = FindFilter("Kevin").ToJson();
 
-            ViewBag.UpdateSceneryTotalModified = updateScenery("Kevin", "悉尼歌剧院", "Opera House");
-            ViewBag.FindFilterAfterUpdate = FindFilter("Kevin").ToJson();
+            //Find&Update
+            FilterDefinition<Scenery> fil = Builders<Scenery>.Filter.Eq("_id", "5509789136186508709");
+            UpdateDefinition<Scenery> upd = Builders<Scenery>.Update.Set("Name", "Whatever").CurrentDate("LastUpdateAt");
+            var res = await repo.UpdateOne(fil, upd);
+
+            var result = await repo.GetOne(fil);
+            //ViewBag.Publisher = "Kevin";
+            //ViewBag.FindFilter = FindFilter("Kevin").ToJson();
+
+            //ViewBag.UpdateSceneryTotalModified = updateScenery("Kevin", "悉尼歌剧院", "Opera House");
+            //ViewBag.FindFilterAfterUpdate = FindFilter("Kevin").ToJson();
             return View();
         }
     }

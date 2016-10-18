@@ -14,7 +14,7 @@ namespace ViewWorld
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            ApplicationIdentityContext.initDatabase();
+            //ApplicationIdentityContext.initDatabase();
             
         }
     }
