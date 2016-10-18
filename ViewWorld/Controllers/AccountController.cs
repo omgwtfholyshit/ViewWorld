@@ -14,6 +14,8 @@ using ViewWorld.Core.Models;
 using System.Collections;
 using System.IO;
 using Newtonsoft.Json;
+using ViewWorld.Core.Enum;
+using System.Drawing;
 
 namespace ViewWorld.Controllers
 {
@@ -83,6 +85,17 @@ namespace ViewWorld.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (string.IsNullOrWhiteSpace(returnUrl))
+                    {
+                        if (User.IsInRole(UserRole.Admin) || User.IsInRole(UserRole.Sales))
+                        {
+                            returnUrl = "/Page/Index";
+                        }
+                        else
+                        {
+                            returnUrl = "/";
+                        }
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -95,48 +108,7 @@ namespace ViewWorld.Controllers
             }
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UserLogin(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                foreach(var key in ModelState.Keys)
-                {
-                    var error = ModelState[key].Errors;
-                    if (error.Count() > 0)
-                    {
-                        return ErrorJson(error[0].ErrorMessage);
-                    }
-                }
-            }
-            // 这不会计入到为执行帐户锁定而统计的登录失败次数中
-            // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    if (string.IsNullOrWhiteSpace(returnUrl))
-                    {
-                        if (this.User.IsInRole(UserRole.Sales) || this.User.IsInRole(UserRole.Admin))
-                        {
-                            returnUrl = "/Page/Index";
-                        }else
-                        {
-                            returnUrl = "/Home/Index";
-                        }
-                    }
-                    return Json(returnUrl);
-                case SignInStatus.LockedOut:
-                    return Json("/Account/Lockout");
-                case SignInStatus.RequiresTwoFactorAuthentication:
-                    return ErrorJson("请输入验证码");
-                case SignInStatus.Failure:
-                default:
-                    return ErrorJson("用户名或密码错误");
-            }
-        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -201,14 +173,15 @@ namespace ViewWorld.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    NickName = "YourName",
-                    RegisteredAt = DateTime.Now
+                    NickName = string.Format("新用户_{0}",Tools.Generate_Nickname()),
+                    RegisteredAt = DateTime.Now,
+                    Sex = SexType.Unknown
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, UserRole.User);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
                     // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 发送包含此链接的电子邮件
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -526,7 +499,64 @@ namespace ViewWorld.Controllers
             }
         }
         #endregion
+        #region 自定义方法
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserLogin(LoginViewModel model, string returnUrl)
+        {
+            #region 判定提交值是否合法
+            if (!ModelState.IsValid)
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var error = ModelState[key].Errors;
+                    if (error.Count() > 0)
+                    {
+                        return ErrorJson(error[0].ErrorMessage);
+                    }
+                }
+            }
+            #endregion
+            if (!ValidationHelper.IsCaptchaRequired(Request) || ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Login))
+            {
+                // 这不会计入到为执行帐户锁定而统计的登录失败次数中
+                // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
+                var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        if (string.IsNullOrWhiteSpace(returnUrl))
+                        {
+                            if (this.User.IsInRole(UserRole.Sales) || this.User.IsInRole(UserRole.Admin))
+                            {
+                                returnUrl = "/Page/Index";
+                            }
+                            else
+                            {
+                                returnUrl = "/Home/Index";
+                            }
+                        }
+                        return Json(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return Json("/Account/Lockout");
+                    case SignInStatus.RequiresTwoFactorAuthentication:
+                        return ErrorJson("请输入验证码");
+                    case SignInStatus.Failure:
+                    default:
+                        return ErrorJson("用户名或密码错误");
+                }
+            }
+            return ErrorJson("验证码有误");
+        }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public FileResult GetLoginCaptcha()
+        {
+            return ValidationHelper.GenerateCaptchaImage(Session,160,45,Color.DodgerBlue,Color.White,CaptchaType.Login);
+        }
+        #endregion
         #region 修改用户信息
         public ActionResult UploadUserAvatar()
         {

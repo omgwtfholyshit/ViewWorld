@@ -509,7 +509,6 @@
     <Content Include="Images\DefaultImages\male.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
     <Content Include="Lib\AntDesign\antd.js" />
-    <Content Include="Lib\AspNet.Identity.RethinkDB.dll" />
     <Content Include="Lib\FullAvatarEditor\crossdomain.xml" />
     <Content Include="Lib\FullAvatarEditor\expressInstall.swf" />
     <Content Include="Lib\FullAvatarEditor\fullAvatarEditor.js" />

@@ -1,4 +1,4 @@
-﻿
+﻿@model ViewWorld.Models.ApplicationUser
 @{
     ViewBag.Title = "我的账号";
     Layout = "~/Views/Shared/_backLayout.cshtml";
@@ -12,14 +12,31 @@
                 <div class="ui dimmer">
                     <div class="content">
                         <div class="center">
-                            <div class="ui inverted button edit-avatar" >修改头像</div>
+                            <div class="ui inverted button edit-avatar">修改头像</div>
                         </div>
                     </div>
                 </div>
                 <img src="~/Images/DefaultImages/female.jpg" />
             </div>
             <div class="content">
-                <h3>Kristy <i class="woman icon user-role pink" data-content="我是女生"></i></h3>
+                <h3>
+                    @Model.NickName
+                    @{
+                        if (Model.Sex == ViewWorld.Core.Enum.SexType.Female)
+                        {
+                            <i class="woman icon user-role pink" data-content="我是女生"></i>
+                        }
+                        else if (Model.Sex == ViewWorld.Core.Enum.SexType.Male)
+                        {
+                            <i class="man icon user-role blue" data-content="我是男生"></i>
+                        }
+                        else
+                        {
+                            <i class="Genderless icon user-role grey" data-content="性别保密"></i>
+                        }
+                    }
+
+                </h3>
                 <div class="meta">
                     <span class="date">注册时间 : 2003年</span>
                 </div>
@@ -36,22 +53,22 @@
             @Html.AntiForgeryToken()
             <div class="field">
                 <label>您的姓名</label>
-                <input type="text" name="nickname" placeholder="您的姓名">
+                <input type="text" name="nickname" placeholder="您的姓名" value="@Model.NickName">
             </div>
             <div class="field">
                 <label>您的电话</label>
                 <div class="ui action input">
-                    <input type="text" name="mobile" placeholder="您的电话" value="13800000001" readonly>
+                    <input type="text" name="mobile" placeholder="您的电话" value="@Model.PhoneNumber" readonly>
                     <button class="ui basic right icon button change-mobile">
                         <i class="edit icon"></i>
                     </button>
                 </div>
-                
+
             </div>
             <div class="field">
                 <label>您的邮箱</label>
                 <div class="ui action input">
-                    <input type="text" name="email" placeholder="您的邮箱" value="liuzhen122087@msn.com" readonly>
+                    <input type="text" name="email" placeholder="您的邮箱" value="@Model.Email" readonly>
                     <button class="ui basic right icon button change-email">
                         <i class="edit icon"></i>
                     </button>
@@ -70,13 +87,13 @@
             <div class="field">
 
             </div>
-           
+
             <button class="ui basic button">
                 <i class="icon save"></i>
                 保存
             </button>
         </form>
-        
+
     </div>
     <div class="ui modal avatar-editor">
         <i class="close icon"></i>

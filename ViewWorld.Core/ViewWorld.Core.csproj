@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Enum\CaptchaType.cs" />
     <Compile Include="Enum\CurrencyType.cs" />
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\TripPlanType.cs" />
@@ -93,6 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Statistic\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ThirdParty\SRVTextToImage.dll" />
+    <Content Include="ThirdParty\ThoughtWorks.QRCode.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

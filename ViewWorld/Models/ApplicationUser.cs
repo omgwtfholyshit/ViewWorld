@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNet.Identity.MongoDB;
 using Microsoft.AspNet.Identity;
+using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Models
 {
@@ -33,6 +34,8 @@ namespace ViewWorld.Models
         public string Address { get; set; }
         [DataMember]
         public DateTime DOB { get; set; }
+        [DataMember]
+        public SexType Sex { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

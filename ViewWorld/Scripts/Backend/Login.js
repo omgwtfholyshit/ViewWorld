@@ -65,18 +65,30 @@
             },
             success: function (data) {
                 if (data.status == 200) {
-                    location.href = data.message;
+                    location.href = data.data;
                 } else {
                     $('#error-message').css({ display: 'block' });
                     $('#error-message ul').html(data.message);
+                    resetCaptcha();
                 }
 
             },
             error: function (data) { $.tip("服务器超时，请稍后重试！"); }
         });
     }
-    
+    function resetCaptcha(requestUrl) {
+        if (typeof requestUrl == "undefined" || requestUrl.length < 10) {
+            requestUrl = "../Account/GetLoginCaptcha"
+        }
+        requestUrl += '?' + Math.round(Math.random() * 10000);
+        $('#captchaImage').attr('src', requestUrl);
+    }
     function bindEvents() {
+        $(document).keydown(function (event) {
+            if (event.keyCode == 13 && ($("#password").is(":focus") || $('#verificationCode').is(':focus'))) {
+                $("#login").click();
+            }
+        })
         $('#login').on('click', function (event) {
             var username = $('#username').val(), password = $('#password').val(), verificationCode = $('#verificationCode').val(),
             rememberMe = $('#rememberMe').prop('checked'), $errorMessage = $('#error-message ul');

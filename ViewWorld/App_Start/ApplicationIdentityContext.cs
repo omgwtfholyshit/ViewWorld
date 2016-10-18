@@ -76,6 +76,10 @@ namespace ViewWorld.App_Start
         }
         public IMongoCollection<TEntity> GetCollection<TEntity>()
         {
+            if(typeof(TEntity).Name == "ApplicationUser")
+            {
+                return DB.GetCollection<TEntity>("users");
+            }
             return DB.GetCollection<TEntity>(typeof(TEntity).Name + "s");
         }
         public void Dispose()
