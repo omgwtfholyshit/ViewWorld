@@ -65,39 +65,6 @@ namespace ViewWorld.App_Start
                 db.CreateCollection("Regions");
             }
 
-            //IConnection databaseConnection = RethinkDb.Driver.RethinkDB.R.Connection().Hostname(RethinkDBConstants.DefaultHostname).Port(RethinkDBConstants.DefaultPort).Timeout(60).Connect();
-            //// Get an object to use the database
-            ////IDatabaseQuery DB = Query.Db(DB_NAME);
-            //Db DB = RethinkDB.R.Db(DB_NAME);
-
-            //// Create DB if it does not exist
-            ////if (!databaseConnection.Run(Query.DbList()).Contains(DB_NAME))
-            ////	databaseConnection.Run(Query.DbCreate(DB_NAME));
-
-            //List<string> result = RethinkDB.R.DbList().RunResult<List<string>>(databaseConnection);
-
-            //if (!result.Contains(DB_NAME))
-            //{
-            //    RethinkDB.R.DbCreate(DB_NAME).Run(databaseConnection);
-            //}
-
-            //result = RethinkDB.R.Db(DB_NAME).TableList().RunResult<List<string>>(databaseConnection);
-            //if (!result.Contains("IdentityRoles"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("IdentityRoles").Run(databaseConnection);
-            //if (!result.Contains("IdentityUsers"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("IdentityUsers").Run(databaseConnection);
-            //if (!result.Contains("Trips"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("Trips").Run(databaseConnection);
-            //if (!result.Contains("Sceneries"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("Sceneries").Run(databaseConnection);
-            //if (!result.Contains("StartingPoints"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("StartingPoints").Run(databaseConnection);
-            //if (!result.Contains("Regions"))
-            //    RethinkDB.R.Db(DB_NAME).TableCreate("Regions").Run(databaseConnection);
-
-            //var dataCount = RethinkDB.R.Db(DB_NAME).Table("Sceneries").Count().Run<int>(databaseConnection);
-            //if (dataCount == 0)
-            //    DataInitializer.Init();
         }
         private static bool CollectionExists(IMongoDatabase db, string collectionName)
         {
@@ -106,6 +73,10 @@ namespace ViewWorld.App_Start
             var collections = db.ListCollections(new ListCollectionsOptions { Filter = filter });
             //check for existence
             return collections.ToList().Any();
+        }
+        public IMongoCollection<TEntity> GetCollection<TEntity>()
+        {
+            return DB.GetCollection<TEntity>(typeof(TEntity).Name + "s");
         }
         public void Dispose()
         {

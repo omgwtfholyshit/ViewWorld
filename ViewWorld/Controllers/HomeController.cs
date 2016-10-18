@@ -8,6 +8,8 @@ using ViewWorld.Utils;
 using ViewWorld.Models.Trip;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using ViewWorld.Models;
+using System.Threading.Tasks;
 
 namespace ViewWorld.Controllers
 {
@@ -15,15 +17,17 @@ namespace ViewWorld.Controllers
     {
         TripManager tripManager;
         SceneryManager sceneryManager;
+        MongoRepository repo;
         public HomeController()
-            :this(new TripManager(),new SceneryManager())
+            :this(new TripManager(),new SceneryManager(),new MongoRepository())
         {
 
         }
-        public HomeController(TripManager _tripManager,SceneryManager _sceneryManager)
+        public HomeController(TripManager _tripManager,SceneryManager _sceneryManager,MongoRepository _repo)
         {
             tripManager = _tripManager;
             sceneryManager = _sceneryManager;
+            repo = _repo;
         }
         public ActionResult Index()
         {
@@ -96,7 +100,7 @@ namespace ViewWorld.Controllers
             return Json(collection.ToList().Count());
         }
 
-        public void InsertOne(string name)
+        public async Task<ActionResult> InsertOne(string name)
         {
             GeoPoint geo = new GeoPoint()
             {
@@ -125,7 +129,8 @@ namespace ViewWorld.Controllers
                 Modificator = name,
             };
             scene.Id = Tools.GenerateId_M2();
-            db.DB.GetCollection<Scenery>("Sceneries").InsertOne(scene);            
+            var result = await repo.AddOne<Scenery>(scene);
+            return Content(result.Success.ToString());
         }
 
         public void InsertMany()

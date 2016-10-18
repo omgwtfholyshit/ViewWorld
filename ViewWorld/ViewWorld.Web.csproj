@@ -316,11 +316,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IDBOperational.cs" />
+    <Compile Include="Interfaces\IMongoDbRepository.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MongoRepository.cs" />
     <Compile Include="Models\Trip\Region.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
     <Compile Include="Models\Trip\SceneryManager.cs" />
