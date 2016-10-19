@@ -80,6 +80,7 @@
     <Compile Include="Enum\CaptchaType.cs" />
     <Compile Include="Enum\CurrencyType.cs" />
     <Compile Include="Enum\DiscountType.cs" />
+    <Compile Include="Enum\SexType.cs" />
     <Compile Include="Enum\TripPlanType.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\AvatarUploadResult.cs" />
