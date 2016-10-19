@@ -86,7 +86,7 @@
                 }
 
             },
-            error: function (data) { $.tip("服务器超时，请稍后重试！"); }
+            error: function (data) { $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
         });
     }
     function ResetCaptcha(requestUrl) {

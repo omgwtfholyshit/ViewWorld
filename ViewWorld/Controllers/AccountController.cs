@@ -188,7 +188,8 @@ namespace ViewWorld.Controllers
                     NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
                     RegisteredAt = DateTime.Now,
                     Sex = SexType.Unknown,
-                    Avatar = "~/Images/DefaultImages/UnknownSex.jpg"
+                    Avatar = "~/Images/DefaultImages/UnknownSex.jpg",
+                    Points = 0
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -572,12 +573,9 @@ namespace ViewWorld.Controllers
         }
         #endregion
         #region 自定义获取用户信息
-        public async Task<JsonResult> GetUserSex()
-        {
-            return null;
-        }
         #endregion
         #region 自定义修改用户信息
+        [HttpPost]
         public async Task<ActionResult> UploadUserAvatar()
         {
             AvatarUploadResult result = new AvatarUploadResult()
@@ -602,7 +600,7 @@ namespace ViewWorld.Controllers
                         Directory.CreateDirectory(Server.MapPath(savePath));
                     }
                     string imagePath = string.Format("/Upload/User/{0}/Avatar/{1}", this.UserId, "Head.jpg");
-                    var updateDef = Builders<ApplicationUser>.Update.SetOnInsert("Avatar", imagePath);
+                    var updateDef = Builders<ApplicationUser>.Update.Set("Avatar", imagePath);
                     await Repo.UpdateOne(this.UserId, updateDef);
                     result.avatarUrls.Add(imagePath);
                     imagePath = Server.MapPath(imagePath);
@@ -625,6 +623,22 @@ namespace ViewWorld.Controllers
                 result.msg = e.Message;
                 return Content(JsonConvert.SerializeObject(result));
             }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserInfo(UpdateUserInfoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var updateDef = Builders<ApplicationUser>.Update.Set("NickName", model.NickName).Set("DOB", model.DOB).Set("Sex", model.Sex);
+                var Result = await Repo.UpdateOne(this.UserId, updateDef);
+                if (Result.Success)
+                {
+                    return SuccessJson();
+                }
+                return ErrorJson(Result.Message);
+            }
+            return ErrorJson("保存失败,请检查您的输入");
         }
         #endregion
     }

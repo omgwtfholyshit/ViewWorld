@@ -1,4 +1,4 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
 @{
     Layout = null;
 }
@@ -83,19 +83,26 @@
                         <div class="header-right">
                             <div class="ui compact menu">
                                 <a class="item">
-                                    <i class="icon mail"></i> 
+                                    <i class="icon mail"></i>
                                     <div class="floating ui red label">22</div>
                                 </a>
                                 <div class="ui simple dropdown item">
-                                    <img class="ui avatar image" src="~/Images/DefaultImages/female.jpg">
+                                    @{
+                                        string imageSrc = string.Format("/Upload/User/{0}/Avatar/Head_thumb.jpg", User.Identity.GetUserId());
+                                        if (!File.Exists(Server.MapPath(imageSrc)))
+                                        {
+                                            imageSrc = "/Images/DefaultImages/female.jpg";
+                                        }
+                                    }
+                                    <img class="ui avatar image" src="@imageSrc">
                                     <span>李语菥</span>
                                     <div class="menu">
                                         <div class="item log-out">注销</div>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
 
                         </div>
                     </div>
@@ -115,7 +122,7 @@
             </div>
         </div>
         <div class="message-container">
-           
+
         </div>
         <div class="ui demo page dimmer">
             <div class="content">
@@ -129,12 +136,12 @@
             </div>
         </div>
     </div>
-   
-   
+
+
     @Scripts.Render("~/bundles/semantic")
     <script src="~/Scripts/Backend/common.js"></script>
     <script src="~/Scripts/Backend/Layout.js"></script>
-    
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

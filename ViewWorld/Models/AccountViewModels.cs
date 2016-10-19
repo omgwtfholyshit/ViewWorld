@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Models
 {
@@ -63,7 +65,16 @@ namespace ViewWorld.Models
         [Display(Name = "记住我?")]
         public bool RememberMe { get; set; }
     }
-
+    public class UpdateUserInfoViewModel
+    {
+        [MaxLength(20)]
+        [Required]
+        public string NickName { get; set; }
+        [Required]
+        public SexType Sex { get; set; }
+        [Required]
+        public DateTime DOB { get; set; }
+    }
     public class RegisterViewModel
     {
         [Required]

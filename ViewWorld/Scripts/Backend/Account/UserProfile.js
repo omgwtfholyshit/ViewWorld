@@ -28,9 +28,52 @@
                 
             }
         })
+        $('#submitForm').on('click', function (e) {
+            e.preventDefault();
+            UpdateUserInfo()
+        })
+    }
+    function UpdateUserInfo() {
+        var userInfo = {
+            NickName: $('input[name=nickname]').val(),
+            Sex: $('input:radio[name=sex]:checked').val(),
+            DOB: $('input[name=dob]').val()
+        }, $submit = $('#submitForm');
+        if (userInfo.NickName == '' || userInfo.NickName.length > 20)
+        {
+            $.tip(".message-container", "昵称错误", "昵称不能为空或者超过20个字符哦~", "negative", 4);
+            return;
+        }
+        if (userInfo.DOB == '') {
+            $.tip(".message-container", "出生日期错误", "出生日期不能为空哦~", "negative", 4);
+            return;
+        }
+        if (!$submit.hasClass('loading')) {
+            $.ajax({
+                url: "/Account/UpdateUserInfo",
+                method: 'post',
+                beforeSend: function () {
+                    $('#submitForm').addClass('loading');
+                },
+                data: {
+                    model: userInfo,
+                    __RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        location.reload();
+                    } else {
+                        $submit.removeClass('loading');
+                        $.tip(".message-container", "保存失败", data.message, "negative", 4);
+                    }
+
+                },
+                error: function (data) { $submit.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
+            });
+        }
         
     }
-    function UpdateUserSex() {
+    function GetUserSex() {
         var sex = 0, //0 = M, 1 = F , 2 = Unknown
             $userRole = $('.user-role');
         if ($userRole.hasClass('woman')) {
@@ -58,10 +101,10 @@
         var editor = new fullAvatarEditor(['*/FullAvatarEditor.swf'], ['*/expressInstall.swf'], 'editor', 380, 600, options, function (data) {
             console.log(data);
             editor.call('loadPic', data.content.avatarUrls[0]);
-            //if (data.code == 5) {
+            if (data.code == 5) {
 
-            //    window.location.reload();
-            //}
+                window.location.reload();
+            }
         });
         $('#upload').on('click', function () {
             editor.call('upload');
@@ -70,7 +113,7 @@
     function initPage() {
         initAvatarEditor($('.user-image').attr('src'));
         bindEvents();
-        UpdateUserSex();
+        GetUserSex();
     }
     initPage();
 })

@@ -88,19 +88,19 @@
                 <div class="three inline fields">
                     <div class="field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="sex" >
+                            <input type="radio" name="sex" value="1">
                             <label>男生</label>
                         </div>
                     </div>
                     <div class="field" style="text-align:center">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="sex">
+                            <input type="radio" name="sex" value="2">
                             <label>女生</label>
                         </div>
                     </div>
                     <div class="field" style="text-align:right">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="sex" checked="checked">
+                            <input type="radio" name="sex" checked="checked" value="0">
                             <label>保密</label>
                         </div>
                     </div>
@@ -113,7 +113,7 @@
                 <div class="ui calendar" id="DOB">
                     <div class="ui input left icon">
                         <i class="calendar icon"></i>
-                        <input type="text" name="dob" placeholder="出生日期">
+                        <input type="text" name="dob" placeholder="出生日期" value="@Model.DOB.ToShortDateString()">
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
 
             </div>
 
-            <button class="ui basic button">
+            <button class="ui basic button" id="submitForm">
                 <i class="icon save"></i>
                 保存
             </button>

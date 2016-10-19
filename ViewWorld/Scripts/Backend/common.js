@@ -1,5 +1,6 @@
 ﻿(function () {
     function tip(selector, title, content, type, dismiss) {
+        //type: Warning,Info,Positive,Negative 
         var id = Math.round(Math.random() * 10000);
         html = '<div class = "ui message ' + type + '" id = "' + id + '" >';
         html += '<i class="close icon"></i>';
@@ -12,6 +13,7 @@
             }, dismiss * 1000)
         }
     }
+
     function loadjscssfile(filename, filetype) {
 
         if (filetype == "js") {
@@ -36,5 +38,11 @@
     function checkMobile(mobile) {
         return /^0?(13|14|15|17|18)[0-9]{9}$/.test(mobile);
     }
-    $.extend({ tip: tip,checkEmail:checkEmail,checkMobile:checkMobile });
+    function bindEvents() {
+        $('.message-container').delegate('.message .close', 'click', function () {
+            $(this).closest('.message').transition('fade');
+        })
+    }
+    $.extend({ tip: tip, checkEmail: checkEmail, checkMobile: checkMobile });
+    bindEvents();
 })(window, document, jQuery);
