@@ -330,10 +330,10 @@ namespace ViewWorld.Models
             {
                 var collection = GetCollection<TEntity>();
                 var updateRes = await collection.UpdateOneAsync(filter, update);
-                if (updateRes.ModifiedCount < 1)
+                if (updateRes.MatchedCount < 1)
                 {
                     var ex = new Exception();
-                    result.Message = DatabaseHelper.NotifyException("UpdateOne", "ERROR: updateRes.ModifiedCount < 1 for entity: " + typeof(TEntity).Name, ex);
+                    result.Message = DatabaseHelper.NotifyException("UpdateOne", "ERROR: updateRes.MatchedCount < 1 for entity: " + typeof(TEntity).Name, ex);
                     return result;
                 }
                 result.Success = true;
@@ -375,10 +375,10 @@ namespace ViewWorld.Models
             {
                 var collection = GetCollection<TEntity>();
                 var updateRes = await collection.UpdateManyAsync(filter, update);
-                if (updateRes.ModifiedCount < 1)
+                if (updateRes.MatchedCount < 1)
                 {
                     var ex = new Exception();
-                    result.Message = DatabaseHelper.NotifyException("UpdateMany", "ERROR: updateRes.ModifiedCount < 1 for entities: " + typeof(TEntity).Name + "s", ex);
+                    result.Message = DatabaseHelper.NotifyException("UpdateMany", "ERROR: updateRes.MatchedCount < 1 for entities: " + typeof(TEntity).Name + "s", ex);
                     return result;
                 }
                 result.Success = true;

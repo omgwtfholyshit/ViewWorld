@@ -65,13 +65,21 @@
                 </div>
 
             </div>
-            <div class="field">
-                <div class="ui action input">
-                    <input type="text" placeholder="验证码..." id="verificationCode" style="width:30%">
-                    <img class="ui button" style="padding:0;width:50%;" src="/Account/GetLoginCaptcha" id="captchaImage" />
-                    
+            @{
+                var required = false;
+                if (Session["RequireCaptcha"] != null && Session["RequireCaptcha"].ToString() == "1")
+                {
+                    required = true;
+                }
+                <div class="field hidden" id="CaptchaDiv" data-required=@required>
+                    <div class="ui action input">
+                        <input type="text" placeholder="验证码..." id="verificationCode" style="width:30%">
+                        <img class="ui button" style="padding:0;width:50%;" src="" id="captchaImage" />
+
+                    </div>
                 </div>
-            </div>
+            }
+            
             <div class="field">
                 <div class="ui checkbox">
                     <input type="checkbox" name="rememberMe" id="rememberMe">

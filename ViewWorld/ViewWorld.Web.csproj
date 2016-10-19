@@ -507,6 +507,7 @@
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\infinity.jpg" />
     <Content Include="Images\DefaultImages\male.jpg" />
+    <Content Include="Images\DefaultImages\UnknownSex.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
     <Content Include="Lib\AntDesign\antd.js" />
     <Content Include="Lib\FullAvatarEditor\crossdomain.xml" />

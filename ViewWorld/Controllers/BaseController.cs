@@ -11,6 +11,7 @@ namespace ViewWorld.Controllers
     public class BaseController : Controller
     {
         #region Json Override
+        //Status Code: 200 正常, 300 通用错误, 301 验证码错误
         protected override JsonResult Json(object data, string contentType,
            Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -74,7 +75,7 @@ namespace ViewWorld.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        protected JsonResult ErrorJson(string status, string msg)
+        protected JsonResult ErrorJson(int status, string msg)
         {
             var result = new
             {

@@ -28,9 +28,20 @@
                 
             }
         })
+        
+    }
+    function UpdateUserSex() {
+        var sex = 0, //0 = M, 1 = F , 2 = Unknown
+            $userRole = $('.user-role');
+        if ($userRole.hasClass('woman')) {
+            sex = 1
+        } else if ($userRole.hasClass('genderless')) {
+            sex = 2;
+        }
+        $('input:radio[name=sex]')[sex].checked = true;
     }
     function initAvatarEditor(logo_url) {
-        logo_url = "/Images/IMG_0602.JPG";
+        console.log(logo_url)
         var options = {
             id: 'swf',
             src_url: logo_url,
@@ -52,11 +63,14 @@
             //    window.location.reload();
             //}
         });
-
+        $('#upload').on('click', function () {
+            editor.call('upload');
+        })
     }
     function initPage() {
-        initAvatarEditor();
+        initAvatarEditor($('.user-image').attr('src'));
         bindEvents();
+        UpdateUserSex();
     }
     initPage();
 })

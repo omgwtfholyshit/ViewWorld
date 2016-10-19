@@ -6,7 +6,7 @@
             outerBuffer: 1.08,
             elementDepth: 220
         };
-    function initAnimation() {
+    function InitAnimation() {
         $("#background").logosDistort(options);
         if (particles) {
             particleDensity = window.outerWidth * 7.5;
@@ -49,6 +49,15 @@
         }
         return data = { Status: status, Message: errorMessage };
     }
+    function InitCaptcha(callback) {
+        var $captcha = $('#CaptchaDiv');
+        if ($captcha.data('required') == "True") {
+            if ($captcha.hasClass('hidden')) {
+                $captcha.removeClass('hidden')
+            }
+            callback();
+        } 
+    }
     function SubmitForm(username, password, verificationCode, rememberMe) {
         var loginModel = {
             UserName: username,
@@ -66,17 +75,21 @@
             success: function (data) {
                 if (data.status == 200) {
                     location.href = data.data;
+                } else if (data.status == 301) {
+                    $('#CaptchaDiv').data('required',"True");
+                    InitCaptcha(ResetCaptcha);
+                    $('#error-message').css({ display: 'block' });
+                    $('#error-message ul').html(data.message);
                 } else {
                     $('#error-message').css({ display: 'block' });
                     $('#error-message ul').html(data.message);
-                    resetCaptcha();
                 }
 
             },
             error: function (data) { $.tip("服务器超时，请稍后重试！"); }
         });
     }
-    function resetCaptcha(requestUrl) {
+    function ResetCaptcha(requestUrl) {
         if (typeof requestUrl == "undefined" || requestUrl.length < 10) {
             requestUrl = "../Account/GetLoginCaptcha"
         }
@@ -102,11 +115,13 @@
                 SubmitForm(username, password, verificationCode, rememberMe);
             }
         });
+        $('#captchaImage').on('click', function (event) { ResetCaptcha();})
     }
-    function initPage() {
+    function InitPage() {
         
         bindEvents();
-        initAnimation();
+        InitAnimation();
+        InitCaptcha(ResetCaptcha);
     }
-    initPage();
+    InitPage();
 })
