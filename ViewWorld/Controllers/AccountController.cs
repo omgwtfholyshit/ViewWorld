@@ -16,6 +16,7 @@ using System.IO;
 using Newtonsoft.Json;
 using ViewWorld.Core.Enum;
 using System.Drawing;
+using MongoDB.Driver;
 
 namespace ViewWorld.Controllers
 {
@@ -31,7 +32,18 @@ namespace ViewWorld.Controllers
         {
             UserManager = userManager;
         }
-
+        private MongoRepository _repo;
+        private MongoRepository Repo
+        {
+            get
+            {
+                return _repo ?? new MongoRepository();
+            }
+            set
+            {
+                _repo = value;
+            }
+        }
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
@@ -173,9 +185,10 @@ namespace ViewWorld.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    NickName = string.Format("新用户_{0}",Tools.Generate_Nickname()),
+                    NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
                     RegisteredAt = DateTime.Now,
-                    Sex = SexType.Unknown
+                    Sex = SexType.Unknown,
+                    Avatar = "~/Images/DefaultImages/UnknownSex.jpg"
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -499,7 +512,7 @@ namespace ViewWorld.Controllers
             }
         }
         #endregion
-        #region 自定义方法
+        #region 自定义登录相关方法
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -541,13 +554,14 @@ namespace ViewWorld.Controllers
                     case SignInStatus.LockedOut:
                         return Json("/Account/Lockout");
                     case SignInStatus.RequiresTwoFactorAuthentication:
-                        return ErrorJson("请输入验证码");
+                        return ErrorJson(301,"请输入验证码");
                     case SignInStatus.Failure:
                     default:
                         return ErrorJson("用户名或密码错误");
                 }
             }
-            return ErrorJson("验证码有误");
+            Session["RequireCaptcha"] = "1";
+            return ErrorJson(301,"验证码错误");
         }
 
         [AllowAnonymous]
@@ -557,8 +571,14 @@ namespace ViewWorld.Controllers
             return ValidationHelper.GenerateCaptchaImage(Session,160,45,Color.DodgerBlue,Color.White,CaptchaType.Login);
         }
         #endregion
-        #region 修改用户信息
-        public ActionResult UploadUserAvatar()
+        #region 自定义获取用户信息
+        public async Task<JsonResult> GetUserSex()
+        {
+            return null;
+        }
+        #endregion
+        #region 自定义修改用户信息
+        public async Task<ActionResult> UploadUserAvatar()
         {
             AvatarUploadResult result = new AvatarUploadResult()
             {
@@ -582,6 +602,8 @@ namespace ViewWorld.Controllers
                         Directory.CreateDirectory(Server.MapPath(savePath));
                     }
                     string imagePath = string.Format("/Upload/User/{0}/Avatar/{1}", this.UserId, "Head.jpg");
+                    var updateDef = Builders<ApplicationUser>.Update.SetOnInsert("Avatar", imagePath);
+                    await Repo.UpdateOne(this.UserId, updateDef);
                     result.avatarUrls.Add(imagePath);
                     imagePath = Server.MapPath(imagePath);
                     file.SaveAs(imagePath);

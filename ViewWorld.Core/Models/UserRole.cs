@@ -12,7 +12,7 @@ namespace ViewWorld.Core.Models
         public static string Sales = "销售";
         public static string VIPMember = "钻石会员";
         public static string GoldUser = "黄金会员";
-        public static string Member = "会员";
-        public static string User = "用户";
+        public static string Member = "白银会员";
+        public static string User = "注册用户";
     }
 }

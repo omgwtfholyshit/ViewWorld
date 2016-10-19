@@ -8,7 +8,6 @@
 .blue{color:#00A0E8}
 .bgblue{background-color:#00A0E8}
 .orange{color:#FF6100}
-
 /******************
  Override Semantic
 ******************/
@@ -151,6 +150,9 @@ body{
     .content-right{
         .ui.form .field > label{
             font-weight:normal;
+        }
+        .ui.form .inline.fields .field{
+            padding:0;
         }
     }
 }

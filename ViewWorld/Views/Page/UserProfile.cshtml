@@ -16,34 +16,42 @@
                         </div>
                     </div>
                 </div>
-                <img src="~/Images/DefaultImages/female.jpg" />
+                <img src="@Model.Avatar" class="user-image" />
             </div>
             <div class="content">
                 <h3>
                     @Model.NickName
                     @{
-                        if (Model.Sex == ViewWorld.Core.Enum.SexType.Female)
+                        try
                         {
-                            <i class="woman icon user-role pink" data-content="我是女生"></i>
+                            if (Model.Sex == ViewWorld.Core.Enum.SexType.Female)
+                            {
+                                <i class="woman icon user-role pink" data-content="我是女生"></i>
+                            }
+                            else if (Model.Sex == ViewWorld.Core.Enum.SexType.Male)
+                            {
+                                <i class="man icon user-role blue" data-content="我是男生"></i>
+                            }
+                            else
+                            {
+                                <i class="genderless icon user-role grey" data-content="性别保密"></i>
+                            }
                         }
-                        else if (Model.Sex == ViewWorld.Core.Enum.SexType.Male)
+                        catch
                         {
-                            <i class="man icon user-role blue" data-content="我是男生"></i>
+                            <i class="genderless icon user-role grey" data-content="性别保密"></i>
                         }
-                        else
-                        {
-                            <i class="Genderless icon user-role grey" data-content="性别保密"></i>
-                        }
+
                     }
 
                 </h3>
                 <div class="meta">
-                    <span class="date">注册时间 : 2003年</span>
+                    <span class="date">注册时间 : @Model.RegisteredAt.ToShortDateString()</span>
                 </div>
             </div>
             <div class="extra content">
                 <a>
-                    管理员
+                    @Model.Roles[0]
                 </a>
             </div>
         </div>
@@ -73,6 +81,31 @@
                         <i class="edit icon"></i>
                     </button>
                 </div>
+
+            </div>
+            <div class="field">
+                <label>您的性别</label>
+                <div class="three inline fields">
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="sex" >
+                            <label>男生</label>
+                        </div>
+                    </div>
+                    <div class="field" style="text-align:center">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="sex">
+                            <label>女生</label>
+                        </div>
+                    </div>
+                    <div class="field" style="text-align:right">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="sex" checked="checked">
+                            <label>保密</label>
+                        </div>
+                    </div>
+                </div>
+                
 
             </div>
             <div class="field">

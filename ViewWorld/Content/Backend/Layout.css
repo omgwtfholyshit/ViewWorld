@@ -140,3 +140,6 @@ body {
 .user-profile .content-right .ui.form .field > label {
   font-weight: normal; }
 
+.user-profile .content-right .ui.form .inline.fields .field {
+  padding: 0; }
+
