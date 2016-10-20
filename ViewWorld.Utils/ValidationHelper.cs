@@ -36,16 +36,30 @@ namespace ViewWorld.Utils
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")] 
         public static FileResult GenerateCaptchaImage(HttpSessionStateBase session, int width, int height, Color textColor, Color backColor, CaptchaType type)
         {
-            CaptchaRandomImage CI = new CaptchaRandomImage();
-            Random rand = new Random(DateTime.Now.Millisecond);
-            var randNum = rand.Next(10000, 99999);
-            string sessionName = GetSessionName(type);
-            session[sessionName] = randNum; 
-            CI.GenerateImage(session[sessionName].ToString(), width, height, textColor, backColor);
             MemoryStream stream = new MemoryStream();
-            CI.Image.Save(stream, ImageFormat.Png);
-            stream.Seek(0, SeekOrigin.Begin);
-            return new FileStreamResult(stream, "image/png");
+            CaptchaRandomImage CI = new CaptchaRandomImage();
+            try
+            {
+                
+                Random rand = new Random(DateTime.Now.Millisecond);
+                var randNum = rand.Next(10000, 99999);
+                string sessionName = GetSessionName(type);
+                session[sessionName] = randNum;
+                CI.GenerateImage(session[sessionName].ToString(), width, height, textColor, backColor);
+                CI.Image.Save(stream, ImageFormat.Png);
+                stream.Seek(0, SeekOrigin.Begin);
+                return new FileStreamResult(stream, "image/png");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                stream.Dispose();
+                CI.Dispose();
+            }
+            
         }
         public static bool ValidateCaptcha(HttpSessionStateBase session,string captcha, CaptchaType type)
         {
@@ -82,6 +96,12 @@ namespace ViewWorld.Utils
                 }
             }
             return requireCaptcha;
+        }
+
+        public static string SendToMobile(string mobileNumber,string content)
+        {
+            string data = "mobile=" + mobileNumber + "&content=" + content;
+            return VerificationSender.Instance.HttpGet(VerificationSender.sendURL,data);
         }
     }
 }

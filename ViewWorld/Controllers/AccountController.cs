@@ -571,6 +571,19 @@ namespace ViewWorld.Controllers
         {
             return ValidationHelper.GenerateCaptchaImage(Session,160,45,Color.DodgerBlue,Color.White,CaptchaType.Login);
         }
+        [AllowAnonymous]
+        [HttpGet]
+        public FileResult GetMobileCaptcha()
+        {
+            return ValidationHelper.GenerateCaptchaImage(Session, 160, 45, Color.LimeGreen, Color.White, CaptchaType.Mobile);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult GetMobileVerificationCode(string mobileNumber)
+        {
+            string content =string.Format("尊敬的会员，您的短信验证码为：{0}（30分钟有效）诚立业祝您生活愉快","123456");
+            return Content(ValidationHelper.SendToMobile(mobileNumber, content));
+        }
         #endregion
         #region 自定义获取用户信息
         #endregion

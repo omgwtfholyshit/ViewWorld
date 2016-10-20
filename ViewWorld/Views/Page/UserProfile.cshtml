@@ -105,8 +105,6 @@
                         </div>
                     </div>
                 </div>
-                
-
             </div>
             <div class="field">
                 <label>出生日期</label>
@@ -149,6 +147,49 @@
             </div>
             <div class="ui positive right labeled icon button" id="upload">
                 Save
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="ui small modal mobile-editor">
+        <i class="close icon"></i>
+        <div class="header">
+            修改手机号码
+        </div>
+        <div class="image content">
+            <div class="ui small image">
+                <img src="~/Images/DefaultImages/icon_phone_large_150.jpg" />
+            </div>
+            <div class="form-container">
+                <form class="ui form" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="field">
+                        <div class="ui action input">
+                            <input type="text" name="mobile" placeholder="要绑定的电话" value="@Model.PhoneNumber" >
+                            <button class="ui basic button change-mobile">
+                                获取验证码
+                            </button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="mobileCode" placeholder="请输入收到的验证码" value="" id="mobileCode">
+                    </div>
+                    <div class="field" id="CaptchaDiv" >
+                        <div class="ui action input">
+                            <input type="text" placeholder="图形验证码" id="verificationCode" style="width:30%">
+                            <img class="ui button" style="padding:0;width:50%;" src="" id="captchaImage" />
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                Nope
+            </div>
+            <div class="ui positive right labeled icon button">
+                Yep, that's me
                 <i class="checkmark icon"></i>
             </div>
         </div>

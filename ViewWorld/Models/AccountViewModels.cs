@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ViewWorld.Core.Enum;
@@ -73,6 +74,7 @@ namespace ViewWorld.Models
         [Required]
         public SexType Sex { get; set; }
         [Required]
+        [BsonDateTimeOptions(DateOnly = true,Kind = DateTimeKind.Local)]
         public DateTime DOB { get; set; }
     }
     public class RegisterViewModel

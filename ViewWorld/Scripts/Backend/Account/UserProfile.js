@@ -28,6 +28,12 @@
                 
             }
         })
+        $('.user-profile .change-mobile').on('click', function (e) {
+            e.preventDefault();
+            ResetCaptcha();
+            $('.mobile-editor').modal('show');
+        })
+        
         $('#submitForm').on('click', function (e) {
             e.preventDefault();
             UpdateUserInfo()
@@ -109,6 +115,13 @@
         $('#upload').on('click', function () {
             editor.call('upload');
         })
+    }
+    function ResetCaptcha(requestUrl) {
+        if (typeof requestUrl == "undefined" || requestUrl.length < 10) {
+            requestUrl = "../Account/GetMobileCaptcha"
+        }
+        requestUrl += '?' + Math.round(Math.random() * 10000);
+        $('#captchaImage').attr('src', requestUrl);
     }
     function initPage() {
         initAvatarEditor($('.user-image').attr('src'));
