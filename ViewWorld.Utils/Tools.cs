@@ -147,6 +147,10 @@ namespace ViewWorld.Utils
             name = name.Substring(0, 1).ToUpper() + name.Substring(1); //Capitalize first letter
             return name;
         }
+        public static string Generate_MobileCode()
+        {
+            return new Random().Next(1000, 9999).ToString();
+        }
         /// <summary>
         /// ID形式类似"82X2ST"
         /// </summary>

@@ -75,6 +75,7 @@ body {
           pointer-events: auto; }
       .wrapper .body-wrapper .header .header-right {
         float: right;
+        display: none;
         margin-right: 2rem; }
         .wrapper .body-wrapper .header .header-right .ui.compact.menu {
           height: 2rem; }
@@ -96,7 +97,8 @@ body {
   .wrapper .message-container {
     position: fixed;
     bottom: 2rem;
-    right: 2rem; }
+    right: 2rem;
+    z-index: 2000; }
 
 .ui.grid {
   height: 100%; }

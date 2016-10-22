@@ -87,15 +87,8 @@
                                     <div class="floating ui red label">22</div>
                                 </a>
                                 <div class="ui simple dropdown item">
-                                    @{
-                                        string imageSrc = string.Format("/Upload/User/{0}/Avatar/Head_thumb.jpg", User.Identity.GetUserId());
-                                        if (!File.Exists(Server.MapPath(imageSrc)))
-                                        {
-                                            imageSrc = "/Images/DefaultImages/female.jpg";
-                                        }
-                                    }
-                                    <img class="ui avatar image" src="@imageSrc">
-                                    <span>李语菥</span>
+                                    <img class="ui avatar image" src="">
+                                    <span class="nickname">昵称</span>
                                     <div class="menu">
                                         <div class="item log-out">注销</div>
                                     </div>

@@ -33,11 +33,95 @@
             ResetCaptcha();
             $('.mobile-editor').modal('show');
         })
-        
+        $('.user-profile .get-code').on('click', function (e) {
+            e.preventDefault();
+            var phone = $(this).siblings().val();
+            if ($.checkMobile(phone)) {
+                $.get("/Account/GetMobileVerificationCode", {"mobileNumber":phone}, function (data) {
+                    console.log(data);
+                    if (data.status == 200) {
+                        $.tip(".message-container", "发送成功", "验证码已发送,请注意查收", "positive", 4);
+                        CountDown(60, "重新发送", CountDownCallback);
+                    } else {
+                        $.tip(".message-container", "获取验证码失败", data.message, "negative", 4);
+                    }
+                   
+                })
+            } else {
+                $.tip(".message-container", "获取验证码失败", "您输入的手机号有误,请修改后再试.", "negative", 4);
+            }
+            
+        })
+        $('#captchaImage').on('click', function () {
+            ResetCaptcha();
+        })
         $('#submitForm').on('click', function (e) {
             e.preventDefault();
             UpdateUserInfo()
         })
+        $('#submitMobile').on('click', function (e) {
+            e.preventDefault();
+            return UpdateUserMobile();
+        })
+    }
+    function CountDown(timer, message, callback) {
+        if (typeof +timer == "number") {
+            if (timer == 0) {
+                callback();
+            } else {
+                $('.get-code').html(message + "(" + timer + ")").attr('disabled', true);
+                timer--;
+                setTimeout(function () {
+                    CountDown(timer, message, callback);
+                }, 1000);
+            }
+        }
+    }
+    function CountDownCallback() {
+        $('.get-code').html("获取验证码").attr('disabled', false);
+    }
+    function UpdateUserMobile() {
+        var userInfo = {
+            Mobile: $(".get-code").siblings().val(),
+            VerificationCode: $('#mobileCode').val(),
+            SetAsUserName: false,
+        }, $submitMobile = $('#submitMobile');
+        if (!$.checkMobile(userInfo.Mobile)) {
+            $.tip(".message-container", "提交失败", "您输入的手机号有误,请修改后再试.", "negative", 4);
+            return false;
+        }
+        if (userInfo.VerificationCode.length != 4) {
+            $.tip(".message-container", "提交失败", "您输入验证码有误,请修改后再试.", "negative", 4);
+            return false;
+        }
+        if (!$submitMobile.hasClass('loading')) {
+            $.ajax({
+                url: "/Account/UpdateUserMobile",
+                method: 'post',
+                beforeSend: function () {
+                    $submitMobile.addClass('loading');
+                },
+                data: {
+                    model: userInfo,
+                    __RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        $submitMobile.removeClass('loading')
+                        $('.change-mobile').siblings().val(userInfo.Mobile);
+                        $.tip(".message-container", "保存成功", "您的手机号已更新", "positive", 4);
+                    } else {
+                        $submitMobile.removeClass('loading')
+                        $.tip(".message-container", "保存失败", data.message, "negative", 4);
+                        return false;
+                    }
+
+                },
+                error: function (data) { $submitMobile.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); return false; }
+            });
+        } else {
+            return false;
+        }
     }
     function UpdateUserInfo() {
         var userInfo = {

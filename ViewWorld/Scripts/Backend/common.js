@@ -2,11 +2,12 @@
     function tip(selector, title, content, type, dismiss) {
         //type: Warning,Info,Positive,Negative 
         var id = Math.round(Math.random() * 10000);
-        html = '<div class = "ui message ' + type + '" id = "' + id + '" >';
+        html = '<div class = "ui message hidden ' + type + '" id = "' + id + '" >';
         html += '<i class="close icon"></i>';
         html += '<div class="header">' + title + '</div>';
         html += '<p>' + content + '</p></div>';
         $(selector).append(html);
+        $('#' + id).transition('vertical flip');
         if (typeof dismiss == 'number') {
             setTimeout(function () {
                 $('#' + id).transition('fade');

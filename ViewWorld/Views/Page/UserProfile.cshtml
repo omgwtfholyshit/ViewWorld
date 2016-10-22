@@ -166,7 +166,7 @@
                     <div class="field">
                         <div class="ui action input">
                             <input type="text" name="mobile" placeholder="要绑定的电话" value="@Model.PhoneNumber" >
-                            <button class="ui basic button change-mobile">
+                            <button class="ui basic button get-code">
                                 获取验证码
                             </button>
                         </div>
@@ -181,15 +181,16 @@
 
                         </div>
                     </div>
+                    
                 </form>
             </div>
         </div>
         <div class="actions">
             <div class="ui black deny button">
-                Nope
+                取消
             </div>
-            <div class="ui positive right labeled icon button">
-                Yep, that's me
+            <div class="ui positive right labeled icon button" id="submitMobile">
+                确定
                 <i class="checkmark icon"></i>
             </div>
         </div>

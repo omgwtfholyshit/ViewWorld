@@ -512,6 +512,12 @@ namespace ViewWorld.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
+        private void RemoveOutputCacheItem(string methodName)
+        {
+            var urlToRemove = Url.Action(methodName, "Account");
+            HttpResponse.RemoveOutputCacheItem(urlToRemove);
+        }
         #endregion
         #region 自定义登录相关方法
         [HttpPost]
@@ -581,11 +587,39 @@ namespace ViewWorld.Controllers
         [HttpGet]
         public ActionResult GetMobileVerificationCode(string mobileNumber)
         {
-            string content =string.Format("尊敬的会员，您的短信验证码为：{0}（30分钟有效）诚立业祝您生活愉快","123456");
-            return Content(ValidationHelper.SendToMobile(mobileNumber, content));
+            if (Tools.isChineseMobile(mobileNumber))
+            {
+                if (Session["MobileTimer"] == null)
+                {
+                    string code = Tools.Generate_MobileCode();
+                    Session["MobileTimer"] = "Sent";
+                    Session["MobileCaptcha"] = code;
+                    Session["MobileSubmitted"] = mobileNumber;
+                    string content = string.Format("尊敬的会员，您的短信验证码为：{0}（20分钟有效）诚立业祝您生活愉快", code);
+                    ValidationHelper.SendToMobile(mobileNumber, content);
+                    Task.Factory.StartNew(() => ValidationHelper.Instance.ClearSession("MobileTimer", Session));
+                    return SuccessJson();
+                }
+
+                return ErrorJson("发送速度太快,请稍候再试");
+            }
+            return ErrorJson("号码不正确");
         }
         #endregion
         #region 自定义获取用户信息
+        [HttpGet]
+        [OutputCache(Location =System.Web.UI.OutputCacheLocation.Server,Duration =1200)]
+        public async Task<JsonResult> GetUserInfo()
+        {
+            var Result = await Repo.GetOne<ApplicationUser>(this.UserId);
+            var data = new
+            {
+                Username = Result.Entity.UserName,
+                Nickname = Result.Entity.NickName,
+                Avatar = Result.Entity.Avatar,
+            };
+            return Json(data);
+        }
         #endregion
         #region 自定义修改用户信息
         [HttpPost]
@@ -629,6 +663,7 @@ namespace ViewWorld.Controllers
                 result.success = true;
                 result.msg = "Success!";
                 //返回图片的保存结果（返回内容为json字符串，可自行构造，该处使用Newtonsoft.Json构造）
+                RemoveOutputCacheItem("GetUserInfo");
                 return Content(JsonConvert.SerializeObject(result));
             }
             catch (Exception e)
@@ -647,9 +682,44 @@ namespace ViewWorld.Controllers
                 var Result = await Repo.UpdateOne(this.UserId, updateDef);
                 if (Result.Success)
                 {
+                    RemoveOutputCacheItem("GetUserInfo");
                     return SuccessJson();
                 }
                 return ErrorJson(Result.Message);
+            }
+            return ErrorJson("保存失败,请检查您的输入");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserMobile(UpdateUserNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Mobile))
+                {
+                    if(Session["MobileSubmitted"] == null || Session["MobileSubmitted"].ToString() != model.Mobile)
+                    {
+                        return ErrorJson("申请的手机号和接受验证码的手机号不匹配");
+                    }
+                    UpdateDefinition<ApplicationUser> updateDef;
+                    if (model.SetAsUserName)
+                    {
+                        updateDef =  Builders<ApplicationUser>.Update.Set("UserName", model.Mobile).Set("PhoneNumber", model.Mobile).Set("PhoneNumberConfirmed",true);
+                    }else
+                    {
+                        updateDef = Builders<ApplicationUser>.Update.Set("PhoneNumber", model.Mobile).Set("PhoneNumberConfirmed", true);
+                    }
+                    var Result = await Repo.UpdateOne(this.UserId, updateDef);
+                    if (Result.Success)
+                    {
+                        RemoveOutputCacheItem("GetUserInfo");
+                        return SuccessJson();
+                    }else
+                    {
+                        return ErrorJson(Result.Message);
+                    }
+                }
+                return ErrorJson("验证码错误");
             }
             return ErrorJson("保存失败,请检查您的输入");
         }

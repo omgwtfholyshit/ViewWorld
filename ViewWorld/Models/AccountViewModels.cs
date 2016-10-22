@@ -77,6 +77,15 @@ namespace ViewWorld.Models
         [BsonDateTimeOptions(DateOnly = true,Kind = DateTimeKind.Local)]
         public DateTime DOB { get; set; }
     }
+    public class UpdateUserNameViewModel
+    {
+        public string Mobile { get; set; }
+        public string Email { get; set; }
+        [Required]
+        public string VerificationCode { get; set; }
+        [Required]
+        public bool SetAsUserName { get; set; }
+    }
     public class RegisterViewModel
     {
         [Required]
