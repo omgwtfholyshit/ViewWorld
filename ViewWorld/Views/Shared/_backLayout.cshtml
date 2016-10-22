@@ -32,7 +32,7 @@
                         <i class="dropdown icon"></i>
                         <div class="menu transition">
                             <a class="item" href="/page/UserProfile"><i class="grid user icon"></i> 我的账号</a>
-                            <a class="item"><i class="grid lock icon"></i> 修改密码</a>
+                            <a class="item" href="/page/EditPassword"><i class="grid lock icon"></i> 修改密码</a>
                         </div>
                     </div>
                     <div class="ui dropdown item ">
@@ -101,9 +101,9 @@
                     </div>
                     <div class="content-body">
                         <div class="ui breadcrumb">
-                            <a class="section">账户管理</a>
+                            <a class="section" id="parentCategory">账户管理</a>
                             <div class="divider"> | </div>
-                            <a class="section active">我的账号</a>
+                            <a class="section active">@ViewBag.Title</a>
                         </div>
                         <div class="content-wrapper">
                             @RenderBody()

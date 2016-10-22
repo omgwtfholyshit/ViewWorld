@@ -723,6 +723,27 @@ namespace ViewWorld.Controllers
             }
             return ErrorJson("保存失败,请检查您的输入");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserPassword(EditPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if(model.OldPassword == model.Password)
+                {
+                    return ErrorJson("新密码不能和旧密码一样");
+                }
+                var Result = await UserManager.ChangePasswordAsync(this.UserId, model.OldPassword, model.Password);
+                if (Result.Succeeded)
+                {
+                    return SuccessJson();
+                }else
+                {
+                    return ErrorJson("密码错误");
+                }
+            }
+            return ErrorJson("两次密码输入不匹配");
+        }
         #endregion
     }
 }

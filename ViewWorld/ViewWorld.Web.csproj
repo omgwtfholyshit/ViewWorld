@@ -507,6 +507,7 @@
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\icon_phone_large_150.jpg" />
     <Content Include="Images\DefaultImages\infinity.jpg" />
+    <Content Include="Images\DefaultImages\lock.jpg" />
     <Content Include="Images\DefaultImages\male.jpg" />
     <Content Include="Images\DefaultImages\UnknownSex.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
@@ -620,6 +621,7 @@
     <Content Include="Views\Page\UserProfile.cshtml" />
     <Content Include="Views\Page\Login.cshtml" />
     <Content Include="Views\Home\MongoTest.cshtml" />
+    <Content Include="Views\Page\EditPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

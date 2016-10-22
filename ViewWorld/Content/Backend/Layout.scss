@@ -1,13 +1,14 @@
 ﻿/******************
  Global Settings
 ******************/
-.ui,.ui.input input,.ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"],h1, h2, h3, h4, h5,.ui.modal>.header{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;}
+.ui,.ui.input input,.ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"],h1, h2, h3, h4, h5,.ui.modal>.header,.content .header{font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;}
 .grey{color:#999}
 .bgblack{background-color:#404040!important}
 .silver{color:#cccccc}
 .blue{color:#00A0E8}
 .bgblue{background-color:#00A0E8}
 .orange{color:#FF6100}
+.clearboth{clear:both}
 /******************
  Override Semantic
 ******************/
@@ -53,7 +54,7 @@ body{
     .body-wrapper{
       width:87.5%;
       max-width:87.5%;
-      .header{
+      >.header{
         position: relative;
         height: 5rem;
         background: #fff;
@@ -135,7 +136,11 @@ body{
    UserProfile
 ******************/
 
-.user-profile{
+.user-profile,.edit-password{
+    .content-upper{
+        width: 56%;
+        margin: auto;
+    }
     .content-left,.content-right{
         vertical-align:top;
         display:inline-block;
@@ -150,6 +155,7 @@ body{
         }
     }
     .content-right{
+        width:50%;
         .ui.form .field > label{
             font-weight:normal;
         }
@@ -161,4 +167,10 @@ body{
 }
 .mobile-editor .form-container{
        margin-left:15%;
+}
+.edit-password{
+    .content-bottom{
+        width: 56%;
+        margin: auto;
+    }
 }

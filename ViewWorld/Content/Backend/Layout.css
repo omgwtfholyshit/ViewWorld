@@ -2,7 +2,7 @@
 /******************
  Global Settings
 ******************/
-.ui, .ui.input input, .ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"], h1, h2, h3, h4, h5, .ui.modal > .header {
+.ui, .ui.input input, .ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"], h1, h2, h3, h4, h5, .ui.modal > .header, .content .header {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important; }
 
 .grey {
@@ -22,6 +22,9 @@
 
 .orange {
   color: #FF6100; }
+
+.clearboth {
+  clear: both; }
 
 /******************
  Override Semantic
@@ -63,21 +66,21 @@ body {
   .wrapper .body-wrapper {
     width: 87.5%;
     max-width: 87.5%; }
-    .wrapper .body-wrapper .header {
+    .wrapper .body-wrapper > .header {
       position: relative;
       height: 5rem;
       background: #fff;
       padding: 1rem;
       border-bottom: 1px solid #F0F0F0; }
-      .wrapper .body-wrapper .header .header-left, .wrapper .body-wrapper .header .header-right {
+      .wrapper .body-wrapper > .header .header-left, .wrapper .body-wrapper > .header .header-right {
         display: inline-block; }
-        .wrapper .body-wrapper .header .header-left .search.icon, .wrapper .body-wrapper .header .header-right .search.icon {
+        .wrapper .body-wrapper > .header .header-left .search.icon, .wrapper .body-wrapper > .header .header-right .search.icon {
           pointer-events: auto; }
-      .wrapper .body-wrapper .header .header-right {
+      .wrapper .body-wrapper > .header .header-right {
         float: right;
         display: none;
         margin-right: 2rem; }
-        .wrapper .body-wrapper .header .header-right .ui.compact.menu {
+        .wrapper .body-wrapper > .header .header-right .ui.compact.menu {
           height: 2rem; }
     .wrapper .body-wrapper .content-body {
       padding-left: 1rem;
@@ -127,24 +130,33 @@ body {
 /******************
    UserProfile
 ******************/
-.user-profile .content-left, .user-profile .content-right {
+.user-profile .content-upper, .edit-password .content-upper {
+  width: 56%;
+  margin: auto; }
+
+.user-profile .content-left, .user-profile .content-right, .edit-password .content-left, .edit-password .content-right {
   vertical-align: top;
   display: inline-block;
   float: left;
   padding-top: 2rem; }
 
-.user-profile .content-left {
+.user-profile .content-left, .edit-password .content-left {
   width: 50%;
   padding-right: 2rem; }
-  .user-profile .content-left .ui.card {
+  .user-profile .content-left .ui.card, .edit-password .content-left .ui.card {
     float: right; }
 
-.user-profile .content-right .ui.form .field > label {
-  font-weight: normal; }
-
-.user-profile .content-right .ui.form .inline.fields .field {
-  padding: 0; }
+.user-profile .content-right, .edit-password .content-right {
+  width: 50%; }
+  .user-profile .content-right .ui.form .field > label, .edit-password .content-right .ui.form .field > label {
+    font-weight: normal; }
+  .user-profile .content-right .ui.form .inline.fields .field, .edit-password .content-right .ui.form .inline.fields .field {
+    padding: 0; }
 
 .mobile-editor .form-container {
   margin-left: 15%; }
+
+.edit-password .content-bottom {
+  width: 56%;
+  margin: auto; }
 

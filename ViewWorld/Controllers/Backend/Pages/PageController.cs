@@ -31,6 +31,10 @@ namespace ViewWorld.Controllers.Backend.Pages
             var result = await repo.GetOne<ApplicationUser>(UserId);
             return View(result.Entity);
         }
+        public ActionResult EditPassword()
+        {
+            return View();
+        }
         public ActionResult Login()
         {
             return View();
