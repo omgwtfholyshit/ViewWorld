@@ -39,5 +39,9 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        public ActionResult RegionManagement()
+        {
+            return View();
+        }
     }
 }

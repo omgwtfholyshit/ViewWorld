@@ -174,7 +174,6 @@
         $('input:radio[name=sex]')[sex].checked = true;
     }
     function initAvatarEditor(logo_url) {
-        console.log(logo_url)
         var options = {
             id: 'swf',
             src_url: logo_url,

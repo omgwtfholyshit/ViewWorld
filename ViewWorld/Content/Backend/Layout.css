@@ -26,6 +26,9 @@
 .clearboth {
   clear: both; }
 
+.invisible {
+  opacity: 0; }
+
 /******************
  Override Semantic
 ******************/
@@ -127,9 +130,9 @@ body {
       color: #ccc;
       padding-top: 5px; }
 
-/******************
-   UserProfile
-******************/
+/************************************
+    UserProfile & EditPassword
+************************************/
 .user-profile .content-upper, .edit-password .content-upper {
   width: 56%;
   margin: auto; }
@@ -159,4 +162,10 @@ body {
 .edit-password .content-bottom {
   width: 56%;
   margin: auto; }
+
+/************************************
+    Region
+************************************/
+.region-management .tool-bar, .region-management .table-container {
+  padding: 0.5rem; }
 

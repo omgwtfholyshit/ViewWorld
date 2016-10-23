@@ -9,6 +9,7 @@
 .bgblue{background-color:#00A0E8}
 .orange{color:#FF6100}
 .clearboth{clear:both}
+.invisible{opacity:0}
 /******************
  Override Semantic
 ******************/
@@ -132,9 +133,9 @@ body{
 
 }
 
-/******************
-   UserProfile
-******************/
+/************************************
+    UserProfile & EditPassword
+************************************/
 
 .user-profile,.edit-password{
     .content-upper{
@@ -172,5 +173,14 @@ body{
     .content-bottom{
         width: 56%;
         margin: auto;
+    }
+}
+
+/************************************
+    Region
+************************************/
+.region-management{
+    .tool-bar,.table-container{
+        padding:0.5rem;
     }
 }

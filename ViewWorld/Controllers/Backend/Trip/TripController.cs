@@ -16,10 +16,6 @@ namespace ViewWorld.Controllers.Trip
             return View();
         }
 
-        public ActionResult TestMethod()
-        {
-           
-            return Json("1");
-        }
+        
     }
 }

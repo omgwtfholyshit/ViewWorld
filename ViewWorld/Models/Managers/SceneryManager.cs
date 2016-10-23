@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core.Models;
 
-namespace ViewWorld.Models.Trip
+namespace ViewWorld.Models.Managers
 {
     public class SceneryManager : Controller
     {
