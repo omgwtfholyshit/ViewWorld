@@ -534,6 +534,7 @@
     <Content Include="Scripts\Backend\common.js" />
     <Content Include="Scripts\Backend\Layout.js" />
     <Content Include="Scripts\Backend\Login.js" />
+    <Content Include="Scripts\Backend\Trip\RegionManagement.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
