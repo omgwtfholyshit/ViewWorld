@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ViewWorld.Models.GlobalSetting>
+@{
+    ViewBag.Title = "GlobalSetting";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+
+<div class="ui container">
+    <h2>全局设置</h2>
+
+    <form class="ui form" id="global-setting" name="global-setting" method="post">
+        @Html.AntiForgeryToken()
+        @if (Model.Any())
+        {
+            foreach (var setting in Model)
+            {
+                
+                <div class="field">
+                    <label>@setting.Label</label>
+                    <input type="text" name="value" value="@setting.Value" />
+                </div>
+                
+            }
+            <button class="ui basic button">
+                <i class="icon save"></i>
+                保存
+            </button>
+        }
+        
+        <button class="ui basic button">
+            <i class="icon add"></i>
+            添加新设置
+        </button>
+    </form>
+</div>

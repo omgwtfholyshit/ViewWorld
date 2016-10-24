@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
 using ViewWorld.Models;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
@@ -42,6 +44,18 @@ namespace ViewWorld.Controllers.Backend.Pages
         public ActionResult RegionManagement()
         {
             return View();
+        }
+        public async Task<ActionResult> GlobalSetting()
+        {
+            var settings = await repo.GetAll<GlobalSetting>();
+            
+            //GlobalSetting setting = new GlobalSetting()
+            //{
+            //    Label = "Test",
+            //    Value = "Kevin"
+            //};
+            //await repo.AddOne(setting);
+            return View(settings.Entities);
         }
     }
 }
