@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AspNet.Identity.MongoDB;
 using Microsoft.AspNet.Identity;
 using ViewWorld.Core.Enum;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace ViewWorld.Models
 {
@@ -17,6 +18,7 @@ namespace ViewWorld.Models
         public string Avatar { get; set; }
 
         [DataMember]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime RegisteredAt { get; set; }
         [DataMember]
         public string WechatOpenId { get; set; }
@@ -33,9 +35,12 @@ namespace ViewWorld.Models
         [DataMember]
         public string Address { get; set; }
         [DataMember]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime DOB { get; set; }
         [DataMember]
         public SexType Sex { get; set; }
+        [DataMember]
+        public int Points { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

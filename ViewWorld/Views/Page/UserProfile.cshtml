@@ -6,128 +6,129 @@
 <link href="~/Content/components/calendar.min.css" rel="stylesheet" />
 
 <div class="ui container user-profile">
-    <div class="content-left">
-        <div class="ui card">
-            <div class="blurring dimmable image">
-                <div class="ui dimmer">
-                    <div class="content">
-                        <div class="center">
-                            <div class="ui inverted button edit-avatar">修改头像</div>
+    <div class="content-upper">
+        <div class="content-left">
+            <div class="ui card">
+                <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <div class="ui inverted button edit-avatar">修改头像</div>
+                            </div>
                         </div>
                     </div>
+                    <img src="@Model.Avatar" class="user-image" />
                 </div>
-                <img src="@Model.Avatar" class="user-image" />
-            </div>
-            <div class="content">
-                <h3>
-                    @Model.NickName
-                    @{
-                        try
-                        {
-                            if (Model.Sex == ViewWorld.Core.Enum.SexType.Female)
+                <div class="content">
+                    <h3>
+                        @Model.NickName
+                        @{
+                            try
                             {
-                                <i class="woman icon user-role pink" data-content="我是女生"></i>
+                                if (Model.Sex == ViewWorld.Core.Enum.SexType.Female)
+                                {
+                                    <i class="woman icon user-role pink" data-content="我是女生"></i>
+                                }
+                                else if (Model.Sex == ViewWorld.Core.Enum.SexType.Male)
+                                {
+                                    <i class="man icon user-role blue" data-content="我是男生"></i>
+                                }
+                                else
+                                {
+                                    <i class="genderless icon user-role grey" data-content="性别保密"></i>
+                                }
                             }
-                            else if (Model.Sex == ViewWorld.Core.Enum.SexType.Male)
-                            {
-                                <i class="man icon user-role blue" data-content="我是男生"></i>
-                            }
-                            else
+                            catch
                             {
                                 <i class="genderless icon user-role grey" data-content="性别保密"></i>
                             }
-                        }
-                        catch
-                        {
-                            <i class="genderless icon user-role grey" data-content="性别保密"></i>
+
                         }
 
-                    }
-
-                </h3>
-                <div class="meta">
-                    <span class="date">注册时间 : @Model.RegisteredAt.ToShortDateString()</span>
+                    </h3>
+                    <div class="meta">
+                        <span class="date">注册时间 : @Model.RegisteredAt.ToShortDateString()</span>
+                    </div>
                 </div>
-            </div>
-            <div class="extra content">
-                <a>
-                    @Model.Roles[0]
-                </a>
+                <div class="extra content">
+                    <a>
+                        @Model.Roles[0]
+                    </a>
+                </div>
             </div>
         </div>
+        <div class="content-right">
+            <form class="ui form" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="field">
+                    <label>您的姓名</label>
+                    <input type="text" name="nickname" placeholder="您的姓名" value="@Model.NickName">
+                </div>
+                <div class="field">
+                    <label>您的电话</label>
+                    <div class="ui action input">
+                        <input type="text" name="mobile" placeholder="您的电话" value="@Model.PhoneNumber" readonly>
+                        <button class="ui basic right icon button change-mobile">
+                            <i class="edit icon"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="field">
+                    <label>您的邮箱</label>
+                    <div class="ui action input">
+                        <input type="text" name="email" placeholder="您的邮箱" value="@Model.Email" readonly>
+                        <button class="ui basic right icon button change-email">
+                            <i class="edit icon"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="field">
+                    <label>您的性别</label>
+                    <div class="three inline fields">
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="sex" value="1">
+                                <label>男生</label>
+                            </div>
+                        </div>
+                        <div class="field" style="text-align:center">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="sex" value="2">
+                                <label>女生</label>
+                            </div>
+                        </div>
+                        <div class="field" style="text-align:right">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="sex" checked="checked" value="0">
+                                <label>保密</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>出生日期</label>
+                    <div class="ui calendar" id="DOB">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input type="text" name="dob" placeholder="出生日期" value="@Model.DOB.ToShortDateString()">
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+
+                </div>
+
+                <button class="ui basic button" id="submitForm">
+                    <i class="icon save"></i>
+                    保存
+                </button>
+            </form>
+
+        </div>
     </div>
-    <div class="content-right">
-        <form class="ui form" method="post" enctype="multipart/form-data">
-            @Html.AntiForgeryToken()
-            <div class="field">
-                <label>您的姓名</label>
-                <input type="text" name="nickname" placeholder="您的姓名" value="@Model.NickName">
-            </div>
-            <div class="field">
-                <label>您的电话</label>
-                <div class="ui action input">
-                    <input type="text" name="mobile" placeholder="您的电话" value="@Model.PhoneNumber" readonly>
-                    <button class="ui basic right icon button change-mobile">
-                        <i class="edit icon"></i>
-                    </button>
-                </div>
 
-            </div>
-            <div class="field">
-                <label>您的邮箱</label>
-                <div class="ui action input">
-                    <input type="text" name="email" placeholder="您的邮箱" value="@Model.Email" readonly>
-                    <button class="ui basic right icon button change-email">
-                        <i class="edit icon"></i>
-                    </button>
-                </div>
-
-            </div>
-            <div class="field">
-                <label>您的性别</label>
-                <div class="three inline fields">
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="sex" >
-                            <label>男生</label>
-                        </div>
-                    </div>
-                    <div class="field" style="text-align:center">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="sex">
-                            <label>女生</label>
-                        </div>
-                    </div>
-                    <div class="field" style="text-align:right">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="sex" checked="checked">
-                            <label>保密</label>
-                        </div>
-                    </div>
-                </div>
-                
-
-            </div>
-            <div class="field">
-                <label>出生日期</label>
-                <div class="ui calendar" id="DOB">
-                    <div class="ui input left icon">
-                        <i class="calendar icon"></i>
-                        <input type="text" name="dob" placeholder="出生日期">
-                    </div>
-                </div>
-            </div>
-            <div class="field">
-
-            </div>
-
-            <button class="ui basic button">
-                <i class="icon save"></i>
-                保存
-            </button>
-        </form>
-
-    </div>
     <div class="ui modal avatar-editor">
         <i class="close icon"></i>
         <div class="header">
@@ -149,6 +150,50 @@
             </div>
             <div class="ui positive right labeled icon button" id="upload">
                 Save
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="ui small modal mobile-editor">
+        <i class="close icon"></i>
+        <div class="header">
+            修改手机号码
+        </div>
+        <div class="image content">
+            <div class="ui small image">
+                <img src="~/Images/DefaultImages/icon_phone_large_150.jpg" />
+            </div>
+            <div class="form-container">
+                <form class="ui form" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div class="field">
+                        <div class="ui action input">
+                            <input type="text" name="mobile" placeholder="要绑定的电话" value="@Model.PhoneNumber" >
+                            <button class="ui basic button get-code">
+                                获取验证码
+                            </button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="mobileCode" placeholder="请输入收到的验证码" value="" id="mobileCode">
+                    </div>
+                    <div class="field" id="CaptchaDiv" >
+                        <div class="ui action input">
+                            <input type="text" placeholder="图形验证码" id="verificationCode" style="width:30%">
+                            <img class="ui button" style="padding:0;width:50%;" src="" id="captchaImage" />
+
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                取消
+            </div>
+            <div class="ui positive right labeled icon button" id="submitMobile">
+                确定
                 <i class="checkmark icon"></i>
             </div>
         </div>

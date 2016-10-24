@@ -1,4 +1,4 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
 @{
     Layout = null;
 }
@@ -32,14 +32,14 @@
                         <i class="dropdown icon"></i>
                         <div class="menu transition">
                             <a class="item" href="/page/UserProfile"><i class="grid user icon"></i> 我的账号</a>
-                            <a class="item"><i class="grid lock icon"></i> 修改密码</a>
+                            <a class="item" href="/page/EditPassword"><i class="grid lock icon"></i> 修改密码</a>
                         </div>
                     </div>
                     <div class="ui dropdown item ">
                         旅游管理
                         <i class="dropdown icon"></i>
                         <div class="menu transition">
-                            <a class="item"><i class="browser icon"></i> 旅游产品分类</a>
+                            <a class="item"><i class="browser icon"></i> 区域管理</a>
                             <a class="item"><i class="globe icon"></i> 行程管理</a>
                             <a class="item"><i class="location arrow icon"></i> 景点管理</a>
                             <a class="item"><i class="marker icon"></i> 出发地管理</a>
@@ -59,7 +59,7 @@
                         <div class="menu transition">
                             <a class="item"><i class="users icon"></i> 会员列表</a>
                             <a class="item"><i class="credit card alternative icon"></i> 信用卡信息</a>
-                            <a class="item"><i class="Trophy icon"></i> 优惠券管理</a>
+                            <a class="item"><i class="trophy icon"></i> 优惠券管理</a>
                         </div>
                     </div>
                     <a class="item" href="#">
@@ -71,7 +71,7 @@
                 </div>
                 <div class="row body-wrapper">
                     <div class="header">
-                        <div class="header-left">
+                        <div class="header-left invisible">
                             <div class="ui search">
                                 <div class="ui icon input">
                                     <input class="prompt" type="text" placeholder="搜索">
@@ -83,27 +83,27 @@
                         <div class="header-right">
                             <div class="ui compact menu">
                                 <a class="item">
-                                    <i class="icon mail"></i> 
+                                    <i class="icon mail"></i>
                                     <div class="floating ui red label">22</div>
                                 </a>
                                 <div class="ui simple dropdown item">
-                                    <img class="ui avatar image" src="~/Images/DefaultImages/female.jpg">
-                                    <span>李语菥</span>
+                                    <img class="ui avatar image" src="">
+                                    <span class="nickname">昵称</span>
                                     <div class="menu">
                                         <div class="item log-out">注销</div>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
 
                         </div>
                     </div>
                     <div class="content-body">
                         <div class="ui breadcrumb">
-                            <a class="section">账户管理</a>
+                            <a class="section" id="parentCategory">账户管理</a>
                             <div class="divider"> | </div>
-                            <a class="section active">我的账号</a>
+                            <a class="section active">@ViewBag.Title</a>
                         </div>
                         <div class="content-wrapper">
                             @RenderBody()
@@ -115,7 +115,7 @@
             </div>
         </div>
         <div class="message-container">
-           
+
         </div>
         <div class="ui demo page dimmer">
             <div class="content">
@@ -129,12 +129,12 @@
             </div>
         </div>
     </div>
-   
-   
+
+
     @Scripts.Render("~/bundles/semantic")
     <script src="~/Scripts/Backend/common.js"></script>
     <script src="~/Scripts/Backend/Layout.js"></script>
-    
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

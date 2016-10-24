@@ -15,6 +15,15 @@
         })
 
     }
+    function GetUserProfile() {
+        $.get("/Account/GetUserInfo", null, function (data) {
+            if (data.status == 200) {
+                $('.nickname').html(data.data.Nickname);
+                $('.avatar.image').attr('src', data.data.Avatar);
+                $('.header-right').transition('fade')
+            }
+        })
+    }
     function adjustLayout() {
         var result = 100 - (1920 - window.innerWidth) / coefficient;
         if (result <= 66) result = 66;
@@ -22,8 +31,9 @@
         $contentWrapper.css({ 'height': (window.innerHeight / 14) - 9 + "rem" });
     }
     function initPage() {
-        bindEvents()
-        adjustLayout()
+        bindEvents();
+        GetUserProfile();
+        adjustLayout();
         window.onresize = adjustLayout;
         //$('.ui.dimmer').dimmer('toggle');
         //setTimeout(function () { $('.ui.dimmer').dimmer('hide'); }, 2000);

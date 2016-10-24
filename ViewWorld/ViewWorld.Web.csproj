@@ -325,11 +325,11 @@
     <Compile Include="Models\MongoRepository.cs" />
     <Compile Include="Models\Trip\Region.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />
-    <Compile Include="Models\Trip\SceneryManager.cs" />
+    <Compile Include="Models\Managers\SceneryManager.cs" />
     <Compile Include="Models\Trip\Schedule.cs" />
     <Compile Include="Models\Trip\StartingPoint.cs" />
     <Compile Include="Models\Trip\Trip.cs" />
-    <Compile Include="Models\Trip\TripManager.cs" />
+    <Compile Include="Models\Managers\TripManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -506,7 +506,9 @@
     <Content Include="Images\Backend\Login\logo_393-73.png" />
     <Content Include="Images\Backend\Login\logo_393-73_white.png" />
     <Content Include="Images\DefaultImages\female.jpg" />
+    <Content Include="Images\DefaultImages\icon_phone_large_150.jpg" />
     <Content Include="Images\DefaultImages\infinity.jpg" />
+    <Content Include="Images\DefaultImages\lock.jpg" />
     <Content Include="Images\DefaultImages\male.jpg" />
     <Content Include="Images\DefaultImages\UnknownSex.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
@@ -620,6 +622,8 @@
     <Content Include="Views\Page\UserProfile.cshtml" />
     <Content Include="Views\Page\Login.cshtml" />
     <Content Include="Views\Home\MongoTest.cshtml" />
+    <Content Include="Views\Page\EditPassword.cshtml" />
+    <Content Include="Views\Page\RegionManagement.cshtml" />
     <Content Include="Views\Page\GlobalSetting.cshtml" />
   </ItemGroup>
   <ItemGroup>

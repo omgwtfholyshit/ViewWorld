@@ -5,11 +5,11 @@ using System.Linq;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
 using ViewWorld.Utils;
-using ViewWorld.Models.Trip;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using ViewWorld.Models;
 using System.Threading.Tasks;
+using ViewWorld.Models.Managers;
 
 namespace ViewWorld.Controllers
 {
