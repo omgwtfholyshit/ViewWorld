@@ -47,14 +47,7 @@ namespace ViewWorld.Controllers.Backend.Pages
         }
         public async Task<ActionResult> GlobalSetting()
         {
-            var settings = await repo.GetAll<GlobalSetting>();
-            
-            //GlobalSetting setting = new GlobalSetting()
-            //{
-            //    Label = "Test",
-            //    Value = "Kevin"
-            //};
-            //await repo.AddOne(setting);
+            var settings = await repo.GetAll<GlobalSetting>();            
             return View(settings.Entities);
         }
     }

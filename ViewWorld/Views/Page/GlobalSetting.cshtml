@@ -16,11 +16,11 @@
                 
                 <div class="field">
                     <label>@setting.Label</label>
-                    <input type="text" name="value" value="@setting.Value" />
+                    <input type="text" name="@setting.EnglishLabel" value="@setting.Value" />
                 </div>
                 
             }
-            <button class="ui basic button">
+            <button class="ui basic button" id="save-global-setting">
                 <i class="icon save"></i>
                 保存
             </button>

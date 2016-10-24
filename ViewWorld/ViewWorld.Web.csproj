@@ -529,6 +529,7 @@
     <Content Include="Lib\React\react.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\Backend\Account\GlobalSetting.js" />
     <Content Include="Scripts\Backend\Account\UserProfile.js" />
     <Content Include="Scripts\Backend\common.js" />
     <Content Include="Scripts\Backend\Layout.js" />

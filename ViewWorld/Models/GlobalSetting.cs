@@ -13,7 +13,8 @@ namespace ViewWorld.Models
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        public string Label { get; set; }        
+        public string Label { get; set; }
+        public string EnglishLabel { get; set; }
         public string Value { get; set; }
         public ApplicationUser CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
