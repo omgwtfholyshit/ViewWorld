@@ -319,6 +319,7 @@
     <Compile Include="Interfaces\IMongoDbRepository.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\GlobalSetting.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MongoRepository.cs" />
@@ -619,6 +620,7 @@
     <Content Include="Views\Page\UserProfile.cshtml" />
     <Content Include="Views\Page\Login.cshtml" />
     <Content Include="Views\Home\MongoTest.cshtml" />
+    <Content Include="Views\Page\GlobalSetting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -52,9 +52,9 @@ namespace ViewWorld.App_Start
             {
                 db.CreateCollection("Trips");
             }
-            if (!CollectionExists(db, "Sceneries"))
+            if (!CollectionExists(db, "Scenerys"))
             {
-                db.CreateCollection("Sceneries");
+                db.CreateCollection("Scenerys");
             }
             if (!CollectionExists(db, "StartingPoints"))
             {
