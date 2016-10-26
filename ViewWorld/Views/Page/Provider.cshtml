@@ -1,0 +1,108 @@
+﻿@model IEnumerable<ViewWorld.Models.Provider>
+@{
+    ViewBag.Title = "供应商管理";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+
+<div class="ui container">
+    <h2>供应商管理</h2>
+    <div>
+        <button class="ui primary button add-provider">
+            添加供应商
+        </button>
+    </div>
+    @if (Model.Any())
+    {
+        <table class="ui celled table">
+            <thead>
+                <tr>供应商名称</tr>
+                <tr>简称/英文</tr>
+                <tr>联系人</tr>
+                <tr>联系电话</tr>
+                <tr>邮箱</tr>
+                <tr>返点</tr>
+                <tr>积分比例</tr>
+                <tr>介绍</tr>
+                <tr>操作</tr>
+            </thead>
+            <tbody>
+                @foreach (var provider in Model)
+                {
+                    <tr>
+                        <td>
+                            @provider.Name <br/>
+                            ID: @provider.Id
+                        </td>
+                        <td>@provider.Alias</td>
+                        <td>@provider.ContactName</td>
+                        <td>@provider.Phone</td>
+                        <td>@provider.Email</td>
+                        <td>@provider.CommissionRate</td>
+                        <td>@provider.AwardRatio</td>
+                        <td>@provider.Description</td>
+                        <td>
+                            修改<br/>
+                            删除
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <div class="ui modal add-provider-modal" style="padding-left:20px; padding-right20px;">
+        <div class="header" style="text-align:center;">
+            添加供应商
+        </div>
+        <i class="close icon"></i>
+
+        <form class="ui form equal width" id="add-provider" style="margin: 10px auto; width:80%;max-width:400px;">
+            @Html.AntiForgeryToken()
+            <div class="ui error message">
+                <div class="header">出错啦:</div>
+                <ui></ui>
+            </div>
+            <div class="required field">
+                <label>供应商名称</label>
+                <input name="provider-name" type="text" placeholder="供应商名称" data-db-key="Name" />
+            </div>
+            <div class="required field">
+                <label>简称/英文</label>
+                <input name="alias" type="text" placeholder="英文缩写" data-db-key="Alias" />
+            </div>
+            <div class="required field">
+                <label>联系人</label>
+                <input name="contact-name" type="text" placeholder="对方联系人" data-db-key="ContactName" />
+            </div>
+            <div class="field">
+                <label>联系电话</label>
+                <input name="phone" type="text" placeholder="电话" data-db-key="Phone" />
+            </div>
+            <div class="field">
+                <label>邮箱</label>
+                <input name="email" type="email" placeholder="电子邮箱" data-db-key="Email" />
+            </div>
+            <div class="required field">
+                <label>返点</label>
+                <input name="commission-rate" type="text" placeholder="提成百分比,如: 40%填写40" data-db-key="CommissionRate" />
+            </div>
+            <div class="required field">
+                <label>积分比例</label>
+                <input name="award-ratio" type="text" placeholder="赠送的积分比例" data-db-key="AwardRatio" />
+            </div>
+            <div class="field">
+                <label>介绍/注释</label>
+                <textarea name="description" type="text" placeholder="附加信息或其他说明" data-db-key="Description"></textarea>
+            </div>
+            <div class="actions">
+                <div class="ui primary button" id="submit-form">
+                    保存
+                </div>
+                <div class="ui cancel button">
+                    关闭
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/Scripts/Backend/Account/Provider.js"></script>
