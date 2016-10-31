@@ -23,9 +23,9 @@ namespace ViewWorld.Controllers
         #region 供应商管理
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddProvider(Provider provider)
+        public async Task<ActionResult> AddProvider(Provider model)
         {
-            var result = await repo.AddOne<Provider>(provider);
+            var result = await repo.AddOne<Provider>(model);
             if (result.Success)
             {
                 return SuccessJson();
