@@ -35,6 +35,18 @@ namespace ViewWorld.Controllers
                 return ErrorJson(result.Message);
             }
         }
+        public async Task<ActionResult> DeleteProvider(string id)
+        {
+            var result = await repo.DeleteOne<Provider>(id);
+            if (result.Success)
+            {
+                return SuccessJson();
+            }
+            else
+            {
+                return ErrorJson(result.Message);
+            }
+        }
         #endregion       
     }
 }

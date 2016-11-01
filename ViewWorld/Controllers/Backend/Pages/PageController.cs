@@ -50,11 +50,12 @@ namespace ViewWorld.Controllers.Backend.Pages
             var settings = await repo.GetAll<GlobalSetting>();            
             return View(settings.Entities);
         }
-        public ActionResult Provider()
+        #region Provider
+        public async Task<ActionResult> Provider()
         {
-            // Todo: 获取所有供应商
-            List<Provider> providers = new List<Models.Provider>();
-            return View(providers);
+            var providers = await repo.GetAll<Provider>();
+            return View(providers.Entities);
         }        
+        #endregion
     }
 }

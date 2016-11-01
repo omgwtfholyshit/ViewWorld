@@ -7,6 +7,54 @@
             e.preventDefault();
             submitForm(e);
         });
+        $('.button.edit').on('click', function (e) {
+            e.preventDefault();
+            editProvider(e);
+        });
+        $('.button.delete').on('click', function (e) {
+            e.preventDefault();            
+            var r = window.confirm("请确认删除操作");
+            if (r) {
+                deleteProvider(e);
+            }
+        });
+    }
+
+    function editProvider(e) {
+        // todo: edit provider
+        return;
+    }
+
+    function deleteProvider(e) {
+        var $this = $(e.target).closest('.button.delete');
+        if ($this.hasClass('loading')) {
+            return;
+        }
+        $this.addClass('loading');
+        if ($this.closest('tr').length > 0) {
+            $.ajax({
+                url: "/Provider/DeleteProvider",
+                method: 'post',
+                data: {
+                    id: $this.closest('tr').data('provider-id')
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        $.tip('.message-container', '删除成功', '正在重载页面', 'positive', 4);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        $this.removeClass('loading');
+                        $.tip(".message-container", "删除失败", response.message, "negative", 4);
+                    }
+                },
+                error: function (data) {
+                    $this.removeClass('loading');
+                    $.tip(".message-container", "操作失败", "服务器超时，请稍后重试！", "negative", 4);
+                }
+            });
+        }
     }
 
     function validator($form, $inputs) {
@@ -58,8 +106,12 @@
                 },
                 success: function (data) {
                     if (data.status == 200) {
+                        $form[0].reset();
                         $this.removeClass('loading');
-                        $.tip(".message-container", "操作成功", "供应商已保存", "positive", 4);
+                        $.tip(".message-container", "操作成功", "供应商已保存,请等待页面刷新", "positive", 4);
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 3000);
                     } else {
                         $this.removeClass('loading');
                         $.tip(".message-container", "保存失败", data.message, "negative", 4);
