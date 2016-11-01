@@ -188,7 +188,7 @@ namespace ViewWorld.Controllers
                     NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
                     RegisteredAt = DateTime.Now,
                     Sex = SexType.Unknown,
-                    Avatar = "~/Images/DefaultImages/UnknownSex.jpg",
+                    Avatar = "/Images/DefaultImages/UnknownSex.jpg",
                     Points = 0
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
