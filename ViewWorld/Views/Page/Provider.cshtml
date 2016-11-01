@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 
-<div class="ui container">
+<div class="ui container" style="padding-left: 20px; padding-right:20px;">
     <h2>供应商管理</h2>
     <div>
         <button class="ui primary button add-provider">
@@ -15,22 +15,24 @@
     {
         <table class="ui celled table">
             <thead>
-                <tr>供应商名称</tr>
-                <tr>简称/英文</tr>
-                <tr>联系人</tr>
-                <tr>联系电话</tr>
-                <tr>邮箱</tr>
-                <tr>返点</tr>
-                <tr>积分比例</tr>
-                <tr>介绍</tr>
-                <tr>操作</tr>
+                <tr>
+                    <th>供应商名称</th>
+                    <th>简称/英文</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th>邮箱</th>
+                    <th>返点</th>
+                    <th>积分比例</th>
+                    <th>介绍/备注</th>
+                    <th>操作</th>
+                </tr>
             </thead>
             <tbody>
                 @foreach (var provider in Model)
                 {
-                    <tr>
+                    <tr data-provider-id="@provider.Id">
                         <td>
-                            @provider.Name <br/>
+                            @provider.Name <br />
                             ID: @provider.Id
                         </td>
                         <td>@provider.Alias</td>
@@ -41,8 +43,8 @@
                         <td>@provider.AwardRatio</td>
                         <td>@provider.Description</td>
                         <td>
-                            修改<br/>
-                            删除
+                            <button class="ui icon button edit"><i class="icon edit"></i></button>
+                            <button class="ui icon button delete"><i class="icon delete"></i></button>
                         </td>
                     </tr>
                 }
