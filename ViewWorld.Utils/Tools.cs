@@ -12,6 +12,13 @@ namespace ViewWorld.Utils
 {
     public class Tools
     {
+        #region 字符串
+        public static bool isChineseLetter(string letter)
+        {
+            string pattern = @"^[\u4e00-\u9fa5]+$";
+            return Regex.IsMatch(letter, pattern);
+        }
+        #endregion
         #region 时间
         /// <summary>
         /// 生成当前时间戳
@@ -208,7 +215,6 @@ namespace ViewWorld.Utils
             return (int)(randomResult % numSeeds);
         }
         #endregion
-
         #region 日志
         /// <summary>
         /// 写入日志

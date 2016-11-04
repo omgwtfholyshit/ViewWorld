@@ -32,18 +32,6 @@ namespace ViewWorld.Controllers
         {
             UserManager = userManager;
         }
-        private MongoRepository _repo;
-        private MongoRepository Repo
-        {
-            get
-            {
-                return _repo ?? new MongoRepository();
-            }
-            set
-            {
-                _repo = value;
-            }
-        }
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {

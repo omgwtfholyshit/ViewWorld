@@ -10,6 +10,7 @@ namespace ViewWorld.Controllers
 {
     public class ProviderController : BaseController
     {
+        #region Constructor
         MongoRepository repo;
         public ProviderController()
             : this(new MongoRepository())
@@ -20,6 +21,7 @@ namespace ViewWorld.Controllers
         {
             repo = _repo;
         }
+        #endregion
         #region 供应商管理
         [HttpPost]
         [ValidateAntiForgeryToken]

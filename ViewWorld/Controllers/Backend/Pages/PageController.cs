@@ -37,8 +37,13 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        [AllowAnonymous]
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("UserProfile", "Page");
+            }
             return View();
         }
         public ActionResult RegionManagement()

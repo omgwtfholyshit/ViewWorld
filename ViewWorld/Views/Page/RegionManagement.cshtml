@@ -37,34 +37,55 @@
     <div class="ui small modal region-editor">
         <i class="close icon"></i>
         <div class="header">
-            修改手机号码
+            添加分类
         </div>
         <div class="image content">
-            <div class="ui small image">
-                <img src="~/Images/DefaultImages/icon_phone_large_150.jpg" />
-            </div>
             <div class="form-container">
                 <form class="ui form" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
                     <div class="field">
-                        <div class="ui action input">
-                            <input type="text" name="mobile" placeholder="要绑定的电话" value="">
-                            <button class="ui basic button get-code">
-                                获取验证码
-                            </button>
+                        <label>上级分类</label>
+                        <div class="ui fluid search selection dropdown">
+                            <input type="hidden" name="parentName" value="-1">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">上级分类</div>
+                            <div class="menu">
+                                <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
+                                <div class="item" data-value="hk"><i class="hk flag"></i>Hong Kong</div>
+                                <div class="item" data-value="hu"><i class="hu flag"></i>Hungary</div>
+                                <div class="item" data-value="is"><i class="is flag"></i>Iceland</div>
+                                <div class="item" data-value="in"><i class="in flag"></i>India</div>
+                                <div class="item" data-value="io"><i class="io flag"></i>Indian Ocean Territory</div>
+                                <div class="item" data-value="zm"><i class="zm flag"></i>Zambia</div>
+                                <div class="item" data-value="zw"><i class="zw flag"></i>Zimbabwe</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <input type="text" name="mobileCode" placeholder="请输入收到的验证码" value="" id="mobileCode">
-                    </div>
-                    <div class="field" id="CaptchaDiv">
-                        <div class="ui action input">
-                            <input type="text" placeholder="图形验证码" id="verificationCode" style="width:30%">
-                            <img class="ui button" style="padding:0;width:50%;" src="" id="captchaImage" />
-
+                    <div class="two fields" >
+                        <div class="ten wide field">
+                            <label>分类名称</label>
+                            <input type="text" name="category[name]" placeholder="请输入分类名称" value="">
+                        </div>
+                        <div class="six wide field">
+                            <label>展示顺序</label>
+                            <input type="number" min="0" name="category[order]" placeholder="数值越大排列越靠后" value="" id="order">
                         </div>
                     </div>
-
+                    <div class="two fields">
+                        <div class="ten wide field">
+                            <label>英文名称</label>
+                            <input type="text" name="category[en-name]" placeholder="请输入英文名称" value="">
+                        </div>
+                        <div class="six wide field">
+                            <label>分类标识</label>
+                            <input type="text" name="category[initial]" placeholder="请输入标识" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="ui toggle checkbox checked">
+                        <input type="checkbox" name="display">
+                        <label>前台展示</label>
+                    </div>
                 </form>
             </div>
         </div>

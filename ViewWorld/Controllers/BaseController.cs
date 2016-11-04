@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core;
+using ViewWorld.Models;
 
 namespace ViewWorld.Controllers
 {
@@ -86,12 +87,23 @@ namespace ViewWorld.Controllers
         }
         #endregion
 
-        protected ApplicationIdentityContext db = ApplicationIdentityContext.Create();
         protected string UserId
         {
             get
             {
                 return User.Identity.GetUserId();
+            }
+        }
+        private MongoRepository _repo;
+        protected MongoRepository Repo
+        {
+            get
+            {
+                return _repo ?? new MongoRepository();
+            }
+            set
+            {
+                _repo = value;
             }
         }
     }

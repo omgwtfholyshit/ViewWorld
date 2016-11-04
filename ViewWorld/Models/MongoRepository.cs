@@ -109,7 +109,27 @@ namespace ViewWorld.Models
                 return res;
             }
         }
-
+        public async Task<GetManyResult<TEntity>> GetMany<TEntity>(FilterDefinition<TEntity> filter, SortDefinition<TEntity> sort) where TEntity : class, new()
+        {
+            var res = new GetManyResult<TEntity>();
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                var entities = await collection.Find(filter).Sort(sort).ToListAsync();
+                if (entities != null)
+                {
+                    res.Entities = entities;
+                }
+                res.Success = true;
+                res.ErrorCode = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = DatabaseHelper.NotifyException("GetMany", "Exception getting many " + typeof(TEntity).Name + "s", ex);
+                return res;
+            }
+        }
         /// <summary>
         /// FindCursor
         /// </summary>
@@ -348,6 +368,35 @@ namespace ViewWorld.Models
             }
         }
 
+        public async Task<Result> ReplaceOne<TEntity>(string id,TEntity model) where TEntity : class, new()
+        {
+            var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
+            return await ReplaceOne<TEntity>(filter, model);
+        }
+        public async Task<Result> ReplaceOne<TEntity>(FilterDefinition<TEntity> filter,TEntity model) where TEntity : class, new()
+        {
+            var result = new Result();
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                var updateRes = await collection.ReplaceOneAsync(filter, model);
+                //if (updateRes.MatchedCount < 1)
+                //{
+                //    var ex = new Exception();
+                //    result.Message = DatabaseHelper.NotifyException("UpdateOne", "ERROR: updateRes.MatchedCount < 1 for entity: " + typeof(TEntity).Name, ex);
+                //    return result;
+                //}
+                result.Success = true;
+                result.Message = "OK";
+                result.ErrorCode = 200;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Message = DatabaseHelper.NotifyException("UpdateOne", "Exception updating entity: " + typeof(TEntity).Name, ex);
+                return result;
+            }
+        }
         /// <summary>
         /// UpdateMany with Ids
         /// </summary>

@@ -156,7 +156,7 @@ body {
   .user-profile .content-right .ui.form .inline.fields .field, .edit-password .content-right .ui.form .inline.fields .field {
     padding: 0; }
 
-.mobile-editor .form-container, .region-editor .form-container {
+.mobile-editor .form-container {
   margin-left: 15%; }
 
 .edit-password .content-bottom {
@@ -168,4 +168,7 @@ body {
 ************************************/
 .region-management .tool-bar, .region-management .table-container {
   padding: 0.5rem; }
+
+.region-editor .form-container {
+  width: 100%; }
 

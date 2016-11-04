@@ -166,7 +166,7 @@ body{
     }
     
 }
-.mobile-editor .form-container,.region-editor .form-container{
+.mobile-editor .form-container{
        margin-left:15%;
 }
 .edit-password{
@@ -180,7 +180,11 @@ body{
     Region
 ************************************/
 .region-management{
+   
     .tool-bar,.table-container{
         padding:0.5rem;
     }
+}
+.region-editor .form-container{
+    width:100%;
 }
