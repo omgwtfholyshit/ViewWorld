@@ -2,6 +2,7 @@
 using PagedList;
 using System;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core;
@@ -85,8 +86,13 @@ namespace ViewWorld.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        protected JsonResult OriginJson(Object data)
+        {
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
+        #region public methods
         protected string UserId
         {
             get
@@ -94,6 +100,12 @@ namespace ViewWorld.Controllers
                 return User.Identity.GetUserId();
             }
         }
+        protected void RemoveOutputCacheItem(string methodName, string controllerName)
+        {
+            var urlToRemove = Url.Action(methodName, controllerName);
+            HttpResponse.RemoveOutputCacheItem(urlToRemove);
+        }
+        #endregion
         private MongoRepository _repo;
         protected MongoRepository Repo
         {

@@ -1,5 +1,10 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ViewWorld.Models.Trip;
 using ViewWorld.Utils;
@@ -24,33 +29,179 @@ namespace ViewWorld.Models.Managers
         #region 区域管理
         public async Task<Result> AddRegion(Region model)
         {
-            return await Repo.AddOne(model);
+            try
+            {
+                if (model.IsSubRegion && model.ParentRegionId != "-1")
+                {
+                    var parent = await Repo.GetOne<Region>(model.ParentRegionId);
+                    model.Id = ObjectId.GenerateNewId().ToString();
+                    parent.Entity.SubRegions.Add(model);
+                    return await UpdateRegion(parent.Entity);
+                }
+                else
+                {
+                    return await Repo.AddOne(model);
+                }
+            }catch(Exception e)
+            {
+                return new Result { ErrorCode = 300, Message = e.Message, Success = false };
+            }
+            
+            
         }
-        public async Task<Result> DeleteRegion(string id)
+        public async Task<Result> DeleteRegion(string id,string parentId)
         {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(parentId))
+                {
+                    return await Repo.DeleteOne<Region>(id);
+                }else
+                {
+                    var parent = await Repo.GetOne<Region>(parentId);
+                    var deleteCount = parent.Entity.SubRegions.RemoveAll(r => r.Id == id);
+                    if(deleteCount > 0)
+                    {
+                        if(deleteCount != 1)
+                        {
+                            Tools.WriteLog("Region", "删除", string.Format("此次删除{0}条记录，数据库可能有异常，请检查", deleteCount));
+                        }
+                        return await UpdateRegion(parent.Entity);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return new Result { ErrorCode = 300, Message = e.Message, Success = false };
+            }
             return await Repo.DeleteOne<Region>(id);
+        }
+        public async Task<Result> UpdateRegion(Region model)
+        {
+            return await Repo.ReplaceOne(model.Id, model);
         }
         public async Task<Result> UpdateRegion(string id,Region model)
         {
             model.Id = id;
             return await Repo.ReplaceOne(id, model);
         }
-        public async Task<Result> GetRegions()
+        public async Task<Result> UpdateSubRegion(Region model)
         {
-            return await Repo.GetAll<Region>();
+            var parent = (await Repo.GetOne<Region>(model.ParentRegionId)).Entity;
+            var modelIndex = parent.SubRegions.FindIndex(r=>r.Id==model.Id);
+            parent.SubRegions[modelIndex] = model;
+            return await UpdateRegion(parent);
         }
-        public async Task<Result> SearchRegions(string keyword)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parentId">This region's parentId, in case to update it.</param>
+        /// <param name="id">This region's Id</param>
+        /// <param name="destId">Target region Id. It needs to be a main region.</param>
+        /// <returns></returns>
+        public async Task<Result> ChangeRegion(string parentId,string id,string destId)
         {
-            var builder = Builders<Region>.Filter;
-            FilterDefinition<Region> filter; 
-            if (keyword.Length == 1 && !Tools.isChineseLetter(keyword))
+            Result result = new Result { ErrorCode = 300,Message = "",Success = false};
+            string[] ids = new string[2] { parentId, destId };
+            var regions = await Repo.GetMany<Region>(ids);
+            if(regions.Success && regions.Entities.Count() == 2)
             {
-                filter = builder.Where(r => r.Initial.ToUpper() == keyword.ToUpper());
+                try
+                {
+                    var parent = regions.Entities.ElementAt(0);
+                    var dest = regions.Entities.ElementAt(1);
+                    if (!parent.IsSubRegion && !dest.IsSubRegion)
+                    {
+                        var child = parent.SubRegions.Find(r => r.Id == id);
+                        dest.SubRegions.Add(child);
+                        await UpdateRegion(dest);
+                        parent.SubRegions.Remove(child);
+                        await UpdateRegion(parent);
+                        result.Success = true;
+                        result.ErrorCode = 200;
+                    }
+                    result.Message = "不能移动到子区域";
+
+                }catch(Exception e)
+                {
+                    result.Message = e.Message;
+                }
+                
             }else
             {
-                filter = builder.Where(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword.ToUpper()));
+                result.Message = "找不到该区域";
             }
-            return await Repo.GetMany(filter);
+            return result;
+        }
+        public async Task<GetManyResult<Region>> GetRegions(bool VisibileOnly = true,bool MainRegionOnly = false)
+        {
+            FilterDefinition<Region> filter;
+            var builder = Builders<Region>.Filter;
+            if (VisibileOnly && MainRegionOnly)
+            {
+                filter = builder.Eq("IsVisible", true) & builder.Eq("IsSubRegion", false);
+                return await Repo.GetMany<Region>(filter);
+            }
+            else if(!VisibileOnly && MainRegionOnly)
+            {
+                filter = builder.Eq("IsSubRegion", false);
+                return await Repo.GetMany<Region>(filter);
+            }
+            else
+            {
+                return await Repo.GetAll<Region>();
+            }
+           
+        }
+        public async Task<GetListResult<Region>> SearchRegions(string keyword)
+        {
+            var result = new GetListResult<Region> { Success = false,ErrorCode= 300,Message = "",Entities = null};
+            var regions = await GetRegions(false);
+            var regionList = new List<Region>();
+            if (regions.Success)
+            {
+                keyword = keyword.ToUpper();
+                foreach (var region in regions.Entities)
+                {
+                    if (IsRegionMatch(region, keyword))
+                    {
+                        if (!region.IsSubRegion && region.SubRegions != null)
+                        {
+                            region.SubRegions = region.SubRegions.Where(s => s.Name.Contains(keyword) || s.EnglishName.Contains(keyword)).ToList();
+                        }
+                        regionList.Add(region);
+                    }
+                }
+                result.Success = true;
+                result.ErrorCode = 200;
+                result.Entities = regionList;
+            }
+            //var builder = Builders<Region>.Filter;
+            //FilterDefinition<Region> filter; 
+            //if (keyword.Length == 1 && !Tools.isChineseLetter(keyword))
+            //{
+            //    filter = builder.Where(r => r.Initial.ToUpper() == keyword.ToUpper());
+            //}else
+            //{
+            //    filter = builder.Where(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword.ToUpper()));
+            //}
+            return result;
+        }
+        bool IsRegionMatch(Region region, string keyword)
+        {
+            if (keyword.Length == 1 && !Tools.isChineseLetter(keyword))
+            {
+                return region.Initial.Contains(keyword) || 
+                    (!region.IsSubRegion && region.SubRegions != null && 
+                    region.SubRegions.Where(r => r.Initial.Contains(keyword)).Count() > 0);
+            }else
+            {
+                return (region.Name.Contains(keyword) || region.EnglishName.ToUpper().Contains(keyword)) ||
+                    (!region.IsSubRegion && region.SubRegions != null && 
+                    (region.SubRegions.Where(r => r.Name.Contains(keyword)).Count() > 0 || 
+                    region.SubRegions.Where(r => r.EnglishName.ToUpper().Contains(keyword)).Count() > 0));
+            }
         }
         #endregion
     }

@@ -10,6 +10,8 @@
 .orange{color:#FF6100}
 .clearboth{clear:both}
 .invisible{opacity:0}
+.hidden{display:none!important}
+.red{color:#DB2828}
 /******************
  Override Semantic
 ******************/
@@ -184,7 +186,18 @@ body{
     .tool-bar,.table-container{
         padding:0.5rem;
     }
+    .padleft54{
+        padding-left:5.4rem!important;
+    }
+     i.caret{
+        transition:all ease-in-out 0.3s;
+        cursor:pointer;
+    }
+    .open{
+        transform:rotate(-90deg)!important;
+    }
 }
 .region-editor .form-container{
     width:100%;
+   
 }

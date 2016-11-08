@@ -501,11 +501,6 @@ namespace ViewWorld.Controllers
             }
         }
 
-        private void RemoveOutputCacheItem(string methodName)
-        {
-            var urlToRemove = Url.Action(methodName, "Account");
-            HttpResponse.RemoveOutputCacheItem(urlToRemove);
-        }
         #endregion
         #region 自定义登录相关方法
         [HttpPost]
@@ -651,7 +646,7 @@ namespace ViewWorld.Controllers
                 result.success = true;
                 result.msg = "Success!";
                 //返回图片的保存结果（返回内容为json字符串，可自行构造，该处使用Newtonsoft.Json构造）
-                RemoveOutputCacheItem("GetUserInfo");
+                RemoveOutputCacheItem("GetUserInfo","Account");
                 return Content(JsonConvert.SerializeObject(result));
             }
             catch (Exception e)
@@ -670,7 +665,7 @@ namespace ViewWorld.Controllers
                 var Result = await Repo.UpdateOne(this.UserId, updateDef);
                 if (Result.Success)
                 {
-                    RemoveOutputCacheItem("GetUserInfo");
+                    RemoveOutputCacheItem("GetUserInfo", "Account");
                     return SuccessJson();
                 }
                 return ErrorJson(Result.Message);
@@ -700,7 +695,7 @@ namespace ViewWorld.Controllers
                     var Result = await Repo.UpdateOne(this.UserId, updateDef);
                     if (Result.Success)
                     {
-                        RemoveOutputCacheItem("GetUserInfo");
+                        RemoveOutputCacheItem("GetUserInfo", "Account");
                         return SuccessJson();
                     }else
                     {

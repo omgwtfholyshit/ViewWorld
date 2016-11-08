@@ -508,6 +508,7 @@
     <Content Include="Images\DefaultImages\infinity.jpg" />
     <Content Include="Images\DefaultImages\lock.jpg" />
     <Content Include="Images\DefaultImages\male.jpg" />
+    <Content Include="Images\DefaultImages\short-paragraph.png" />
     <Content Include="Images\DefaultImages\UnknownSex.jpg" />
     <Content Include="Lib\AntDesign\antd.css" />
     <Content Include="Lib\AntDesign\antd.js" />
@@ -627,11 +628,11 @@
     <Content Include="Views\Page\RegionManagement.cshtml" />
     <Content Include="Views\Page\GlobalSetting.cshtml" />
     <Content Include="Views\Page\Provider.cshtml" />
+    <Content Include="Views\PartialViews\_PartialRegionTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Backend\" />
-    <Folder Include="Views\Base\" />
     <Folder Include="Views\Provider\" />
     <Folder Include="Views\Trip\" />
   </ItemGroup>

@@ -29,6 +29,12 @@
 .invisible {
   opacity: 0; }
 
+.hidden {
+  display: none !important; }
+
+.red {
+  color: #DB2828; }
+
 /******************
  Override Semantic
 ******************/
@@ -168,6 +174,16 @@ body {
 ************************************/
 .region-management .tool-bar, .region-management .table-container {
   padding: 0.5rem; }
+
+.region-management .padleft54 {
+  padding-left: 5.4rem !important; }
+
+.region-management i.caret {
+  transition: all ease-in-out 0.3s;
+  cursor: pointer; }
+
+.region-management .open {
+  transform: rotate(-90deg) !important; }
 
 .region-editor .form-container {
   width: 100%; }

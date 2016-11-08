@@ -13,28 +13,27 @@
     </div>
     <div class="table-container">
         <div class="ui fitted divider"></div>
-        <table class="ui compact celled table">
+        <table class="ui compact celled table" id="dataTable">
             <thead>
-                <tr>
-                    <th>编号</th>
-                    <th>分类</th>
+                <tr class="center aligned">
+                    <th class="five wide left aligned">分类中文名称</th>
+                    <th class="five wide left aligned">分类英文名称</th>
+                    <th class="one wide">标识</th>
+                    <th class="one wide">前台可见</th>
+                    <th class="one wide">排序</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="collapsing">
-                        <i class="folder icon"></i> node_modules
+                <tr class="center aligned">
+                    <td colspan="6" class="ui loading segment" height="150px">
                     </td>
-                    <td>Initial commit</td>
-                    <td class="right aligned collapsing">10 hours agoooooooooo</td>
                 </tr>
-   
             </tbody>
             
         </table>
     </div>
-    <div class="ui small modal region-editor">
+    <div class="ui small modal region-editor add">
         <i class="close icon"></i>
         <div class="header">
             添加分类
@@ -46,54 +45,67 @@
                     <div class="field">
                         <label>上级分类</label>
                         <div class="ui fluid search selection dropdown">
-                            <input type="hidden" name="parentName" value="-1">
+                            <input type="hidden" name="parentName" value="-1" data-db-key="ParentRegionId" class="parent">
                             <i class="dropdown icon"></i>
                             <div class="default text">上级分类</div>
                             <div class="menu">
-                                <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
-                                <div class="item" data-value="hk"><i class="hk flag"></i>Hong Kong</div>
-                                <div class="item" data-value="hu"><i class="hu flag"></i>Hungary</div>
-                                <div class="item" data-value="is"><i class="is flag"></i>Iceland</div>
-                                <div class="item" data-value="in"><i class="in flag"></i>India</div>
-                                <div class="item" data-value="io"><i class="io flag"></i>Indian Ocean Territory</div>
-                                <div class="item" data-value="zm"><i class="zm flag"></i>Zambia</div>
-                                <div class="item" data-value="zw"><i class="zw flag"></i>Zimbabwe</div>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="two fields" >
                         <div class="ten wide field">
                             <label>分类名称</label>
-                            <input type="text" name="category[name]" placeholder="请输入分类名称" value="">
+                            <input type="text" name="Name" placeholder="请输入分类名称" value="" data-db-key="Name">
                         </div>
                         <div class="six wide field">
                             <label>展示顺序</label>
-                            <input type="number" min="0" name="category[order]" placeholder="数值越大排列越靠后" value="" id="order">
+                            <input type="number" min="0" name="SortOrder" placeholder="数值越大排列越靠后" value="20" id="order" data-db-key="SortOrder">
                         </div>
                     </div>
                     <div class="two fields">
                         <div class="ten wide field">
                             <label>英文名称</label>
-                            <input type="text" name="category[en-name]" placeholder="请输入英文名称" value="">
+                            <input type="text" name="EnglishName" placeholder="请输入英文名称" value="" data-db-key="EnglishName">
                         </div>
                         <div class="six wide field">
                             <label>分类标识</label>
-                            <input type="text" name="category[initial]" placeholder="请输入标识" value="">
+                            <input type="text" name="Initial" placeholder="请输入标识" value="" onkeyup="this.value=this.value.toUpperCase()" data-db-key="Initial" maxlength="1" >
                         </div>
                     </div>
                     
                     <div class="ui toggle checkbox checked">
-                        <input type="checkbox" name="display">
+                        <input type="checkbox" name="IsVisible" data-db-key="IsVisible" value="true">
                         <label>前台展示</label>
                     </div>
+                    <div class="ui error message">
+                    </div>
                 </form>
+                
             </div>
         </div>
         <div class="actions">
             <div class="ui black deny button">
+                关闭
+            </div>
+            <div class="ui positive right labeled icon button" id="submitForm">
+                确定
+                <i class="checkmark icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="ui small modal region-editor confirm">
+        <div class="header">
+            删除分类
+        </div>
+        <div class="content">
+            <p>您确定要删除 <span class="red"></span> 吗？</p>
+        </div>
+        <div class="actions">
+            <div class="ui negative button">
                 取消
             </div>
-            <div class="ui positive right labeled icon button" id="submitMobile">
+            <div class="ui positive right labeled icon button">
                 确定
                 <i class="checkmark icon"></i>
             </div>

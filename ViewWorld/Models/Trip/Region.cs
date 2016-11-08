@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ViewWorld.Models.Trip
 {
@@ -32,7 +33,16 @@ namespace ViewWorld.Models.Trip
         [BsonRequired]
         public bool IsVisible { get; set; }
         public string ParentRegionId { get; set; }
-        public List<Region> SubRegions { get; set; }
+        public List<Region> SubRegions {
+            get {
+                return _subRegions ?? new List<Region>();
+            }
+            set {
+                _subRegions = value;
+            }
+        }
+        [NotMapped]
+        private List<Region> _subRegions;
 
     }
 }
