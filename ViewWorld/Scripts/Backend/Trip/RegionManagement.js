@@ -17,6 +17,11 @@
             $('.region-editor .ui.form .checkbox').checkbox('check');
             $modal.modal('show');
         })
+        $('#clear').on('click', function () {
+            $('.header-left input').val('');
+            openedCategory.splice(0);
+            BuildTable();
+        })
         $('.header-left .search.icon').on('click', function (e) {
             BuildTable($(e.target).siblings().val());
         })
