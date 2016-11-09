@@ -531,14 +531,7 @@ namespace ViewWorld.Controllers
                     case SignInStatus.Success:
                         if (string.IsNullOrWhiteSpace(returnUrl))
                         {
-                            if (this.User.IsInRole(UserRole.Sales) || this.User.IsInRole(UserRole.Admin))
-                            {
-                                returnUrl = "/Page/Index";
-                            }
-                            else
-                            {
-                                returnUrl = "/Home/Index";
-                            }
+                            returnUrl = "/Page/Index";
                         }
                         return Json(returnUrl);
                     case SignInStatus.LockedOut:

@@ -11,6 +11,7 @@ using MongoDB.Bson;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
+    [Authorize(Roles ="管理员,销售")]
     public class PageController : BaseController
     {
         MongoRepository repo;
@@ -40,9 +41,13 @@ namespace ViewWorld.Controllers.Backend.Pages
         [AllowAnonymous]
         public ActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated) 
             {
-                return RedirectToAction("UserProfile", "Page");
+                if(User.IsInRole(UserRole.Admin) || User.IsInRole(UserRole.Sales))
+                {
+                    return RedirectToAction("UserProfile", "Page");
+                }
+                return RedirectToAction("Index", "Home");
             }
             return View();
         }
