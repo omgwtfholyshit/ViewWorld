@@ -71,7 +71,7 @@ namespace ViewWorld.Models
             try
             {
                 var collection = GetCollection<TEntity>();
-                var filter = Builders<TEntity>.Filter.Eq("Id", ids);
+                var filter = Builders<TEntity>.Filter.In("Id", ids);
                 return await GetMany<TEntity>(filter);
             }
             catch (Exception ex)

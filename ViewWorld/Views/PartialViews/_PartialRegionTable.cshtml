@@ -1,8 +1,8 @@
-﻿@model List<ViewWorld.Models.Trip.Region>
+﻿@model IOrderedEnumerable<ViewWorld.Models.Trip.Region>
 @{
     foreach (var item in Model)
     {
-        <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="">
+        <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="-1" data-sort="@item.SortOrder" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-isdisplay="@item.IsVisible">
             <td class="five wide left aligned collapsing">
                 <div class="ui ribbon label">主分类</div>
                 @item.Name
@@ -38,9 +38,9 @@
         </tr>
         if (item.SubRegions != null && item.SubRegions.Count() > 0)
         {
-            foreach (var sub in item.SubRegions)
+            foreach (var sub in item.SubRegions.OrderBy(r=>r.SortOrder))
             {
-                <tr class="center aligned hidden @item.Id" data-id="@sub.Id" data-name="@sub.Name" data-parent="@sub.ParentRegionId" data-parentname="@item.Name">
+                <tr class="center aligned hidden @item.Id" data-id="@sub.Id" data-name="@sub.Name" data-parent="@sub.ParentRegionId" data-parentname="@item.Name" data-sort="@sub.SortOrder" data-englishname="@sub.EnglishName" data-initial="@sub.Initial" data-isdisplay="@sub.IsVisible">
                     <td class="five wide left aligned collapsing padleft54">
                         @sub.Name
                     </td>
@@ -48,7 +48,14 @@
                     <td class="one wide">@sub.Initial</td>
                     <td class="one wide">
                         <div class="ui checkbox">
-                            <input type="checkbox" name="example">
+                            @if (sub.IsVisible)
+                            {
+                                <input type="checkbox" name="example" checked="checked" disabled="disabled">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="example" disabled="disabled">
+                            }
                             <label></label>
                         </div>
                     </td>
@@ -57,10 +64,6 @@
                         <button class="ui labeled blue icon button modify">
                             <i class="edit icon"></i>
                             修改
-                        </button>
-                        <button class="ui labeled teal icon button move">
-                            <i class="move icon"></i>
-                            移动
                         </button>
                         <button class="ui labeled red icon button delete">
                             <i class="delete icon"></i>

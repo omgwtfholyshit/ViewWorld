@@ -72,9 +72,16 @@ namespace ViewWorld.Controllers.Trip
                 if (!string.IsNullOrWhiteSpace(model.Id))
                 {
                     
-                    if(string.IsNullOrWhiteSpace(model.ParentRegionId)||model.ParentRegionId == "-1")
+                    if(string.IsNullOrWhiteSpace(prevParentId) || prevParentId == "-1")
                     {
-                        result = await tripManager.UpdateRegion(model);
+                        if(model.ParentRegionId == prevParentId)
+                        {
+                            result = await tripManager.UpdateRegion(model);
+                        }else
+                        {
+                            result.Message = "主区域不能移动";
+                        }
+                        
 
                     }else
                     {
@@ -135,12 +142,12 @@ namespace ViewWorld.Controllers.Trip
             if (string.IsNullOrEmpty(keyword))
             {
                 regions = (await tripManager.GetRegions()).Entities.ToList();
+                
             }else
             {
-                regions = (await tripManager.SearchRegions(keyword)).Entities;
+                regions = (await tripManager.SearchRegions(keyword)).Entities.ToList();
             }
-
-            return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions);
+            return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.OrderBy(r => r.SortOrder));
         }
         #endregion
 

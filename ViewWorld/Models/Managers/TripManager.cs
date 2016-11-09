@@ -49,11 +49,12 @@ namespace ViewWorld.Models.Managers
             
             
         }
-        public async Task<Result> DeleteRegion(string id,string parentId)
+        public async Task<Result> DeleteRegion(string id, string parentId)
         {
+            var result = new Result { ErrorCode = 300, Message = "", Success = false };
             try
             {
-                if (string.IsNullOrWhiteSpace(parentId))
+                if (string.IsNullOrWhiteSpace(parentId) || parentId == "-1")
                 {
                     return await Repo.DeleteOne<Region>(id);
                 }else
@@ -68,13 +69,15 @@ namespace ViewWorld.Models.Managers
                         }
                         return await UpdateRegion(parent.Entity);
                     }
+                    result.Message = "找不到该区域";
+                    return result;
                 }
             }
             catch (Exception e)
             {
-                return new Result { ErrorCode = 300, Message = e.Message, Success = false };
+                result.Message = e.Message;
+                return result;
             }
-            return await Repo.DeleteOne<Region>(id);
         }
         public async Task<Result> UpdateRegion(Region model)
         {
@@ -120,8 +123,11 @@ namespace ViewWorld.Models.Managers
                         await UpdateRegion(parent);
                         result.Success = true;
                         result.ErrorCode = 200;
+                    }else
+                    {
+                        result.Message = "不能移动到子区域";
                     }
-                    result.Message = "不能移动到子区域";
+                    
 
                 }catch(Exception e)
                 {
