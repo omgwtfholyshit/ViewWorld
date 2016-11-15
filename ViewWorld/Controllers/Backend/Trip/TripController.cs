@@ -126,6 +126,28 @@ namespace ViewWorld.Controllers.Trip
             }
             return ErrorJson("服务器内部错误，请稍后再试");
         }
+        public async Task<JsonResult> ListSubRegionsApi()
+        {
+            var result = (await tripManager.GetRegions(false, false));
+            if (result.Success)
+            {
+                List<Region> subRegions = new List<Region>();
+                result.Entities.ToList().ForEach(r =>
+                {
+                    if (r.SubRegions.Count() > 0)
+                    {
+                        subRegions.AddRange(r.SubRegions);
+                    }
+                });
+                var data = new
+                {
+                    success = result.Success,
+                    results = subRegions.Select(r => new { name = r.Name, value = r.Id })
+                };
+                return OriginJson(data);
+            }
+            return ErrorJson("服务器内部错误，请稍后再试");
+        }
         public async Task<JsonResult> ChangeRegion(string parentId, string id, string destId)
         {
             var result = await tripManager.ChangeRegion(parentId, id, destId);
@@ -150,6 +172,5 @@ namespace ViewWorld.Controllers.Trip
             return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.OrderBy(r => r.SortOrder));
         }
         #endregion
-
     }
 }

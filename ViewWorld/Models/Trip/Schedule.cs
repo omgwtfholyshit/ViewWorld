@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace ViewWorld.Core.Models
     /// </summary>
     public class Schedule
     {
-        [JsonProperty("id")]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRequired]
         public string Id { get; set; }
         public string Description { get; set; }
         /// <summary>
@@ -27,6 +29,9 @@ namespace ViewWorld.Core.Models
         public string GroupPickUp { get; set; }
         public string PickUp { get; set; }
         public string Introduction { get; set; }
+        //At Day 1 or 2 or whatever
+        public int Day { get; set; }
+        public string ParentId { get; set; }
     }
     public class ScheduleItem
     {

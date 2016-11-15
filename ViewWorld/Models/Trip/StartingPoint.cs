@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,9 +15,9 @@ namespace ViewWorld.Core.Models
     /// </summary>
     public class StartingPoint
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Required]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRequired]
+        public string Id { get; set; }
         [Required]
         public string Name { get; set; }
         //出发时间
@@ -24,7 +26,7 @@ namespace ViewWorld.Core.Models
         public string AvailableDate { get; set; }
         public GeoPoint Coordinate { get; set; }
         public Location Location { get; set; }
-        //统计该起点的热门度
+        //统计该起点的热门度,可以用来排序
         public int Popularity { get; set; }
     }
 }

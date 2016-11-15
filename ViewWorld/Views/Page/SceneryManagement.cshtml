@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Parent = "旅游管理";
-    ViewBag.Title = "区域管理";
+    ViewBag.Title = "景点管理";
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 
@@ -21,21 +21,23 @@
         <table class="ui compact celled table" id="dataTable">
             <thead>
                 <tr class="center aligned">
-                    <th class="five wide left aligned">分类中文名称</th>
-                    <th class="five wide left aligned">分类英文名称</th>
-                    <th class="one wide">标识</th>
-                    <th class="one wide">前台可见</th>
-                    <th class="one wide">排序</th>
+                    <th class="left aligned">景点名称</th>
+                    <th class="left aligned">英文名称</th>
+                    <th class="">标识</th>
+                    <th class="">发布者</th>
+                    <th class="">发布时间</th>
+                    <th class="">修改者</th>
+                    <th class="">修改时间</th>
+                    <th class="">热度</th>
                     <th>操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="center aligned">
-                    <td colspan="6" class="ui loading segment" height="150px">
-                    </td>
+                    <td colspan="9" class="ui loading segment" height="150px"></td>
                 </tr>
             </tbody>
-            
+
         </table>
     </div>
     <div class="ui small modal region-editor add">
@@ -52,15 +54,15 @@
                         <div class="ui fluid search selection dropdown">
                             <input type="hidden" name="parentName" value="-1" data-db-key="ParentRegionId" class="parent">
                             <i class="dropdown icon"></i>
-                            <div class="default text">上级分类</div>
+                            <div class="default text">所属分类</div>
                             <div class="menu">
-                                
+
                             </div>
                         </div>
                     </div>
-                    <div class="two fields" >
+                    <div class="two fields">
                         <div class="ten wide field">
-                            <label>分类名称</label>
+                            <label>景点名称</label>
                             <input type="text" name="Name" placeholder="请输入分类名称" value="" data-db-key="Name">
                         </div>
                         <div class="six wide field">
@@ -75,10 +77,10 @@
                         </div>
                         <div class="six wide field">
                             <label>分类标识</label>
-                            <input type="text" name="Initial" placeholder="请输入标识" value="" onkeyup="this.value=this.value.toUpperCase()" data-db-key="Initial" maxlength="1" >
+                            <input type="text" name="Initial" placeholder="请输入标识" value="" onkeyup="this.value=this.value.toUpperCase()" data-db-key="Initial" maxlength="1">
                         </div>
                     </div>
-                    
+
                     <div class="ui toggle checkbox checked">
                         <input type="checkbox" name="IsVisible" data-db-key="IsVisible" value="true">
                         <label>前台展示</label>
@@ -86,7 +88,7 @@
                     <div class="ui error message">
                     </div>
                 </form>
-                
+
             </div>
         </div>
         <div class="actions">
@@ -117,4 +119,4 @@
         </div>
     </div>
 </div>
-<script src="~/Scripts/Backend/Trip/RegionManagement.js"></script>
+<script src="~/Scripts/Backend/Trip/SceneryManagement.js"></script>

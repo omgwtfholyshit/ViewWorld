@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,19 +19,23 @@ namespace ViewWorld.Core.Models
     /// 
     public class Trip
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRequired]
+        public string Id { get; set; }
         public string Name { get; set; }
         public CommonInfo CommonInfo { get; set; }
         public ProductInfo ProductionInfo { get; set; }
         public List<Schedule> Schedules { get; set; }
         public TripPlan TripPlan { get; set; }
+        public bool IsVisible { get; set; }
+        public bool IsDeleted { get; set; }
     }
 
     public class CommonInfo
     {
         public string ProviderPrefix { get; set; }
-        public Location Region { get; set; }
+        public string RegionId { get; set; }
+        public string RegionName { get; set; }
         public string Promotion { get; set; }
         public string Theme { get; set; }
         //1,2,3,4,5,6,7 代表周一到周日
@@ -69,8 +75,12 @@ namespace ViewWorld.Core.Models
         public string Intro { get; set; }
 
     }
+    //发团计划
     public class TripPlan
     {
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonRequired]
+        public string Id { get; set; }
         public TripPlanType Type { get; set; }
         public bool OneDayOnly { get; set; }
         public DateTime AvaiableFrom { get; set; }

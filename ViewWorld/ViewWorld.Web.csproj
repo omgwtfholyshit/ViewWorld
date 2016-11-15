@@ -535,6 +535,7 @@
     <Content Include="Scripts\Backend\Layout.js" />
     <Content Include="Scripts\Backend\Login.js" />
     <Content Include="Scripts\Backend\Trip\RegionManagement.js" />
+    <Content Include="Scripts\Backend\Trip\SceneryManagement.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -629,6 +630,9 @@
     <Content Include="Views\Page\GlobalSetting.cshtml" />
     <Content Include="Views\Page\Provider.cshtml" />
     <Content Include="Views\PartialViews\_PartialRegionTable.cshtml" />
+    <Content Include="Views\Page\TripManagement.cshtml" />
+    <Content Include="Views\Page\DepartureManagement.cshtml" />
+    <Content Include="Views\Page\SceneryManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
