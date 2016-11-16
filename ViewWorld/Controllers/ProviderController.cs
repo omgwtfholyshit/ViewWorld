@@ -39,6 +39,8 @@ namespace ViewWorld.Controllers
                 return ErrorJson(result.Message);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteProvider(string id)
         {
             var update = Builders<Provider>.Update.Set("IsArchived", true).CurrentDate("ModifiedDate");
@@ -52,20 +54,10 @@ namespace ViewWorld.Controllers
                 return ErrorJson(result.Message);
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditProvider(Provider model)
-        {
-            //var update = Builders<Provider>.Update
-            //                .Set("Name", model.Name)
-            //                .Set("Alias", model.Alias)
-            //                .Set("ContactName", model.ContactName)
-            //                .Set("Phone", model.Phone)
-            //                .Set("Email", model.Email)
-            //                .Set("CommissionRate", model.CommissionRate)
-            //                .Set("AwardRatio", model.AwardRatio)
-            //                .Set("Description", model.Description)
-            //                .Set("UpdatedBy", User.Identity.Name)
-            //                .CurrentDate("ModifiedDate");
-            //var result = await repo.UpdateOne<Provider>(model.Id, update);
+        {            
             model.UpdatedBy = User.Identity.Name;
             model.ModifiedDate = DateTime.UtcNow;
             var result = await repo.ReplaceOne<Provider>(model.Id, model);

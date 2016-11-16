@@ -47,7 +47,8 @@
             url: '/Provider/EditProvider',
             method: 'POST',
             data: {
-                model: model
+                model: model,
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"').val()
             },
             success: function (response) {
                 if (response.status == 200) {
@@ -100,13 +101,14 @@
                 url: "/Provider/DeleteProvider",
                 method: 'post',
                 data: {
-                    id: $this.closest('tr').data('provider-id')
+                    id: $this.closest('tr').data('provider-id'),
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"').val()
                 },
                 success: function (response) {
                     if (response.status == 200) {
                         $.tip('.message-container', '删除成功', '', 'positive', 4);                        
-                        $this.closest('tr').remove();
-                        $this.removeClass('loading');
+                        $this.closest('tr').addClass('archived-provider');
+                        $this.addClass('disabled').removeClass('red loading');
                     } else {
                         $this.removeClass('loading');
                         $.tip(".message-container", "删除失败", response.message, "negative", 4);
