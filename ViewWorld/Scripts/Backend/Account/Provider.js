@@ -57,6 +57,7 @@
                          .addClass('hidden')
                          .siblings('.button.edit')
                             .removeClass('loading hidden');
+                    $cells.attr('contenteditable', false);
                 } else {
                     $this.removeClass('loading');
                     $.tip(".message-container", "修改失败", response.message, "negative", 4);
