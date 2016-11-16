@@ -30,28 +30,36 @@
             <tbody>
                 @foreach (var provider in Model)
                 {
-                    <tr data-provider-id="@provider.Id">
+                    <tr class="@(provider.IsArchived ? "archived-provider" : "")" data-provider-id="@provider.Id">
                         <td>
-                            @provider.Name <br />
+                            <div class="editable-cell" data-db-key="Name">@provider.Name</div>
                             ID: @provider.Id
                         </td>
-                        <td>@provider.Alias</td>
-                        <td>@provider.ContactName</td>
-                        <td>@provider.Phone</td>
-                        <td>@provider.Email</td>
-                        <td>@provider.CommissionRate</td>
-                        <td>@provider.AwardRatio</td>
-                        <td>@provider.Description</td>
+                        <td><div class="editable-cell" data-db-key="Alias">@provider.Alias</div></td>
+                        <td><div class="editable-cell" data-db-key="ContactName">@provider.ContactName</div></td>
+                        <td><div class="editable-cell" data-db-key="Phone">@provider.Phone</div></td>
+                        <td><div class="editable-cell" data-db-key="Email">@provider.Email</div></td>
+                        <td><div class="editable-cell" data-db-key="CommissionRate">@provider.CommissionRate</div></td>
+                        <td><div class="editable-cell" data-db-key="AwardRatio">@provider.AwardRatio</div></td>
+                        <td><div class="editable-cell" data-db-key="Description">@provider.Description</div></td>
                         <td>
-                            <button class="ui icon button edit"><i class="icon edit"></i></button>
-                            <button class="ui icon button delete"><i class="icon delete"></i></button>
+                            <button class="ui blue icon button save hidden"><i class="icon save"></i></button>
+                            <button class="ui blue icon button edit"><i class="icon edit"></i></button>
+                            @if (!provider.IsArchived)
+                            {
+                                <button class="ui red icon button delete"><i class="icon delete"></i></button>
+                            }
+                            else
+                            {
+                                <button class="ui disabled icon button delete"><i class="icon delete"></i></button>
+                            }
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
-    <div class="ui modal add-provider-modal" style="padding-left:20px; padding-right20px;">
+    <div class="ui modal add-provider-modal" style="padding-left:20px; padding-right:20px;">
         <div class="header" style="text-align:center;">
             添加供应商
         </div>

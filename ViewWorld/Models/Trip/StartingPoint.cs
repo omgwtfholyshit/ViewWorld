@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +15,7 @@ namespace ViewWorld.Core.Models
     /// </summary>
     public class StartingPoint
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [BsonRepresentation(BsonType.ObjectId)]
         [Required]
         public int Id { get; set; }
         [Required]
@@ -22,8 +24,7 @@ namespace ViewWorld.Core.Models
         public string DepartAt { get; set; }
         //1,2,3,4,5,6,7 代表周一到周日
         public string AvailableDate { get; set; }
-        public GeoPoint Coordinate { get; set; }
-        public Location Location { get; set; }
+        public string Address { get; set; }
         //统计该起点的热门度
         public int Popularity { get; set; }
     }

@@ -18,11 +18,75 @@
                 deleteProvider(e);
             }
         });
+        $('.button.save').on('click', function (e) {
+            e.preventDefault();
+            var r = window.confirm("确认保存");
+            if (r) {
+                saveProvider(e);
+            }
+        });
+    }
+
+    function saveProvider(e) {
+        var $this = $(e.target).closest('.button.save');
+        if ($this.hasClass('loading')) {
+            return;
+        }
+        $this.addClass('loading');
+
+        var $cells = $this.closest('tr').find('.editable-cell');
+        
+        var model = {
+            Id: $this.closest('tr').data('provider-id')
+        };
+        $cells.each(function (index, cell) {
+            model[$(cell).data('db-key')] = $(cell).text().trim();
+        });
+
+        $.ajax({
+            url: '/Provider/EditProvider',
+            method: 'POST',
+            data: {
+                model: model
+            },
+            success: function (response) {
+                if (response.status == 200) {
+                    $.tip('.message-container', '修改成功', '', 'positive', 4);
+                    $this.removeClass('loading')
+                         .addClass('hidden')
+                         .siblings('.button.edit')
+                            .removeClass('loading hidden');
+                } else {
+                    $this.removeClass('loading');
+                    $.tip(".message-container", "修改失败", response.message, "negative", 4);
+                }
+            },
+            error: function (error) {
+                $this.removeClass('loading')
+                         .addClass('hidden')
+                         .siblings('.button.edit')
+                            .removeClass('loading hidden');
+                $.tip(".message-container", "操作失败", "服务器超时，请稍后重试！", "negative", 4);
+            }
+
+        });
     }
 
     function editProvider(e) {
+
         // todo: edit provider
-        return;
+        var $this = $(e.target).closest('.button.edit');
+        if ($this.hasClass('loading')) {
+            return;
+        }
+        $this.addClass('loading');
+
+        if ($this.closest('tr').length > 0) {
+            var $row = $this.closest('tr');
+            $row.find('.editable-cell').attr('contenteditable', true);
+            $($row.find('.editable-cell')[0]).focus();
+            $this.addClass('hidden').siblings('.button.save').removeClass('hidden');
+        }
     }
 
     function deleteProvider(e) {
@@ -40,10 +104,9 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
-                        $.tip('.message-container', '删除成功', '正在重载页面', 'positive', 4);
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000);
+                        $.tip('.message-container', '删除成功', '', 'positive', 4);                        
+                        $this.closest('tr').remove();
+                        $this.removeClass('loading');
                     } else {
                         $this.removeClass('loading');
                         $.tip(".message-container", "删除失败", response.message, "negative", 4);
@@ -111,7 +174,7 @@
                         $.tip(".message-container", "操作成功", "供应商已保存,请等待页面刷新", "positive", 4);
                         setTimeout(function () {
                             window.location.reload();
-                        }, 3000);
+                        }, 1000);
                     } else {
                         $this.removeClass('loading');
                         $.tip(".message-container", "保存失败", data.message, "negative", 4);
