@@ -16,8 +16,8 @@ namespace ViewWorld.Core.Models
     public class StartingPoint
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        [Required]
-        public int Id { get; set; }
+        [BsonRequired]
+        public string Id { get; set; }
         [Required]
         public string Name { get; set; }
         //出发时间

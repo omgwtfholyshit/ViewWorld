@@ -40,8 +40,8 @@
                         <i class="dropdown icon"></i>
                         <div class="menu transition">
                             <a class="item" href="/Page/RegionManagement"><i class="browser icon"></i> 区域管理</a>
-                            <a class="item"><i class="globe icon"></i> 行程管理</a>
-                            <a class="item"><i class="location arrow icon"></i> 景点管理</a>
+                            <a class="item" href="/Page/TripManagement"><i class="globe icon"></i> 行程管理</a>
+                            <a class="item" href="/Page/SceneryManagement"><i class="location arrow icon"></i> 景点管理</a>
                         </div>
                     </div>
                     <div class="ui dropdown item ">
@@ -67,7 +67,6 @@
                     <a class="item">
                         <i class="marker icon"></i> 出发地管理
                     </a>
-
                     <a class="item" href="/Page/GlobalSetting">
                         <i class="grid setting icon"></i> 全局设置
                     </a>
@@ -104,7 +103,7 @@
                     </div>
                     <div class="content-body">
                         <div class="ui breadcrumb">
-                            <a class="section" id="parentCategory">账户管理</a>
+                            <a class="section" id="parentCategory">@ViewBag.Parent</a>
                             <div class="divider"> | </div>
                             <a class="section active">@ViewBag.Title</a>
                         </div>
