@@ -5,11 +5,11 @@
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 
-<div class="ui container" style="padding-left: 20px; padding-right:20px;">
+<div class="ui fluid container admin-content">
     <h2>供应商管理</h2>
     <div>
         <button class="ui primary button add-provider">
-            添加供应商
+            <i class="icon add"></i>添加供应商
         </button>
     </div>
     @if (Model.Any())
@@ -31,7 +31,7 @@
             <tbody>
                 @foreach (var provider in Model)
                 {
-                    <tr class="@(provider.IsArchived ? "archived-provider" : "")" data-provider-id="@provider.Id">
+                    <tr class="@(provider.IsArchived ? "archived-row" : "")" data-provider-id="@provider.Id">
                         <td>
                             <div class="editable-cell" data-db-key="Name">@provider.Name</div>
                             ID: @provider.Id
@@ -60,13 +60,13 @@
             </tbody>
         </table>
     }
-    <div class="ui modal add-provider-modal" style="padding-left:20px; padding-right:20px;">
-        <div class="header" style="text-align:center;">
+    <div class="ui modal add-provider-modal admin-modal">
+        <div class="header">
             添加供应商
         </div>
         <i class="close icon"></i>
 
-        <form class="ui form equal width" id="add-provider" style="margin: 10px auto; width:80%;max-width:400px;">
+        <form class="ui form equal width" id="add-provider">
             @Html.AntiForgeryToken()
             <div class="ui error message">
                 <div class="header">出错啦:</div>
@@ -116,4 +116,4 @@
     </div>
 </div>
 
-<script src="~/Scripts/Backend/Account/Provider.js"></script>
+<script src="~/Scripts/Backend/Trip/Provider.js"></script>

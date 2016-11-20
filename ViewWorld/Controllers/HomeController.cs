@@ -7,7 +7,7 @@ using ViewWorld.Core.Models;
 using ViewWorld.Utils;
 using MongoDB.Driver;
 using MongoDB.Bson;
-using ViewWorld.Models;
+using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
 using ViewWorld.Models.Managers;
 

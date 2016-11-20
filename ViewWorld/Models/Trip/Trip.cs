@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewWorld.Core.Enum;
 
-namespace ViewWorld.Core.Models
+namespace ViewWorld.Models.Trip
 {
     /// <summary>
     /// 行程信息

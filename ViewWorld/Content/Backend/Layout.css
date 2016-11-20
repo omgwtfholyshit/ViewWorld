@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 /******************
  Global Settings
 ******************/
@@ -136,25 +136,39 @@ body {
       color: #ccc;
       padding-top: 5px; }
 
+.ui.modal.admin-modal {
+  padding-left: 20px;
+  padding-right: 20px; }
+  .ui.modal.admin-modal .header {
+    text-align: center; }
+  .ui.modal.admin-modal .ui.form {
+    margin: 10px auto;
+    width: 80%;
+    max-width: 400px; }
+
+.ui.container.admin-content {
+  padding-left: 20px;
+  padding-right: 20px; }
+
+.archived-row {
+  background-color: #ccc; }
+
 /************************************
     UserProfile & EditPassword
 ************************************/
 .user-profile .content-upper, .edit-password .content-upper {
   width: 56%;
   margin: auto; }
-
 .user-profile .content-left, .user-profile .content-right, .edit-password .content-left, .edit-password .content-right {
   vertical-align: top;
   display: inline-block;
   float: left;
   padding-top: 2rem; }
-
 .user-profile .content-left, .edit-password .content-left {
   width: 50%;
   padding-right: 2rem; }
   .user-profile .content-left .ui.card, .edit-password .content-left .ui.card {
     float: right; }
-
 .user-profile .content-right, .edit-password .content-right {
   width: 50%; }
   .user-profile .content-right .ui.form .field > label, .edit-password .content-right .ui.form .field > label {
@@ -174,22 +188,15 @@ body {
 ************************************/
 .region-management .tool-bar, .region-management .table-container {
   padding: 0.5rem; }
-
 .region-management .padleft54 {
   padding-left: 5.4rem !important; }
-
 .region-management i.caret {
   transition: all ease-in-out 0.3s;
   cursor: pointer; }
-
 .region-management .open {
   transform: rotate(-90deg) !important; }
 
 .region-editor .form-container {
   width: 100%; }
 
-/************************************
-    Provider
-************************************/
-.archived-provider {
-    background-color : #ccc; }
+/*# sourceMappingURL=Layout.css.map */

@@ -70,6 +70,33 @@ namespace ViewWorld.Controllers
                 return ErrorJson(result.Message);
             }
         }
+        public async Task<JsonResult> GetAll()
+        {
+            var result = await repo.GetAll<Provider>();
+            var data = new List<Object>();
+            
+            if (result.Success)
+            {
+                foreach (var provider in result.Entities)
+                {
+                    if (!provider.IsArchived)
+                    {
+                        var doc = new
+                        {
+                            name  = provider.Name,
+                            value = provider.Id
+                        };
+
+                        data.Add(doc);
+                    }
+                }
+                return DropdownData(result.Success, data);
+            }
+            else
+            {
+                return ErrorJson(result.Message);
+            }
+        }
         #endregion       
     }
 }

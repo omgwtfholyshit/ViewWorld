@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using PagedList;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -46,7 +47,15 @@ namespace ViewWorld.Controllers
             };
             return Json(data2, JsonRequestBehavior.AllowGet);
         }
-
+        protected JsonResult DropdownData(bool status, Object data)
+        {
+            var result = new
+            {
+                success = true,
+                results = data
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         protected JsonResult PageJson(IPagedList data)
         {
             var pageData = new

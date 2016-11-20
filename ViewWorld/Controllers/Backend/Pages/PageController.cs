@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
 using ViewWorld.Models;
+using ViewWorld.Models.Trip;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
@@ -78,10 +79,11 @@ namespace ViewWorld.Controllers.Backend.Pages
             var providers = await repo.GetAll<Provider>();
             return View(providers.Entities);
         }
-        public ActionResult DepartureManagement()
+        public async Task<ActionResult> DepartureManagement()
         {
-            return View();
+            var departures = await repo.GetAll<StartingPoint>();            
+            return View(departures.Entities);
         }
-        #endregion
+        #endregion        
     }
 }

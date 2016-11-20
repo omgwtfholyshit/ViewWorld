@@ -5,6 +5,7 @@ using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ViewWorld.Core.Models;
+using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Models
 {

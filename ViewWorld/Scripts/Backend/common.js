@@ -39,6 +39,26 @@
     function checkMobile(mobile) {
         return /^0?(13|14|15|17|18)[0-9]{9}$/.test(mobile);
     }
+    function validator($form, $inputs) {
+        var error = false;
+
+        $inputs.each(function () {
+            var $this = $(this);
+            if ($this.closest('.field').hasClass('required') && $this.val().trim().length == 0) {
+                error = true;
+                $form.find('.ui.error.message ui').append(
+                    $('<li/>').text('请填写' + $this.siblings('label').text())
+                );
+                $this.closest('.field').addClass('error');
+            }
+        });
+
+        if (error) {
+            $form.addClass('error');
+            $('.ui.modal.add-provider-modal').modal('refresh');
+        }
+        return !error;
+    }
     function bindEvents() {
         $('.message-container').delegate('.message .close', 'click', function () {
             $(this).closest('.message').transition('fade');

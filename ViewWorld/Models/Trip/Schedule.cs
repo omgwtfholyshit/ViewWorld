@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewWorld.Core.Models
+namespace ViewWorld.Models.Trip
 {
     /// <summary>
     /// 日程信息

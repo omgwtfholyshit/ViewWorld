@@ -5,7 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using ViewWorld.Models.Trip;
 
-namespace ViewWorld.Core.Models
+namespace ViewWorld.Models.Trip
 {
     /// <summary>
     /// 景点信息

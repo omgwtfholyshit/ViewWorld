@@ -1,9 +1,82 @@
-﻿
+﻿@model IEnumerable<ViewWorld.Models.Trip.StartingPoint>
 @{
     ViewBag.Parent = "旅游管理";
     ViewBag.Title = "出发地管理";
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 
-<h2>DepartureManagement</h2>
+<div class="ui fluid container admin-content">
+    <h2>出发地管理</h2>
+    <button class="ui primary button add-departure">
+        <i class="icon add"></i>
+        添加出发地
+    </button>
+    @if (Model.Any())
+    {
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>出发时间</th>
+                    <th>地点/地标</th>
+                    <th>地址</th>
+                    <th>供应商简称</th>
+                    <th>供应商</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var depart in Model)
+                {
+                    <tr class="@(depart.IsArchived ? "archived-row" : "")">
+                        <td>depart.DepartTime</td>
+                        <td>depart.Landmark</td>
+                        <td>depart.Address</td>
+                        <td>depart.ProviderAlias</td>
+                        <td>depart.ProviderName</td>
+                    </tr>
+                }
 
+            </tbody>
+        </table>
+    }
+    <div class="ui modal admin-modal add-departure-modal">
+        <div class="header">
+            添加出发地
+        </div>
+        <i class="close icon"></i>
+
+        <form class="ui form equal width" id="add-departure">
+            @Html.AntiForgeryToken()
+            <div class="ui error message">
+                <div class="header">出错啦:</div>
+                <ui></ui>
+            </div>
+            <div class="required field">
+                <label>地点/地标</label>
+                <input name="provider-name" type="text" placeholder="地点,如:酒店名" data-db-key="Landmark" />
+            </div>
+            <div class="required field">
+                <label>地址</label>
+                <input name="alias" type="text" placeholder="如:道路名和门牌号" data-db-key="Address" />
+            </div>
+            <div class="required field">
+                <label>出发时间</label>
+                <input name="depart-time" type="text" placeholder="如: 7:00am" data-db-key="DepartTime" />
+            </div>
+            <div class="required field">
+                <label>供应商</label>
+                <input class="ui selection dropdown provider-list" name="provider" />                
+            </div>            
+            <div class="actions">
+                <div class="ui primary button" id="submit-form">
+                    保存
+                </div>
+                <div class="ui cancel button">
+                    关闭
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/Scripts/Backend/Trip/DepartureManagement.js"></script>
