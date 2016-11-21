@@ -305,6 +305,7 @@
     <Compile Include="App_Start\StyleBundleFallback.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Backend\Pages\PageController.cs" />
+    <Compile Include="Controllers\DepartureController.cs" />
     <Compile Include="Controllers\ProviderController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -638,6 +639,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Backend\" />
+    <Folder Include="Views\Departure\" />
     <Folder Include="Views\Provider\" />
     <Folder Include="Views\Trip\" />
   </ItemGroup>

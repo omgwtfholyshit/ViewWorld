@@ -46,26 +46,29 @@
         <i class="close icon"></i>
 
         <form class="ui form equal width" id="add-departure">
-            @Html.AntiForgeryToken()
-            <div class="ui error message">
-                <div class="header">出错啦:</div>
-                <ui></ui>
-            </div>
+            @Html.AntiForgeryToken()           
             <div class="required field">
                 <label>地点/地标</label>
-                <input name="provider-name" type="text" placeholder="地点,如:酒店名" data-db-key="Landmark" />
+                <input name="landmark" type="text" placeholder="地点,如:酒店名" data-db-key="Landmark" />
             </div>
             <div class="required field">
                 <label>地址</label>
-                <input name="alias" type="text" placeholder="如:道路名和门牌号" data-db-key="Address" />
+                <input name="address" type="text" placeholder="如:道路名和门牌号" data-db-key="Address" />
             </div>
             <div class="required field">
                 <label>出发时间</label>
-                <input name="depart-time" type="text" placeholder="如: 7:00am" data-db-key="DepartTime" />
+                <input name="depart_time" type="text" placeholder="如: 7:00am" data-db-key="DepartTime" />
             </div>
             <div class="required field">
                 <label>供应商</label>
-                <input class="ui selection dropdown provider-list" name="provider" />                
+                <div class="ui search selection dropdown provider-list">
+                    <input type="hidden" name="provider" data-db-key="provider">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">供应商</div>
+                    <div class="menu">
+
+                    </div>
+                </div>
             </div>            
             <div class="actions">
                 <div class="ui primary button" id="submit-form">
