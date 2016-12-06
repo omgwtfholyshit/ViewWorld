@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
+using ViewWorld.Core.Models.ProviderModels;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Models;
 
