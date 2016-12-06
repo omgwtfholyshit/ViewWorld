@@ -15,7 +15,7 @@
             e.preventDefault();
             var r = window.confirm("请确认删除操作");
             if (r) {
-                deleteProvider(e);
+                deleteProvider(e); 
             }
         });
         $('.button.save').on('click', function (e) {
