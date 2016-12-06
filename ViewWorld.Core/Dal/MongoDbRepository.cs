@@ -3,12 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewWorld.Core.Models;
-using ViewWorld.Utils;
-using ViewWorld.Utils.ViewModels;
 using MongoDB.Bson;
 using ViewWorld.Core.Dal;
 
-namespace ViewWorld.Models
+namespace ViewWorld.Core.Dal
 {
     public class MongoDbRepository : IMongoDbRepository
     {

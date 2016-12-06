@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewWorld.Utils.ViewModels
+namespace ViewWorld.Core.Dal
 {
     public class Result
     {

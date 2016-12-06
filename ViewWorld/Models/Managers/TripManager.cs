@@ -1,15 +1,14 @@
 ﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models;
 using ViewWorld.Models.Trip;
 using ViewWorld.Utils;
-using ViewWorld.Utils.ViewModels;
 
 namespace ViewWorld.Models.Managers
 {

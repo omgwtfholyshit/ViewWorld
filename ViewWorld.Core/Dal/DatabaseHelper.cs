@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace ViewWorld.Utils
+namespace ViewWorld.Core.Dal
 {
     public class DatabaseHelper
     {

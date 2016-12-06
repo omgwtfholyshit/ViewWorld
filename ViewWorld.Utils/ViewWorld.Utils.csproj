@@ -80,7 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="EncryptionHelper.cs" />
     <Compile Include="HttpHelper.cs" />
     <Compile Include="ImageHelper.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="ValidationHelper.cs" />
     <Compile Include="VerificationSender.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
-    <Compile Include="ViewModels\MongoDbResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ViewWorld.Core\ViewWorld.Core.csproj">
@@ -100,6 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,8 +1,7 @@
 ﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ViewWorld.Utils.ViewModels;
-using ViewWorld.Models.Trip;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Core.Models
 {

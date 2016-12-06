@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ViewWorld.Core.Models;
 using MongoDB.Driver;
-using ViewWorld.Models;
 using ViewWorld.Models.Managers;
 using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
-using ViewWorld.Utils.ViewModels;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers.Trip
 {

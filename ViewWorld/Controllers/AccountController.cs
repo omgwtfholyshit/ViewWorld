@@ -544,7 +544,7 @@ namespace ViewWorld.Controllers
                         default:
                             return ErrorJson("用户名或密码错误");
                     }
-                }catch(TimeoutException e)
+                }catch(TimeoutException)
                 {
                     return ErrorJson("服务器内部错误，请稍候再试");
                 }

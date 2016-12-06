@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using ViewWorld.App_Start;
 using ViewWorld.Core;
 using ViewWorld.Core.Models;
-using ViewWorld.Models;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
