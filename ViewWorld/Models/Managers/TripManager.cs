@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ViewWorld.Core.Models;
 using ViewWorld.Models.Trip;
 using ViewWorld.Utils;
 using ViewWorld.Utils.ViewModels;
@@ -15,15 +16,10 @@ namespace ViewWorld.Models.Managers
     public class TripManager 
     {
         #region Constructor
-        private MongoRepository Repo;
-        public TripManager(MongoRepository _repo)
+        private IMongoDbRepository Repo;
+        public TripManager(IMongoDbRepository _repo)
         {
             Repo = _repo;
-        }
-        public TripManager()
-            :this(new MongoRepository())
-        {
-
         }
         #endregion
         #region 区域管理

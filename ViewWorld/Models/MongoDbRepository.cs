@@ -7,14 +7,15 @@ using ViewWorld.Core.Models;
 using ViewWorld.Utils;
 using ViewWorld.Utils.ViewModels;
 using MongoDB.Bson;
+using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Models
 {
-    public class MongoRepository : IMongoDbRepository
+    public class MongoDbRepository : IMongoDbRepository
     {
 
         private ApplicationIdentityContext _mongoDbContext = null;
-        public MongoRepository(ApplicationIdentityContext mongoDbContext = null)
+        public MongoDbRepository(ApplicationIdentityContext mongoDbContext = null)
         {
             _mongoDbContext = mongoDbContext != null ? mongoDbContext : ApplicationIdentityContext.Create();
         }
@@ -484,7 +485,6 @@ namespace ViewWorld.Models
         {
             return _mongoDbContext.GetCollection<TEntity>();
         }
-
 
     }
 }

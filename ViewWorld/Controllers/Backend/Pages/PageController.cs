@@ -15,13 +15,13 @@ namespace ViewWorld.Controllers.Backend.Pages
     [Authorize(Roles ="管理员,销售")]
     public class PageController : BaseController
     {
-        MongoRepository repo;
+        MongoDbRepository repo;
         public PageController()
-            : this(new MongoRepository())
+            : this(new MongoDbRepository())
         {
 
         }
-        public PageController(MongoRepository _repo)
+        public PageController(MongoDbRepository _repo)
         {
             repo = _repo;
         }

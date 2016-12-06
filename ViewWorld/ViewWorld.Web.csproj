@@ -313,11 +313,10 @@
     </Compile>
     <Compile Include="Interfaces\IMongoDbRepository.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\GlobalSetting.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MongoRepository.cs" />
+    <Compile Include="Models\MongoDbRepository.cs" />
     <Compile Include="Models\Provider.cs" />
     <Compile Include="Models\Trip\Region.cs" />
     <Compile Include="Models\Trip\Scenery.cs" />

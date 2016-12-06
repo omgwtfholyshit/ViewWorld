@@ -12,13 +12,13 @@ namespace ViewWorld.Controllers
     public class ProviderController : BaseController
     {
         #region Constructor
-        MongoRepository repo;
+        MongoDbRepository repo;
         public ProviderController()
-            : this(new MongoRepository())
+            : this(new MongoDbRepository())
         {
 
         }
-        public ProviderController(MongoRepository _repo)
+        public ProviderController(MongoDbRepository _repo)
         {
             repo = _repo;
         }

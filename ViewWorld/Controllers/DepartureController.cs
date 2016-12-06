@@ -12,13 +12,13 @@ namespace ViewWorld.Controllers
 {
     public class DepartureController : BaseController
     {
-        MongoRepository repo;
+        MongoDbRepository repo;
         public DepartureController()
-            :this (new MongoRepository())
+            :this (new MongoDbRepository())
         {
 
         }
-        public DepartureController(MongoRepository _repo)
+        public DepartureController(MongoDbRepository _repo)
         {
             repo = _repo;
         }

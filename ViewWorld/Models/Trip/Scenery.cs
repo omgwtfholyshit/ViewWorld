@@ -3,7 +3,9 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using ViewWorld.Models.Trip;
+using ViewWorld.Utils.ViewModels;
 
 namespace ViewWorld.Models.Trip
 {
@@ -50,6 +52,7 @@ namespace ViewWorld.Models.Trip
         private GeoPoint _coord { get; set; }
 
     }
+
     public class GeoPoint
     {
         /// <summary>

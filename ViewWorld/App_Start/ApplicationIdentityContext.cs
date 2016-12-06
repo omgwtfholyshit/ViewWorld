@@ -6,12 +6,14 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using ViewWorld.Models;
 using AspNet.Identity.MongoDB;
+using ViewWorld.Core;
 
 namespace ViewWorld.App_Start
 {
     public class ApplicationIdentityContext : IDisposable
-    {        
-        private const string DB_NAME = Core.Config.db_name;
+    {
+        static string dbName = "ViewWorld";
+        static string connectionStr = string.Format("mongodb://{0}:{1}",Config.host_IP,Config.db_port);
         public IMongoClient Client { get; set; }
         public IMongoDatabase DB { get; set; }
         public IMongoCollection<IdentityRole> Roles { get; set; }
@@ -26,8 +28,8 @@ namespace ViewWorld.App_Start
 
         public static ApplicationIdentityContext Create()
         {
-            IMongoClient client = new MongoClient("mongodb://localhost:27017");
-            IMongoDatabase database = client.GetDatabase(DB_NAME);
+            IMongoClient client = new MongoClient(connectionStr);
+            IMongoDatabase database = client.GetDatabase(dbName);
             var users = database.GetCollection<ApplicationUser>("users");
             var roles = database.GetCollection<IdentityRole>("roles");
             return new ApplicationIdentityContext(client, database,users,roles);
@@ -38,7 +40,7 @@ namespace ViewWorld.App_Start
             IMongoClient c;
             IMongoDatabase db;
             c = new MongoClient();
-            db = c.GetDatabase(DB_NAME);
+            db = c.GetDatabase(dbName);
                         
             if (!CollectionExists(db, "IdentityRoles"))
             {

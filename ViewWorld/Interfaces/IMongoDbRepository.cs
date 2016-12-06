@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewWorld.Utils.ViewModels;
+using ViewWorld.Models.Trip;
 
 namespace ViewWorld.Core.Models
 {
@@ -138,9 +139,13 @@ namespace ViewWorld.Core.Models
         /// <param name="update"></param>
         /// <returns></returns>
         Task<Result> UpdateMany<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
+
+        Task<Result> ReplaceOne<TEntity>(string id, TEntity model) where TEntity : class, new();
+        Task<Result> ReplaceOne<TEntity>(FilterDefinition<TEntity> filter, TEntity model) where TEntity : class, new();
+
         #endregion Update
 
-        #region Find And Update
+            #region Find And Update
 
         /// <summary>
         /// GetAndUpdateOne with filter

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using ViewWorld.App_Start;
 using ViewWorld.Core;
+using ViewWorld.Core.Models;
 using ViewWorld.Models;
 
 namespace ViewWorld.Controllers
@@ -115,14 +116,14 @@ namespace ViewWorld.Controllers
             HttpResponse.RemoveOutputCacheItem(urlToRemove);
         }
         #endregion
-        private MongoRepository _repo;
-        protected MongoRepository Repo
+        IMongoDbRepository _repo;
+        protected IMongoDbRepository Repo
         {
             get
             {
-                return _repo ?? new MongoRepository();
+                return _repo ?? new MongoDbRepository();
             }
-            set
+            private set
             {
                 _repo = value;
             }

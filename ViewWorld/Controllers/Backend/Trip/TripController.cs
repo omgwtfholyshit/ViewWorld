@@ -22,9 +22,8 @@ namespace ViewWorld.Controllers.Trip
         {
             tripManager = _tripManager;
         }
-        public TripController() : this(new TripManager())
-        {
-
+        public TripController(){
+            this.tripManager = new TripManager(Repo);
         }
         #endregion
         static string[] cachedMethods = new string[]{"ListRegionsAPI"};
