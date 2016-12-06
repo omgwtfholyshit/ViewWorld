@@ -79,16 +79,16 @@ namespace ViewWorld.Controllers
             {
                 foreach (var provider in result.Entities)
                 {
-                    if (!provider.IsArchived)
+                    
+                    var doc = new
                     {
-                        var doc = new
-                        {
-                            name  = provider.Name,
-                            value = provider.Id
-                        };
+                        name  = provider.Name,
+                        value = provider.Id,
+                        disabled = provider.IsArchived
+                    };
 
-                        data.Add(doc);
-                    }
+                    data.Add(doc);
+                    
                 }
                 return DropdownData(result.Success, data);
             }

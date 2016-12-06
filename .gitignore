@@ -8,3 +8,4 @@ ViewWorld.Core/bin/
 ViewWorld.Utils/obj/
 ViewWorld.Utils/bin/
 .vs/
+.vs/config/applicationhost.config
