@@ -1,30 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
+using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Models;
-using ViewWorld.Models.Trip;
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
     [Authorize(Roles ="管理员,销售")]
     public class PageController : BaseController
     {
-        MongoDbRepository repo;
-        public PageController()
-            : this(new MongoDbRepository())
-        {
-
-        }
-        public PageController(MongoDbRepository _repo)
-        {
-            repo = _repo;
-        }
         // GET: Page
         public ActionResult Index()
         {
@@ -46,7 +30,7 @@ namespace ViewWorld.Controllers.Backend.Pages
         #region 账户管理
         public async Task<ActionResult> UserProfile()
         {
-            var result = await repo.GetOne<ApplicationUser>(UserId);
+            var result = await Repo.GetOne<ApplicationUser>(UserId);
             return View(result.Entity);
         }
         public ActionResult EditPassword()
@@ -70,18 +54,18 @@ namespace ViewWorld.Controllers.Backend.Pages
         #endregion
         public async Task<ActionResult> GlobalSetting()
         {
-            var settings = await repo.GetAll<GlobalSetting>();
+            var settings = await Repo.GetAll<GlobalSetting>();
             return View(settings.Entities);
         }
         #region 供应商管理
         public async Task<ActionResult> Provider()
         {
-            var providers = await repo.GetAll<Provider>();
+            var providers = await Repo.GetAll<Provider>();
             return View(providers.Entities);
         }
         public async Task<ActionResult> DepartureManagement()
         {
-            var departures = await repo.GetAll<StartingPoint>();            
+            var departures = await Repo.GetAll<StartingPoint>();            
             return View(departures.Entities);
         }
         #endregion        

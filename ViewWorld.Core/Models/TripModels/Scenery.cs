@@ -3,11 +3,8 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using ViewWorld.Models.Trip;
-using ViewWorld.Utils.ViewModels;
 
-namespace ViewWorld.Models.Trip
+namespace ViewWorld.Core.Models.TripModels
 {
     /// <summary>
     /// 景点信息

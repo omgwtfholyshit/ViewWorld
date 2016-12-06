@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using ViewWorld.Core.Models;
-using ViewWorld.Models.Trip;
 
 namespace ViewWorld.App_Start
 {

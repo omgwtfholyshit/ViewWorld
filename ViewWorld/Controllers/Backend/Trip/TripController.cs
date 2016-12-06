@@ -3,9 +3,9 @@ using System.Linq;
 using System.Web.Mvc;
 using MongoDB.Driver;
 using ViewWorld.Models.Managers;
-using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.TripModels;
 
 namespace ViewWorld.Controllers.Trip
 {

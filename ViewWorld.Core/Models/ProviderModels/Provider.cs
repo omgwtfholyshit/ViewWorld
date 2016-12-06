@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using ViewWorld.Core.Models;
-using ViewWorld.Models.Trip;
+using ViewWorld.Core.Models.TripModels;
 
-namespace ViewWorld.Models
+namespace ViewWorld.Core.Models.ProviderModels
 {
     public class Provider
     {

@@ -114,6 +114,12 @@
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\AvatarUploadResult.cs" />
+    <Compile Include="Models\ProviderModels\Provider.cs" />
+    <Compile Include="Models\TripModels\Region.cs" />
+    <Compile Include="Models\TripModels\Scenery.cs" />
+    <Compile Include="Models\TripModels\Schedule.cs" />
+    <Compile Include="Models\TripModels\StartingPoint.cs" />
+    <Compile Include="Models\TripModels\Trip.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

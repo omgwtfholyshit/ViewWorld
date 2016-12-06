@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
 using ViewWorld.Utils;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
-using ViewWorld.Models.Managers;
+using ViewWorld.Core.Models.TripModels;
 
 namespace ViewWorld.Controllers
 {

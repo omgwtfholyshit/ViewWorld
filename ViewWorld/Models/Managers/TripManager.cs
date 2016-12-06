@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
-using ViewWorld.Core.Models;
-using ViewWorld.Models.Trip;
+using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Utils;
 
 namespace ViewWorld.Models.Managers

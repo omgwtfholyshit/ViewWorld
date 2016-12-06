@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
 
-namespace ViewWorld.Core.Models
+namespace ViewWorld.Core.Dal
 {
     public interface IMongoDbRepository
     {
