@@ -1,13 +1,8 @@
 ﻿; $(function () {
     function bindEvents() {
         $('.button.add-departure').on('click', function () {
-            $('.ui.modal.add-departure-modal').modal('show');
-            $('.ui.dropdown.provider-list').dropdown({
-                apiSettings: {
-                    url: '/Provider/GetAll',
-                    saveRemoteData: false
-                },
-            });
+            $('.ui.modal.add-departure-modal').modal('show');            
+            renderProviderList();
         });
         $('.button#submit-form').on('click', function (e) {
             e.preventDefault();
@@ -32,6 +27,20 @@
             }
         });        
         
+    }
+
+    function renderProviderList() {
+        $.ajax({
+            url: '/Provider/GetAll',
+            success: function (response) {
+                $('.ui.dropdown.provider-list').dropdown({
+                    apiSettings: {
+                        response: response
+                    }
+                }).removeClass('loading');
+
+            }
+        });
     }
 
     function initFormValidator() {

@@ -108,7 +108,7 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $.tip('.message-container', '删除成功', '', 'positive', 4);                        
-                        $this.closest('tr').addClass('archived-provider');
+                        $this.closest('tr').addClass('archived-row');
                         $this.addClass('disabled').removeClass('red loading');
                     } else {
                         $this.removeClass('loading');
