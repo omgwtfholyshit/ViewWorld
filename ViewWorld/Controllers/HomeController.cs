@@ -5,16 +5,26 @@ using ViewWorld.Core.Models;
 using ViewWorld.Utils;
 using System.Threading.Tasks;
 using ViewWorld.Core.Models.TripModels;
+using CacheManager.Core;
 
 namespace ViewWorld.Controllers
 {
     public class HomeController : BaseController
     {
+        ICacheManager<object> cache;
+        public HomeController(ICacheManager<object> _cache)
+        {
+            this.cache = _cache;
+        }
         public ActionResult Index()
         {
             return View();
         }
-
+        public ActionResult AddToCacheTest()
+        {
+            cache.Add("test", "testValue");
+            return Content(cache.Get("test").ToString());
+        }
         public ActionResult About()
         {
             HttpHelper.RequestUserLocation("118.19.3.42");
@@ -24,7 +34,6 @@ namespace ViewWorld.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
         public ActionResult TestMethods()
