@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models;
 using ViewWorld.Core.Models.ProviderModels;
 using ViewWorld.Core.Models.TripModels;
@@ -11,6 +12,11 @@ namespace ViewWorld.Controllers.Backend.Pages
     public class PageController : BaseController
     {
         // GET: Page
+        private readonly IMongoDbRepository Repo;
+        public PageController(IMongoDbRepository _repo)
+        {
+            Repo = _repo;
+        }
         public ActionResult Index()
         {
             return View();

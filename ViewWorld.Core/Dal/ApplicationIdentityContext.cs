@@ -18,21 +18,20 @@ namespace ViewWorld.Core.Dal
         public IMongoDatabase DB { get; set; }
         public IMongoCollection<IdentityRole> Roles { get; set; }
         public IMongoCollection<ApplicationUser> Users { get; set; }
-        private ApplicationIdentityContext(IMongoClient client, IMongoDatabase db, IMongoCollection<ApplicationUser> users, IMongoCollection<IdentityRole> roles)
+        public ApplicationIdentityContext()
         {
-            Client = client;
-            DB = db;
-            Users = users;
-            Roles = roles;
+            CreateDatabase();
         }
-
+        void CreateDatabase()
+        {
+            Client = new MongoClient(connectionStr);
+            DB = Client.GetDatabase(dbName);
+            Users = DB.GetCollection<ApplicationUser>("users");
+            Roles =DB.GetCollection<IdentityRole>("roles");
+        }
         public static ApplicationIdentityContext Create()
         {
-            IMongoClient client = new MongoClient(connectionStr);
-            IMongoDatabase database = client.GetDatabase(dbName);
-            var users = database.GetCollection<ApplicationUser>("users");
-            var roles = database.GetCollection<IdentityRole>("roles");
-            return new ApplicationIdentityContext(client, database, users, roles);
+            return new ApplicationIdentityContext();
         }
         private static bool CollectionExists(IMongoDatabase db, string collectionName)
         {

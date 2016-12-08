@@ -64,6 +64,10 @@
       <HintPath>..\packages\CacheManager.Core.0.9.2\lib\net45\CacheManager.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CacheManager.Serialization.Json, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
+      <HintPath>..\packages\CacheManager.Serialization.Json.0.9.2\lib\net45\CacheManager.Serialization.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="CacheManager.StackExchange.Redis, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
       <HintPath>..\packages\CacheManager.StackExchange.Redis.0.9.2\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -100,8 +104,8 @@
       <HintPath>..\packages\JSPool.2.0.0\lib\net451\JSPool.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.5\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -681,6 +685,10 @@
     <ProjectReference Include="..\ViewWorld.Core\ViewWorld.Core.csproj">
       <Project>{bab5ba08-007f-4157-9302-810a62cf9246}</Project>
       <Name>ViewWorld.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewWorld.Services\ViewWorld.Services.csproj">
+      <Project>{75D2766C-0695-4965-AE42-DA5D573E47A6}</Project>
+      <Name>ViewWorld.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewWorld.Utils\ViewWorld.Utils.csproj">
       <Project>{11ad461f-9d7f-4e4e-a2b0-07b4b4430985}</Project>

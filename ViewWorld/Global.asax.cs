@@ -2,10 +2,14 @@
 using Autofac.Integration.Mvc;
 using CacheManager.Core;
 using System;
+using System.Configuration;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using ViewWorld.Core;
+using ViewWorld.Core.Dal;
+using Newtonsoft.Json;
 
 namespace ViewWorld
 {
@@ -23,6 +27,20 @@ namespace ViewWorld
             #region ioC config
             // Register MVC controllers.
             var builder = new ContainerBuilder();
+
+            //Register Data Access Layer & Services
+            var dal = Assembly.Load("ViewWorld.Core");
+            var services = Assembly.Load("ViewWorld.Services");
+            builder.RegisterAssemblyTypes(dal,services)
+            .Where(t => t.Name.EndsWith("Repository")|| t.Name.EndsWith("Service"))
+            .AsImplementedInterfaces().InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(ApplicationIdentityContext).Assembly)
+                .AsSelf().InstancePerLifetimeScope();
+            //Register Services
+
+
+
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             // OPTIONAL: Register model binders that require DI.
             builder.RegisterModelBinders(typeof(MvcApplication).Assembly);
@@ -45,7 +63,9 @@ namespace ViewWorld
                 .WithRedisConfiguration("redisConnection", config => 
                 config
                 .WithConnectionTimeout(10000)
-                .WithEndpoint(Config.Cache_HostIP, Config.Cache_Port))
+                .WithEndpoint(ConfigurationManager.AppSettings["cacheHostIP"],
+                 Convert.ToInt32(ConfigurationManager.AppSettings["cachePort"])))
+                .WithJsonSerializer()
                 .WithMaxRetries(100)
                 .WithRetryTimeout(50)
                 .WithRedisCacheHandle("redisConnection", true)

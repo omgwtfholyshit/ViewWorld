@@ -115,17 +115,5 @@ namespace ViewWorld.Controllers
             HttpResponse.RemoveOutputCacheItem(urlToRemove);
         }
         #endregion
-        IMongoDbRepository _repo;
-        protected IMongoDbRepository Repo
-        {
-            get
-            {
-                return _repo ?? new MongoDbRepository();
-            }
-            private set
-            {
-                _repo = value;
-            }
-        }
     }
 }

@@ -6,15 +6,18 @@ using ViewWorld.Utils;
 using System.Threading.Tasks;
 using ViewWorld.Core.Models.TripModels;
 using CacheManager.Core;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
     public class HomeController : BaseController
     {
         ICacheManager<object> cache;
-        public HomeController(ICacheManager<object> _cache)
+        private readonly IMongoDbRepository Repo;
+        public HomeController(ICacheManager<object> _cache,IMongoDbRepository _repo)
         {
             this.cache = _cache;
+            this.Repo = _repo;
         }
         public ActionResult Index()
         {

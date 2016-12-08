@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using ViewWorld.Core.Enum;
 using System.Drawing;
 using MongoDB.Driver;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
@@ -24,15 +25,12 @@ namespace ViewWorld.Controllers
     public class AccountController : BaseController
     {
         #region 初始化
-        public AccountController()
-        {
-        }
-
-        public AccountController(ApplicationUserManager userManager)
-        {
-            UserManager = userManager;
-        }
+        private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
+        public AccountController(IMongoDbRepository _repo)
+        {
+            Repo = _repo;
+        }
         public ApplicationUserManager UserManager
         {
             get

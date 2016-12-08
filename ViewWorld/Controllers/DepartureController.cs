@@ -8,16 +8,17 @@ namespace ViewWorld.Controllers
     {
         public async Task<ActionResult> AddDeparture(StartingPoint data)
         {
-            data.UpdatedBy = User.Identity.Name;
-            var result = await Repo.AddOne<StartingPoint>(data);
-            if (result.Success)
-            {
-                return SuccessJson();
-            }
-            else
-            {
-                return ErrorJson(result.Message);
-            }
+            //data.UpdatedBy = User.Identity.Name;
+            //var result = await Repo.AddOne<StartingPoint>(data);
+            //if (result.Success)
+            //{
+            //    return SuccessJson();
+            //}
+            //else
+            //{
+            //    return ErrorJson(result.Message);
+            //}
+            return SuccessJson();
         }
     }
 }

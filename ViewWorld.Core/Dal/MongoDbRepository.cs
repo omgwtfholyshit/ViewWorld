@@ -11,10 +11,10 @@ namespace ViewWorld.Core.Dal
     public class MongoDbRepository : IMongoDbRepository
     {
 
-        private ApplicationIdentityContext _mongoDbContext = null;
-        public MongoDbRepository(ApplicationIdentityContext mongoDbContext = null)
+        ApplicationIdentityContext _mongoDbContext { get; set; }
+        public MongoDbRepository(ApplicationIdentityContext mongoDbContext)
         {
-            _mongoDbContext = mongoDbContext != null ? mongoDbContext : ApplicationIdentityContext.Create();
+            _mongoDbContext = _mongoDbContext != null ? _mongoDbContext : mongoDbContext;
         }
 
         #region Get
