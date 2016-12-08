@@ -5,6 +5,7 @@ using System;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using ViewWorld.Core;
 
 namespace ViewWorld
 {
@@ -44,7 +45,7 @@ namespace ViewWorld
                 .WithRedisConfiguration("redisConnection", config => 
                 config
                 .WithConnectionTimeout(10000)
-                .WithEndpoint("192.168.0.198", 6379))
+                .WithEndpoint(Config.Cache_HostIP, Config.Cache_Port))
                 .WithMaxRetries(100)
                 .WithRetryTimeout(50)
                 .WithRedisCacheHandle("redisConnection", true)

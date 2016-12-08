@@ -13,12 +13,16 @@ namespace ViewWorld.Core
         /// <summary>
         /// 数据库连接IP
         /// </summary>
-        public static string host_IP { get; private set; }
-        public static int db_port { get; private set; }
+        public static string DB_HostIP { get; private set; }
+        public static int DB_Port { get; private set; }
+        public static string Cache_HostIP { get; private set; }
+        public static int Cache_Port { get; private set; }
         static Config()
         {
-            host_IP = ConfigurationManager.AppSettings["dbHostIP"];
-            db_port = Convert.ToInt32(ConfigurationManager.AppSettings["dbPort"]);
+            DB_HostIP = ConfigurationManager.AppSettings["dbHostIP"];
+            DB_Port = Convert.ToInt32(ConfigurationManager.AppSettings["dbPort"]);
+            Cache_HostIP = ConfigurationManager.AppSettings["cacheHostIP"];
+            Cache_Port = Convert.ToInt32(ConfigurationManager.AppSettings["cachePort"]);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ViewWorld.Core.Dal
     public class ApplicationIdentityContext : IDisposable
     {
         static string dbName = "ViewWorld";
-        static string connectionStr = string.Format("mongodb://{0}:{1}", Config.host_IP, Config.db_port);
+        static string connectionStr = string.Format("mongodb://{0}:{1}", Config.DB_HostIP, Config.DB_Port);
         public IMongoClient Client { get; set; }
         public IMongoDatabase DB { get; set; }
         public IMongoCollection<IdentityRole> Roles { get; set; }
@@ -33,40 +33,6 @@ namespace ViewWorld.Core.Dal
             var users = database.GetCollection<ApplicationUser>("users");
             var roles = database.GetCollection<IdentityRole>("roles");
             return new ApplicationIdentityContext(client, database, users, roles);
-        }
-        [Obsolete]
-        public static void initDatabase()
-        {
-            IMongoClient c;
-            IMongoDatabase db;
-            c = new MongoClient();
-            db = c.GetDatabase(dbName);
-
-            if (!CollectionExists(db, "IdentityRoles"))
-            {
-                db.CreateCollection("IdentityRoles");
-            }
-            if (!CollectionExists(db, "IdentityUsers"))
-            {
-                db.CreateCollection("IdentityUsers");
-            }
-            if (!CollectionExists(db, "Trips"))
-            {
-                db.CreateCollection("Trips");
-            }
-            if (!CollectionExists(db, "Scenerys"))
-            {
-                db.CreateCollection("Scenerys");
-            }
-            if (!CollectionExists(db, "StartingPoints"))
-            {
-                db.CreateCollection("StartingPoints");
-            }
-            if (!CollectionExists(db, "Regions"))
-            {
-                db.CreateCollection("Regions");
-            }
-
         }
         private static bool CollectionExists(IMongoDatabase db, string collectionName)
         {
