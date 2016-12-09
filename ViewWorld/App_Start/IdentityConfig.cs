@@ -7,10 +7,9 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using AspNet.Identity.MongoDB;
 using ViewWorld.Models;
-using ViewWorld.App_Start;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld
 {

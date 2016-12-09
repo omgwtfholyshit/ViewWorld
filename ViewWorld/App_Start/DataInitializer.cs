@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using ViewWorld.Core.Models;
-using ViewWorld.Models.Trip;
 
 namespace ViewWorld.App_Start
 {
     public sealed class DataInitializer
     {
-        private const string DB_NAME = Core.Config.db_name;
 
         //public async Task CreateSceneriesAsync()
         //{

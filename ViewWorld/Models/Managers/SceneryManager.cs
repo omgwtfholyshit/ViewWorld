@@ -3,9 +3,8 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using ViewWorld.App_Start;
-using ViewWorld.Models.Trip;
-using ViewWorld.Core.Models;
+using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.TripModels;
 
 namespace ViewWorld.Models.Managers
 {

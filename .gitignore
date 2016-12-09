@@ -7,5 +7,7 @@ ViewWorld.Core/obj/
 ViewWorld.Core/bin/
 ViewWorld.Utils/obj/
 ViewWorld.Utils/bin/
+ViewWorld.Services/obj/
+ViewWorld.Services/bin/
 .vs/
 .vs/config/applicationhost.config

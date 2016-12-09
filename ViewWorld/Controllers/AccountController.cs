@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using ViewWorld.Core.Enum;
 using System.Drawing;
 using MongoDB.Driver;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
@@ -24,15 +25,12 @@ namespace ViewWorld.Controllers
     public class AccountController : BaseController
     {
         #region 初始化
-        public AccountController()
-        {
-        }
-
-        public AccountController(ApplicationUserManager userManager)
-        {
-            UserManager = userManager;
-        }
+        private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
+        public AccountController(IMongoDbRepository _repo)
+        {
+            Repo = _repo;
+        }
         public ApplicationUserManager UserManager
         {
             get
@@ -523,25 +521,32 @@ namespace ViewWorld.Controllers
             #endregion
             if (!ValidationHelper.IsCaptchaRequired(Request) || ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Login))
             {
-                // 这不会计入到为执行帐户锁定而统计的登录失败次数中
-                // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-                var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
-                switch (result)
+                try
                 {
-                    case SignInStatus.Success:
-                        if (string.IsNullOrWhiteSpace(returnUrl))
-                        {
-                            returnUrl = "/Page/Index";
-                        }
-                        return Json(returnUrl);
-                    case SignInStatus.LockedOut:
-                        return Json("/Account/Lockout");
-                    case SignInStatus.RequiresTwoFactorAuthentication:
-                        return ErrorJson(301,"请输入验证码");
-                    case SignInStatus.Failure:
-                    default:
-                        return ErrorJson("用户名或密码错误");
+                    // 这不会计入到为执行帐户锁定而统计的登录失败次数中
+                    // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
+                    var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            if (string.IsNullOrWhiteSpace(returnUrl))
+                            {
+                                returnUrl = "/Page/Index";
+                            }
+                            return Json(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return Json("/Account/Lockout");
+                        case SignInStatus.RequiresTwoFactorAuthentication:
+                            return ErrorJson(301, "请输入验证码");
+                        case SignInStatus.Failure:
+                        default:
+                            return ErrorJson("用户名或密码错误");
+                    }
+                }catch(TimeoutException)
+                {
+                    return ErrorJson("服务器内部错误，请稍候再试");
                 }
+                
             }
             Session["RequireCaptcha"] = "1";
             return ErrorJson(301,"验证码错误");

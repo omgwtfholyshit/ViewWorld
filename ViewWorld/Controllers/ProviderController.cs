@@ -1,35 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ViewWorld.Models;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using ViewWorld.Core.Models.ProviderModels;
+using ViewWorld.Services.Providers;
+using CacheManager.Core;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
     public class ProviderController : BaseController
     {
-        #region Constructor
-        MongoRepository repo;
-        public ProviderController()
-            : this(new MongoRepository())
+        readonly IProviderService providerService;
+        ICacheManager<object> cacheManager;
+        public ProviderController(IProviderService _providerService,ICacheManager<object> _cache)
         {
-
+            providerService = _providerService;
+            cacheManager = _cache;
         }
-        public ProviderController(MongoRepository _repo)
-        {
-            repo = _repo;
-        }
-        #endregion
         #region 供应商管理
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddProvider(Provider model)
         {
             model.UpdatedBy = User.Identity.Name;
-            var result = await repo.AddOne<Provider>(model);
+            var result = await providerService.AddProvider(model);
             if (result.Success)
             {
                 return SuccessJson();
@@ -43,8 +39,7 @@ namespace ViewWorld.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteProvider(string id)
         {
-            var update = Builders<Provider>.Update.Set("IsArchived", true).CurrentDate("ModifiedDate");
-            var result = await repo.UpdateOne<Provider>(id, update);
+            var result = await providerService.DeleteProvider(id);
             if (result.Success)
             {
                 return SuccessJson();
@@ -60,7 +55,7 @@ namespace ViewWorld.Controllers
         {            
             model.UpdatedBy = User.Identity.Name;
             model.ModifiedDate = DateTime.UtcNow;
-            var result = await repo.ReplaceOne<Provider>(model.Id, model);
+            var result = await providerService.EditProvider(model);
             if (result.Success)
             {
                 return SuccessJson();
@@ -72,8 +67,15 @@ namespace ViewWorld.Controllers
         }
         public async Task<JsonResult> GetAll()
         {
-            var result = await repo.GetAll<Provider>();
+            string key = "ProviderList";
             var data = new List<Object>();
+            GetManyResult<Provider> result;
+            result = cacheManager.Get(key) as GetManyResult<Provider>;
+            if (result == null || !result.Success)
+            {
+                result = await providerService.ListProviders();
+                cacheManager.Add(key, result);
+            }
             
             if (result.Success)
             {

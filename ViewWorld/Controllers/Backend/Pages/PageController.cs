@@ -1,31 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models;
+using ViewWorld.Core.Models.ProviderModels;
+using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Models;
-using ViewWorld.Models.Trip;
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
     [Authorize(Roles ="管理员,销售")]
     public class PageController : BaseController
     {
-        MongoRepository repo;
-        public PageController()
-            : this(new MongoRepository())
-        {
-
-        }
-        public PageController(MongoRepository _repo)
-        {
-            repo = _repo;
-        }
         // GET: Page
+        private readonly IMongoDbRepository Repo;
+        public PageController(IMongoDbRepository _repo)
+        {
+            Repo = _repo;
+        }
         public ActionResult Index()
         {
             return View();
@@ -46,7 +37,7 @@ namespace ViewWorld.Controllers.Backend.Pages
         #region 账户管理
         public async Task<ActionResult> UserProfile()
         {
-            var result = await repo.GetOne<ApplicationUser>(UserId);
+            var result = await Repo.GetOne<ApplicationUser>(UserId);
             return View(result.Entity);
         }
         public ActionResult EditPassword()
@@ -70,18 +61,18 @@ namespace ViewWorld.Controllers.Backend.Pages
         #endregion
         public async Task<ActionResult> GlobalSetting()
         {
-            var settings = await repo.GetAll<GlobalSetting>();
+            var settings = await Repo.GetAll<GlobalSetting>();
             return View(settings.Entities);
         }
         #region 供应商管理
         public async Task<ActionResult> Provider()
         {
-            var providers = await repo.GetAll<Provider>();
+            var providers = await Repo.GetAll<Provider>();
             return View(providers.Entities);
         }
         public async Task<ActionResult> DepartureManagement()
         {
-            var departures = await repo.GetAll<StartingPoint>();            
+            var departures = await Repo.GetAll<StartingPoint>();            
             return View(departures.Entities);
         }
         #endregion        

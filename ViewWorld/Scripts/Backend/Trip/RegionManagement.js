@@ -16,6 +16,7 @@
             }
             $('.region-editor .ui.form .checkbox').checkbox('check');
             $modal.modal('show');
+            LoadModalCategory();
         })
         $('#clear').on('click', function () {
             $('.header-left input').val('');
@@ -93,12 +94,16 @@
         }
     }
     function LoadModalCategory() {
-        $modalCatDropDown.dropdown({
-            apiSettings: {
-                url: api.modalCategory,
-                saveRemoteData: false,
-            },
-        })
+        $.ajax({
+            url: api.modalCategory,
+            success: function (response) {
+                $modalCatDropDown.dropdown({
+                    apiSettings: {
+                        response: response
+                    }
+                }).removeClass('loading');
+            }
+        });
     }
     function InitFormValidator() {
         $('.region-editor .ui.form').form({
@@ -223,8 +228,6 @@
         $('.header-left').transition('fade in').removeClass('invisible');
         BuildTable();
         BindEvents();
-        LoadModalCategory();
-        
     }
     InitPage();
 })

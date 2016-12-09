@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using ViewWorld.App_Start;
 using ViewWorld.Core;
-using ViewWorld.Models;
+using ViewWorld.Core.Models;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
@@ -51,7 +51,7 @@ namespace ViewWorld.Controllers
         {
             var result = new
             {
-                success = true,
+                success = status,
                 results = data
             };
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -115,17 +115,5 @@ namespace ViewWorld.Controllers
             HttpResponse.RemoveOutputCacheItem(urlToRemove);
         }
         #endregion
-        private MongoRepository _repo;
-        protected MongoRepository Repo
-        {
-            get
-            {
-                return _repo ?? new MongoRepository();
-            }
-            set
-            {
-                _repo = value;
-            }
-        }
     }
 }

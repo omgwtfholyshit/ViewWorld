@@ -1,25 +1,33 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using ViewWorld.Core.Models;
 using ViewWorld.Utils;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
-using ViewWorld.Models.Managers;
+using ViewWorld.Core.Models.TripModels;
+using CacheManager.Core;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
     public class HomeController : BaseController
     {
+        ICacheManager<object> cache;
+        private readonly IMongoDbRepository Repo;
+        public HomeController(ICacheManager<object> _cache,IMongoDbRepository _repo)
+        {
+            this.cache = _cache;
+            this.Repo = _repo;
+        }
         public ActionResult Index()
         {
             return View();
         }
-
+        public ActionResult AddToCacheTest()
+        {
+            cache.Add("test", "testValue");
+            return Content(cache.Get("test").ToString());
+        }
         public ActionResult About()
         {
             HttpHelper.RequestUserLocation("118.19.3.42");
@@ -29,7 +37,6 @@ namespace ViewWorld.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
         public ActionResult TestMethods()

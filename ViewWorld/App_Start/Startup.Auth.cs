@@ -6,7 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using ViewWorld.Models;
-using ViewWorld.App_Start;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld
 {

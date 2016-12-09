@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ViewWorld.Core.Models;
 using MongoDB.Driver;
-using ViewWorld.Models;
 using ViewWorld.Models.Managers;
-using ViewWorld.Models.Trip;
 using System.Threading.Tasks;
-using ViewWorld.Utils.ViewModels;
+using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.TripModels;
+using ViewWorld.Services.Regions;
 
 namespace ViewWorld.Controllers.Trip
 {
@@ -17,14 +14,10 @@ namespace ViewWorld.Controllers.Trip
     {
         #region Constructor
         // GET: Trip
-        private TripManager tripManager;
-        public TripController(TripManager _tripManager)
+        readonly IRegionService regionService;
+        public TripController(IRegionService _regionService)
         {
-            tripManager = _tripManager;
-        }
-        public TripController() : this(new TripManager())
-        {
-
+            regionService = _regionService;
         }
         #endregion
         static string[] cachedMethods = new string[]{"ListRegionsAPI"};
@@ -39,7 +32,7 @@ namespace ViewWorld.Controllers.Trip
                 {
                     model.IsSubRegion = true;
                 }
-                var result = await tripManager.AddRegion(model);
+                var result = await regionService.AddRegion(model);
                 if (result.Success)
                 {
                     RemoveOutputCacheItem(cachedMethods[0], "Trip");
@@ -50,7 +43,7 @@ namespace ViewWorld.Controllers.Trip
         }
         public async Task<JsonResult> DeleteRegion(string id,string parentId)
         {
-            var result = await tripManager.DeleteRegion(id,parentId);
+            var result = await regionService.DeleteRegion(id,parentId);
             if (result.Success)
             {
                 RemoveOutputCacheItem(cachedMethods[0], "Trip");
@@ -76,7 +69,7 @@ namespace ViewWorld.Controllers.Trip
                     {
                         if(model.ParentRegionId == prevParentId)
                         {
-                            result = await tripManager.UpdateRegion(model);
+                            result = await regionService.UpdateRegion(model);
                         }else
                         {
                             result.Message = "主区域不能移动";
@@ -87,10 +80,10 @@ namespace ViewWorld.Controllers.Trip
                     {
                         if(model.ParentRegionId != prevParentId)
                         {
-                            result = await tripManager.ChangeRegion(prevParentId, model.Id, model.ParentRegionId);
+                            result = await regionService.ChangeRegion(prevParentId, model.Id, model.ParentRegionId);
                         }else
                         {
-                            result = await tripManager.UpdateSubRegion(model);
+                            result = await regionService.UpdateSubRegion(model);
                         }
                     }
                 }
@@ -105,14 +98,14 @@ namespace ViewWorld.Controllers.Trip
         {
             if (string.IsNullOrEmpty(keyword))
             {
-                return Json(await tripManager.GetRegions());
+                return Json(await regionService.GetRegions());
             }
-            return Json(await tripManager.SearchRegions(keyword));
+            return Json(await regionService.SearchRegions(keyword));
         }
         [OutputCache(Location = System.Web.UI.OutputCacheLocation.Server, Duration = 1200)]
         public async Task<JsonResult> ListRegionsAPI()
         {
-            var result = await tripManager.GetRegions(false, true);
+            var result = await regionService.GetRegions(false, true);
             if (result.Success)
             {
                 var entities = result.Entities.ToList();
@@ -128,7 +121,7 @@ namespace ViewWorld.Controllers.Trip
         }
         public async Task<JsonResult> ListSubRegionsApi()
         {
-            var result = (await tripManager.GetRegions(false, false));
+            var result = (await regionService.GetRegions(false, false));
             if (result.Success)
             {
                 List<Region> subRegions = new List<Region>();
@@ -150,7 +143,7 @@ namespace ViewWorld.Controllers.Trip
         }
         public async Task<JsonResult> ChangeRegion(string parentId, string id, string destId)
         {
-            var result = await tripManager.ChangeRegion(parentId, id, destId);
+            var result = await regionService.ChangeRegion(parentId, id, destId);
             if (result.Success)
             {
                 RemoveOutputCacheItem(cachedMethods[0], "Trip");
@@ -163,11 +156,11 @@ namespace ViewWorld.Controllers.Trip
             List<Region> regions;
             if (string.IsNullOrEmpty(keyword))
             {
-                regions = (await tripManager.GetRegions()).Entities.ToList();
+                regions = (await regionService.GetRegions()).Entities.ToList();
                 
             }else
             {
-                regions = (await tripManager.SearchRegions(keyword)).Entities.ToList();
+                regions = (await regionService.SearchRegions(keyword)).Entities.ToList();
             }
             return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.OrderBy(r => r.SortOrder));
         }
