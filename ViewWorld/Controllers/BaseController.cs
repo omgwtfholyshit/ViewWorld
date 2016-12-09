@@ -51,7 +51,7 @@ namespace ViewWorld.Controllers
         {
             var result = new
             {
-                success = true,
+                success = status,
                 results = data
             };
             return Json(result, JsonRequestBehavior.AllowGet);
