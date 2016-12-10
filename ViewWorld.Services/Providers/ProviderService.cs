@@ -18,23 +18,23 @@ namespace ViewWorld.Services.Providers
         }
         public async Task<Result> AddProvider(Provider model)
         {
-            return await Repo.AddOne(model);
+            return await Repo.AddOneAsync(model);
         }
 
         public async Task<Result> DeleteProvider(string id)
         {
             var update = Builders<Provider>.Update.Set("IsArchived", true).CurrentDate("ModifiedDate");
-            return await Repo.UpdateOne(id, update);
+            return await Repo.UpdateOneAsync(id, update);
         }
 
         public async Task<Result> EditProvider(Provider model)
         {
-            return await Repo.ReplaceOne(model.Id, model);
+            return await Repo.ReplaceOneAsync(model.Id, model);
         }
 
         public async Task<GetManyResult<Provider>> ListProviders()
         {
-            return await Repo.GetAll<Provider>();
+            return await Repo.GetAllAsync<Provider>();
         }
     }
 }

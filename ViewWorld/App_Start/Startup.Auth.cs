@@ -7,6 +7,7 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using ViewWorld.Models;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld
 {

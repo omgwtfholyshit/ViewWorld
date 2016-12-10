@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNet.Identity.MongoDB;
-using ViewWorld.Models;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld
 {

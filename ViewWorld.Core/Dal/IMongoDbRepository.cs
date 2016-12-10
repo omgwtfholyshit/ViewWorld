@@ -13,7 +13,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<GetOneResult<TEntity>> GetOne<TEntity>(string id) where TEntity : class, new();
+        GetOneResult<TEntity> GetOne<TEntity>(string id) where TEntity : class, new();
 
         /// <summary>
         /// A generic GetOne method
@@ -21,7 +21,22 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<GetOneResult<TEntity>> GetOne<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
+        GetOneResult<TEntity> GetOne<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
+        /// <summary>
+        /// A generic GetOne method
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<GetOneResult<TEntity>> GetOneAsync<TEntity>(string id) where TEntity : class, new();
+
+        /// <summary>
+        /// A generic GetOne method
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<GetOneResult<TEntity>> GetOneAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
 
         /// <summary>
         /// A generic get many method
@@ -29,7 +44,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task<GetManyResult<TEntity>> GetMany<TEntity>(IEnumerable<string> ids) where TEntity : class, new();
+        Task<GetManyResult<TEntity>> GetManyAsync<TEntity>(IEnumerable<string> ids) where TEntity : class, new();
 
         /// <summary>
         /// A generic get many method with filter
@@ -37,7 +52,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task<GetManyResult<TEntity>> GetMany<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
+        Task<GetManyResult<TEntity>> GetManyAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
 
         /// <summary>
         /// GetMany with filter and projection
@@ -52,7 +67,7 @@ namespace ViewWorld.Core.Dal
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        Task<GetManyResult<TEntity>> GetAll<TEntity>() where TEntity : class, new();
+        Task<GetManyResult<TEntity>> GetAllAsync<TEntity>() where TEntity : class, new();
 
         /// <summary>
         /// A generic Exists method
@@ -60,7 +75,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task<bool> Exists<TEntity>(string id) where TEntity : class, new();
+        Task<bool> ExistsAsync<TEntity>(string id) where TEntity : class, new();
 
         /// <summary>
         /// A generic count method
@@ -68,7 +83,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<long> Count<TEntity>(string id) where TEntity : class, new();
+        Task<long> CountAsync<TEntity>(string id) where TEntity : class, new();
 
         /// <summary>
         /// A generic count method
@@ -76,7 +91,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<long> Count<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
+        Task<long> CountAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
 
         /// <summary>
         /// A generic Add One method
@@ -84,7 +99,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        Task<Result> AddOne<TEntity>(TEntity item) where TEntity : class, new();
+        Task<Result> AddOneAsync<TEntity>(TEntity item) where TEntity : class, new();
 
         /// <summary>
         /// A generic delete one method
@@ -92,7 +107,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Result> DeleteOne<TEntity>(string id) where TEntity : class, new();
+        Task<Result> DeleteOneAsync<TEntity>(string id) where TEntity : class, new();
 
         /// <summary>
         /// A generic delete many method
@@ -100,7 +115,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task<Result> DeleteMany<TEntity>(IEnumerable<string> ids) where TEntity : class, new();
+        Task<Result> DeleteManyAsync<TEntity>(IEnumerable<string> ids) where TEntity : class, new();
 
         #region Update
         /// <summary>
@@ -110,7 +125,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="id"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        Task<Result> UpdateOne<TEntity>(string id, UpdateDefinition<TEntity> update) where TEntity : class, new();
+        Task<Result> UpdateOneAsync<TEntity>(string id, UpdateDefinition<TEntity> update) where TEntity : class, new();
 
         /// <summary>
         /// UpdateOne with filter
@@ -119,7 +134,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="filter"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        Task<Result> UpdateOne<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
+        Task<Result> UpdateOneAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
 
         /// <summary>
         /// UpdateMany with Ids
@@ -128,7 +143,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="id"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        Task<Result> UpdateMany<TEntity>(IEnumerable<string> ids, UpdateDefinition<TEntity> update) where TEntity : class, new();
+        Task<Result> UpdateManyAsync<TEntity>(IEnumerable<string> ids, UpdateDefinition<TEntity> update) where TEntity : class, new();
 
         /// <summary>
         /// UpdateMany with filter
@@ -137,10 +152,10 @@ namespace ViewWorld.Core.Dal
         /// <param name="filter"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        Task<Result> UpdateMany<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
+        Task<Result> UpdateManyAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
 
-        Task<Result> ReplaceOne<TEntity>(string id, TEntity model) where TEntity : class, new();
-        Task<Result> ReplaceOne<TEntity>(FilterDefinition<TEntity> filter, TEntity model) where TEntity : class, new();
+        Task<Result> ReplaceOneAsync<TEntity>(string id, TEntity model) where TEntity : class, new();
+        Task<Result> ReplaceOneAsync<TEntity>(FilterDefinition<TEntity> filter, TEntity model) where TEntity : class, new();
 
         #endregion Update
 
@@ -154,7 +169,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="update"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        Task<GetOneResult<TEntity>> GetAndUpdateOne<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update, FindOneAndUpdateOptions<TEntity, TEntity> options) where TEntity : class, new();
+        Task<GetOneResult<TEntity>> GetAndUpdateOneAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update, FindOneAndUpdateOptions<TEntity, TEntity> options) where TEntity : class, new();
 
         #endregion Find And Update
     }

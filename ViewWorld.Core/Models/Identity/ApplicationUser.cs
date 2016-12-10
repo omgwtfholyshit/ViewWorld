@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity;
 using ViewWorld.Core.Enum;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ViewWorld.Models
+namespace ViewWorld.Core.Models.Identity
 {
     [DataContract]
     public class ApplicationUser : IdentityUser
@@ -41,6 +41,8 @@ namespace ViewWorld.Models
         public SexType Sex { get; set; }
         [DataMember]
         public int Points { get; set; }
+        [DataMember]
+        public string Department { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

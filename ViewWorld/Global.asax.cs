@@ -25,7 +25,7 @@ namespace ViewWorld
             #endregion
 
             #region ioC config
-            // Register MVC controllers.
+            
             var builder = new ContainerBuilder();
 
             //Register Data Access Layer & Services
@@ -37,10 +37,8 @@ namespace ViewWorld
 
             builder.RegisterAssemblyTypes(typeof(ApplicationIdentityContext).Assembly)
                 .AsSelf().InstancePerLifetimeScope();
-            //Register Services
 
-
-
+            // Register MVC controllers.
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             // OPTIONAL: Register model binders that require DI.
             builder.RegisterModelBinders(typeof(MvcApplication).Assembly);

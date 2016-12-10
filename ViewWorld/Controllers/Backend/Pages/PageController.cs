@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models;
+using ViewWorld.Core.Models.Identity;
 using ViewWorld.Core.Models.ProviderModels;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Models;
@@ -37,7 +38,7 @@ namespace ViewWorld.Controllers.Backend.Pages
         #region 账户管理
         public async Task<ActionResult> UserProfile()
         {
-            var result = await Repo.GetOne<ApplicationUser>(UserId);
+            var result = await Repo.GetOneAsync<ApplicationUser>(UserId);
             return View(result.Entity);
         }
         public ActionResult EditPassword()
@@ -61,18 +62,18 @@ namespace ViewWorld.Controllers.Backend.Pages
         #endregion
         public async Task<ActionResult> GlobalSetting()
         {
-            var settings = await Repo.GetAll<GlobalSetting>();
+            var settings = await Repo.GetAllAsync<GlobalSetting>();
             return View(settings.Entities);
         }
         #region 供应商管理
         public async Task<ActionResult> Provider()
         {
-            var providers = await Repo.GetAll<Provider>();
+            var providers = await Repo.GetAllAsync<Provider>();
             return View(providers.Entities);
         }
         public async Task<ActionResult> DepartureManagement()
         {
-            var departures = await Repo.GetAll<StartingPoint>();            
+            var departures = await Repo.GetAllAsync<StartingPoint>();            
             return View(departures.Entities);
         }
         #endregion        

@@ -27,14 +27,14 @@ namespace ViewWorld.Models.Managers
             {
                 if (model.IsSubRegion && model.ParentRegionId != "-1")
                 {
-                    var parent = await Repo.GetOne<Region>(model.ParentRegionId);
+                    var parent = await Repo.GetOneAsync<Region>(model.ParentRegionId);
                     model.Id = ObjectId.GenerateNewId().ToString();
                     parent.Entity.SubRegions.Add(model);
                     return await UpdateRegion(parent.Entity);
                 }
                 else
                 {
-                    return await Repo.AddOne(model);
+                    return await Repo.AddOneAsync(model);
                 }
             }catch(Exception e)
             {
@@ -50,10 +50,10 @@ namespace ViewWorld.Models.Managers
             {
                 if (string.IsNullOrWhiteSpace(parentId) || parentId == "-1")
                 {
-                    return await Repo.DeleteOne<Region>(id);
+                    return await Repo.DeleteOneAsync<Region>(id);
                 }else
                 {
-                    var parent = await Repo.GetOne<Region>(parentId);
+                    var parent = await Repo.GetOneAsync<Region>(parentId);
                     var deleteCount = parent.Entity.SubRegions.RemoveAll(r => r.Id == id);
                     if(deleteCount > 0)
                     {
@@ -75,16 +75,16 @@ namespace ViewWorld.Models.Managers
         }
         public async Task<Result> UpdateRegion(Region model)
         {
-            return await Repo.ReplaceOne(model.Id, model);
+            return await Repo.ReplaceOneAsync(model.Id, model);
         }
         public async Task<Result> UpdateRegion(string id,Region model)
         {
             model.Id = id;
-            return await Repo.ReplaceOne(id, model);
+            return await Repo.ReplaceOneAsync(id, model);
         }
         public async Task<Result> UpdateSubRegion(Region model)
         {
-            var parent = (await Repo.GetOne<Region>(model.ParentRegionId)).Entity;
+            var parent = (await Repo.GetOneAsync<Region>(model.ParentRegionId)).Entity;
             var modelIndex = parent.SubRegions.FindIndex(r=>r.Id==model.Id);
             parent.SubRegions[modelIndex] = model;
             return await UpdateRegion(parent);
@@ -101,7 +101,7 @@ namespace ViewWorld.Models.Managers
         {
             Result result = new Result { ErrorCode = 300,Message = "",Success = false};
             string[] ids = new string[2] { parentId, destId };
-            var regions = await Repo.GetMany<Region>(ids);
+            var regions = await Repo.GetManyAsync<Region>(ids);
             if(regions.Success && regions.Entities.Count() == 2)
             {
                 try
@@ -141,16 +141,16 @@ namespace ViewWorld.Models.Managers
             if (VisibileOnly && MainRegionOnly)
             {
                 filter = builder.Eq("IsVisible", true) & builder.Eq("IsSubRegion", false);
-                return await Repo.GetMany<Region>(filter);
+                return await Repo.GetManyAsync<Region>(filter);
             }
             else if(!VisibileOnly && MainRegionOnly)
             {
                 filter = builder.Eq("IsSubRegion", false);
-                return await Repo.GetMany<Region>(filter);
+                return await Repo.GetManyAsync<Region>(filter);
             }
             else
             {
-                return await Repo.GetAll<Region>();
+                return await Repo.GetAllAsync<Region>();
             }
            
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ViewWorld.Models;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Controllers
 {

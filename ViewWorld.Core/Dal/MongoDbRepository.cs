@@ -18,16 +18,43 @@ namespace ViewWorld.Core.Dal
         }
 
         #region Get
+        public GetOneResult<TEntity> GetOne<TEntity>(string id) where TEntity : class, new()
+        {
+            var filter = Builders<TEntity>.Filter.Eq("Id", id);
+            return GetOne<TEntity>(filter);
+        }
+
+        public GetOneResult<TEntity> GetOne<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
+        {
+            var res = new GetOneResult<TEntity>();
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                var entity = collection.Find(filter).SingleOrDefault();
+                if (entity != null)
+                {
+                    res.Entity = entity;
+                }
+                res.Success = true;
+                res.ErrorCode = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = DatabaseHelper.NotifyException("GetOne", "Exception getting one " + typeof(TEntity).Name, ex);
+                return res;
+            }
+        }
         /// <summary>
         /// A generic GetOne method
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<GetOneResult<TEntity>> GetOne<TEntity>(string id) where TEntity : class, new()
+        public async Task<GetOneResult<TEntity>> GetOneAsync<TEntity>(string id) where TEntity : class, new()
         {
             var filter = Builders<TEntity>.Filter.Eq("Id", id);
-            return await GetOne<TEntity>(filter);
+            return await GetOneAsync<TEntity>(filter);
         }
 
         /// <summary>
@@ -36,7 +63,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<GetOneResult<TEntity>> GetOne<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
+        public async Task<GetOneResult<TEntity>> GetOneAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
         {
             var res = new GetOneResult<TEntity>();
             try
@@ -64,13 +91,13 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task<GetManyResult<TEntity>> GetMany<TEntity>(IEnumerable<string> ids) where TEntity : class, new()
+        public async Task<GetManyResult<TEntity>> GetManyAsync<TEntity>(IEnumerable<string> ids) where TEntity : class, new()
         {
             try
             {
                 var collection = GetCollection<TEntity>();
                 var filter = Builders<TEntity>.Filter.In("Id", ids);
-                return await GetMany<TEntity>(filter);
+                return await GetManyAsync<TEntity>(filter);
             }
             catch (Exception ex)
             {
@@ -86,7 +113,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task<GetManyResult<TEntity>> GetMany<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
+        public async Task<GetManyResult<TEntity>> GetManyAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
         {
             var res = new GetManyResult<TEntity>();
             try
@@ -147,7 +174,7 @@ namespace ViewWorld.Core.Dal
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public async Task<GetManyResult<TEntity>> GetAll<TEntity>() where TEntity : class, new()
+        public async Task<GetManyResult<TEntity>> GetAllAsync<TEntity>() where TEntity : class, new()
         {
             var res = new GetManyResult<TEntity>();
             try
@@ -175,7 +202,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public async Task<bool> Exists<TEntity>(string id) where TEntity : class, new()
+        public async Task<bool> ExistsAsync<TEntity>(string id) where TEntity : class, new()
         {
             var collection = GetCollection<TEntity>();
             var query = new BsonDocument("Id", id);
@@ -190,10 +217,10 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<long> Count<TEntity>(string id) where TEntity : class, new()
+        public async Task<long> CountAsync<TEntity>(string id) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
-            return await Count<TEntity>(filter);
+            return await CountAsync<TEntity>(filter);
         }
 
         /// <summary>
@@ -202,7 +229,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<long> Count<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
+        public async Task<long> CountAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
         {
             var collection = GetCollection<TEntity>();
             var cursor = collection.Find(filter);
@@ -218,7 +245,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        public async Task<Result> AddOne<TEntity>(TEntity item) where TEntity : class, new()
+        public async Task<Result> AddOneAsync<TEntity>(TEntity item) where TEntity : class, new()
         {
             var res = new Result();
             try
@@ -245,7 +272,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Result> DeleteOne<TEntity>(string id) where TEntity : class, new()
+        public async Task<Result> DeleteOneAsync<TEntity>(string id) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
             return await DeleteOne<TEntity>(filter);
@@ -282,7 +309,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task<Result> DeleteMany<TEntity>(IEnumerable<string> ids) where TEntity : class, new()
+        public async Task<Result> DeleteManyAsync<TEntity>(IEnumerable<string> ids) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().In("Id", ids);
             return await DeleteMany<TEntity>(filter);
@@ -328,10 +355,10 @@ namespace ViewWorld.Core.Dal
         /// <param name="id"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public async Task<Result> UpdateOne<TEntity>(string id, UpdateDefinition<TEntity> update) where TEntity : class, new()
+        public async Task<Result> UpdateOneAsync<TEntity>(string id, UpdateDefinition<TEntity> update) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
-            return await UpdateOne<TEntity>(filter, update);
+            return await UpdateOneAsync<TEntity>(filter, update);
         }
 
         /// <summary>
@@ -341,7 +368,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="filter"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public async Task<Result> UpdateOne<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new()
+        public async Task<Result> UpdateOneAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new()
         {
             var result = new Result();
             try
@@ -366,12 +393,12 @@ namespace ViewWorld.Core.Dal
             }
         }
 
-        public async Task<Result> ReplaceOne<TEntity>(string id,TEntity model) where TEntity : class, new()
+        public async Task<Result> ReplaceOneAsync<TEntity>(string id,TEntity model) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
-            return await ReplaceOne<TEntity>(filter, model);
+            return await ReplaceOneAsync<TEntity>(filter, model);
         }
-        public async Task<Result> ReplaceOne<TEntity>(FilterDefinition<TEntity> filter,TEntity model) where TEntity : class, new()
+        public async Task<Result> ReplaceOneAsync<TEntity>(FilterDefinition<TEntity> filter,TEntity model) where TEntity : class, new()
         {
             var result = new Result();
             try
@@ -402,10 +429,10 @@ namespace ViewWorld.Core.Dal
         /// <param name="id"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public async Task<Result> UpdateMany<TEntity>(IEnumerable<string> ids, UpdateDefinition<TEntity> update) where TEntity : class, new()
+        public async Task<Result> UpdateManyAsync<TEntity>(IEnumerable<string> ids, UpdateDefinition<TEntity> update) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().In("Id", ids);
-            return await UpdateOne<TEntity>(filter, update);
+            return await UpdateOneAsync<TEntity>(filter, update);
         }
 
         /// <summary>
@@ -415,7 +442,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="filter"></param>
         /// <param name="update"></param>
         /// <returns></returns>
-        public async Task<Result> UpdateMany<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new()
+        public async Task<Result> UpdateManyAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new()
         {
             var result = new Result();
             try
@@ -451,7 +478,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="update"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<GetOneResult<TEntity>> GetAndUpdateOne<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update, FindOneAndUpdateOptions<TEntity, TEntity> options) where TEntity : class, new()
+        public async Task<GetOneResult<TEntity>> GetAndUpdateOneAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update, FindOneAndUpdateOptions<TEntity, TEntity> options) where TEntity : class, new()
         {
             var result = new GetOneResult<TEntity>();
             try
@@ -483,5 +510,6 @@ namespace ViewWorld.Core.Dal
             return _mongoDbContext.GetCollection<TEntity>();
         }
 
+        
     }
 }

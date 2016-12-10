@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewWorld.Core.Models
+namespace ViewWorld.Core.Models.Identity
 {
     public class UserRole
     {

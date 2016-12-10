@@ -6,6 +6,7 @@ using System.Web;
 using Newtonsoft.Json;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Models
 {

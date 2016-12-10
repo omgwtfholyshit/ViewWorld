@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using ViewWorld.Models;
 using AspNet.Identity.MongoDB;
-using ViewWorld.Core;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Core.Dal
 {

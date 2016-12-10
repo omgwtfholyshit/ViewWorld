@@ -18,6 +18,7 @@ using ViewWorld.Core.Enum;
 using System.Drawing;
 using MongoDB.Driver;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Controllers
 {
@@ -592,7 +593,7 @@ namespace ViewWorld.Controllers
         [OutputCache(Location =System.Web.UI.OutputCacheLocation.Server,Duration =1200)]
         public async Task<JsonResult> GetUserInfo()
         {
-            var Result = await Repo.GetOne<ApplicationUser>(this.UserId);
+            var Result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
             var data = new
             {
                 Username = Result.Entity.UserName,
@@ -629,7 +630,7 @@ namespace ViewWorld.Controllers
                     }
                     string imagePath = string.Format("/Upload/User/{0}/Avatar/{1}", this.UserId, "Head.jpg");
                     var updateDef = Builders<ApplicationUser>.Update.Set("Avatar", imagePath);
-                    await Repo.UpdateOne(this.UserId, updateDef);
+                    await Repo.UpdateOneAsync(this.UserId, updateDef);
                     result.avatarUrls.Add(imagePath);
                     imagePath = Server.MapPath(imagePath);
                     file.SaveAs(imagePath);
@@ -660,7 +661,7 @@ namespace ViewWorld.Controllers
             if (ModelState.IsValid)
             {
                 var updateDef = Builders<ApplicationUser>.Update.Set("NickName", model.NickName).Set("DOB", model.DOB).Set("Sex", model.Sex);
-                var Result = await Repo.UpdateOne(this.UserId, updateDef);
+                var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
                 if (Result.Success)
                 {
                     RemoveOutputCacheItem("GetUserInfo", "Account");
@@ -690,7 +691,7 @@ namespace ViewWorld.Controllers
                     {
                         updateDef = Builders<ApplicationUser>.Update.Set("PhoneNumber", model.Mobile).Set("PhoneNumberConfirmed", true);
                     }
-                    var Result = await Repo.UpdateOne(this.UserId, updateDef);
+                    var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
                     if (Result.Success)
                     {
                         RemoveOutputCacheItem("GetUserInfo", "Account");

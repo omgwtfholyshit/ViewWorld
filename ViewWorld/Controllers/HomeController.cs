@@ -123,7 +123,7 @@ namespace ViewWorld.Controllers
                 Modificator = name,
             };
             scene.Id = Tools.GenerateId_M2();
-            await Repo.AddOne(scene);
+            await Repo.AddOneAsync(scene);
         }
 
         public void InsertMany()
