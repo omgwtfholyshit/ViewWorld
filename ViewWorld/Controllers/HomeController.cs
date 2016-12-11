@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using ViewWorld.Core.Models.TripModels;
 using CacheManager.Core;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
+using ViewWorld.Services.Authorization;
+using MongoDB.Bson;
 
 namespace ViewWorld.Controllers
 {
@@ -14,10 +17,12 @@ namespace ViewWorld.Controllers
     {
         ICacheManager<object> cache;
         private readonly IMongoDbRepository Repo;
-        public HomeController(ICacheManager<object> _cache,IMongoDbRepository _repo)
+        readonly IAuthService AuthService;
+        public HomeController(ICacheManager<object> _cache,IMongoDbRepository _repo, IAuthService _auth)
         {
             this.cache = _cache;
             this.Repo = _repo;
+            this.AuthService = _auth;
         }
         public ActionResult Index()
         {
@@ -87,11 +92,11 @@ namespace ViewWorld.Controllers
             return Json("hello");
         }
 
-        public ActionResult TotalCollections()
+        public async Task<ActionResult> InsertPermissions()
         {
-            //var collection = db.DB.ListCollections();
-            //return Json(collection.ToList().Count());
-            return null;
+            var r = AuthService.AddOnePermissionAsync(new PermissionStore { Id = ObjectId.GenerateNewId().ToString(), Permission = new Permission { Name = "Region", ChineseName = "区域管理", Description = "管理区域分类的权限" } });
+            var latest = await Repo.GetAllAsync<PermissionStore>();
+            return Json(latest.Entities);
         }
 
         public async Task InsertOne(string name)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ViewWorld.Core.Models;
 using MongoDB.Bson;
 using ViewWorld.Core.Dal;
+using System.Threading;
 
 namespace ViewWorld.Core.Dal
 {
@@ -263,6 +264,48 @@ namespace ViewWorld.Core.Dal
                 return res;
             }
         }
+        /// <summary>
+        /// Add many documents. 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="documents"></param>
+        public void AddMany<TEntity>(IEnumerable<TEntity> documents)
+        {
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                collection.InsertManyAsync(documents);
+            }
+            catch (Exception ex)
+            {
+                throw ex; 
+            }
+            
+        }
+        /// <summary>
+        /// Add many document async method.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="documents"></param>
+        /// <returns></returns>
+        public async Task<Result> AddManyAsync<TEntity>(IEnumerable<TEntity> documents)
+        {
+            var res = new Result();
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                await collection.InsertManyAsync(documents);
+                res.Success = true;
+                res.Message = "OK";
+                res.ErrorCode = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = DatabaseHelper.NotifyException("AddManyAsync", "Exception adding many " + typeof(TEntity).Name, ex);
+                return res;
+            }
+        }
         #endregion Create
 
         #region Delete
@@ -392,12 +435,25 @@ namespace ViewWorld.Core.Dal
                 return result;
             }
         }
-
+        /// <summary>
+        /// Update an entity without changing it's Id
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<Result> ReplaceOneAsync<TEntity>(string id,TEntity model) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
             return await ReplaceOneAsync<TEntity>(filter, model);
         }
+        /// <summary>
+        /// Replacing an entity
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="filter"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<Result> ReplaceOneAsync<TEntity>(FilterDefinition<TEntity> filter,TEntity model) where TEntity : class, new()
         {
             var result = new Result();
@@ -405,12 +461,6 @@ namespace ViewWorld.Core.Dal
             {
                 var collection = GetCollection<TEntity>();
                 var updateRes = await collection.ReplaceOneAsync(filter, model);
-                //if (updateRes.MatchedCount < 1)
-                //{
-                //    var ex = new Exception();
-                //    result.Message = DatabaseHelper.NotifyException("UpdateOne", "ERROR: updateRes.MatchedCount < 1 for entity: " + typeof(TEntity).Name, ex);
-                //    return result;
-                //}
                 result.Success = true;
                 result.Message = "OK";
                 result.ErrorCode = 200;
@@ -418,7 +468,7 @@ namespace ViewWorld.Core.Dal
             }
             catch (Exception ex)
             {
-                result.Message = DatabaseHelper.NotifyException("UpdateOne", "Exception updating entity: " + typeof(TEntity).Name, ex);
+                result.Message = DatabaseHelper.NotifyException("UpdateOne", "Exception replacing entity: " + typeof(TEntity).Name, ex);
                 return result;
             }
         }

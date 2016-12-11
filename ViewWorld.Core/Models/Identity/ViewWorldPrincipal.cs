@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -12,7 +13,7 @@ namespace ViewWorld.Core.Models.Identity
     public class ViewWorldPrincipal : IPrincipal
     {
         public IIdentity Identity { get; set; }
-        ArrayList _PermissionList;
+        List<Permission> _PermissionList;
         IMongoDbRepository Repo;
         public ViewWorldPrincipal(IMongoDbRepository _repo , string UserId)
         {
@@ -20,7 +21,7 @@ namespace ViewWorld.Core.Models.Identity
             var result = Repo.GetOne<ApplicationUser>(UserId);
             Identity = new ViewWorldIdentity(result.Entity.UserName,result.Entity.Department,result.Entity.PhoneNumber);
         }
-        public ArrayList PermissionList
+        public List<Permission> PermissionList
         {
             get { return _PermissionList; }
         }
@@ -28,9 +29,9 @@ namespace ViewWorld.Core.Models.Identity
         {
             return false;
         }
-        public bool HasPermission(string permissionId)
+        public bool HasPermission(Permission item)
         {
-            return PermissionList.Contains(permissionId);
+            return PermissionList.Contains(item);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
 
@@ -101,6 +102,8 @@ namespace ViewWorld.Core.Dal
         /// <returns></returns>
         Task<Result> AddOneAsync<TEntity>(TEntity item) where TEntity : class, new();
 
+        void AddMany<TEntity>(IEnumerable<TEntity> documents);
+        Task<Result> AddManyAsync<TEntity>(IEnumerable<TEntity> documents);
         /// <summary>
         /// A generic delete one method
         /// </summary>
@@ -153,8 +156,21 @@ namespace ViewWorld.Core.Dal
         /// <param name="update"></param>
         /// <returns></returns>
         Task<Result> UpdateManyAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new();
-
+        /// <summary>
+        /// Update an entity without changing it's Id
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task<Result> ReplaceOneAsync<TEntity>(string id, TEntity model) where TEntity : class, new();
+        /// <summary>
+        /// Replacing an Entity
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task<Result> ReplaceOneAsync<TEntity>(FilterDefinition<TEntity> filter, TEntity model) where TEntity : class, new();
 
         #endregion Update
