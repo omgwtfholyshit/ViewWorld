@@ -26,10 +26,15 @@ namespace ViewWorld.Core.Models.Identity
             base.HandleUnauthorizedRequest(filterContext);
             if (filterContext.HttpContext.Response.StatusCode == 401)
             {
-                var result = new JsonResult();
-                result.Data = new Result() { ErrorCode = 300, Success = false, Message = "您没有权限执行该操作，请咨询您的管理员" };
-                result.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-                filterContext.Result = result;
+                if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    filterContext.Result = new RedirectResult("/Page/Login");
+                }
+                else
+                {
+                    filterContext.Result = new RedirectResult("/Home/PermissionRequired");
+                }
+                
             }
 
                 

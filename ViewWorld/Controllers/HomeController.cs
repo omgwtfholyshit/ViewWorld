@@ -196,5 +196,9 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene2);
             //db.DB.GetCollection<Scenery>("Scenerys").InsertMany(scenelist);
         }        
+        public ActionResult PermissionRequired()
+        {
+            return Content("您没有权限执行该操作");
+        }
     }
 }
