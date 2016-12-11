@@ -63,6 +63,7 @@ namespace ViewWorld.Core.Dal
         /// <returns>A cursor for the query</returns>
         IFindFluent<TEntity, TEntity> FindCursor<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
 
+        GetManyResult<TEntity> GetAll<TEntity>() where TEntity : class, new();
         /// <summary>
         /// A generic get all method
         /// </summary>

@@ -31,7 +31,7 @@ namespace ViewWorld.Core.Models.Identity
         {
             get
             {
-                return true;
+                return !string.IsNullOrWhiteSpace(UserName);
             }
         }
 

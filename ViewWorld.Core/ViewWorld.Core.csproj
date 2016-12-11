@@ -133,6 +133,7 @@
     <Compile Include="Models\Identity\ApplicationUser.cs" />
     <Compile Include="Models\AvatarUploadResult.cs" />
     <Compile Include="Models\Identity\Permission.cs" />
+    <Compile Include="Models\Identity\RequirePermission.cs" />
     <Compile Include="Models\Identity\ViewWorldIdentity.cs" />
     <Compile Include="Models\Identity\ViewWorldPrincipal.cs" />
     <Compile Include="Models\ProviderModels\Provider.cs" />

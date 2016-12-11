@@ -13,9 +13,11 @@ namespace ViewWorld.Services.Authorization
         Task<Result> AddOnePermissionAsync(PermissionStore permissionStore);
         Task<Result> UpdateOnePermissionAsync(string Id, Permission permission);
         Task<Result> DeleteOnePermissionAsync(string Id);
+        Task<Result> AddOnePermissionToUserAsync(string userId, string permissionName);
         Task<Result> AddOnePermissionToUserAsync(string userId, Permission permission);
         Task<Result> AddManyPermissionsToUserAsync(string userId, List<Permission> permissionList);
 
+        Task<Result> DeleteOnePermissionFromUserAsync(string userId, string permissionName);
         Task<Result> DeleteOnePermissionFromUserAsync(string userId, Permission permission);
         Task<Result> DeleteManyPermissionsFromUserAsync(string userId, List<Permission> permissionList);
     }

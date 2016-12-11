@@ -10,6 +10,7 @@ using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.Identity;
 using ViewWorld.Services.Authorization;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace ViewWorld.Controllers
 {
@@ -28,20 +29,37 @@ namespace ViewWorld.Controllers
         {
             return View();
         }
+        [RequirePermission(Permission ="Region,Trip")]
         public ActionResult AddToCacheTest()
         {
             cache.Add("test", "testValue");
             return Content(cache.Get("test").ToString());
         }
+        [RequirePermission(Permission = "Trip")]
         public ActionResult About()
         {
             HttpHelper.RequestUserLocation("118.19.3.42");
             return View();
         }
-
+        public async Task<ActionResult> AddPermission(string name)
+        {
+            FilterDefinition<PermissionStore> fil = Builders<PermissionStore>.Filter.Eq("Permission.Name", name);
+            var permission = await Repo.GetOneAsync<PermissionStore>(fil);
+            var result = await AuthService.AddOnePermissionToUserAsync(this.UserId, permission.Entity.Permission);
+            return Json(result);
+        }
+        public async Task<ActionResult> DeletePermission(string name)
+        {
+            return Json(await AuthService.DeleteOnePermissionFromUserAsync(this.UserId, name));
+        }
+        public ActionResult GetUserPermission()
+        {
+            var user = Repo.GetOne<ApplicationUser>(UserId);
+            return Json(user.Entity);
+        }
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            
             return View();
         }
         public ActionResult TestMethods()
@@ -89,6 +107,7 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene);
             scenelist.Add(scene2);
             //var ts = sceneryManager.AddScenery(scenelist, db);
+            var userIdentity = User as ViewWorldPrincipal;
             return Json("hello");
         }
 
@@ -177,10 +196,5 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene2);
             //db.DB.GetCollection<Scenery>("Scenerys").InsertMany(scenelist);
         }        
-
-
-
-       
-
     }
 }

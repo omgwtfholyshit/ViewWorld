@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspNet.Identity.MongoDB;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -15,23 +16,65 @@ namespace ViewWorld.Core.Models.Identity
         public IIdentity Identity { get; set; }
         List<Permission> _PermissionList;
         IMongoDbRepository Repo;
-        public ViewWorldPrincipal(IMongoDbRepository _repo , string UserId)
+        List<string> Roles;
+        public ViewWorldPrincipal(string UserId)
         {
-            Repo = _repo;
-            var result = Repo.GetOne<ApplicationUser>(UserId);
-            Identity = new ViewWorldIdentity(result.Entity.UserName,result.Entity.Department,result.Entity.PhoneNumber);
+            Repo = new MongoDbRepository(new ApplicationIdentityContext()) as IMongoDbRepository;
+            if (!string.IsNullOrWhiteSpace(UserId))
+            {
+                var result = Repo.GetOne<ApplicationUser>(UserId);
+                if (result.Entity != null)
+                {
+                    Roles = result.Entity.Roles;
+                    this._PermissionList = result.Entity.Permissions;
+                    Identity = new ViewWorldIdentity(result.Entity.UserName, result.Entity.Department, result.Entity.PhoneNumber);
+                }
+                    
+            }else
+            {
+                Identity = new ViewWorldIdentity("", "", "");
+            }
+            
         }
         public List<Permission> PermissionList
         {
             get { return _PermissionList; }
+            set { _PermissionList = value; }
         }
         public bool IsInRole(string role)
         {
-            return false;
+            if (Roles == null || Roles.Count() == 0)
+            {
+                return false;
+            }
+            return Roles.Contains(role);
         }
         public bool HasPermission(Permission item)
         {
             return PermissionList.Contains(item);
+        }
+        public bool HasPermission(string permissionName)
+        {
+            if (PermissionList == null || PermissionList.Count() == 0)
+                return false;
+            if (!permissionName.Contains(','))
+            {
+                return PermissionList.Where(p => p.Name == permissionName).Any();
+            }else
+            {
+                string[] permissions = permissionName.Split(',').ToArray();
+                bool hasPermission = true;
+                foreach(var permission in permissions)
+                {
+                    if(!PermissionList.Where(p => p.Name == permission).Any())
+                    {
+                        hasPermission = false;
+                        break;
+                    }
+                }
+                return hasPermission;
+            }
+            
         }
     }
 }

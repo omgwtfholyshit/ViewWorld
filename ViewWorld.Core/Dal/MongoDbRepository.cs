@@ -169,7 +169,27 @@ namespace ViewWorld.Core.Dal
             var cursor = collection.Find(filter);
             return cursor;
         }
-
+        public GetManyResult<TEntity> GetAll<TEntity>() where TEntity : class, new()
+        {
+            var res = new GetManyResult<TEntity>();
+            try
+            {
+                var collection = GetCollection<TEntity>();
+                var entities =  collection.Find(new BsonDocument()).ToList();
+                if (entities != null)
+                {
+                    res.Entities = entities;
+                }
+                res.Success = true;
+                res.ErrorCode = 200;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                res.Message = DatabaseHelper.NotifyException("GetAll", "Exception getting all " + typeof(TEntity).Name + "s", ex);
+                return res;
+            }
+        }
         /// <summary>
         /// A generic get all method
         /// </summary>
