@@ -39,6 +39,8 @@ namespace ViewWorld.Controllers.Backend.Pages
         public async Task<ActionResult> UserProfile()
         {
             var result = await Repo.GetOneAsync<ApplicationUser>(UserId);
+            if (!System.IO.File.Exists(result.Entity.Avatar))
+                result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
             return View(result.Entity);
         }
         public ActionResult EditPassword()

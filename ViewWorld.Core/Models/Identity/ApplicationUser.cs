@@ -61,8 +61,21 @@ namespace ViewWorld.Core.Models.Identity
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            // Add custom user claims here
+
+            // Add custom user claims
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, NickName));
+            claims.Add(new Claim(ClaimTypes.Email, Email));
+            claims.Add(new Claim(ClaimTypes.MobilePhone, PhoneNumber));
+            claims.Add(new Claim(ClaimTypes.DateOfBirth, DOB.ToString()));
+            userIdentity.AddClaims(claims);
+
+            //Update HttpContext.Current.User
+            ViewWorldPrincipal principal = new ViewWorldPrincipal(Roles, Permissions, userIdentity);
+            System.Web.HttpContext.Current.User = principal;
+
             return userIdentity;
         }
+        
     }
 }

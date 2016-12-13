@@ -532,7 +532,13 @@ namespace ViewWorld.Controllers
                         case SignInStatus.Success:
                             if (string.IsNullOrWhiteSpace(returnUrl))
                             {
-                                returnUrl = "/Page/Index";
+                                if (User.IsInRole("管理员") || User.IsInRole("销售"))
+                                {
+                                    return Json("/Page/Index");
+                                }else
+                                {
+                                    return Json("/Home/Index");
+                                }
                             }
                             return Json(returnUrl);
                         case SignInStatus.LockedOut:
@@ -594,6 +600,8 @@ namespace ViewWorld.Controllers
         public async Task<JsonResult> GetUserInfo()
         {
             var Result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
+            if (!System.IO.File.Exists(Result.Entity.Avatar))
+                Result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
             var data = new
             {
                 Username = Result.Entity.UserName,

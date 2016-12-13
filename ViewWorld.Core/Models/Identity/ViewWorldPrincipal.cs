@@ -34,8 +34,13 @@ namespace ViewWorld.Core.Models.Identity
             {
                 Identity = new ViewWorldIdentity("", "", "");
             }
-            
         }
+        public ViewWorldPrincipal(List<string> roles,List<Permission> permission,IIdentity identity)
+        {
+            this.Roles = roles;
+            this._PermissionList = permission;
+            this.Identity = identity;
+        } 
         public List<Permission> PermissionList
         {
             get { return _PermissionList; }

@@ -188,7 +188,6 @@
             avatar_sizes_desc: '200*200'
         }
         var editor = new fullAvatarEditor(['*/FullAvatarEditor.swf'], ['*/expressInstall.swf'], 'editor', 380, 600, options, function (data) {
-            console.log(data);
             editor.call('loadPic', data.content.avatarUrls[0]);
             if (data.code == 5) {
 
