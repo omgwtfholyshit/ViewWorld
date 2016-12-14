@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ViewWorld.Core.Models.TripModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ViewWorld.Core.Models.ProviderModels
 {
@@ -24,6 +25,7 @@ namespace ViewWorld.Core.Models.ProviderModels
         public string UpdatedBy { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime ModifiedDate { get; set; }
+        [NotMapped]
         public List<StartingPoint> StartingPoints { get; set; }
     }
 }

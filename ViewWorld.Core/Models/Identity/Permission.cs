@@ -13,6 +13,13 @@ namespace ViewWorld.Core.Models.Identity
         public string Name { get; set; }
         public string ChineseName { get; set; }
         public string Description { get; set; }
+        public Permission(string permissionName,string chineseName,string description)
+        {
+            this.Name = permissionName;
+            this.ChineseName = chineseName;
+            this.Description = description;
+        }
+        public Permission() { }
         public override bool Equals(object obj)
         {
             if (obj == null)

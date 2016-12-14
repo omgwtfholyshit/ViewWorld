@@ -70,6 +70,7 @@
             method: 'post',
             data: {
                 model: loginModel,
+                returnUrl: decodeURIComponent($.getQueryStringByName("ReturnUrl")),
                 __RequestVerificationToken: token,
             },
             success: function (data) {

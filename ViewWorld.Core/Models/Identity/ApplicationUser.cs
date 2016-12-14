@@ -72,8 +72,8 @@ namespace ViewWorld.Core.Models.Identity
 
             //Update HttpContext.Current.User
             ViewWorldPrincipal principal = new ViewWorldPrincipal(Roles, Permissions, userIdentity);
-            System.Web.HttpContext.Current.User = principal;
-
+            if(System.Web.HttpContext.Current !=null)
+                System.Web.HttpContext.Current.User = principal;
             return userIdentity;
         }
         

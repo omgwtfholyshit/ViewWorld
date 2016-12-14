@@ -28,11 +28,11 @@
                 @foreach (var depart in Model)
                 {
                     <tr class="@(depart.IsArchived ? "archived-row" : "")">
-                        <td>depart.DepartTime</td>
-                        <td>depart.Landmark</td>
-                        <td>depart.Address</td>
-                        <td>depart.ProviderAlias</td>
-                        <td>depart.ProviderName</td>
+                        <td>@depart.DepartTime</td>
+                        <td>@depart.Landmark</td>
+                        <td>@depart.Address</td>
+                        <td>@depart.ProviderAlias</td>
+                        <td>@depart.ProviderName</td>
                     </tr>
                 }
 
