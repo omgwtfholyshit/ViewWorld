@@ -75,6 +75,8 @@
     <Compile Include="Providers\ProviderService.cs" />
     <Compile Include="Regions\IRegionService.cs" />
     <Compile Include="Regions\RegionService.cs" />
+    <Compile Include="Sceneries\ISceneryService.cs" />
+    <Compile Include="Sceneries\SceneryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
