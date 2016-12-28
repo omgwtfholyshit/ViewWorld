@@ -6,7 +6,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using ViewWorld.Models;
-using ViewWorld.App_Start;
+using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld
 {
@@ -26,7 +27,7 @@ namespace ViewWorld
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login"),
+                LoginPath = new PathString("/Page/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
                     // 当用户登录时使应用程序可以验证安全戳。

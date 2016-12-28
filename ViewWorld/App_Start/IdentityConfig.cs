@@ -7,10 +7,9 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using AspNet.Identity.MongoDB;
-using ViewWorld.Models;
-using ViewWorld.App_Start;
+using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld
 {
@@ -36,7 +35,7 @@ namespace ViewWorld
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
+                RequireNonLetterOrDigit = false,
                 RequireDigit = true,
                 RequireLowercase = true,
                 RequireUppercase = true,
@@ -44,7 +43,7 @@ namespace ViewWorld
             // Configure user lockout defaults
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+            manager.MaxFailedAccessAttemptsBeforeLockout = 10;
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug in here.
             manager.RegisterTwoFactorProvider("PhoneCode", new PhoneNumberTokenProvider<ApplicationUser>

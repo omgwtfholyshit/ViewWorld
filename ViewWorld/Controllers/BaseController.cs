@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNet.Identity;
 using PagedList;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
-using ViewWorld.App_Start;
 using ViewWorld.Core;
+using ViewWorld.Core.Models;
+using ViewWorld.Core.Dal;
 
 namespace ViewWorld.Controllers
 {
     public class BaseController : Controller
     {
         #region Json Override
+        //Status Code: 200 正常, 300 通用错误, 301 验证码错误
         protected override JsonResult Json(object data, string contentType,
            Encoding contentEncoding, JsonRequestBehavior behavior)
         {
@@ -43,7 +47,15 @@ namespace ViewWorld.Controllers
             };
             return Json(data2, JsonRequestBehavior.AllowGet);
         }
-
+        protected JsonResult DropdownData(bool status, Object data)
+        {
+            var result = new
+            {
+                success = status,
+                results = data
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         protected JsonResult PageJson(IPagedList data)
         {
             var pageData = new
@@ -74,7 +86,7 @@ namespace ViewWorld.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        protected JsonResult ErrorJson(string status, string msg)
+        protected JsonResult ErrorJson(int status, string msg)
         {
             var result = new
             {
@@ -83,9 +95,13 @@ namespace ViewWorld.Controllers
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        protected JsonResult OriginJson(Object data)
+        {
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
-        protected ApplicationIdentityContext db = ApplicationIdentityContext.Create();
+        #region public methods
         protected string UserId
         {
             get
@@ -93,5 +109,11 @@ namespace ViewWorld.Controllers
                 return User.Identity.GetUserId();
             }
         }
+        protected void RemoveOutputCacheItem(string methodName, string controllerName)
+        {
+            var urlToRemove = Url.Action(methodName, controllerName);
+            HttpResponse.RemoveOutputCacheItem(urlToRemove);
+        }
+        #endregion
     }
 }

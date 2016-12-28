@@ -1,0 +1,90 @@
+﻿@model IOrderedEnumerable<ViewWorld.Core.Models.TripModels.Region>
+@{
+    if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="-1" data-sort="@item.SortOrder" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-isdisplay="@item.IsVisible">
+                <td class="five wide left aligned collapsing">
+                    <div class="ui ribbon label">主分类</div>
+                    @item.Name
+                    <i class="caret left icon"></i>
+                </td>
+                <td class="five wide left aligned">@item.EnglishName</td>
+                <td class="one wide">@item.Initial</td>
+                <td class="one wide">
+                    <div class="ui checkbox">
+                        @if (item.IsVisible)
+                    {
+                            <input type="checkbox" name="example" checked="checked" disabled="disabled">
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="example" disabled="disabled">
+                        }
+
+                        <label></label>
+                    </div>
+                </td>
+                <td class="one wide">@item.SortOrder</td>
+                <td class="collapsing">
+                    <button class="ui labeled blue icon button modify">
+                        <i class="edit icon"></i>
+                        修改
+                    </button>
+                    <button class="ui labeled red icon button delete">
+                        <i class="delete icon"></i>
+                        删除
+                    </button>
+                </td>
+            </tr>
+            if (item.SubRegions != null && item.SubRegions.Count() > 0)
+            {
+                foreach (var sub in item.SubRegions.OrderBy(r => r.SortOrder))
+                {
+                    <tr class="center aligned hidden @item.Id" data-id="@sub.Id" data-name="@sub.Name" data-parent="@sub.ParentRegionId" data-parentname="@item.Name" data-sort="@sub.SortOrder" data-englishname="@sub.EnglishName" data-initial="@sub.Initial" data-isdisplay="@sub.IsVisible">
+                        <td class="five wide left aligned collapsing padleft54">
+                            @sub.Name
+                        </td>
+                        <td class="five wide left aligned">@sub.EnglishName</td>
+                        <td class="one wide">@sub.Initial</td>
+                        <td class="one wide">
+                            <div class="ui checkbox">
+                                @if (sub.IsVisible)
+                            {
+                                    <input type="checkbox" name="example" checked="checked" disabled="disabled">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="example" disabled="disabled">
+                                }
+                                <label></label>
+                            </div>
+                        </td>
+                        <td class="one wide">@sub.SortOrder</td>
+                        <td class="collapsing">
+                            <button class="ui labeled blue icon button modify">
+                                <i class="edit icon"></i>
+                                修改
+                            </button>
+                            <button class="ui labeled red icon button delete">
+                                <i class="delete icon"></i>
+                                删除
+                            </button>
+                        </td>
+                    </tr>
+                }
+
+            }
+        }
+    }
+    else
+    {
+        <tr class="center aligned">
+            <td colspan="6" class="ui segment" >没有您要搜索的数据..</td>
+        </tr>
+    }
+
+}
+
+

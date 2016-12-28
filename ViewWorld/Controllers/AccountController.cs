@@ -14,6 +14,11 @@ using ViewWorld.Core.Models;
 using System.Collections;
 using System.IO;
 using Newtonsoft.Json;
+using ViewWorld.Core.Enum;
+using System.Drawing;
+using MongoDB.Driver;
+using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Controllers
 {
@@ -21,16 +26,12 @@ namespace ViewWorld.Controllers
     public class AccountController : BaseController
     {
         #region 初始化
-        public AccountController()
-        {
-        }
-
-        public AccountController(ApplicationUserManager userManager)
-        {
-            UserManager = userManager;
-        }
-
+        private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
+        public AccountController(IMongoDbRepository _repo)
+        {
+            Repo = _repo;
+        }
         public ApplicationUserManager UserManager
         {
             get
@@ -83,6 +84,17 @@ namespace ViewWorld.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (string.IsNullOrWhiteSpace(returnUrl))
+                    {
+                        if (User.IsInRole(UserRole.Admin) || User.IsInRole(UserRole.Sales))
+                        {
+                            returnUrl = "/Page/Index";
+                        }
+                        else
+                        {
+                            returnUrl = "/";
+                        }
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -95,48 +107,7 @@ namespace ViewWorld.Controllers
             }
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UserLogin(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                foreach(var key in ModelState.Keys)
-                {
-                    var error = ModelState[key].Errors;
-                    if (error.Count() > 0)
-                    {
-                        return ErrorJson(error[0].ErrorMessage);
-                    }
-                }
-            }
-            // 这不会计入到为执行帐户锁定而统计的登录失败次数中
-            // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    if (string.IsNullOrWhiteSpace(returnUrl))
-                    {
-                        if (this.User.IsInRole(UserRole.Sales) || this.User.IsInRole(UserRole.Admin))
-                        {
-                            returnUrl = "/Page/Index";
-                        }else
-                        {
-                            returnUrl = "/Home/Index";
-                        }
-                    }
-                    return Json(returnUrl);
-                case SignInStatus.LockedOut:
-                    return Json("/Account/Lockout");
-                case SignInStatus.RequiresTwoFactorAuthentication:
-                    return ErrorJson("请输入验证码");
-                case SignInStatus.Failure:
-                default:
-                    return ErrorJson("用户名或密码错误");
-            }
-        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -201,14 +172,17 @@ namespace ViewWorld.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    NickName = "YourName",
-                    RegisteredAt = DateTime.Now
+                    NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
+                    RegisteredAt = DateTime.Now,
+                    Sex = SexType.Unknown,
+                    Avatar = "/Images/DefaultImages/UnknownSex.jpg",
+                    Points = 0
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, UserRole.User);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
                     // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 发送包含此链接的电子邮件
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -525,10 +499,121 @@ namespace ViewWorld.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
-        #endregion
 
-        #region 修改用户信息
-        public ActionResult UploadUserAvatar()
+        #endregion
+        #region 自定义登录相关方法
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserLogin(LoginViewModel model, string returnUrl)
+        {
+            #region 判定提交值是否合法
+            if (!ModelState.IsValid)
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var error = ModelState[key].Errors;
+                    if (error.Count() > 0)
+                    {
+                        return ErrorJson(error[0].ErrorMessage);
+                    }
+                }
+            }
+            #endregion
+            if (!ValidationHelper.IsCaptchaRequired(Request) || ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Login))
+            {
+                try
+                {
+                    // 这不会计入到为执行帐户锁定而统计的登录失败次数中
+                    // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
+                    var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                    switch (result)
+                    {
+                        case SignInStatus.Success:
+                            if (string.IsNullOrWhiteSpace(returnUrl))
+                            {
+                                if (User.IsInRole("管理员") || User.IsInRole("销售"))
+                                {
+                                    return Json("/Page/Index");
+                                }else
+                                {
+                                    return Json("/Home/Index");
+                                }
+                            }
+                            return Json(returnUrl);
+                        case SignInStatus.LockedOut:
+                            return Json("/Account/Lockout");
+                        case SignInStatus.RequiresTwoFactorAuthentication:
+                            return ErrorJson(301, "请输入验证码");
+                        case SignInStatus.Failure:
+                        default:
+                            return ErrorJson("用户名或密码错误");
+                    }
+                }catch(TimeoutException)
+                {
+                    return ErrorJson("服务器内部错误，请稍候再试");
+                }
+                
+            }
+            Session["RequireCaptcha"] = "1";
+            return ErrorJson(301,"验证码错误");
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public FileResult GetLoginCaptcha()
+        {
+            return ValidationHelper.GenerateCaptchaImage(Session,160,45,Color.DodgerBlue,Color.White,CaptchaType.Login);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public FileResult GetMobileCaptcha()
+        {
+            return ValidationHelper.GenerateCaptchaImage(Session, 160, 45, Color.LimeGreen, Color.White, CaptchaType.Mobile);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult GetMobileVerificationCode(string mobileNumber)
+        {
+            if (Tools.isChineseMobile(mobileNumber))
+            {
+                if (Session["MobileTimer"] == null)
+                {
+                    string code = Tools.Generate_MobileCode();
+                    Session["MobileTimer"] = "Sent";
+                    Session["MobileCaptcha"] = code;
+                    Session["MobileSubmitted"] = mobileNumber;
+                    string content = string.Format("尊敬的会员，您的短信验证码为：{0}（20分钟有效）诚立业祝您生活愉快", code);
+                    ValidationHelper.SendToMobile(mobileNumber, content);
+                    Task.Factory.StartNew(() => ValidationHelper.Instance.ClearSession("MobileTimer", Session));
+                    return SuccessJson();
+                }
+
+                return ErrorJson("发送速度太快,请稍候再试");
+            }
+            return ErrorJson("号码不正确");
+        }
+        #endregion
+        #region 自定义获取用户信息
+        [HttpGet]
+        [OutputCache(Location =System.Web.UI.OutputCacheLocation.Server,Duration =1200)]
+        public async Task<JsonResult> GetUserInfo()
+        {
+            var Result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
+            if (!System.IO.File.Exists(Result.Entity.Avatar))
+                Result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
+            var data = new
+            {
+                Username = Result.Entity.UserName,
+                Nickname = Result.Entity.NickName,
+                Avatar = Result.Entity.Avatar,
+            };
+            return Json(data);
+        }
+        #endregion
+        #region 自定义修改用户信息
+        [HttpPost]
+        public async Task<ActionResult> UploadUserAvatar()
         {
             AvatarUploadResult result = new AvatarUploadResult()
             {
@@ -552,6 +637,8 @@ namespace ViewWorld.Controllers
                         Directory.CreateDirectory(Server.MapPath(savePath));
                     }
                     string imagePath = string.Format("/Upload/User/{0}/Avatar/{1}", this.UserId, "Head.jpg");
+                    var updateDef = Builders<ApplicationUser>.Update.Set("Avatar", imagePath);
+                    await Repo.UpdateOneAsync(this.UserId, updateDef);
                     result.avatarUrls.Add(imagePath);
                     imagePath = Server.MapPath(imagePath);
                     file.SaveAs(imagePath);
@@ -566,6 +653,7 @@ namespace ViewWorld.Controllers
                 result.success = true;
                 result.msg = "Success!";
                 //返回图片的保存结果（返回内容为json字符串，可自行构造，该处使用Newtonsoft.Json构造）
+                RemoveOutputCacheItem("GetUserInfo","Account");
                 return Content(JsonConvert.SerializeObject(result));
             }
             catch (Exception e)
@@ -574,6 +662,78 @@ namespace ViewWorld.Controllers
                 return Content(JsonConvert.SerializeObject(result));
             }
         }
-        #endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserInfo(UpdateUserInfoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var updateDef = Builders<ApplicationUser>.Update.Set("NickName", model.NickName).Set("DOB", model.DOB).Set("Sex", model.Sex);
+                var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
+                if (Result.Success)
+                {
+                    RemoveOutputCacheItem("GetUserInfo", "Account");
+                    return SuccessJson();
+                }
+                return ErrorJson(Result.Message);
+            }
+            return ErrorJson("保存失败,请检查您的输入");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserMobile(UpdateUserNameViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Mobile))
+                {
+                    if(Session["MobileSubmitted"] == null || Session["MobileSubmitted"].ToString() != model.Mobile)
+                    {
+                        return ErrorJson("申请的手机号和接受验证码的手机号不匹配");
+                    }
+                    UpdateDefinition<ApplicationUser> updateDef;
+                    if (model.SetAsUserName)
+                    {
+                        updateDef =  Builders<ApplicationUser>.Update.Set("UserName", model.Mobile).Set("PhoneNumber", model.Mobile).Set("PhoneNumberConfirmed",true);
+                    }else
+                    {
+                        updateDef = Builders<ApplicationUser>.Update.Set("PhoneNumber", model.Mobile).Set("PhoneNumberConfirmed", true);
+                    }
+                    var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
+                    if (Result.Success)
+                    {
+                        RemoveOutputCacheItem("GetUserInfo", "Account");
+                        return SuccessJson();
+                    }else
+                    {
+                        return ErrorJson(Result.Message);
+                    }
+                }
+                return ErrorJson("验证码错误");
+            }
+            return ErrorJson("保存失败,请检查您的输入");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateUserPassword(EditPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if(model.OldPassword == model.Password)
+                {
+                    return ErrorJson("新密码不能和旧密码一样");
+                }
+                var Result = await UserManager.ChangePasswordAsync(this.UserId, model.OldPassword, model.Password);
+                if (Result.Succeeded)
+                {
+                    return SuccessJson();
+                }else
+                {
+                    return ErrorJson("密码错误");
+                }
+            }
+            return ErrorJson("两次密码输入不匹配");
+        }
+        #endregion        
     }
 }

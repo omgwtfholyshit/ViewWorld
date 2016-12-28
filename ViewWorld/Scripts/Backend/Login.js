@@ -6,7 +6,7 @@
             outerBuffer: 1.08,
             elementDepth: 220
         };
-    function initAnimation() {
+    function InitAnimation() {
         $("#background").logosDistort(options);
         if (particles) {
             particleDensity = window.outerWidth * 7.5;
@@ -49,6 +49,15 @@
         }
         return data = { Status: status, Message: errorMessage };
     }
+    function InitCaptcha(callback) {
+        var $captcha = $('#CaptchaDiv');
+        if ($captcha.data('required') == "True") {
+            if ($captcha.hasClass('hidden')) {
+                $captcha.removeClass('hidden')
+            }
+            callback();
+        } 
+    }
     function SubmitForm(username, password, verificationCode, rememberMe) {
         var loginModel = {
             UserName: username,
@@ -61,22 +70,39 @@
             method: 'post',
             data: {
                 model: loginModel,
+                returnUrl: decodeURIComponent($.getQueryStringByName("ReturnUrl")),
                 __RequestVerificationToken: token,
             },
             success: function (data) {
                 if (data.status == 200) {
-                    location.href = data.message;
+                    location.href = data.data;
+                } else if (data.status == 301) {
+                    $('#CaptchaDiv').data('required',"True");
+                    InitCaptcha(ResetCaptcha);
+                    $('#error-message').css({ display: 'block' });
+                    $('#error-message ul').html(data.message);
                 } else {
                     $('#error-message').css({ display: 'block' });
                     $('#error-message ul').html(data.message);
                 }
 
             },
-            error: function (data) { $.tip("服务器超时，请稍后重试！"); }
+            error: function (data) { $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
         });
     }
-    
+    function ResetCaptcha(requestUrl) {
+        if (typeof requestUrl == "undefined" || requestUrl.length < 10) {
+            requestUrl = "../Account/GetLoginCaptcha"
+        }
+        requestUrl += '?' + Math.round(Math.random() * 10000);
+        $('#captchaImage').attr('src', requestUrl);
+    }
     function bindEvents() {
+        $(document).keydown(function (event) {
+            if (event.keyCode == 13 && ($("#password").is(":focus") || $('#verificationCode').is(':focus'))) {
+                $("#login").click();
+            }
+        })
         $('#login').on('click', function (event) {
             var username = $('#username').val(), password = $('#password').val(), verificationCode = $('#verificationCode').val(),
             rememberMe = $('#rememberMe').prop('checked'), $errorMessage = $('#error-message ul');
@@ -90,11 +116,13 @@
                 SubmitForm(username, password, verificationCode, rememberMe);
             }
         });
+        $('#captchaImage').on('click', function (event) { ResetCaptcha();})
     }
-    function initPage() {
+    function InitPage() {
         
         bindEvents();
-        initAnimation();
+        InitAnimation();
+        InitCaptcha(ResetCaptcha);
     }
-    initPage();
+    InitPage();
 })

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<ViewWorld.Core.Models.ProviderModels.Provider>
+@{
+    ViewBag.Parent = "供应商管理";
+    ViewBag.Title = "供应商管理";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+
+<div class="ui fluid container admin-content">
+    <h2>供应商管理</h2>
+    <div>
+        <button class="ui primary button add-provider">
+            <i class="icon add"></i>添加供应商
+        </button>
+    </div>
+    @if (Model.Any())
+    {
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>供应商名称</th>
+                    <th>简称/英文</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th>邮箱</th>
+                    <th>返点</th>
+                    <th>积分比例</th>
+                    <th>介绍/备注</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var provider in Model)
+                {
+                    <tr class="@(provider.IsArchived ? "archived-row" : "")" data-provider-id="@provider.Id">
+                        <td>
+                            <div class="editable-cell" data-db-key="Name">@provider.Name</div>
+                            ID: @provider.Id
+                        </td>
+                        <td><div class="editable-cell" data-db-key="Alias">@provider.Alias</div></td>
+                        <td><div class="editable-cell" data-db-key="ContactName">@provider.ContactName</div></td>
+                        <td><div class="editable-cell" data-db-key="Phone">@provider.Phone</div></td>
+                        <td><div class="editable-cell" data-db-key="Email">@provider.Email</div></td>
+                        <td><div class="editable-cell" data-db-key="CommissionRate">@provider.CommissionRate</div></td>
+                        <td><div class="editable-cell" data-db-key="AwardRatio">@provider.AwardRatio</div></td>
+                        <td><div class="editable-cell" data-db-key="Description">@provider.Description</div></td>
+                        <td>
+                            <button class="ui blue icon button save hidden"><i class="icon save"></i></button>
+                            <button class="ui blue icon button edit"><i class="icon edit"></i></button>
+                            @if (!provider.IsArchived)
+                            {
+                                <button class="ui red icon button delete"><i class="icon delete"></i></button>
+                            }
+                            else
+                            {
+                                <button class="ui disabled icon button delete"><i class="icon delete"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <div class="ui modal add-provider-modal admin-modal">
+        <div class="header">
+            添加供应商
+        </div>
+        <i class="close icon"></i>
+
+        <form class="ui form equal width" id="add-provider">
+            @Html.AntiForgeryToken()
+            <div class="ui error message">
+                <div class="header">出错啦:</div>
+                <ui></ui>
+            </div>
+            <div class="required field">
+                <label>供应商名称</label>
+                <input name="provider-name" type="text" placeholder="供应商名称" data-db-key="Name" />
+            </div>
+            <div class="required field">
+                <label>简称/英文</label>
+                <input name="alias" type="text" placeholder="英文缩写" data-db-key="Alias" />
+            </div>
+            <div class="required field">
+                <label>联系人</label>
+                <input name="contact-name" type="text" placeholder="对方联系人" data-db-key="ContactName" />
+            </div>
+            <div class="field">
+                <label>联系电话</label>
+                <input name="phone" type="text" placeholder="电话" data-db-key="Phone" />
+            </div>
+            <div class="field">
+                <label>邮箱</label>
+                <input name="email" type="email" placeholder="电子邮箱" data-db-key="Email" />
+            </div>
+            <div class="required field">
+                <label>返点</label>
+                <input name="commission-rate" type="text" placeholder="提成百分比,如: 40%填写40" data-db-key="CommissionRate" />
+            </div>
+            <div class="required field">
+                <label>积分比例</label>
+                <input name="award-ratio" type="text" placeholder="赠送的积分比例" data-db-key="AwardRatio" />
+            </div>
+            <div class="field">
+                <label>介绍/注释</label>
+                <textarea name="description" type="text" placeholder="附加信息或其他说明" data-db-key="Description"></textarea>
+            </div>
+            <div class="actions">
+                <div class="ui primary button" id="submit-form">
+                    保存
+                </div>
+                <div class="ui cancel button">
+                    关闭
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/Scripts/Backend/Trip/Provider.js"></script>

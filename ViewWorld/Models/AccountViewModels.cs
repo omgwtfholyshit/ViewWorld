@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Models
 {
@@ -63,7 +66,26 @@ namespace ViewWorld.Models
         [Display(Name = "记住我?")]
         public bool RememberMe { get; set; }
     }
-
+    public class UpdateUserInfoViewModel
+    {
+        [MaxLength(20)]
+        [Required]
+        public string NickName { get; set; }
+        [Required]
+        public SexType Sex { get; set; }
+        [Required]
+        [BsonDateTimeOptions(DateOnly = true,Kind = DateTimeKind.Local)]
+        public DateTime DOB { get; set; }
+    }
+    public class UpdateUserNameViewModel
+    {
+        public string Mobile { get; set; }
+        public string Email { get; set; }
+        [Required]
+        public string VerificationCode { get; set; }
+        [Required]
+        public bool SetAsUserName { get; set; }
+    }
     public class RegisterViewModel
     {
         [Required]
@@ -102,6 +124,22 @@ namespace ViewWorld.Models
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
+    }
+    public class EditPasswordViewModel
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        public string OldPassword { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "密码")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "确认密码")]
+        [Compare("Password", ErrorMessage = "密码和确认密码不匹配。")]
+        public string ConfirmPassword { get; set; }
     }
 
     public class ForgotPasswordViewModel

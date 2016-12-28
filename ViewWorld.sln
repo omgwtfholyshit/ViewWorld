@@ -8,6 +8,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewWorld.Utils", "ViewWorld.Utils\ViewWorld.Utils.csproj", "{11AD461F-9D7F-4E4E-A2B0-07B4B4430985}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewWorld.Web", "ViewWorld\ViewWorld.Web.csproj", "{B934DA75-CF8B-4FFE-B080-0257C44C6309}"
+	ProjectSection(ProjectDependencies) = postProject
+		{75D2766C-0695-4965-AE42-DA5D573E47A6} = {75D2766C-0695-4965-AE42-DA5D573E47A6}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewWorld.Services", "ViewWorld.Services\ViewWorld.Services.csproj", "{75D2766C-0695-4965-AE42-DA5D573E47A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BAB5BA08-007F-4157-9302-810A62CF9246} = {BAB5BA08-007F-4157-9302-810A62CF9246}
+		{11AD461F-9D7F-4E4E-A2B0-07B4B4430985} = {11AD461F-9D7F-4E4E-A2B0-07B4B4430985}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +36,10 @@ Global
 		{B934DA75-CF8B-4FFE-B080-0257C44C6309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B934DA75-CF8B-4FFE-B080-0257C44C6309}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B934DA75-CF8B-4FFE-B080-0257C44C6309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D2766C-0695-4965-AE42-DA5D573E47A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D2766C-0695-4965-AE42-DA5D573E47A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D2766C-0695-4965-AE42-DA5D573E47A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D2766C-0695-4965-AE42-DA5D573E47A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

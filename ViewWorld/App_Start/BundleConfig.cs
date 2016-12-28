@@ -11,7 +11,7 @@ namespace ViewWorld
             bundles.UseCdn = true;
             BundleTable.EnableOptimizations = true;
 
-            var jQuery = new ScriptBundle("~/bundles/jquery", "https://code.jquery.com/jquery-3.1.0.min.js").Include(
+            var jQuery = new ScriptBundle("~/bundles/jquery", "//cdn.bootcss.com/jquery/3.1.1/jquery.min.js").Include(
                         "~/Scripts/jquery-{version}.js");
             jQuery.CdnFallbackExpression = "window.jQuery";
             bundles.Add(jQuery);
