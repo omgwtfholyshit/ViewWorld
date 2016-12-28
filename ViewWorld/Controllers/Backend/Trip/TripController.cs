@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Services.Regions;
+using CacheManager.Core;
 
 namespace ViewWorld.Controllers.Trip
 {
@@ -15,12 +16,14 @@ namespace ViewWorld.Controllers.Trip
         #region Constructor
         // GET: Trip
         readonly IRegionService regionService;
-        public TripController(IRegionService _regionService)
+        ICacheManager<object> cacheManager;
+        public TripController(IRegionService _regionService, ICacheManager<object> _cache)
         {
             regionService = _regionService;
+            cacheManager = _cache;
         }
         #endregion
-        static string[] cachedMethods = new string[]{"ListRegionsAPI"};
+        static string[] cachedMethods = new string[]{"ListRegionsAPI", "SearchRegions" };
         #region 区域管理
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -32,7 +35,7 @@ namespace ViewWorld.Controllers.Trip
                 {
                     model.IsSubRegion = true;
                 }
-                var result = await regionService.AddRegion(model);
+                var result = await regionService.AddEntity(model);
                 if (result.Success)
                 {
                     RemoveOutputCacheItem(cachedMethods[0], "Trip");
@@ -69,7 +72,7 @@ namespace ViewWorld.Controllers.Trip
                     {
                         if(model.ParentRegionId == prevParentId)
                         {
-                            result = await regionService.UpdateRegion(model);
+                            result = await regionService.UpdateEntity(model);
                         }else
                         {
                             result.Message = "主区域不能移动";
@@ -90,22 +93,38 @@ namespace ViewWorld.Controllers.Trip
             }
             if (result.Success)
             {
-                RemoveOutputCacheItem(cachedMethods[0], "Trip");
+                
             }
             return OriginJson(result);
         }
         public async Task<JsonResult> SearchRegions(string keyword)
         {
+            GetManyResult<Region> result;
+            IEnumerable<Region> output;
+            result = cacheManager.Get(cachedMethods[0]) as GetManyResult<Region>;
+            if (result == null || !result.Success)
+            {
+                result = await regionService.GetRegions(false, true);
+                cacheManager.Add(cachedMethods[0], result);
+            }
             if (string.IsNullOrEmpty(keyword))
             {
-                return Json(await regionService.GetRegions());
+                output = result.Entities.Where(e => e.IsVisible).OrderByDescending(e => e.SortOrder).OrderBy(e => e.Initial);
+            }else
+            {
+                output = (await regionService.RetrieveEntitiesByKeyword(keyword, result)).Entities.Where(e => e.IsVisible).OrderByDescending(e => e.SortOrder).OrderBy(e => e.Initial);
             }
-            return Json(await regionService.SearchRegions(keyword));
+            return Json(output);
         }
-        [OutputCache(Location = System.Web.UI.OutputCacheLocation.Server, Duration = 1200)]
         public async Task<JsonResult> ListRegionsAPI()
         {
-            var result = await regionService.GetRegions(false, true);
+            GetManyResult<Region> result;
+            result = cacheManager.Get(cachedMethods[0]) as GetManyResult<Region>;
+            if (result == null || !result.Success)
+            {
+                result = await regionService.GetRegions(false, true);
+                cacheManager.Add(cachedMethods[0], result);
+            }
             if (result.Success)
             {
                 var entities = result.Entities.ToList();
@@ -160,7 +179,7 @@ namespace ViewWorld.Controllers.Trip
                 
             }else
             {
-                regions = (await regionService.SearchRegions(keyword)).Entities.ToList();
+                regions = (await regionService.RetrieveEntitiesByKeyword(keyword)).Entities.ToList();
             }
             return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.OrderBy(r => r.SortOrder));
         }

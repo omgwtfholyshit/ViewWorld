@@ -17,17 +17,18 @@ namespace ViewWorld.Services.Sceneries
             this.Repo = _Repo;
         }
 
-        public async Task<Result> AddScenery(Scenery model)
+        public async Task<Result> AddEntity(Scenery Entity)
         {
-            return await Repo.AddOneAsync(model);
+            return await Repo.AddOneAsync(Entity);
         }
 
-        public async Task<Result> DeleteScenery(string id)
+
+        public async Task<Result> DeleteEntityById(string id)
         {
             return await Repo.DeleteOneAsync<Scenery>(id);
         }
 
-        public async Task<GetListResult<Scenery>> SearchSceneries(string keyword)
+        public async Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(string keyword)
         {
             var result = new GetListResult<Scenery>();
             if (string.IsNullOrWhiteSpace(keyword))
@@ -43,6 +44,12 @@ namespace ViewWorld.Services.Sceneries
             {
                 throw new NotImplementedException();
             }
+            return null;
+        }
+
+        public async Task<Result> UpdateEntity(Scenery Entity)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Result> UpdatePhotos(List<string> photoList)
@@ -50,9 +57,5 @@ namespace ViewWorld.Services.Sceneries
             throw new NotImplementedException();
         }
 
-        public async Task<Result> UpdateScenery(Scenery model)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

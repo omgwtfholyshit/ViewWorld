@@ -7,6 +7,7 @@ using ViewWorld.Core.Models.ProviderModels;
 using ViewWorld.Services.Providers;
 using CacheManager.Core;
 using ViewWorld.Core.Dal;
+using System.Linq;
 
 namespace ViewWorld.Controllers
 {
@@ -25,7 +26,7 @@ namespace ViewWorld.Controllers
         public async Task<ActionResult> AddProvider(Provider model)
         {
             model.UpdatedBy = User.Identity.Name;
-            var result = await providerService.AddProvider(model);
+            var result = await providerService.AddEntity(model);
             if (result.Success)
             {
                 return SuccessJson();
@@ -39,7 +40,7 @@ namespace ViewWorld.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteProvider(string id)
         {
-            var result = await providerService.DeleteProvider(id);
+            var result = await providerService.DeleteEntityById(id);
             if (result.Success)
             {
                 return SuccessJson();
@@ -55,7 +56,7 @@ namespace ViewWorld.Controllers
         {            
             model.UpdatedBy = User.Identity.Name;
             model.ModifiedDate = DateTime.UtcNow;
-            var result = await providerService.EditProvider(model);
+            var result = await providerService.UpdateEntity(model);
             if (result.Success)
             {
                 return SuccessJson();
@@ -68,7 +69,7 @@ namespace ViewWorld.Controllers
         public async Task<JsonResult> GetAll()
         {
             string key = "ProviderList";
-            var data = new List<Object>();
+            //var data = new List<Object>();
             GetManyResult<Provider> result;
             result = cacheManager.Get(key) as GetManyResult<Provider>;
             if (result == null || !result.Success)
@@ -79,20 +80,20 @@ namespace ViewWorld.Controllers
             
             if (result.Success)
             {
-                foreach (var provider in result.Entities)
-                {
+                //foreach (var provider in result.Entities)
+                //{
                     
-                    var doc = new
-                    {
-                        name  = provider.Name,
-                        value = provider.Id,
-                        disabled = provider.IsArchived
-                    };
+                //    var doc = new
+                //    {
+                //        name  = provider.Name,
+                //        value = provider.Id,
+                //        disabled = provider.IsArchived
+                //    };
 
-                    data.Add(doc);
+                //    data.Add(doc);
                     
-                }
-                return DropdownData(result.Success, data);
+                //}
+                return DropdownData(result.Success, result.Entities.Select(e => new { name = e.Name, value = e.Id, disabled = e.IsArchived }).OrderBy(e => e.name));
             }
             else
             {

@@ -168,7 +168,7 @@ namespace ViewWorld.Models.Managers
                     {
                         if (!region.IsSubRegion && region.SubRegions != null)
                         {
-                            region.SubRegions = region.SubRegions.Where(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword)).ToList();
+                            region.SubRegions = region.SubRegions.FindAll(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword));
                         }
                         regionList.Add(region);
                     }

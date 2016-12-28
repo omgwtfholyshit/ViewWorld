@@ -18,20 +18,20 @@ namespace ViewWorld.Services.Regions
         {
             this.Repo = _Repo;
         }
-        public async Task<Result> AddRegion(Region model)
+        public async Task<Result> AddEntity(Region Entity)
         {
             try
             {
-                if (model.IsSubRegion && model.ParentRegionId != "-1")
+                if (Entity.IsSubRegion && Entity.ParentRegionId != "-1")
                 {
-                    var parent = await Repo.GetOneAsync<Region>(model.ParentRegionId);
-                    model.Id = ObjectId.GenerateNewId().ToString();
-                    parent.Entity.SubRegions.Add(model);
-                    return await UpdateRegion(parent.Entity);
+                    var parent = await Repo.GetOneAsync<Region>(Entity.ParentRegionId);
+                    Entity.Id = ObjectId.GenerateNewId().ToString();
+                    parent.Entity.SubRegions.Add(Entity);
+                    return await UpdateEntity(parent.Entity);
                 }
                 else
                 {
-                    return await Repo.AddOneAsync(model);
+                    return await Repo.AddOneAsync(Entity);
                 }
             }
             catch (Exception e)
@@ -62,9 +62,9 @@ namespace ViewWorld.Services.Regions
                     {
                         var child = parent.SubRegions.Find(r => r.Id == id);
                         dest.SubRegions.Add(child);
-                        await UpdateRegion(dest);
+                        await UpdateEntity(dest);
                         parent.SubRegions.Remove(child);
-                        await UpdateRegion(parent);
+                        await UpdateEntity(parent);
                         result.Success = true;
                         result.ErrorCode = 200;
                     }
@@ -95,7 +95,7 @@ namespace ViewWorld.Services.Regions
             {
                 if (string.IsNullOrWhiteSpace(parentId) || parentId == "-1")
                 {
-                    return await Repo.DeleteOneAsync<Region>(id);
+                    return await DeleteEntityById(id);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace ViewWorld.Services.Regions
                         {
                             Tools.WriteLog("Region", "删除", string.Format("此次删除{0}条记录，数据库可能有异常，请检查", deleteCount));
                         }
-                        return await UpdateRegion(parent.Entity);
+                        return await UpdateEntity(parent.Entity);
                     }
                     result.Message = "找不到该区域";
                     return result;
@@ -141,7 +141,7 @@ namespace ViewWorld.Services.Regions
 
         }
 
-        public async Task<GetListResult<Region>> SearchRegions(string keyword)
+        public async Task<GetListResult<Region>> RetrieveEntitiesByKeyword(string keyword)
         {
             var result = new GetListResult<Region> { Success = false, ErrorCode = 300, Message = "", Entities = null };
             var regions = await GetRegions(false);
@@ -155,7 +155,7 @@ namespace ViewWorld.Services.Regions
                     {
                         if (!region.IsSubRegion && region.SubRegions != null)
                         {
-                            region.SubRegions = region.SubRegions.Where(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword)).ToList();
+                            region.SubRegions = region.SubRegions.FindAll(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword));
                         }
                         regionList.Add(region);
                     }
@@ -165,6 +165,30 @@ namespace ViewWorld.Services.Regions
                 result.Entities = regionList;
             }
             return result;
+        }
+        public async Task<GetListResult<Region>> RetrieveEntitiesByKeyword(string keyword,GetManyResult<Region> regions)
+        {
+            var result = new GetListResult<Region> { Success = false, ErrorCode = 300, Message = "", Entities = null };
+            var regionList = new List<Region>();
+            if (regions.Success)
+            {
+                keyword = keyword.ToUpper();
+                foreach (var region in regions.Entities)
+                {
+                    if (IsRegionMatch(region, keyword))
+                    {
+                        if (!region.IsSubRegion && region.SubRegions != null)
+                        {
+                            region.SubRegions = region.SubRegions.FindAll(s => s.Name.Contains(keyword) || s.EnglishName.ToUpper().Contains(keyword));
+                        }
+                        regionList.Add(region);
+                    }
+                }
+                result.Success = true;
+                result.ErrorCode = 200;
+                result.Entities = regionList;
+            }
+            return await Task.FromResult(result);
         }
 
         bool IsRegionMatch(Region region, string keyword)
@@ -184,9 +208,9 @@ namespace ViewWorld.Services.Regions
             }
         }
 
-        public async Task<Result> UpdateRegion(Region model)
+        public async Task<Result> UpdateEntity(Region Entity)
         {
-            return await Repo.ReplaceOneAsync(model.Id, model);
+            return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
         public async Task<Result> UpdateRegion(string id, Region model)
         {
@@ -199,7 +223,11 @@ namespace ViewWorld.Services.Regions
             var parent = (await Repo.GetOneAsync<Region>(model.ParentRegionId)).Entity;
             var modelIndex = parent.SubRegions.FindIndex(r => r.Id == model.Id);
             parent.SubRegions[modelIndex] = model;
-            return await UpdateRegion(parent);
+            return await UpdateEntity(parent);
+        }
+        public Task<Result> DeleteEntityById(string id)
+        {
+            return Repo.DeleteOneAsync<Region>(id);
         }
     }
 }

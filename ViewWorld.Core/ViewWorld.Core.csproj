@@ -129,6 +129,8 @@
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\SexType.cs" />
     <Compile Include="Enum\TripPlanType.cs" />
+    <Compile Include="ExtensionMethods\MongoDbResultExtensions.cs" />
+    <Compile Include="Interfaces\ICRUDable.cs" />
     <Compile Include="JsonNetResult.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
     <Compile Include="Models\AvatarUploadResult.cs" />
@@ -153,7 +155,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="Models\Statistic\" />
   </ItemGroup>
   <ItemGroup>
