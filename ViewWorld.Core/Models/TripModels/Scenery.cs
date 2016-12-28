@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ViewWorld.Core.Models.TripModels
@@ -36,6 +37,17 @@ namespace ViewWorld.Core.Models.TripModels
                 _coord = value;
             }
         }
+        public List<string> Photos
+        {
+            get
+            {
+                return _photos ?? new List<string>();
+            }
+            set
+            {
+                _photos = value;
+            }
+        }
         public string RegionId { get; set; }
         public string ParentRegionId { get; set; }
         public string Address { get; set; }
@@ -47,7 +59,7 @@ namespace ViewWorld.Core.Models.TripModels
         //统计该景点热门度
         public int Popularity { get; set; }
         private GeoPoint _coord { get; set; }
-
+        private List<string> _photos { get; set; }
     }
 
     public class GeoPoint
