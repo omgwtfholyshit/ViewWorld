@@ -54,6 +54,7 @@
             var $dataSource = $(e.target).closest('tr'), $form = $(".region-editor .ui.form");
             FillForm($dataSource, $form);
             $('.region-editor.add').addClass('modifying').modal('show')
+            LoadModalCategory();
         })
         $('.region-editor.confirm.modal .button.positive').on('click', function (e) {
             $.get(api.deleteRegion, { id: globalVar.Id, parentId: globalVar.ParentRegionId }, function (result) {
@@ -97,6 +98,7 @@
         $.ajax({
             url: api.modalCategory,
             success: function (response) {
+                console.log(response);
                 $modalCatDropDown.dropdown({
                     apiSettings: {
                         response: response

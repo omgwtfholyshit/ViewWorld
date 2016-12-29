@@ -38,7 +38,7 @@ namespace ViewWorld.Controllers.Trip
                 var result = await regionService.AddEntity(model);
                 if (result.Success)
                 {
-                    RemoveOutputCacheItem(cachedMethods[0], "Trip");
+                    cacheManager.Remove(cachedMethods[0]);
                 }
                 return OriginJson(result);
             }
@@ -49,7 +49,7 @@ namespace ViewWorld.Controllers.Trip
             var result = await regionService.DeleteRegion(id,parentId);
             if (result.Success)
             {
-                RemoveOutputCacheItem(cachedMethods[0], "Trip");
+                cacheManager.Remove(cachedMethods[0]);
             }
             return OriginJson(result);
         }
@@ -77,7 +77,6 @@ namespace ViewWorld.Controllers.Trip
                         {
                             result.Message = "主区域不能移动";
                         }
-                        
 
                     }else
                     {
@@ -91,30 +90,11 @@ namespace ViewWorld.Controllers.Trip
                     }
                 }
             }
-            if (result.Success)
-            {
-                
-            }
             return OriginJson(result);
         }
         public async Task<JsonResult> SearchRegions(string keyword)
         {
-            GetManyResult<Region> result;
-            IEnumerable<Region> output;
-            result = cacheManager.Get(cachedMethods[0]) as GetManyResult<Region>;
-            if (result == null || !result.Success)
-            {
-                result = await regionService.GetRegions(false, true);
-                cacheManager.Add(cachedMethods[0], result);
-            }
-            if (string.IsNullOrEmpty(keyword))
-            {
-                output = result.Entities.Where(e => e.IsVisible).OrderByDescending(e => e.SortOrder).OrderBy(e => e.Initial);
-            }else
-            {
-                output = (await regionService.RetrieveEntitiesByKeyword(keyword, result)).Entities.Where(e => e.IsVisible).OrderByDescending(e => e.SortOrder).OrderBy(e => e.Initial);
-            }
-            return Json(output);
+            return Json((await regionService.RetrieveEntitiesByKeyword(keyword)).Entities.Where(e => e.IsVisible).OrderBy(e => e.SortOrder).OrderBy(e => e.Initial));
         }
         public async Task<JsonResult> ListRegionsAPI()
         {
@@ -172,16 +152,9 @@ namespace ViewWorld.Controllers.Trip
         [HttpGet]
         public async Task<ActionResult> _PartialRegionTable(string keyword)
         {
-            List<Region> regions;
-            if (string.IsNullOrEmpty(keyword))
-            {
-                regions = (await regionService.GetRegions()).Entities.ToList();
-                
-            }else
-            {
-                regions = (await regionService.RetrieveEntitiesByKeyword(keyword)).Entities.ToList();
-            }
-            return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.OrderBy(r => r.SortOrder));
+            List<Region> regions = (await regionService.RetrieveEntitiesByKeyword(keyword)).Entities;
+            
+            return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.Where(e => e.IsVisible).OrderBy(e => e.SortOrder).OrderBy(e => e.Initial));
         }
         #endregion
     }

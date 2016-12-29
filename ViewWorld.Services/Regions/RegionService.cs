@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.ExtensionMethods;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Utils;
 
@@ -145,9 +146,13 @@ namespace ViewWorld.Services.Regions
         {
             var result = new GetListResult<Region> { Success = false, ErrorCode = 300, Message = "", Entities = null };
             var regions = await GetRegions(false);
-            var regionList = new List<Region>();
+            
             if (regions.Success)
             {
+                if (string.IsNullOrWhiteSpace(keyword))
+                    return regions.ManyToListResult();
+
+                var regionList = new List<Region>();
                 keyword = keyword.ToUpper();
                 foreach (var region in regions.Entities)
                 {
@@ -172,6 +177,9 @@ namespace ViewWorld.Services.Regions
             var regionList = new List<Region>();
             if (regions.Success)
             {
+                if (string.IsNullOrWhiteSpace(keyword))
+                    return await Task.FromResult(regions.ManyToListResult());
+
                 keyword = keyword.ToUpper();
                 foreach (var region in regions.Entities)
                 {
