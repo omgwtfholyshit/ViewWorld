@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.ExtensionMethods;
 using ViewWorld.Core.Models.TripModels;
 
 namespace ViewWorld.Services.Sceneries
@@ -30,26 +31,29 @@ namespace ViewWorld.Services.Sceneries
 
         public async Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(string keyword)
         {
-            var result = new GetListResult<Scenery>();
             if (string.IsNullOrWhiteSpace(keyword))
             {
-                var getAllResult = await Repo.GetAllAsync<Scenery>();
-                result.Success = getAllResult.Success;
-                result.Message = getAllResult.Message;
-                if (getAllResult.Success)
-                {
-                    result.Entities = getAllResult.Entities.ToList();
-                }
+                return (await Repo.GetAllAsync<Scenery>()).ManyToListResult();
             }else
             {
-                throw new NotImplementedException();
+                var builder = Builders<Scenery>.Filter;
+                FilterDefinition<Scenery> filter;
+                if(keyword.Length == 1)
+                {
+                    filter = builder.Eq("Initial", keyword);
+                }
+                else
+                {
+                    filter = builder.In("Name", keyword) | builder.In("EnglishName", keyword) | builder.In("Address", keyword)
+                        | builder.In("Publisher", keyword) | builder.In("Modificator", keyword);
+                }
+                return (await Repo.GetManyAsync(filter)).ManyToListResult();
             }
-            return null;
         }
 
         public async Task<Result> UpdateEntity(Scenery Entity)
         {
-            throw new NotImplementedException();
+            return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
         public async Task<Result> UpdatePhotos(List<string> photoList)
@@ -57,5 +61,9 @@ namespace ViewWorld.Services.Sceneries
             throw new NotImplementedException();
         }
 
+        public Task<Result> UploadPhotos()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

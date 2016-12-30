@@ -18,6 +18,7 @@ namespace ViewWorld.Services.Sceneries
         /// <param name="photoList"></param>
         /// <returns></returns>
         Task<Result> UpdatePhotos(List<string> photoList);
-       
+        Task<Result> UploadPhotos();
+
     }
 }
