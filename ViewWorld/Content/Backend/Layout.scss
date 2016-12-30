@@ -199,9 +199,9 @@ body{
 }
 
 /************************************
-    Region
+    Region & Scenery
 ************************************/
-.region-management{
+.region-management,.scenery-management{
    
     .tool-bar,.table-container{
         padding:0.5rem;
@@ -217,7 +217,7 @@ body{
         transform:rotate(-90deg)!important;
     }
 }
-.region-editor .form-container{
+.region-editor .form-container,.scenery-editor .form-container{
     width:100%;
    
 }

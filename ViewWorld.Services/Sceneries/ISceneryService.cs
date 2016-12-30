@@ -19,6 +19,6 @@ namespace ViewWorld.Services.Sceneries
         /// <returns></returns>
         Task<Result> UpdatePhotos(List<string> photoList);
         Task<Result> UploadPhotos();
-
+        Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(GetListResult<Scenery> cachedData, string keyword);
     }
 }

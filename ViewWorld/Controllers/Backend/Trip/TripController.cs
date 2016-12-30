@@ -8,6 +8,8 @@ using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Services.Regions;
 using CacheManager.Core;
+using ViewWorld.Services.Sceneries;
+using ViewWorld.Core.Models;
 
 namespace ViewWorld.Controllers.Trip
 {
@@ -16,14 +18,16 @@ namespace ViewWorld.Controllers.Trip
         #region Constructor
         // GET: Trip
         readonly IRegionService regionService;
+        readonly ISceneryService sceneryService;
         ICacheManager<object> cacheManager;
-        public TripController(IRegionService _regionService, ICacheManager<object> _cache)
+        public TripController(IRegionService _regionService,ISceneryService _sceneryService, ICacheManager<object> _cache)
         {
             regionService = _regionService;
+            sceneryService = _sceneryService;
             cacheManager = _cache;
         }
         #endregion
-        static string[] cachedMethods = new string[]{"ListRegionsAPI", "SearchRegions" };
+        static string[] cachedMethods = new string[]{"ListRegionsAPI", "ListSceneriesAPI" };
         #region 区域管理
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,7 +100,7 @@ namespace ViewWorld.Controllers.Trip
         {
             return Json((await regionService.RetrieveEntitiesByKeyword(keyword)).Entities.Where(e => e.IsVisible).OrderBy(e => e.SortOrder).OrderBy(e => e.Initial));
         }
-        public async Task<JsonResult> ListRegionsAPI()
+        public async Task<JsonResult> ListRegionsAPI(bool displaySubRegions = false)
         {
             GetManyResult<Region> result;
             result = cacheManager.Get(cachedMethods[0]) as GetManyResult<Region>;
@@ -108,11 +112,33 @@ namespace ViewWorld.Controllers.Trip
             if (result.Success)
             {
                 var entities = result.Entities.ToList();
-                entities.Insert(0, new Region { Id = "-1", Name = "无", EnglishName = "null" });
+                List<DropdownDataStruct> dropdownDataList = new List<DropdownDataStruct>(); ;
+                if (displaySubRegions)
+                {
+                    entities.ForEach(e =>
+                    {
+                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, values = e.Id, });
+                        if (e.SubRegions.Count() > 0)
+                        {
+                            e.SubRegions.ForEach(sub =>
+                            {
+                                dropdownDataList.Add(new DropdownDataStruct { name = "  " + sub.Name, values = sub.Id, });
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    entities.Insert(0, new Region { Id = "-1", Name = "无", EnglishName = "null" });
+                    entities.ForEach(e =>
+                    {
+                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, values = e.Id, });
+                    });
+                }
                 var data = new
                 {
                     success = result.Success,
-                    results = entities.Select(r => new { name = r.Name, value = r.Id })
+                    results = dropdownDataList
                 };
                 return OriginJson(data);
             }
@@ -155,6 +181,74 @@ namespace ViewWorld.Controllers.Trip
             List<Region> regions = (await regionService.RetrieveEntitiesByKeyword(keyword)).Entities;
             
             return PartialView("~/Views/PartialViews/_PartialRegionTable.cshtml", regions.Where(e => e.IsVisible).OrderBy(e => e.SortOrder).OrderBy(e => e.Initial));
+        }
+        #endregion
+        #region 景点管理
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddScenery(Scenery model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await sceneryService.AddEntity(model);
+                if (result.Success)
+                {
+                    cacheManager.Remove(cachedMethods[1]);
+                }
+                return OriginJson(result);
+            }
+            return ErrorJson("参数错误");
+        }
+        public async Task<JsonResult> DeleteScenery(string id)
+        {
+            var result = await sceneryService.DeleteEntityById(id);
+            if (result.Success)
+            {
+                cacheManager.Remove(cachedMethods[1]);
+            }
+            return OriginJson(result);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> UpdateScenery(Scenery model)
+        {
+            return OriginJson(await sceneryService.UpdateEntity(model));
+        }
+        public async Task<JsonResult> ListSceneriesAPI()
+        {
+            GetListResult<Scenery> result;
+            result = cacheManager.Get(cachedMethods[1]) as GetListResult<Scenery>;
+            if (result == null || !result.Success)
+            {
+                result = await sceneryService.RetrieveEntitiesByKeyword("");
+                cacheManager.Add(cachedMethods[1], result);
+            }
+            if (result.Success)
+            {
+                var entities = result.Entities.ToList();
+                entities.Insert(0, new Scenery { Id = "-1", Name = "无", EnglishName = "null" });
+                var data = new
+                {
+                    success = result.Success,
+                    results = entities.Select(r => new { name = r.Name, value = r.Id })
+                };
+                return OriginJson(data);
+            }
+            return ErrorJson("服务器内部错误，请稍后再试");
+        }
+        [HttpGet]
+        public async Task<ActionResult> _PartialSceneryTable(string keyword)
+        {
+            GetListResult<Scenery> result;
+            result = cacheManager.Get(cachedMethods[1]) as GetListResult<Scenery>;
+            if (result == null || !result.Success)
+            {
+                result = await sceneryService.RetrieveEntitiesByKeyword("");
+                cacheManager.Add(cachedMethods[1], result);
+            }
+            List<Scenery> sceneries = (await sceneryService.RetrieveEntitiesByKeyword(result, keyword)).Entities;
+
+            return PartialView("~/Views/PartialViews/_PartialSceneryTable.cshtml", sceneries.OrderByDescending(s=>s.Popularity));
         }
         #endregion
     }

@@ -38,16 +38,39 @@ namespace ViewWorld.Services.Sceneries
             {
                 var builder = Builders<Scenery>.Filter;
                 FilterDefinition<Scenery> filter;
+                keyword = keyword.ToUpper();
                 if(keyword.Length == 1)
                 {
                     filter = builder.Eq("Initial", keyword);
                 }
                 else
                 {
-                    filter = builder.In("Name", keyword) | builder.In("EnglishName", keyword) | builder.In("Address", keyword)
-                        | builder.In("Publisher", keyword) | builder.In("Modificator", keyword);
+                    filter = builder.Where(obj => obj.Name.Contains(keyword) || obj.EnglishName.Contains(keyword) ||
+                    obj.Address.ToUpper().Contains(keyword) || obj.Publisher.ToUpper().Contains(keyword) || obj.Modificator.ToUpper().Contains(keyword));
                 }
                 return (await Repo.GetManyAsync(filter)).ManyToListResult();
+            }
+        }
+
+        public async Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(GetListResult<Scenery> cachedData, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return cachedData;
+            }else
+            {
+                var filteredResult = new GetListResult<Scenery> { Success = true, Message = "" };
+                keyword = keyword.ToUpper();
+                if (keyword.Length == 1)
+                {
+                    filteredResult.Entities = cachedData.Entities.FindAll(e => e.Initial == keyword);
+                }else
+                {
+                    filteredResult.Entities = cachedData.Entities.FindAll(obj => obj.Name.Contains(keyword) || obj.EnglishName.Contains(keyword) ||
+                    obj.Address.ToUpper().Contains(keyword) || obj.Publisher.ToUpper().Contains(keyword) || obj.Modificator.ToUpper().Contains(keyword));
+                }
+
+                return await Task.FromResult(filteredResult);
             }
         }
 

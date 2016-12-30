@@ -34,4 +34,15 @@ namespace ViewWorld.Core.Models
         /// </summary>
         public ArrayList avatarUrls;
     }
+    public struct DropdownDataStruct
+    { 
+        // grouping for all dropdown values
+        public string name { get; set; }
+       
+        // actual dropdown value
+        public string values { get; set; }
+
+        // grouping for api results
+        public string results { get; set; }
+    }
 }

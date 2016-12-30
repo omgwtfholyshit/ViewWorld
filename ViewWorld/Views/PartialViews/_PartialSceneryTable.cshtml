@@ -1,0 +1,41 @@
+﻿@model IOrderedEnumerable<ViewWorld.Core.Models.TripModels.Scenery>
+@{
+    if (Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="-1" data-englishname="@item.EnglishName" data-initial="@item.Initial">
+                <td class="three wide left aligned collapsing">
+                    @item.Name
+                </td>
+                <td class="three wide left aligned">@item.EnglishName</td>
+                <td class="one wide">@item.Initial</td>
+                <td class="one wide">@item.Publisher</td>
+                <td class="one wide">@item.PublishedAt.ToString()</td>
+                <td class="one wide">@item.Modificator</td>
+                <td class="one wide">@item.LastUpdateAt.ToString()</td>
+                <td class="one wide">@item.Popularity</td>
+                <td class="collapsing">
+                    <button class="ui labeled blue icon button modify">
+                        <i class="edit icon"></i>
+                        修改
+                    </button>
+                    <button class="ui labeled red icon button delete">
+                        <i class="delete icon"></i>
+                        删除
+                    </button>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr class="center aligned">
+            <td colspan="9" class="ui segment">没有您要搜索的数据..</td>
+        </tr>
+    }
+
+}
+
+
+

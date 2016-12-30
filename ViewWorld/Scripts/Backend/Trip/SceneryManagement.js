@@ -1,20 +1,20 @@
 ﻿$(function () {
-    var $table = $('#dataTable tbody'), $modalCatMenu = $('.region-editor .dropdown .menu'), $modalCatDropDown = $('.region-editor .dropdown'), globalVar = { Id: "", ParentRegionId: "", }, openedCategory = new Array();
+    var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), globalVar = { Id: "", ParentSceneryId: "", }, openedCategory = new Array();
     var api = {
-        modalCategory: '/Trip/ListSubRegionsApi',
-        tablePartial: '/Trip/_PartialRegionTable',
-        addRegion: '/Trip/AddRegion',
-        deleteRegion: '/Trip/DeleteRegion',
-        changeRegion: '/Trip/UpdateRegion',
+        modalCategory: '/Trip/ListRegionsAPI?displaySubRegions=true',
+        tablePartial: '/Trip/_PartialSceneryTable',
+        addScenery: '/Trip/AddScenery',
+        deleteScenery: '/Trip/DeleteScenery',
+        changeScenery: '/Trip/UpdateScenery',
     }
     function BindEvents() {
-        $('#addRegion').on('click', function () {
-            var $modal = $('.region-editor.add');
+        $('#addScenery').on('click', function () {
+            var $modal = $('.scenery-editor.add');
             if ($modal.hasClass('modifying')) {
                 $modal.removeClass('modifying');
-                $(".region-editor .ui.form")[0].reset();
+                $(".scenery-editor .ui.form")[0].reset();
             }
-            $('.region-editor .ui.form .checkbox').checkbox('check');
+            $('.scenery-editor .ui.form .checkbox').checkbox('check');
             $modal.modal('show');
         })
         $('#clear').on('click', function () {
@@ -25,12 +25,12 @@
         $('.header-left .search.icon').on('click', function (e) {
             BuildTable($(e.target).siblings().val());
         })
-        $('.header-left input').on('keyup', function () {
+        $('.header-left input').on('keyup', function (e) {
             $('.header-left .search.icon').click();
         })
         InitFormValidator();
         $('#submitForm').on('click', function () {
-            $('.region-editor .ui.form').form('validate form');
+            $('.scenery-editor .ui.form').form('validate form');
         })
         $table.delegate('i.caret', 'click', function (e) {
             $target = $(e.target);
@@ -44,18 +44,18 @@
                 openedCategory.push('.' + $target.closest('tr').data('id'));
             }
         }).delegate('button.delete', 'click', function (e) {
-            var modal = $('.region-editor.confirm.modal'),$dataSource=$(e.target).closest('tr');
+            var modal = $('.scenery-editor.confirm.modal'),$dataSource=$(e.target).closest('tr');
             modal.find('.content span').html($dataSource.data('name'));
             globalVar.Id = $dataSource.data('id');
-            globalVar.ParentRegionId = $dataSource.data('parent');
+            globalVar.ParentSceneryId = $dataSource.data('parent');
             modal.modal('show');
         }).delegate('button.modify', 'click', function (e) {
-            var $dataSource = $(e.target).closest('tr'), $form = $(".region-editor .ui.form");
+            var $dataSource = $(e.target).closest('tr'), $form = $(".scenery-editor .ui.form");
             FillForm($dataSource, $form);
-            $('.region-editor.add').addClass('modifying').modal('show')
+            $('.scenery-editor.add').addClass('modifying').modal('show')
         })
-        $('.region-editor.confirm.modal .button.positive').on('click', function (e) {
-            $.get(api.deleteRegion, { id: globalVar.Id, parentId: globalVar.ParentRegionId }, function (result) {
+        $('.scenery-editor.confirm.modal .button.positive').on('click', function (e) {
+            $.get(api.deleteScenery, { id: globalVar.Id, parentId: globalVar.ParentSceneryId }, function (result) {
                 if (result.Success) {
                     $.tip(".message-container", "删除成功", "分类已删除", "positive", 4);
                     BuildTable();
@@ -66,7 +66,7 @@
         })
     }
     function BuildTable(keyword) {
-        var loadingHtml = '<tr class="center aligned"><td colspan="6" class="ui loading segment" height="150px"></td></tr>';
+        var loadingHtml = '<tr class="center aligned"><td colspan="9" class="ui loading segment" height="150px"></td></tr>';
         if (typeof keyword == "undefiend")
             keyword = '';
 
@@ -101,7 +101,7 @@
         })
     }
     function InitFormValidator() {
-        $('.region-editor .ui.form').form({
+        $('.scenery-editor .ui.form').form({
             on : 'blur',
             fields: {
                 Name: {
@@ -136,7 +136,7 @@
         $form.find('input[name="EnglishName"]').val($dataSource.data('englishname'));
         $form.find('input[name="Initial"]').val($dataSource.data('initial'));
         globalVar.Id = $dataSource.data('id')
-        globalVar.ParentRegionId = $dataSource.data('parent');
+        globalVar.ParentSceneryId = $dataSource.data('parent');
         if ($dataSource.data('isdisplay') == "True") {
             $form.find('.checkbox').checkbox('check');
         } else {
@@ -160,17 +160,17 @@
             }
         });
         if (!$button.hasClass('loading')) {
-            if ($('.region-editor.add').hasClass('modifying')) {
+            if ($('.scenery-editor.add').hasClass('modifying')) {
                 model['Id'] = globalVar.Id
                 $.ajax({
-                    url: api.changeRegion,
+                    url: api.changeScenery,
                     method: 'post',
                     beforeSend: function () {
                         $button.addClass('loading');
                     },
                     data: {
                         model: model,
-                        prevParentId: globalVar.ParentRegionId,
+                        prevParentId: globalVar.ParentSceneryId,
                         __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
                     },
                     success: function (data) {
@@ -190,7 +190,7 @@
                 })
             } else {
                 $.ajax({
-                    url: api.addRegion,
+                    url: api.addScenery,
                     method: 'post',
                     beforeSend: function () {
                         $button.addClass('loading');
@@ -205,7 +205,7 @@
                             $button.removeClass('loading');
                             $.tip(".message-container", "操作成功", "新分类添加成功", "positive", 4);
                             BuildTable();
-                            $('.ui.modal.region-editor').modal('refresh');
+                            $('.ui.modal.scenery-editor').modal('refresh');
                             return false;
                         } else {
                             $button.removeClass('loading');

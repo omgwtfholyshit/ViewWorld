@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /******************
  Global Settings
 ******************/
@@ -159,16 +159,19 @@ body {
 .user-profile .content-upper, .edit-password .content-upper {
   width: 56%;
   margin: auto; }
+
 .user-profile .content-left, .user-profile .content-right, .edit-password .content-left, .edit-password .content-right {
   vertical-align: top;
   display: inline-block;
   float: left;
   padding-top: 2rem; }
+
 .user-profile .content-left, .edit-password .content-left {
   width: 50%;
   padding-right: 2rem; }
   .user-profile .content-left .ui.card, .edit-password .content-left .ui.card {
     float: right; }
+
 .user-profile .content-right, .edit-password .content-right {
   width: 50%; }
   .user-profile .content-right .ui.form .field > label, .edit-password .content-right .ui.form .field > label {
@@ -184,19 +187,21 @@ body {
   margin: auto; }
 
 /************************************
-    Region
+    Region & Scenery
 ************************************/
-.region-management .tool-bar, .region-management .table-container {
+.region-management .tool-bar, .region-management .table-container, .scenery-management .tool-bar, .scenery-management .table-container {
   padding: 0.5rem; }
-.region-management .padleft54 {
+
+.region-management .padleft54, .scenery-management .padleft54 {
   padding-left: 5.4rem !important; }
-.region-management i.caret {
+
+.region-management i.caret, .scenery-management i.caret {
   transition: all ease-in-out 0.3s;
   cursor: pointer; }
-.region-management .open {
+
+.region-management .open, .scenery-management .open {
   transform: rotate(-90deg) !important; }
 
-.region-editor .form-container {
+.region-editor .form-container, .scenery-editor .form-container {
   width: 100%; }
 
-/*# sourceMappingURL=Layout.css.map */
