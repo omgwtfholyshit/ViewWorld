@@ -591,6 +591,7 @@
     <Content Include="Images\Backend\Login\logo.png" />
     <Content Include="Images\Backend\Login\logo_393-73.png" />
     <Content Include="Images\Backend\Login\logo_393-73_white.png" />
+    <Content Include="Images\DefaultImages\add.png" />
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\icon_phone_large_150.jpg" />
     <Content Include="Images\DefaultImages\infinity.jpg" />
