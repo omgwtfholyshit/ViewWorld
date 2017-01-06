@@ -40,7 +40,7 @@ namespace ViewWorld.Core.Models
         public string name { get; set; }
        
         // actual dropdown value
-        public string values { get; set; }
+        public string value { get; set; }
 
         // grouping for api results
         public string results { get; set; }

@@ -65,8 +65,8 @@ namespace ViewWorld.Core.Models.Identity
             // Add custom user claims
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, NickName));
-            claims.Add(new Claim(ClaimTypes.Email, Email));
-            claims.Add(new Claim(ClaimTypes.MobilePhone, PhoneNumber));
+            claims.Add(new Claim(ClaimTypes.Email, Email ?? ""));
+            claims.Add(new Claim(ClaimTypes.MobilePhone, PhoneNumber ?? ""));
             claims.Add(new Claim(ClaimTypes.DateOfBirth, DOB.ToString()));
             userIdentity.AddClaims(claims);
 

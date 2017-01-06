@@ -51,10 +51,10 @@
             globalVar.ParentRegionId = $dataSource.data('parent');
             modal.modal('show');
         }).delegate('button.modify', 'click', function (e) {
+            //LoadModalCategory();
             var $dataSource = $(e.target).closest('tr'), $form = $(".region-editor .ui.form");
             FillForm($dataSource, $form);
             $('.region-editor.add').addClass('modifying').modal('show')
-            LoadModalCategory();
         })
         $('.region-editor.confirm.modal .button.positive').on('click', function (e) {
             $.get(api.deleteRegion, { id: globalVar.Id, parentId: globalVar.ParentRegionId }, function (result) {
@@ -94,7 +94,7 @@
             })
         }
     }
-    function LoadModalCategory() {
+    function LoadModalCategory(callback) {
         $.ajax({
             url: api.modalCategory,
             success: function (response) {
@@ -104,6 +104,8 @@
                         response: response
                     }
                 }).removeClass('loading');
+                if (typeof callback == "function")
+                    callback();
             }
         });
     }
@@ -151,8 +153,10 @@
         }
         if (typeof $dataSource.data('parentname') == "undefined" || $dataSource.data('parentname') == "-1") {
             $modalCatDropDown.find('input').click().after(function () { $modalCatDropDown.dropdown("set selected", "无") })
+            
         } else {
-            $modalCatDropDown.find('input').click().after(function () { $modalCatDropDown.dropdown("set selected", $dataSource.data('parentname')) })
+            $modalCatDropDown.find('input').click();
+            setTimeout(function () { $modalCatDropDown.dropdown("set selected", $dataSource.data('parentname')) },500);
         }
     }
     function SubmitForm($form) {
@@ -230,6 +234,7 @@
         $('.header-left').transition('fade in').removeClass('invisible');
         BuildTable();
         BindEvents();
+        LoadModalCategory();
     }
     InitPage();
 })

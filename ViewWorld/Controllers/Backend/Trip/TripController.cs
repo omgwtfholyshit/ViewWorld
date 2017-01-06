@@ -42,7 +42,7 @@ namespace ViewWorld.Controllers.Trip
                 var result = await regionService.AddEntity(model);
                 if (result.Success)
                 {
-                    cacheManager.Remove(cachedMethods[0]);
+                    RemoveOutputCacheItem(cachedMethods[0], "Trip");
                 }
                 return OriginJson(result);
             }
@@ -53,7 +53,7 @@ namespace ViewWorld.Controllers.Trip
             var result = await regionService.DeleteRegion(id,parentId);
             if (result.Success)
             {
-                cacheManager.Remove(cachedMethods[0]);
+                RemoveOutputCacheItem(cachedMethods[0], "Trip");
             }
             return OriginJson(result);
         }
@@ -94,35 +94,34 @@ namespace ViewWorld.Controllers.Trip
                     }
                 }
             }
+            if (result.Success)
+            {
+                RemoveOutputCacheItem(cachedMethods[0], "Trip");
+            }
             return OriginJson(result);
         }
         public async Task<JsonResult> SearchRegions(string keyword)
         {
             return Json((await regionService.RetrieveEntitiesByKeyword(keyword)).Entities.Where(e => e.IsVisible).OrderBy(e => e.SortOrder).OrderBy(e => e.Initial));
         }
+        [OutputCache(Location = System.Web.UI.OutputCacheLocation.Server,VaryByParam = "displaySubRegions",Duration =120)]
         public async Task<JsonResult> ListRegionsAPI(bool displaySubRegions = false)
         {
-            GetManyResult<Region> result;
-            result = cacheManager.Get(cachedMethods[0]) as GetManyResult<Region>;
-            if (result == null || !result.Success)
-            {
-                result = await regionService.GetRegions(false, true);
-                cacheManager.Add(cachedMethods[0], result);
-            }
+            GetManyResult<Region> result = await regionService.GetRegions(false, true);
             if (result.Success)
             {
                 var entities = result.Entities.ToList();
-                List<DropdownDataStruct> dropdownDataList = new List<DropdownDataStruct>(); ;
+                List<DropdownDataStruct> dropdownDataList = new List<DropdownDataStruct>(); 
                 if (displaySubRegions)
                 {
                     entities.ForEach(e =>
                     {
-                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, values = e.Id, });
+                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, value = e.Id, });
                         if (e.SubRegions.Count() > 0)
                         {
                             e.SubRegions.ForEach(sub =>
                             {
-                                dropdownDataList.Add(new DropdownDataStruct { name = "  " + sub.Name, values = sub.Id, });
+                                dropdownDataList.Add(new DropdownDataStruct { name = "----" + sub.Name, value = sub.Id, });
                             });
                         }
                     });
@@ -132,35 +131,13 @@ namespace ViewWorld.Controllers.Trip
                     entities.Insert(0, new Region { Id = "-1", Name = "无", EnglishName = "null" });
                     entities.ForEach(e =>
                     {
-                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, values = e.Id, });
+                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, value = e.Id, });
                     });
                 }
                 var data = new
                 {
                     success = result.Success,
                     results = dropdownDataList
-                };
-                return OriginJson(data);
-            }
-            return ErrorJson("服务器内部错误，请稍后再试");
-        }
-        public async Task<JsonResult> ListSubRegionsApi()
-        {
-            var result = (await regionService.GetRegions(false, false));
-            if (result.Success)
-            {
-                List<Region> subRegions = new List<Region>();
-                result.Entities.ToList().ForEach(r =>
-                {
-                    if (r.SubRegions.Count() > 0)
-                    {
-                        subRegions.AddRange(r.SubRegions);
-                    }
-                });
-                var data = new
-                {
-                    success = result.Success,
-                    results = subRegions.Select(r => new { name = r.Name, value = r.Id })
                 };
                 return OriginJson(data);
             }
