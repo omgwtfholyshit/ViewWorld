@@ -79,7 +79,7 @@
                     identifier: 'provider',
                     rules: [
                         {
-                            tyep: 'empty',
+                            type: 'empty',
                             prompt: '供应商不能为空'
                         }
                     ]
@@ -100,8 +100,15 @@
             return;
         }
         $submitButton.addClass('loading');
-        var $inputs = $form.find('input');
+        var $inputs = $form.find('input:visible, input#provider, textarea:visible');
         var data = {};
+        $inputs.each(function (index, input) {            
+            if ($(input).data('db-key')) {
+                data[$(input).data('db-key')] = $(input).val().trim();
+            }
+        });
+        data['providerName'] = $('input#provider').siblings('div.text').text();
+        console.log(data);
 
     }
     
