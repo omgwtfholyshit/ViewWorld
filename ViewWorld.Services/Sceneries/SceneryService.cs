@@ -29,6 +29,36 @@ namespace ViewWorld.Services.Sceneries
             return await Repo.DeleteOneAsync<Scenery>(id);
         }
 
+        public async Task<GetOneResult<Scenery>> RetrieveEntitiesById(GetListResult<Scenery> cachedData, string id)
+        {
+            GetOneResult<Scenery> result = new GetOneResult<Scenery>() { Entity = null, ErrorCode = 300, Message = "", Success = false };
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Message = "id不能为空";
+                return result;
+            }
+            
+            if(cachedData != null)
+            {
+                var entity =  cachedData.Entities.FirstOrDefault(s => s.Id == id);
+                if(entity!=null)
+                {
+                    result.Success = true;
+                    result.Entity = entity;
+                    result.ErrorCode = 200;
+                }
+                else
+                {
+                    result.Message = "找不到该景点";
+                }
+            }
+            else
+            {
+                result = await Repo.GetOneAsync<Scenery>(id);
+            }
+            return result;
+        }
+
         public async Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))

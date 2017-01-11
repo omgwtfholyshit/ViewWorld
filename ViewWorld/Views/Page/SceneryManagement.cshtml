@@ -21,14 +21,14 @@
         <table class="ui compact celled table" id="dataTable">
             <thead>
                 <tr class="center aligned">
-                    <th class="left aligned">景点名称</th>
-                    <th class="left aligned">英文名称</th>
-                    <th class="">标识</th>
-                    <th class="">发布者</th>
-                    <th class="">发布时间</th>
-                    <th class="">修改者</th>
-                    <th class="">修改时间</th>
-                    <th class="">热度</th>
+                    <th>景点名称</th>
+                    <th>英文名称</th>
+                    <th>标识</th>
+                    <th>发布者</th>
+                    <th>发布时间</th>
+                    <th>修改者</th>
+                    <th>修改时间</th>
+                    <th>热度</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -40,7 +40,7 @@
 
         </table>
     </div>
-    <div class="ui small modal scenery-editor add">
+    <div class="ui long modal scenery-editor add">
         <i class="close icon"></i>
         <div class="header">
             编辑分类信息
@@ -57,7 +57,7 @@
                         </div>
                         <div class="six wide field">
                             <label>发布人</label>
-                            <input type="text" min="0" name="Publisher" value="@User.Identity.Name" disabled>
+                            <input type="text" name="Publisher" value="@User.Identity.Name" disabled>
                         </div>
                     </div>
                     <div class="two fields">
@@ -84,6 +84,13 @@
                     <div class="field">
                         <label>景点地址</label>
                         <input type="text" name="Address" placeholder="请输入地址" value="" data-db-key="Address">
+                    </div>
+                    <div class="field">
+                        <label>景点图片</label>
+                        <ul id="sceneryPhotos">
+                            
+                        </ul>
+                        <div class="clearboth"></div>
                     </div>
                     <div class="ui error message">
                     </div>
