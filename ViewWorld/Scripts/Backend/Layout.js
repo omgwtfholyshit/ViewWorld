@@ -21,6 +21,11 @@
                 $('.nickname').html(data.data.Nickname);
                 $('.avatar.image').attr('src', data.data.Avatar);
                 $('.header-right').transition('fade')
+            } else {
+                $.tip(".message-container", data.message, "请重新登陆,4秒后为您跳转....", "negative", 4);
+                setTimeout(function () {
+                    location.href = "../Page/Login?returnUrl=" + location.pathname;
+                }, 4000)
             }
         })
     }

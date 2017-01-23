@@ -35,9 +35,9 @@ namespace ViewWorld.Core.Dal
                 if (entity != null)
                 {
                     res.Entity = entity;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)
@@ -74,9 +74,9 @@ namespace ViewWorld.Core.Dal
                 if (entity != null)
                 {
                     res.Entity = entity;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)
@@ -124,9 +124,9 @@ namespace ViewWorld.Core.Dal
                 if (entities != null)
                 {
                     res.Entities = entities;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)
@@ -145,9 +145,9 @@ namespace ViewWorld.Core.Dal
                 if (entities != null)
                 {
                     res.Entities = entities;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)
@@ -179,9 +179,9 @@ namespace ViewWorld.Core.Dal
                 if (entities != null)
                 {
                     res.Entities = entities;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)
@@ -205,9 +205,9 @@ namespace ViewWorld.Core.Dal
                 if (entities != null)
                 {
                     res.Entities = entities;
+                    res.Success = true;
+                    res.ErrorCode = 200;
                 }
-                res.Success = true;
-                res.ErrorCode = 200;
                 return res;
             }
             catch (Exception ex)

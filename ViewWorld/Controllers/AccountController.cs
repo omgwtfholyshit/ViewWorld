@@ -597,18 +597,25 @@ namespace ViewWorld.Controllers
         #region 自定义获取用户信息
         [HttpGet]
         [OutputCache(Location =System.Web.UI.OutputCacheLocation.Server,Duration =1200)]
+        [Authorize]
         public async Task<JsonResult> GetUserInfo()
         {
-            var Result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
-            if (!System.IO.File.Exists(Result.Entity.Avatar))
-                Result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
-            var data = new
+            var result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
+            if (result.Success)
             {
-                Username = Result.Entity.UserName,
-                Nickname = Result.Entity.NickName,
-                Avatar = Result.Entity.Avatar,
-            };
-            return Json(data);
+                if (!System.IO.File.Exists(result.Entity.Avatar))
+                    result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
+                var data = new
+                {
+                    Username = result.Entity.UserName,
+                    Nickname = result.Entity.NickName,
+                    Avatar = result.Entity.Avatar,
+                };
+                return Json(data);
+            }
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            RemoveOutputCacheItem("GetUserInfo", "Account");
+            return ErrorJson("登录信息有误");
         }
         #endregion
         #region 自定义修改用户信息

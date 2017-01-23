@@ -226,6 +226,10 @@ namespace ViewWorld.Controllers.Trip
             }
             
         }
+        public async Task<JsonResult> UploadSceneryPhotos(string sceneryId)
+        {
+            return SuccessJson();
+        }
         [HttpGet]
         public async Task<ActionResult> _PartialSceneryTable(string keyword)
         {

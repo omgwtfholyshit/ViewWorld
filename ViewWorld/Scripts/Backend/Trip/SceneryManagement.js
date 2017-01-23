@@ -28,6 +28,45 @@
         $('.header-left input').on('keyup', function (e) {
             $('.header-left .search.icon').click();
         })
+        $('#fileUpload').fileupload({
+            dataType: 'json',
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            previewMaxWidth: 100,
+            previewMaxHeight: 100,
+            previewCrop: true,
+            add: function (e, data) {
+                //console.log(data)
+                data.context = $('<div/>').appendTo('#files');
+                console.log(data.files)
+                $.each(data.files, function (index, file) {
+                    var node = $('<p/>')
+                            .append($('<span/>').text(file.name));
+                    if (!index) {
+                        node
+                            .append('<br>')
+                        //var canvas = data.files[0].preview;
+                        //var dataURL = canvas.toDataURL();
+                        //$("#some-image").css("background-image", 'url(' + dataURL + ')');
+                    }
+                    node.appendTo(data.context);
+                });
+            },
+            done: function (e, data) {
+                console.log(data);
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+                //data.context.text('Upload finished.');
+            },
+            progressall: function (e, data) {
+                console.log(data);
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }
+        })
         InitFormValidator();
         $('#submitForm').on('click', function () {
             $('.scenery-editor .ui.form').form('validate form');
@@ -40,6 +79,7 @@
             var $dataSource = $(e.target).closest('tr'), $form = $(".scenery-editor .ui.form");
             LoadSceneryPhtotos($dataSource.data('id'));
             FillForm($dataSource, $form);
+            $('.scenery-editor.add').addClass('modifying').modal('show');
         }).delegate('.sceneryPhoto add-photo', 'click', function () {
 
         })
@@ -98,7 +138,7 @@
                 }
                 html += '<li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;"></li>';
                 $sceneryPhotos.html(html);
-                $('.scenery-editor.add').addClass('modifying').modal('show');
+                $('.scenery-editor.add').modal('refresh');
             },
             error: function (data) {
                 console.log(data);
