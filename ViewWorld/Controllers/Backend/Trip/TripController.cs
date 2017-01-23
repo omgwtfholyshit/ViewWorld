@@ -214,6 +214,19 @@ namespace ViewWorld.Controllers.Trip
             return ErrorJson("服务器内部错误，请稍后再试");
         }
         [HttpGet]
+        public async Task<JsonResult> ListSceneryPhotos(string sceneryId)
+        {
+            var result = await sceneryService.RetrieveEntitiesById(cacheManager.Get(cachedMethods[1]) as GetListResult<Scenery>,sceneryId);
+            if(result.Success)
+            {
+                return Json(result.Entity.Photos);
+            }else
+            {
+                return ErrorJson(result.Message);
+            }
+            
+        }
+        [HttpGet]
         public async Task<ActionResult> _PartialSceneryTable(string keyword)
         {
             GetListResult<Scenery> result;

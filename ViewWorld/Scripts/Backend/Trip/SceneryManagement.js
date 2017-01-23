@@ -1,11 +1,12 @@
 ﻿$(function () {
-    var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), globalVar = { Id: "", ParentSceneryId: "", }, openedCategory = new Array();
+    var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), $sceneryPhotos = $('#sceneryPhotos'), globalVar = { Id: "", ParentSceneryId: "", };
     var api = {
         modalCategory: '/Trip/ListRegionsAPI?displaySubRegions=true',
         tablePartial: '/Trip/_PartialSceneryTable',
         addScenery: '/Trip/AddScenery',
         deleteScenery: '/Trip/DeleteScenery',
         changeScenery: '/Trip/UpdateScenery',
+        photos: '/Trip/ListSceneryPhotos',
     }
     function BindEvents() {
         $('#addScenery').on('click', function () {
@@ -19,7 +20,6 @@
         })
         $('#clear').on('click', function () {
             $('.header-left input').val('');
-            openedCategory.splice(0);
             BuildTable();
         })
         $('.header-left .search.icon').on('click', function (e) {
@@ -32,37 +32,16 @@
         $('#submitForm').on('click', function () {
             $('.scenery-editor .ui.form').form('validate form');
         })
-        $table.delegate('i.caret', 'click', function (e) {
-            $target = $(e.target);
-            if ($target.hasClass('open')) {
-                $target.removeClass('open')
-                $('.' + $target.closest('tr').data('id')).transition('fly up')
-                openedCategory.splice(openedCategory.findIndex(function (element) { return element == '.' + $target.closest('tr').data('id');}), 1);
-            } else {
-                $target.addClass('open')
-                $('.' + $target.closest('tr').data('id')).transition('fly down')
-                openedCategory.push('.' + $target.closest('tr').data('id'));
-            }
-        }).delegate('button.delete', 'click', function (e) {
+        $table.delegate('button.delete', 'click', function (e) {
             var modal = $('.scenery-editor.confirm.modal'),$dataSource=$(e.target).closest('tr');
             modal.find('.content span').html($dataSource.data('name'));
-            globalVar.Id = $dataSource.data('id');
-            globalVar.ParentSceneryId = $dataSource.data('parent');
             modal.modal('show');
         }).delegate('button.modify', 'click', function (e) {
             var $dataSource = $(e.target).closest('tr'), $form = $(".scenery-editor .ui.form");
+            LoadSceneryPhtotos($dataSource.data('id'));
             FillForm($dataSource, $form);
-            $('.scenery-editor.add').addClass('modifying').modal('show')
-        })
-        $('.scenery-editor.confirm.modal .button.positive').on('click', function (e) {
-            $.get(api.deleteScenery, { id: globalVar.Id, parentId: globalVar.ParentSceneryId }, function (result) {
-                if (result.Success) {
-                    $.tip(".message-container", "删除成功", "分类已删除", "positive", 4);
-                    BuildTable();
-                } else {
-                    $.tip(".message-container", "删除失败", result.Message, "negative", 4);
-                }
-            })
+        }).delegate('.sceneryPhoto add-photo', 'click', function () {
+
         })
     }
     function BuildTable(keyword) {
@@ -84,9 +63,6 @@
                 success: function (data) {
                     $table.removeClass('loading');
                     $table.hide().html(data).transition('fade in');
-                    $.each(openedCategory, function (index, ele) {
-                        $(ele).transition('fade in');
-                    })
                 },
                 error: function (data) { $table.find('td.loading').removeClass('loading').html("服务器超时，请稍后重试！"); $.tip(".message-container", "载入失败", "服务器超时，请稍后重试！", "negative", 4); }
             })
@@ -98,6 +74,35 @@
                 url: api.modalCategory,
                 saveRemoteData: false,
             },
+        })
+    }
+    function LoadSceneryPhtotos(sceneryId) {
+        $.ajax({
+            url: api.photos,
+            method: 'get',
+            beforeSend: function () {
+               
+            },
+            data: {
+                sceneryId: sceneryId,
+            },
+            success: function (data) {
+                console.log(data);
+                var html = "";
+                if (data.status == 200) {
+                    if (data.data.length > 0) {
+                        $.each(data.data, function (index, element) {
+                            html += '<li class="sceneryPhoto" style="background:url(' + element + ')no-repeat;background-position: center;background-size: contain;"></li>';
+                        })
+                    }
+                }
+                html += '<li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;"></li>';
+                $sceneryPhotos.html(html);
+                $('.scenery-editor.add').addClass('modifying').modal('show');
+            },
+            error: function (data) {
+                console.log(data);
+            }
         })
     }
     function InitFormValidator() {
@@ -135,8 +140,6 @@
         $form.find('input[name="SortOrder"]').val($dataSource.data('sort'));
         $form.find('input[name="EnglishName"]').val($dataSource.data('englishname'));
         $form.find('input[name="Initial"]').val($dataSource.data('initial'));
-        globalVar.Id = $dataSource.data('id')
-        globalVar.ParentSceneryId = $dataSource.data('parent');
         if ($dataSource.data('isdisplay') == "True") {
             $form.find('.checkbox').checkbox('check');
         } else {
@@ -161,33 +164,33 @@
         });
         if (!$button.hasClass('loading')) {
             if ($('.scenery-editor.add').hasClass('modifying')) {
-                model['Id'] = globalVar.Id
-                $.ajax({
-                    url: api.changeScenery,
-                    method: 'post',
-                    beforeSend: function () {
-                        $button.addClass('loading');
-                    },
-                    data: {
-                        model: model,
-                        prevParentId: globalVar.ParentSceneryId,
-                        __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
-                    },
-                    success: function (data) {
-                        if (data.Success) {
-                            $form[0].reset();
-                            $button.removeClass('loading');
-                            $.tip(".message-container", "操作成功", "分类已更新成功", "positive", 4);
-                            BuildTable();
-                        } else {
-                            $button.removeClass('loading');
-                            $.tip(".message-container", "保存失败", data.Message, "negative", 4);
-                            return false;
-                        }
+                //model['Id'] = globalVar.Id
+                //$.ajax({
+                //    url: api.changeScenery,
+                //    method: 'post',
+                //    beforeSend: function () {
+                //        $button.addClass('loading');
+                //    },
+                //    data: {
+                //        model: model,
+                //        prevParentId: globalVar.ParentSceneryId,
+                //        __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
+                //    },
+                //    success: function (data) {
+                //        if (data.Success) {
+                //            $form[0].reset();
+                //            $button.removeClass('loading');
+                //            $.tip(".message-container", "操作成功", "分类已更新成功", "positive", 4);
+                //            BuildTable();
+                //        } else {
+                //            $button.removeClass('loading');
+                //            $.tip(".message-container", "保存失败", data.Message, "negative", 4);
+                //            return false;
+                //        }
 
-                    },
-                    error: function (data) { $button.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
-                })
+                //    },
+                //    error: function (data) { $button.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
+                //})
             } else {
                 $.ajax({
                     url: api.addScenery,

@@ -136,7 +136,7 @@
             onFailure: function (formErrors, fields) {
                 console.log(formErrors)
             }
-
+            
         })
     }
     function FillForm($dataSource,$form) {
@@ -153,7 +153,6 @@
         }
         if (typeof $dataSource.data('parentname') == "undefined" || $dataSource.data('parentname') == "-1") {
             $modalCatDropDown.find('input').click().after(function () { $modalCatDropDown.dropdown("set selected", "无") })
-            
         } else {
             $modalCatDropDown.find('input').click();
             setTimeout(function () { $modalCatDropDown.dropdown("set selected", $dataSource.data('parentname')) },500);

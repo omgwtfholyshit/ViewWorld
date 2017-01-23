@@ -206,9 +206,6 @@ body{
     .tool-bar,.table-container{
         padding:0.5rem;
     }
-    .padleft54{
-        padding-left:5.4rem!important;
-    }
      i.caret{
         transition:all ease-in-out 0.3s;
         cursor:pointer;
@@ -219,4 +216,14 @@ body{
 }
 .region-editor .form-container,.scenery-editor .form-container{
     width:100%;
+    ul{
+        list-style-type:none;
+        padding:0;
+        margin:0;
+        .sceneryPhoto{
+            width:15rem;
+            height:12rem;
+            float:left;
+        }
+    }
 }

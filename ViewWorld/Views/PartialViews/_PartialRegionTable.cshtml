@@ -6,11 +6,14 @@
         {
             <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="-1" data-sort="@item.SortOrder" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-isdisplay="@item.IsVisible">
                 <td class="five wide left aligned collapsing">
-                    <div class="ui ribbon label">主分类</div>
-                    @item.Name
-                    <i class="caret left icon"></i>
+                    @*<div class="ui ribbon label">主分类</div>*@
+                    <div class="center aligned">
+                        @item.Name
+                        <i class="caret left icon"></i>
+                    </div>
+                   
                 </td>
-                <td class="five wide left aligned">@item.EnglishName</td>
+                <td class="five wide">@item.EnglishName</td>
                 <td class="one wide">@item.Initial</td>
                 <td class="one wide">
                     <div class="ui checkbox">
@@ -43,10 +46,10 @@
                 foreach (var sub in item.SubRegions.OrderBy(r => r.SortOrder))
                 {
                     <tr class="center aligned hidden @item.Id" data-id="@sub.Id" data-name="@sub.Name" data-parent="@sub.ParentRegionId" data-parentname="@item.Name" data-sort="@sub.SortOrder" data-englishname="@sub.EnglishName" data-initial="@sub.Initial" data-isdisplay="@sub.IsVisible">
-                        <td class="five wide left aligned collapsing padleft54">
+                        <td class="five wide collapsing">
                             @sub.Name
                         </td>
-                        <td class="five wide left aligned">@sub.EnglishName</td>
+                        <td class="five wide">@sub.EnglishName</td>
                         <td class="one wide">@sub.Initial</td>
                         <td class="one wide">
                             <div class="ui checkbox">
