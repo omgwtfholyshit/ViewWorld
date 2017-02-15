@@ -5,6 +5,11 @@
 .ui, .ui.input input, .ui.form input:not([type]), .ui.form input[type="date"], .ui.form input[type="datetime-local"], .ui.form input[type="email"], .ui.form input[type="number"], .ui.form input[type="password"], .ui.form input[type="search"], .ui.form input[type="tel"], .ui.form input[type="time"], .ui.form input[type="text"], .ui.form input[type="file"], .ui.form input[type="url"], h1, h2, h3, h4, h5, .ui.modal > .header, .content .header {
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important; }
 
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0; }
+
 .grey {
   color: #999; }
 
@@ -201,12 +206,13 @@ body {
 
 .region-editor .form-container, .scenery-editor .form-container {
   width: 100%; }
-  .region-editor .form-container ul, .scenery-editor .form-container ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0; }
-    .region-editor .form-container ul .sceneryPhoto, .scenery-editor .form-container ul .sceneryPhoto {
-      width: 15rem;
-      height: 12rem;
-      float: left; }
+  .region-editor .form-container #photoList .sceneryPhoto, .scenery-editor .form-container #photoList .sceneryPhoto {
+    width: 15rem;
+    height: 12rem;
+    float: left; }
+  .region-editor .form-container #photoList #fileUpload, .scenery-editor .form-container #photoList #fileUpload {
+    width: 100%;
+    height: 100%;
+    opacity: 0 !important;
+    cursor: pointer; }
 

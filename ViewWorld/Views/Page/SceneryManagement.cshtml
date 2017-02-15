@@ -116,11 +116,13 @@
                     </div>
                     <div class="field">
                         <label>景点图片</label>
-                        <ul id="sceneryPhotos">
-                            
+                        <ul id="photoList">
+                            <li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;">
+                                <input id="fileUpload" type="file" name="files[]" data-url="/Trip/UploadSceneryPhotos?sceneryId=" multiple>
+                            </li>
                         </ul>
-                      
-                        <input id="fileUpload" type="file" name="files[]" data-url="/Trip/UploadSceneryPhotos?sceneryId=" multiple>
+                      <div class="clearboth"></div>
+                        
                         <div id="progress" class="progress">
                             <div class="progress-bar progress-bar-success" ></div>
                         </div>

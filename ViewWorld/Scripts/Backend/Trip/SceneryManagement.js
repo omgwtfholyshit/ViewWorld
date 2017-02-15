@@ -1,5 +1,6 @@
 ﻿$(function () {
-    var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), $sceneryPhotos = $('#sceneryPhotos'), globalVar = { Id: "", ParentSceneryId: "", };
+    var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), $sceneryPhotos = $('#photoList'),
+        globalVar = { Id: "", fileUpload: "" };
     var api = {
         modalCategory: '/Trip/ListRegionsAPI?displaySubRegions=true',
         tablePartial: '/Trip/_PartialSceneryTable',
@@ -28,45 +29,7 @@
         $('.header-left input').on('keyup', function (e) {
             $('.header-left .search.icon').click();
         })
-        $('#fileUpload').fileupload({
-            dataType: 'json',
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            previewMaxWidth: 100,
-            previewMaxHeight: 100,
-            previewCrop: true,
-            add: function (e, data) {
-                //console.log(data)
-                data.context = $('<div/>').appendTo('#files');
-                console.log(data.files)
-                $.each(data.files, function (index, file) {
-                    var node = $('<p/>')
-                            .append($('<span/>').text(file.name));
-                    if (!index) {
-                        node
-                            .append('<br>')
-                        //var canvas = data.files[0].preview;
-                        //var dataURL = canvas.toDataURL();
-                        //$("#some-image").css("background-image", 'url(' + dataURL + ')');
-                    }
-                    node.appendTo(data.context);
-                });
-            },
-            done: function (e, data) {
-                console.log(data);
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo(document.body);
-                });
-                //data.context.text('Upload finished.');
-            },
-            progressall: function (e, data) {
-                console.log(data);
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .bar').css(
-                    'width',
-                    progress + '%'
-                );
-            }
-        })
+        InitFileUpload();
         InitFormValidator();
         $('#submitForm').on('click', function () {
             $('.scenery-editor .ui.form').form('validate form');
@@ -76,17 +39,68 @@
             modal.find('.content span').html($dataSource.data('name'));
             modal.modal('show');
         }).delegate('button.modify', 'click', function (e) {
+            
             var $dataSource = $(e.target).closest('tr'), $form = $(".scenery-editor .ui.form");
-            LoadSceneryPhtotos($dataSource.data('id'));
+            globalVar.Id = $dataSource.data('id');
+            var uploadUrl = '/Trip/UploadSceneryPhotos?sceneryId=' + globalVar.Id;
+            $('#fileUpload').fileupload({ url: uploadUrl });
+            InitFileUpload();
+            LoadSceneryPhtotos();
             FillForm($dataSource, $form);
             $('.scenery-editor.add').addClass('modifying').modal('show');
         }).delegate('.sceneryPhoto add-photo', 'click', function () {
 
         })
     }
+    function InitFileUpload() {
+        $('#fileUpload').fileupload({
+            dataType: 'json',
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|bmp)$/i,
+            maxFileSize: 999000,
+            disableImageResize: false,
+            imageMaxWidth: 800,
+            imageMaxHeight: 800,
+            imageCrop: true,
+            singleFileUploads: true,
+            limitMultiFileUploads: 5,
+            done: function (e, data) {
+                //console.log(data.result);
+                var result = data.result;
+                var fileNames;
+                if (result.status == 300) {
+                    if (result.message.indexOf(',') != -1) {
+                        fileNames = result.message.split(',');
+                    }
+                }
+                $.each(data.files, function (index, file) {
+                    if (typeof fileNames != "undefined" && fileNames.indexOf(file.name) != -1) {
+                        $('<p/>').text(file.name + "上传失败").appendTo(data.context);
+                    } else {
+                        $('<p/>').text(file.name).appendTo(data.context);
+                    }
+                });
+                //data.context.text('Upload finished.');
+            },
+            progress: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                console.log(data.files[0].name + "     " + progress);
+                //console.log(data);
+            },
+            progressall: function (e, data) {
+                //console.log(e);
+                //console.log(data);
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+                );
+            },
+
+        }).bind('fileuploadadd', function (e, data) { console.log(data) });
+    }
     function BuildTable(keyword) {
         var loadingHtml = '<tr class="center aligned"><td colspan="9" class="ui loading segment" height="150px"></td></tr>';
-        if (typeof keyword == "undefiend")
+        if (typeof keyword == "undefined")
             keyword = '';
 
         if (!$table.hasClass('loading')) {
@@ -116,15 +130,15 @@
             },
         })
     }
-    function LoadSceneryPhtotos(sceneryId) {
+    function LoadSceneryPhtotos() {
         $.ajax({
             url: api.photos,
             method: 'get',
             beforeSend: function () {
-               
+                console.log(globalVar.Id);
             },
             data: {
-                sceneryId: sceneryId,
+                sceneryId: globalVar.Id,
             },
             success: function (data) {
                 console.log(data);
@@ -136,8 +150,8 @@
                         })
                     }
                 }
-                html += '<li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;"></li>';
-                $sceneryPhotos.html(html);
+               // html += '<li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;"></li>';
+                $sceneryPhotos.append(html);
                 $('.scenery-editor.add').modal('refresh');
             },
             error: function (data) {

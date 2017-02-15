@@ -10,9 +10,11 @@ using ViewWorld.Services.Regions;
 using CacheManager.Core;
 using ViewWorld.Services.Sceneries;
 using ViewWorld.Core.Models;
+using System.Web;
 
 namespace ViewWorld.Controllers.Trip
 {
+    [AllowAnonymous]
     public class TripController : BaseController
     {
         #region Constructor
@@ -165,6 +167,7 @@ namespace ViewWorld.Controllers.Trip
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> AddScenery(Scenery model)
         {
+            
             if (ModelState.IsValid)
             {
                 var result = await sceneryService.AddEntity(model);
@@ -216,19 +219,18 @@ namespace ViewWorld.Controllers.Trip
         [HttpGet]
         public async Task<JsonResult> ListSceneryPhotos(string sceneryId)
         {
-            var result = await sceneryService.RetrieveEntitiesById(cacheManager.Get(cachedMethods[1]) as GetListResult<Scenery>,sceneryId);
-            if(result.Success)
-            {
-                return Json(result.Entity.Photos);
-            }else
-            {
-                return ErrorJson(result.Message);
-            }
-            
+            var result = await sceneryService.ListPhotos(sceneryId);
+            return Json(result);
+
         }
         public async Task<JsonResult> UploadSceneryPhotos(string sceneryId)
         {
-            return SuccessJson();
+            Result result = await sceneryService.UploadPhoto(Request.Files,sceneryId);
+            if (result.Success)
+            {
+                return SuccessJson();
+            }
+            return ErrorJson(result.Message);
         }
         [HttpGet]
         public async Task<ActionResult> _PartialSceneryTable(string keyword)

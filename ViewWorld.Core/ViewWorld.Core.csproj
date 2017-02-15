@@ -34,18 +34,6 @@
       <HintPath>..\packages\AspNet.Identity.MongoDB.2.0.8\lib\net45\AspNet.Identity.MongoDB.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CacheManager.Core, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
-      <HintPath>..\packages\CacheManager.Core.0.9.2\lib\net45\CacheManager.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CacheManager.StackExchange.Redis, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
-      <HintPath>..\packages\CacheManager.StackExchange.Redis.0.9.2\lib\net45\CacheManager.StackExchange.Redis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CacheManager.SystemRuntimeCaching, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
-      <HintPath>..\packages\CacheManager.SystemRuntimeCaching.0.9.2\lib\net45\CacheManager.SystemRuntimeCaching.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -129,6 +117,7 @@
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\SexType.cs" />
     <Compile Include="Enum\TripPlanType.cs" />
+    <Compile Include="ExtensionMethods\DirectoryExtensions.cs" />
     <Compile Include="ExtensionMethods\MongoDbResultExtensions.cs" />
     <Compile Include="Interfaces\ICRUDable.cs" />
     <Compile Include="JsonNetResult.cs" />

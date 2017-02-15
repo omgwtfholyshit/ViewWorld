@@ -43,7 +43,6 @@
     }
 }(function ($, loadImage) {
     'use strict';
-
     // Prepend to the default processQueue:
     $.blueimp.fileupload.prototype.options.processQueue.unshift(
         {

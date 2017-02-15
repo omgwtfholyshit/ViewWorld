@@ -1,18 +1,22 @@
 ﻿using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.ExtensionMethods;
 using ViewWorld.Core.Models.TripModels;
+using ViewWorld.Utils;
 
 namespace ViewWorld.Services.Sceneries
 {
     public class SceneryService : ISceneryService
     {
         private readonly IMongoDbRepository Repo;
+        const string photoDirectory = "/Upload/Sceneries/";
         public SceneryService(IMongoDbRepository _Repo)
         {
             this.Repo = _Repo;
@@ -109,14 +113,54 @@ namespace ViewWorld.Services.Sceneries
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
-        public async Task<Result> UpdatePhotos(List<string> photoList)
+        public async Task<Result> UpdatePhoto(List<string> photoList)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> UploadPhotos()
+        public Task<Result> UploadPhoto(HttpFileCollectionBase files, string id)
         {
-            throw new NotImplementedException();
+            var result = new Result() { ErrorCode = 300, Message = "", Success = false };
+            HttpPostedFileBase file;
+            try
+            {
+                for(int i = 0; i < files.AllKeys.Count(); i++)
+                {
+                    file = files[i];
+                    string savePath = PathHelper.MapPath(photoDirectory + id + "/");
+                    if (!ImageHelper.CheckImageByFileExtension(Path.GetExtension(file.FileName)))
+                    {
+                        result.Message += file.FileName + ',';
+                    }
+                    else
+                    {
+                        string filePath = savePath + Tools.GenerateId_M1() + Path.GetExtension(file.FileName).ToLower();
+                        if (!Directory.Exists(savePath))
+                            Directory.CreateDirectory(savePath);
+                        file.SaveAs(filePath);
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(result.Message))
+                {
+                    result.Success = true;
+                    result.ErrorCode = 200;
+                }
+                return Task.FromResult(result);
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                return Task.FromResult(result);
+            }
+            
+        }
+
+        public Task<List<string>> ListPhotos(string id)
+        {
+            List<string> result = new List<string>();
+            string photoPath = PathHelper.MapPath(photoDirectory + id + "/");
+            result.AddRange(Directory.EnumerateFiles(photoPath).ToVirtualPaths());
+            return Task.FromResult(result);
         }
     }
 }

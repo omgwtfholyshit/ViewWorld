@@ -1,6 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ViewWorld.Utils
 {
@@ -89,6 +91,24 @@ namespace ViewWorld.Utils
                 tempG.Dispose();
             }
 
+        }
+        public static bool CheckImageByFileExtension(string fileExtension)
+        {
+            return Regex.IsMatch(fileExtension.ToLower(), @"(\.|\/)(gif|jpe?g|png|bmp)");
+        }
+        public static bool CheckImageByFile(string filePath)
+        {
+            try
+            {
+                using (Image img = Image.FromFile(filePath))
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
