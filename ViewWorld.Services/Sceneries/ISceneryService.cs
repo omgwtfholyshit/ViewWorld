@@ -18,8 +18,8 @@ namespace ViewWorld.Services.Sceneries
         /// </summary>
         /// <param name="photoList"></param>
         /// <returns></returns>
-        Task<Result> UpdatePhoto(List<string> photoList);
         Task<Result> UploadPhoto(HttpFileCollectionBase files, string id);
+        Task<Result> DeletePhotoByFileName(string sceneryId, string fileName);
         Task<List<string>> ListPhotos(string id);
         Task<GetOneResult<Scenery>> RetrieveEntitiesById(GetListResult<Scenery> cachedData, string id);
         Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(GetListResult<Scenery> cachedData, string keyword);

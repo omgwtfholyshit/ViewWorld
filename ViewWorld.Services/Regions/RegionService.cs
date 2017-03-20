@@ -51,40 +51,54 @@ namespace ViewWorld.Services.Regions
         public async Task<Result> ChangeRegion(string parentId, string id, string destId)
         {
             Result result = new Result { ErrorCode = 300, Message = "", Success = false };
-            string[] ids = new string[2] { parentId, destId };
-            var regions = await Repo.GetManyAsync<Region>(ids);
-            if (regions.Success && regions.Entities.Count() == 2)
+            //if destId == -1, it means that changing a subregion into main region.
+            if (destId == "-1")
             {
-                try
-                {
-                    var parent = regions.Entities.ElementAt(0);
-                    var dest = regions.Entities.ElementAt(1);
-                    if (!parent.IsSubRegion && !dest.IsSubRegion)
-                    {
-                        var child = parent.SubRegions.Find(r => r.Id == id);
-                        dest.SubRegions.Add(child);
-                        await UpdateEntity(dest);
-                        parent.SubRegions.Remove(child);
-                        await UpdateEntity(parent);
-                        result.Success = true;
-                        result.ErrorCode = 200;
-                    }
-                    else
-                    {
-                        result.Message = "不能移动到子区域";
-                    }
-
-
-                }
-                catch (Exception e)
-                {
-                    result.Message = e.Message;
-                }
-
+                result.Message = "不能将子区域变更为主区域";
             }
+            //else just move the subregion from a main region to another;
             else
             {
-                result.Message = "找不到该区域";
+                string[] ids = new string[2] { parentId, destId };
+                var regions = await Repo.GetManyAsync<Region>(ids);
+                if (regions.Success && regions.Entities.Count() == 2)
+                {
+                    try
+                    {
+                        var parent = regions.Entities.Single(p => p.Id == parentId);
+                        var dest = regions.Entities.Single(d => d.Id == destId);
+                        if (!parent.IsSubRegion && !dest.IsSubRegion)
+                        {
+                            var child = parent.SubRegions.Find(r => r.Id == id);
+                            if (child != null)
+                            {
+                                child.ParentRegionId = dest.Id;
+                                dest.SubRegions.Add(child);
+                                await UpdateEntity(dest);
+                                parent.SubRegions.Remove(child);
+                                await UpdateEntity(parent);
+                                result.Success = true;
+                                result.ErrorCode = 200;
+                            }
+
+                        }
+                        else
+                        {
+                            result.Message = "不能移动到子区域";
+                        }
+
+
+                    }
+                    catch (Exception e)
+                    {
+                        result.Message = e.Message;
+                    }
+
+                }
+                else
+                {
+                    result.Message = "找不到该区域";
+                }
             }
             return result;
         }
@@ -230,8 +244,12 @@ namespace ViewWorld.Services.Regions
         {
             var parent = (await Repo.GetOneAsync<Region>(model.ParentRegionId)).Entity;
             var modelIndex = parent.SubRegions.FindIndex(r => r.Id == model.Id);
-            parent.SubRegions[modelIndex] = model;
-            return await UpdateEntity(parent);
+            if(modelIndex!=-1)
+            {
+                parent.SubRegions[modelIndex] = model;
+                return await UpdateEntity(parent);
+            }
+            return new Result() { ErrorCode = 300, Message = "找不到该区域", Success = false };
         }
         public Task<Result> DeleteEntityById(string id)
         {

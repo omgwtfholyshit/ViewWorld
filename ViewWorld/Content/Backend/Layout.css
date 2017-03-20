@@ -206,13 +206,56 @@ body {
 
 .region-editor .form-container, .scenery-editor .form-container {
   width: 100%; }
-  .region-editor .form-container #photoList .sceneryPhoto, .scenery-editor .form-container #photoList .sceneryPhoto {
+  .region-editor .form-container #photoListContainer li, .scenery-editor .form-container #photoListContainer li {
+    padding-bottom: 0.3rem; }
+  .region-editor .form-container #photoListContainer .sceneryPhoto, .scenery-editor .form-container #photoListContainer .sceneryPhoto {
     width: 15rem;
     height: 12rem;
-    float: left; }
-  .region-editor .form-container #photoList #fileUpload, .scenery-editor .form-container #photoList #fileUpload {
+    float: left;
+    position: relative;
+    overflow: hidden;
+    margin: 0.3rem; }
+    .region-editor .form-container #photoListContainer .sceneryPhoto img, .scenery-editor .form-container #photoListContainer .sceneryPhoto img {
+      position: absolute;
+      margin: auto;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; }
+  .region-editor .form-container #photoListContainer #photoList li:hover span, .scenery-editor .form-container #photoListContainer #photoList li:hover span {
+    opacity: 1; }
+  .region-editor .form-container #photoListContainer #photoList li span, .scenery-editor .form-container #photoListContainer #photoList li span {
+    float: right;
+    opacity: 0;
+    transition: all ease 0.4s;
+    cursor: pointer; }
+    .region-editor .form-container #photoListContainer #photoList li span i, .scenery-editor .form-container #photoListContainer #photoList li span i {
+      font-size: 1.5rem; }
+    .region-editor .form-container #photoListContainer #photoList li span:hover i, .scenery-editor .form-container #photoListContainer #photoList li span:hover i {
+      transform: scale(1.5);
+      transition: all ease 0.4s; }
+  .region-editor .form-container #photoListContainer #fileUpload, .scenery-editor .form-container #photoListContainer #fileUpload {
     width: 100%;
     height: 100%;
     opacity: 0 !important;
     cursor: pointer; }
+  .region-editor .form-container #photoListContainer #pendingList, .scenery-editor .form-container #photoListContainer #pendingList {
+    position: relative;
+    transition: all ease-in-out 0.5s; }
+    .region-editor .form-container #photoListContainer #pendingList .single-progress, .scenery-editor .form-container #photoListContainer #pendingList .single-progress {
+      width: 100%;
+      height: 100%;
+      opacity: 0.7;
+      background-color: white;
+      position: absolute; }
+    .region-editor .form-container #photoListContainer #pendingList .single-progress-text, .scenery-editor .form-container #photoListContainer #pendingList .single-progress-text {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      position: absolute; }
+      .region-editor .form-container #photoListContainer #pendingList .single-progress-text span, .scenery-editor .form-container #photoListContainer #pendingList .single-progress-text span {
+        top: 42%;
+        position: relative;
+        font-size: 1.5rem;
+        color: #5cb85c; }
 

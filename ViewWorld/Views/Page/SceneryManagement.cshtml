@@ -103,7 +103,7 @@
                     <div class="field">
                         <label>所属地区</label>
                         <div class="ui fluid search selection dropdown">
-                            <input type="hidden" name="parentName" value="-1" data-db-key="ParentsceneryId" class="parent">
+                            <input type="hidden" name="parentName" value="-1" data-db-key="regionid" class="parent">
                             <i class="dropdown icon"></i>
                             <div class="default text">所属地区</div>
                             <div class="menu">
@@ -116,10 +116,21 @@
                     </div>
                     <div class="field">
                         <label>景点图片</label>
-                        <ul id="photoList">
+                        <ul id="photoListContainer">
+                            <li>
+                                <ul id="photoList">
+                                </ul>
+                            </li>
                             <li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;">
                                 <input id="fileUpload" type="file" name="files[]" data-url="/Trip/UploadSceneryPhotos?sceneryId=" multiple>
                             </li>
+                            <li class="clearboth"></li>
+                            <li>
+                                <ul id="pendingList">
+
+                                </ul>
+                            </li>
+                           
                         </ul>
                       <div class="clearboth"></div>
                         

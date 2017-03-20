@@ -4,7 +4,7 @@
     {
         foreach (var item in Model)
         {
-            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-parent="-1" data-englishname="@item.EnglishName" data-initial="@item.Initial">
+            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-regionid="@item.RegionId" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-address="@item.Address">
                 <td class="three wide collapsing">
                     @item.Name
                 </td>

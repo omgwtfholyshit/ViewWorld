@@ -128,6 +128,7 @@
     <Compile Include="Models\Identity\ViewWorldIdentity.cs" />
     <Compile Include="Models\Identity\ViewWorldPrincipal.cs" />
     <Compile Include="Models\ProviderModels\Provider.cs" />
+    <Compile Include="Models\TripModels\CityInfo.cs" />
     <Compile Include="Models\TripModels\Region.cs" />
     <Compile Include="Models\TripModels\Scenery.cs" />
     <Compile Include="Models\TripModels\Schedule.cs" />

@@ -190,9 +190,19 @@ namespace ViewWorld.Controllers.Trip
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> UpdateScenery(Scenery model)
+        public async Task<JsonResult> UpdateScenery([Bind(Include = "Id,Name,EnglishName,Coordinate,Initial,Address,RegionId")] Scenery model)
         {
-            return OriginJson(await sceneryService.UpdateEntity(model));
+            if (ModelState.IsValid)
+            {
+                model.Modificator = User.Identity.Name;
+                var result = await sceneryService.UpdateEntity(model);
+                if (result.Success)
+                {
+                    cacheManager.Remove(cachedMethods[1]);
+                    return OriginJson(result);
+                }
+            }
+            return ErrorJson("Model Invalid");
         }
         public async Task<JsonResult> ListSceneriesAPI()
         {
@@ -222,6 +232,11 @@ namespace ViewWorld.Controllers.Trip
             var result = await sceneryService.ListPhotos(sceneryId);
             return Json(result);
 
+        }
+        [HttpDelete]
+        public async Task<JsonResult> DeleteSceneryPhotoByFileName(string sceneryId,string fileName)
+        {
+            return OriginJson(await sceneryService.DeletePhotoByFileName(sceneryId, fileName));
         }
         public async Task<JsonResult> UploadSceneryPhotos(string sceneryId)
         {

@@ -6,7 +6,7 @@
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
 /* jshint nomen:false */
@@ -43,6 +43,7 @@
     }
 }(function ($, loadImage) {
     'use strict';
+
     // Prepend to the default processQueue:
     $.blueimp.fileupload.prototype.options.processQueue.unshift(
         {
