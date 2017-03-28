@@ -40,7 +40,8 @@
                     method: 'delete',
                     data: {
                         sceneryId: globalVar.Id,
-                        fileName:globalVar.imageUrl
+                        fileName: globalVar.imageUrl,
+                        __RequestVerificationToken: $(".scenery-editor .ui.form").find('input[name="__RequestVerificationToken"]').val()
                     },
                     success: function (data) {
                         $modal.removeClass('delete-photo');
@@ -59,6 +60,7 @@
                     method: 'delete',
                     data: {
                         id: globalVar.Id,
+                        __RequestVerificationToken: $(".scenery-editor .ui.form").find('input[name="__RequestVerificationToken"]').val()
                     },
                     success: function (data) {
                         $modal.removeClass('delete-scenery');
@@ -152,12 +154,13 @@
                 //console.log(e);
                 //console.log(data);
                 var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .progress-bar').css(
-                    'width',
-                    progress + '%'
-                );
+                $('#progress').progress({ percent: progress, text: { active: '已上传{percent}%', success: '上传完毕' } });
                 if (progress == 100)
+                {
                     LoadSceneryPhtotos();
+                    $('#progress').progress({percent:0}).transition('fade out');
+                }
+                    
             },
 
         }).bind('fileuploadadd', function (e, data) {
@@ -177,8 +180,10 @@
                 });
                 if (++count === data.files.length) {
                     data.submit();
+                    $('#progress').transition('fade in');
                 }
             })
+
         })
     }
     function CleanUploadData() {
@@ -276,6 +281,10 @@
                 Initial: {
                     identifier: 'Initial',
                     rules: [{ type: 'regExp[^[a-zA-Z]$]', prompt: '分类标识仅限英文A-Z' }]
+                },
+                ExtraCost: {
+                    identifier: 'ExtraCost',
+                    rules: [{ type: 'regExp[^\\d+$]', prompt: '额外费用必须为非负整数' }]
                 }
             },
             onSuccess: function (event, fields) {
@@ -288,9 +297,9 @@
 
         })
     }
-    function FillForm($dataSource,$form) {
+    function FillForm($dataSource, $form) {
         $form.find('input[name="Name"]').val($dataSource.data('name'));
-        $form.find('input[name="SortOrder"]').val($dataSource.data('sort'));
+        $form.find('input[name="ExtraCost"]').val($dataSource.data('extracost'));
         $form.find('input[name="EnglishName"]').val($dataSource.data('englishname'));
         $form.find('input[name="Initial"]').val($dataSource.data('initial'));
         $form.find('input[name="Address"]').val($dataSource.data('address'));
@@ -301,7 +310,7 @@
         }
     }
     function SubmitForm($form) {
-        var $inputs = $form.find('.parent,input:visible, textarea:visible,input[name=IsVisible]').not('.search'),$button = $('#submitForm');
+        var $inputs = $form.find('.parent,input:visible, textarea:visible,input[name=IsVisible]').not('.search,#fileUpload'),$button = $('#submitForm');
         var model = {}, $input, outcome;
         $inputs.each(function (index, input) {
             $input = $(input);

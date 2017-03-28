@@ -4,7 +4,7 @@
     {
         foreach (var item in Model)
         {
-            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-regionid="@item.RegionId" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-address="@item.Address">
+            <tr class="center aligned" data-id="@item.Id" data-name="@item.Name" data-regionid="@item.RegionId" data-englishname="@item.EnglishName" data-initial="@item.Initial" data-address="@item.Address" data-extracost="@item.ExtraCost">
                 <td class="three wide collapsing">
                     @item.Name
                 </td>
@@ -15,6 +15,7 @@
                 <td class="one wide">@item.Modificator</td>
                 <td class="one wide">@item.LastUpdateAt.ToString()</td>
                 <td class="one wide">@item.Popularity</td>
+                <td class="one wide">@item.ExtraCost</td>
                 <td class="collapsing">
                     <button class="ui labeled blue icon button modify">
                         <i class="edit icon"></i>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -109,7 +110,6 @@ namespace ViewWorld.Utils
         {
             return DateTime.Now.ToString("yyMMdd") + (id % 10000).ToString("D4");
         }
-
         public static string Generate_Nickname()
         {
             string name = string.Empty;

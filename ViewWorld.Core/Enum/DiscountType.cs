@@ -9,7 +9,7 @@ namespace ViewWorld.Core.Enum
     public enum DiscountType
     {
         百分比,
-        折扣,
+        减价,
         无折扣
     }
 }

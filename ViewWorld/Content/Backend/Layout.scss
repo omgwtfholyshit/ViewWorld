@@ -133,7 +133,7 @@ body{
         color:white;
         p{font-size:0.6em;color:#ccc;padding-top:5px;} 
     }
-
+    
 }
 .ui.modal.admin-modal {
     padding-left: 20px;
@@ -202,7 +202,7 @@ body{
 /************************************
     Region & Scenery
 ************************************/
-.region-management,.scenery-management{
+.region-management,.scenery-management,.city-management,.trip-management{
    
     .tool-bar,.table-container{
         padding:0.5rem;
@@ -214,8 +214,54 @@ body{
     .open{
         transform:rotate(-90deg)!important;
     }
+    #tripContext{
+        .field label{min-width:4.5rem;}
+    }
+    //ueditor
+    .edui-default{
+        z-index:1!important;
+        .edui-editor-iframeholder{min-height:150px;}
+    }
+    #commonInfo{
+    .inline.fields>.three.wide.field{min-width:20rem;}
+    #photoListContainer{
+        .saved-photo{
+            li{
+               width:10rem;height:11rem;display:inline-block;position:relative;
+               div{height:8rem;width:100%;position:absolute;}
+               span{position:absolute;height:2rem;bottom:1rem;}
+            }
+        }
+        .green.button{
+            position:relative;
+            #fileUpload{
+               position: absolute;
+               width: 15rem;
+               height: 15rem;
+               left: -5rem;
+               top: -1rem;
+            }
+        }
+       
+        .photo-item{
+            display:inline-block;
+            margin:1em 0;
+            vertical-align:top;
+            margin:0 0.2rem 1rem 0.2rem;
+            .image{
+                height:13rem;
+                overflow:hidden;
+                img{width:100%}
+            }
+        }
+    }
+    
 }
-.region-editor .form-container,.scenery-editor .form-container{
+    #productInfo{
+        .scenery-selection{display:inline-block;min-width:14rem}
+    }
+}
+.region-editor .form-container,.scenery-editor .form-container,#commonInfo{
     width:100%;
     #photoListContainer{
         li{
@@ -270,4 +316,5 @@ body{
            }
        }
     }
+    
 }

@@ -116,7 +116,7 @@
     <Compile Include="Enum\CurrencyType.cs" />
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\SexType.cs" />
-    <Compile Include="Enum\TripPlanType.cs" />
+    <Compile Include="Enum\TripType.cs" />
     <Compile Include="ExtensionMethods\DirectoryExtensions.cs" />
     <Compile Include="ExtensionMethods\MongoDbResultExtensions.cs" />
     <Compile Include="Interfaces\ICRUDable.cs" />
@@ -129,11 +129,12 @@
     <Compile Include="Models\Identity\ViewWorldPrincipal.cs" />
     <Compile Include="Models\ProviderModels\Provider.cs" />
     <Compile Include="Models\TripModels\CityInfo.cs" />
+    <Compile Include="Models\TripModels\HotelPrice.cs" />
     <Compile Include="Models\TripModels\Region.cs" />
     <Compile Include="Models\TripModels\Scenery.cs" />
     <Compile Include="Models\TripModels\Schedule.cs" />
     <Compile Include="Models\TripModels\StartingPoint.cs" />
-    <Compile Include="Models\TripModels\Trip.cs" />
+    <Compile Include="Models\TripModels\TripArrangement.cs" />
     <Compile Include="Models\Identity\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

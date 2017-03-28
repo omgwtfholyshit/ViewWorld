@@ -142,6 +142,7 @@ namespace ViewWorld.Services.Sceneries
                 prevEntity.Entity.Modificator = Entity.Modificator;
                 prevEntity.Entity.RegionId = Entity.RegionId;
                 prevEntity.Entity.LastUpdateAt = DateTime.Now;
+                prevEntity.Entity.ExtraCost = Entity.ExtraCost;
                 return await Repo.ReplaceOneAsync(Entity.Id, prevEntity.Entity);
             }
             return new Result() { ErrorCode = 300, Message = "找不到该数据", Success = false };

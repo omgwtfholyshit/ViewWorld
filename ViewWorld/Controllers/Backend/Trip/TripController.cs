@@ -1,31 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using CacheManager.Core;
 using MongoDB.Driver;
-using ViewWorld.Models.Managers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using ViewWorld.Core.Dal;
-using ViewWorld.Core.Models.TripModels;
-using ViewWorld.Services.Regions;
-using CacheManager.Core;
-using ViewWorld.Services.Sceneries;
+using ViewWorld.Core.Enum;
 using ViewWorld.Core.Models;
-using System.Web;
+using ViewWorld.Core.Models.TripModels;
+using ViewWorld.Services.Cities;
+using ViewWorld.Services.Regions;
+using ViewWorld.Services.Sceneries;
+using ViewWorld.Services.Trips;
 
 namespace ViewWorld.Controllers.Trip
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "管理员,销售")]
     public class TripController : BaseController
     {
         #region Constructor
         // GET: Trip
         readonly IRegionService regionService;
         readonly ISceneryService sceneryService;
+        readonly ICityService cityService;
+        readonly ITripService tripService;
         ICacheManager<object> cacheManager;
-        public TripController(IRegionService _regionService,ISceneryService _sceneryService, ICacheManager<object> _cache)
+        public TripController(IRegionService _regionService,ISceneryService _sceneryService, ICityService _cityService, ITripService _tripService, ICacheManager<object> _cache)
         {
             regionService = _regionService;
             sceneryService = _sceneryService;
+            cityService = _cityService;
+            tripService = _tripService;
             cacheManager = _cache;
         }
         #endregion
@@ -123,7 +130,7 @@ namespace ViewWorld.Controllers.Trip
                         {
                             e.SubRegions.ForEach(sub =>
                             {
-                                dropdownDataList.Add(new DropdownDataStruct { name = "----" + sub.Name, value = sub.Id, });
+                                dropdownDataList.Add(new DropdownDataStruct { name = "----" + sub.Name, value = sub.Id, results=sub.Initial});
                             });
                         }
                     });
@@ -133,7 +140,7 @@ namespace ViewWorld.Controllers.Trip
                     entities.Insert(0, new Region { Id = "-1", Name = "无", EnglishName = "null" });
                     entities.ForEach(e =>
                     {
-                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, value = e.Id, });
+                        dropdownDataList.Add(new DropdownDataStruct { name = e.Name, value = e.Id,results= e.Initial });
                     });
                 }
                 var data = new
@@ -190,7 +197,7 @@ namespace ViewWorld.Controllers.Trip
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> UpdateScenery([Bind(Include = "Id,Name,EnglishName,Coordinate,Initial,Address,RegionId")] Scenery model)
+        public async Task<JsonResult> UpdateScenery([Bind(Include = "Id,Name,EnglishName,Coordinate,Initial,Address,RegionId,ExtraCost")] Scenery model)
         {
             if (ModelState.IsValid)
             {
@@ -234,10 +241,13 @@ namespace ViewWorld.Controllers.Trip
 
         }
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> DeleteSceneryPhotoByFileName(string sceneryId,string fileName)
         {
             return OriginJson(await sceneryService.DeletePhotoByFileName(sceneryId, fileName));
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> UploadSceneryPhotos(string sceneryId)
         {
             Result result = await sceneryService.UploadPhoto(Request.Files,sceneryId);
@@ -260,6 +270,137 @@ namespace ViewWorld.Controllers.Trip
             List<Scenery> sceneries = (await sceneryService.RetrieveEntitiesByKeyword(result, keyword)).Entities;
 
             return PartialView("~/Views/PartialViews/_PartialSceneryTable.cshtml", sceneries.OrderByDescending(s=>s.Popularity));
+        }
+        #endregion
+        #region 城市管理
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddCity(CityInfo model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await cityService.AddEntity(model);
+                if (result.Success)
+                    return OriginJson(result);
+                return ErrorJson(result.Message);
+            }
+            return ErrorJson("参数错误");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> EditCity(CityInfo model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await cityService.UpdateEntity(model);
+                if (result.Success)
+                    return OriginJson(result);
+                return ErrorJson(result.Message);
+            }
+            return ErrorJson("参数错误");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> DeleteCity(string id)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await cityService.DeleteEntityById(id);
+                if (result.Success)
+                    return OriginJson(result);
+                return ErrorJson(result.Message);
+            }
+            return ErrorJson("参数错误");
+        }
+        [HttpGet]
+        public async Task<JsonResult> SearchCityByKeyword(string keyword)
+        {
+            var result = await cityService.RetrieveEntitiesByKeyword(keyword);
+            return Json(result.Entities);
+        }
+        #endregion
+        #region 行程管理
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddTripArrangement(TripArrangement entity)
+        {
+            return OriginJson(await tripService.AddEntity(entity));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> UpdateTripArrangement(TripArrangement entity)
+        {
+            return OriginJson(await tripService.UpdateEntity(entity));
+        }
+        public async Task<JsonResult> GetTripArrangementById(string tripId)
+        {
+            return OriginJson(await tripService.RetrieveTripArrangementById(tripId));
+        }
+        #region 更新部分内容
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> UpdateTripPartial(string tripId,string data,TripTypes.TripInfoType type)
+        {
+            var result = new Result() { ErrorCode = 300, Success = false, Message = "" };
+            var serializer = new JavaScriptSerializer();
+            try
+            {
+                switch (type)
+                {
+                    case TripTypes.TripInfoType.通用信息:
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<CommonInfo>(data));
+                        break;
+                    case TripTypes.TripInfoType.产品概要:
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<ProductInfo>(data));
+                        break;
+                    case TripTypes.TripInfoType.单日行程:
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<List<Schedule>>(data));
+                        break;
+                    case TripTypes.TripInfoType.发团属性:
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<TripProperty>(data));
+                        break;
+                    case TripTypes.TripInfoType.发团计划:
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<TripPlan>(data));
+                        break;
+                    default:
+                        result.Message = "行程类型错误";
+                        return OriginJson(result);
+                }
+                result.Message = type.ToString();
+                return OriginJson(result);
+            }catch(Exception e)
+            {
+                result.Message = e.Message;
+                return OriginJson(result);
+            }
+            
+        }
+        #endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> UploadTripArrangementPhoto()
+        {
+            Result result = await tripService.UploadPhoto(Request);
+            if (result.Success)
+            {
+                return Json(result.Message);
+            }
+            return ErrorJson(result.Message);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> DeletePhotoById(string tripId,string photoId)
+        {
+            return OriginJson(await tripService.DeletePhotoById(tripId, photoId));
+        }
+        public async Task<JsonResult> TestMethod()
+        {
+            var tripId = "58d3726c60c3d847c46ae1a9";
+            var result = await tripService.RetrieveTripArrangementById(tripId);
+            return OriginJson(result);
         }
         #endregion
     }

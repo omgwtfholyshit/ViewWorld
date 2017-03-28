@@ -13,6 +13,10 @@ namespace ViewWorld.Services.Cities
     public class CityService : ICityService
     {
         private readonly IMongoDbRepository Repo;
+        public CityService(IMongoDbRepository _Repo)
+        {
+            this.Repo = _Repo;
+        }
         public async Task<Result> AddEntity(CityInfo Entity)
         {
             var result = new Result() { ErrorCode = 300, Message = "城市已存在", Success = false };
@@ -32,7 +36,16 @@ namespace ViewWorld.Services.Cities
 
         public async Task<GetListResult<CityInfo>> RetrieveEntitiesByKeyword(string keyword)
         {
-            var filter = Builders<CityInfo>.Filter.Eq("Initial", keyword);
+            if (string.IsNullOrWhiteSpace(keyword))
+                return (await Repo.GetAllAsync<CityInfo>()).ManyToListResult();
+
+            var filterItem = "Name";
+            if (keyword.Length == 1)
+            {
+                filterItem = "Initial";
+                keyword = keyword.ToUpper();
+            }
+            var filter = Builders<CityInfo>.Filter.Eq(filterItem, keyword);
             return (await Repo.GetManyAsync(filter)).ManyToListResult();
         }
 

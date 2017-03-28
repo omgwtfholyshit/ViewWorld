@@ -61,6 +61,11 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        public async Task<ActionResult> CityManagement()
+        {
+            var cities = await Repo.GetAllAsync<CityInfo>();
+            return View(cities.Entities);
+        }
         #endregion
         public async Task<ActionResult> GlobalSetting()
         {

@@ -56,6 +56,7 @@ namespace ViewWorld.Core.Models.TripModels
         public string Modificator { get; set; }
         public DateTime LastUpdateAt { get; set; }
         public string Initial { get; set; }
+        public decimal ExtraCost { get; set; } = 0;
         //统计该景点热门度
         public int Popularity { get; set; }
         private GeoPoint _coord { get; set; }

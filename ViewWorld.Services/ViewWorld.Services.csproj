@@ -58,6 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthService.cs" />
     <Compile Include="Authorization\IAuthService.cs" />
+    <Compile Include="Cities\CityService.cs" />
     <Compile Include="Cities\ICityService.cs" />
     <Compile Include="Installation\IInstallService.cs" />
     <Compile Include="Installation\InstallService.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Regions\RegionService.cs" />
     <Compile Include="Sceneries\ISceneryService.cs" />
     <Compile Include="Sceneries\SceneryService.cs" />
+    <Compile Include="Trips\ITripService.cs" />
+    <Compile Include="Trips\TripService.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -16,6 +16,7 @@ namespace ViewWorld.Core.Models.TripModels
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonRequired]
         public string Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
         /// <summary>
         /// 日程里面去往景点的细节
@@ -35,8 +36,8 @@ namespace ViewWorld.Core.Models.TripModels
     }
     public class ScheduleItem
     {
-        public List<Scenery> Sceneries { get; set; }
-        public string Time { get; set; }
+        public string Sceneries { get; set; }
+        public string ActivityTime { get; set; }
         public string Arrangement { get; set; }
         public string Memo { get; set; }
     }
