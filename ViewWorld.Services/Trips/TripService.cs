@@ -124,8 +124,8 @@ namespace ViewWorld.Services.Trips
                 sceneries.Add(sceneryEntities[1]);
                 sceneries.Add(sceneryEntities[2]);
                 siList2.Add(new ScheduleItem() { ActivityTime = "9am-9pm", Arrangement = "nothin", Memo = "Bring the money", Sceneries = "" });
-                scheduleList.Add(new Schedule() { Accommodation = "自理", Day = 1, Description = "吃饭喝酒打屁屁", Details = siList1, GroupPickUp = "没有", Introduction = "烦死了", Meal = "不管", PickUp = "屁话真多", ParentId = "99999", Id = ObjectId.GenerateNewId().ToString() });
-                scheduleList.Add(new Schedule() { Accommodation = "自理2", Day = 2, Description = "吃饭喝酒打屁屁2", Details = siList2, GroupPickUp = "没有2", Introduction = "烦死了2", Meal = "不管2", PickUp = "屁话真多2", ParentId = "99999", Id = ObjectId.GenerateNewId().ToString() });
+                scheduleList.Add(new Schedule() { Accommodation = "自理", Day = 1, Description = "吃饭喝酒打屁屁", Details = siList1, GroupPickUp = "没有", Introduction = "烦死了", Meal = "不管", PickUp = "屁话真多", Id = ObjectId.GenerateNewId().ToString() });
+                scheduleList.Add(new Schedule() { Accommodation = "自理2", Day = 2, Description = "吃饭喝酒打屁屁2", Details = siList2, GroupPickUp = "没有2", Introduction = "烦死了2", Meal = "不管2", PickUp = "屁话真多2", Id = ObjectId.GenerateNewId().ToString() });
 
                 #endregion
                 #region TripProperty

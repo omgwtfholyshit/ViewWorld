@@ -15,7 +15,7 @@
             <i class="icon refresh"></i>
             保存并发布
         </button>
-        <hr />
+        <hr />  
     </div>
     <div id="tripContext" class="table-container">
         <div class="ui secondary menu">
@@ -403,7 +403,7 @@
                 </div>
                 <div class="field">
                     <div class="inline field">
-                        <label>途径景点</label>
+                        <label>途经景点</label>
                         <div class="ui fluid multiple search selection dropdown scenery-selection" id="sceneries">
                             <input type="hidden" name="Sceneries" data-category="ProductInfo" data-db-key="Sceneries">
                             <i class="dropdown icon"></i>
@@ -442,40 +442,167 @@
                 </div>
             </form>
         </div>
-        <div class="ui tab segment" data-tab="单日行程">
+        <div class="ui tab segment" data-tab="单日行程" id="scheduleList">
             <div class="ui top attached tabular menu">
-                <a class="item active" data-tab="单日行程/1">第1天<span><i class="plus icon"></i><i class="remove icon"></i></span></a>
-                <a class="item" data-tab="单日行程/2">第2天</a>
-                <a class="item" data-tab="单日行程/3">第3天</a>
+                @*<div class="item-container">
+                    <a class="item active" data-tab="单日行程/1">第1天</a>
+                    <div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div>
+                </div>
+                <div class="item-container">
+                    <a class="item" data-tab="单日行程/2">第2天</a>
+                    <div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div>
+                </div>
+                <div class="item-container">
+                    <a class="item" data-tab="单日行程/3">第3天</a>
+                    <div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div>
+                </div>*@
+                
+                
             </div>
-            <div class="ui bottom attached tab segment active day" data-tab="单日行程/1">
-                <form class="ui form day-form">
-                    <div class="field">
-                        <div class="inline field">
-                            <label>第几天</label>
-                            <input type="number" name="Day" placeholder="行程第几天" data-category="Schedules" data-db-key="Day" min="1" value="1">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="inline field">
-                            <label>标题</label>
-                            <input type="number" name="Name" placeholder="总共天数" data-category="Schedules" data-db-key="Name" min="1" value="1">
-                        </div>
-                    </div>
-                    <div class="inline fields">
-                        <div class="sixteen wide field">
-                            <label>行程概述</label>
-                            <div class="ten wide field">
-                                <script type="text/plain" id="d1intro">
-                                </script>
+            <div id="scheduleContainer">
+                @*<div class="ui bottom attached tab segment active day" data-tab="单日行程/1">
+                    @*<form class="ui form day-form">
+                        <div class="field">
+                            <div class="inline field">
+                                <label>第几天</label>
+                                <input type="number" name="Day" placeholder="行程第几天" data-category="Schedules" data-db-key="Day" min="1" value="1">
                             </div>
                         </div>
+                        <div class="field">
+                            <div class="inline field">
+                                <label>标题</label>
+                                <input type="number" name="Name" placeholder="总共天数" data-category="Schedules" data-db-key="Name" min="1" value="1">
+                            </div>
+                        </div>
+                        <div class="inline fields">
+                            <div class="sixteen wide field">
+                                <label>行程概述</label>
+                                <div class="ten wide field">
+                                    <script type="text/plain" id="d1intro">
+                                    </script>
+                                </div>
+                            </div>
 
-                    </div>
-                </form>
+                        </div>
+                        <div class="schedule-item-container">
+                            <div class="schedule-item">
+                                <hr />
+                                <div class="inline field">
+                                    <label>途经景点</label>
+                                    <div class="ui fluid multiple search selection dropdown scenery-selection">
+                                        <input type="hidden" name="Sceneries" data-category="Schedules" data-db-key="Sceneries">
+                                        <i class="dropdown icon"></i>
+                                        <div class="default text">选择景点</div>
+                                        <div class="menu">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="inline field">
+                                        <label>活动时间</label>
+                                        <input type="text" name="ActivityTime" placeholder="例如：10:00 —16:00 或 活动时间为X小时" data-category="Schedules" data-db-key="ActivityTime">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="sixteen wide field">
+                                        <label>行程安排</label>
+                                        <div class="ten wide field">
+                                            <script type="text/plain" id="d1intro">
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="inline field">
+                                        <label>备注</label>
+                                        <input type="text" name="Memo" placeholder="其他信息" data-category="Schedules" data-db-key="Memo">
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                            <div class="schedule-item">
+                                <hr />
+                                <div class="inline field">
+                                    <label>途经景点</label>
+                                    <div class="ui fluid multiple search selection dropdown scenery-selection">
+                                        <input type="hidden" name="Sceneries" data-category="Schedules" data-db-key="Sceneries">
+                                        <i class="dropdown icon"></i>
+                                        <div class="default text">选择景点</div>
+                                        <div class="menu">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="inline field">
+                                        <label>活动时间</label>
+                                        <input type="text" name="ActivityTime" placeholder="例如：10:00 —16:00 或 活动时间为X小时" data-category="Schedules" data-db-key="ActivityTime">
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <div class="sixteen wide field">
+                                        <label>行程安排</label>
+                                        <div class="ten wide field">
+                                            <script type="text/plain" id="d1intro">
+                                            </script>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="inline field">
+                                        <label>备注</label>
+                                        <input type="text" name="Memo" placeholder="其他信息" data-category="Schedules" data-db-key="Memo">
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                        <button class="ui basic button add-scenery">
+                            <i class="icon save"></i>
+                            添加景点
+                        </button>
+                        <div class="field">
+                            <div class="inline field">
+                                <label>用餐安排</label>
+                                <input type="text" name="Meal" data-category="Schedules" data-db-key="Meal">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="inline field">
+                                <label>住宿安排</label>
+                                <input type="text" name="Accommodation" data-category="Schedules" data-db-key="Accommodation">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="inline field">
+                                <label>团体免费接机</label>
+                                <input type="text" name="GroupPickUp" data-category="Schedules" data-db-key="GroupPickUp">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="inline field">
+                                <label>个人自费接机</label>
+                                <input type="text" name="PickUp" data-category="Schedules" data-db-key="PickUp">
+                            </div>
+                        </div>
+                        <div class="inline fields">
+                            <div class="sixteen wide field">
+                                <label>行程概述</label>
+                                <div class="ten wide field">
+                                    <script type="text/plain" id="d1intro">
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class="ui bottom attached tab segment" data-tab="单日行程/2">第2天</div>
+                <div class="ui bottom attached tab segment" data-tab="单日行程/3">第3天</div>*@
             </div>
-            <div class="ui bottom attached tab segment" data-tab="单日行程/2">第2天</div>
-            <div class="ui bottom attached tab segment" data-tab="单日行程/3">第3天</div>
+
         </div>
         <div class="ui tab segment" data-tab="发团属性">
             <div class="ui top attached tabular menu">
@@ -536,6 +663,113 @@
         </div>
     </div>
 </script>
+@*data-tab="单日行程/1"*@ 
+<script type="text/html" id="scheduleTmpl">
+    <div class="ui bottom attached tab segment day" data-template-bind='[{"attribute":"data-tab","value":"tabPath"},{"attribute":"class","value":"class"},{"attribute":"id","value":"Id"}]'>
+        <form class="ui form day-form">
+            <div class="field">
+                <div class="inline field">
+                    <label>天数</label>
+                    <input type="number" name="Day" placeholder="行程第几天" data-category="Schedules" data-db-key="Day" data-value="Day" min="1" disabled>
+                </div>
+            </div>
+            <div class="field">
+                <div class="inline field">
+                    <label>标题</label>
+                    <input type="text" name="Name" placeholder="行程标题" data-category="Schedules" data-db-key="Name" data-value="Name">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="sixteen wide field">
+                    <label>行程概述</label>
+                    <div class="ten wide field script-container desc">
+                        
+                    </div>
+                </div>
+
+            </div>
+            <div class="schedule-item-container" data-Id="containerId">
+                
+            </div>
+            <button class="ui basic button add-scenery">
+                <i class="icon save"></i>
+                添加景点
+            </button>
+            <hr />
+            <div class="field">
+                <div class="inline field">
+                    <label>用餐安排</label>
+                    <input type="text" name="Meal" data-category="Schedules" data-db-key="Meal" data-value="Meal">
+                </div>
+            </div>
+            <div class="field">
+                <div class="inline field">
+                    <label>住宿安排</label>
+                    <input type="text" name="Accommodation" data-category="Schedules" data-db-key="Accommodation" data-value="Accommodation">
+                </div>
+            </div>
+            <div class="field">
+                <div class="inline field">
+                    <label>团体免费接机</label>
+                    <input type="text" name="GroupPickUp" data-category="Schedules" data-db-key="GroupPickUp" data-value="GroupPickUp">
+                </div>
+            </div>
+            <div class="field">
+                <div class="inline field">
+                    <label>个人自费接机</label>
+                    <input type="text" name="PickUp" data-category="Schedules" data-db-key="PickUp" data-value="PickUp">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="sixteen wide field">
+                    <label>行程介绍</label>
+                    <div class="ten wide field script-container intro">
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+</script>
+<script type="text/html" id="scheduleItemTmpl">
+    <div class="schedule-item">
+        <hr />
+        <div class="inline field">
+            <label>途经景点</label>
+            <div class="ui fluid multiple search selection dropdown scenery-selection">
+                <input type="hidden" name="Sceneries" data-category="Schedules" data-db-key="Sceneries">
+                <i class="dropdown icon"></i>
+                <div class="default text">选择景点</div>
+                <div class="menu">
+
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="inline field">
+                <label>活动时间</label>
+                <input type="text" name="ActivityTime" placeholder="例如：10:00 —16:00 或 活动时间为X小时" data-category="Schedules" data-db-key="ActivityTime" data-value="ActivityTime">
+            </div>
+        </div>
+        <div class="field">
+            <div class="inline field">
+                <label>备注</label>
+                <input type="text" name="Memo" placeholder="其他信息" data-category="Schedules" data-db-key="Memo" data-value="Memo">
+            </div>
+        </div>
+        <div class="inline fields">
+            <div class="sixteen wide field">
+                <label>行程安排</label>
+                <div class="ten wide field">
+                    <script type="text/plain" data-id="Id">
+                    </script>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</script>
 <script src="~/Scripts/jQuery.FileUpload/load-image.all.min.js"></script>
 <script src="~/Scripts/jquery.ui.widget.js"></script>
 <script src="~/Scripts/jQuery.FileUpload/jquery.iframe-transport.js"></script>
@@ -550,5 +784,6 @@
 <script src="~/Scripts/UEditor/ueditor.config.js"></script>
 <script src="~/Scripts/UEditor/ueditor.all.js"></script>
 <script src="~/Scripts/UEditor/lang/zh-cn/zh-cn.js"></script>
+<script src="~/Scripts/UnderScore/underscore.js"></script>
 <script src="~/Scripts/jQuery.LoadTemplate/jquery.loadTemplate.js"></script>
 <script src="~/Scripts/Backend/Trip/TripManagement.js"></script>

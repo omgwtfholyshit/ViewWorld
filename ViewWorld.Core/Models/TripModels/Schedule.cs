@@ -32,10 +32,10 @@ namespace ViewWorld.Core.Models.TripModels
         public string Introduction { get; set; }
         //At Day 1 or 2 or whatever
         public int Day { get; set; }
-        public string ParentId { get; set; }
     }
     public class ScheduleItem
     {
+        public string Id { get; set; }
         public string Sceneries { get; set; }
         public string ActivityTime { get; set; }
         public string Arrangement { get; set; }

@@ -933,6 +933,8 @@
     <Content Include="Scripts\UEditor\ueditor.config.js" />
     <Content Include="Scripts\UEditor\ueditor.parse.js" />
     <Content Include="Scripts\UEditor\ueditor.parse.min.js" />
+    <Content Include="Scripts\UnderScore\underscore-min.js" />
+    <Content Include="Scripts\UnderScore\underscore.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

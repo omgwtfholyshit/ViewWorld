@@ -260,6 +260,15 @@ body{
     #productInfo{
         .scenery-selection{display:inline-block;min-width:14rem}
     }
+    #scheduleList{
+        .ui.tabular.menu{
+            .item-container{
+                width:10rem;position:relative;
+                .icon-container{position:absolute;top:0.8rem;right:0.5rem;}
+            }
+        }
+        .scenery-selection{display:inline-block;min-width:14rem}
+    }
 }
 .region-editor .form-container,.scenery-editor .form-container,#commonInfo{
     width:100%;

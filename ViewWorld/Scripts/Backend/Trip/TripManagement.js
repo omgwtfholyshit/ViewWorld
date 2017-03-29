@@ -76,7 +76,6 @@
             var $input,_this=this;
             $inputs.each(function (index, input) {
                 $input = $(input);
-                // console.log($input.data('db-key') + " :" + $input.val().trim());
                 _this[$input.data('db-key')] = $input.val().trim();
             });
             _this.Introduction =$.htmlEncode(introEditor.getContent());
@@ -202,6 +201,7 @@
                     $.each(data.results, function (index, element) {
                         html += '<div class="item" data-value="' + element.value + '">' + element.name + '</div>'
                     })
+                    localStorage.sceneries = html;
                 }
                 $('.scenery-selection .menu').html(html);
             }).fail(function (xhr) { $.tip(".message-container", "载入城市数据失败", "服务器超时，请稍后重试！", "negative", 4); })
@@ -274,18 +274,98 @@
                     }
                 }).fail(function (xhr) { $.tip(".message-container", "载入数据失败", "服务器超时，请稍后重试！", "negative", 4); });
             } else {
-                if (Trip.Id != '')
+                if (Trip.Id != '') {
                     $.tip(".message-container", "载入数据失败", "TripId参数有误", "negative", 4);
+                } else {
+                    Trip.UpdateSchedulesObj(new Array);
+                    Trip.SetSchedulesForPage();
+                }
             }
         },
-        SetSceneriesForJs: function (remoteData) {
+        UpdateSchedulesObj: function (remoteData) {
             var _this = this;
+            var schedule;
             if (remoteData.length > 0) {
                 $.each(remoteData, function (index, element) {
-                    var schedule = new Schedule(element.Id, element.Day, element.Name, element.Description, element.Details, element.Meal, element.Accommodation, element.GroupPickUp, element.PickUp, element.Introduction);
-                    Schedules.push(schedule);
+                    schedule = new Schedule(element.Id, element.Day, element.Name, element.Description, element.Details, element.Meal, element.Accommodation, element.GroupPickUp, element.PickUp, element.Introduction);
                 })
+            } else {
+                var details = new Array();
+                details.push(new ScheduleItem($.uuid(),'', '', '', ''));
+                schedule = new Schedule($.uuid(), 1, '', '', details, '', '', '', '', '');
             }
+            Schedules.push(schedule);
+        },
+        SetSchedulesForJs: function () {
+            var _this = this, $tabs = $('#scheduleContainer .day.tab');
+            $tabs.each(function (index, element) {
+                var correspondingSchedule = Schedules.find(function (schedule) { return schedule.Id == $(element).attr('id') }), day = index + 1
+                containerId = 'day' + day + 'container', descId = 'd' + day + 'desc', introId = 'd' + day + 'intro', $itemContainer = $('#' + containerId);
+                if (correspondingSchedule != 'undefined') {
+                    var $inputs = $(element).find('input').not($itemContainer.find('input')),$input;
+                    $inputs.each(function (ind, ele) {
+                        $input = $(ele);
+                        correspondingSchedule[$input.data('db-key')] = $input.val().trim();
+                    })
+                    var $scheduleItems = $itemContainer.find('.schedule-item');
+                    $scheduleItems.each(function (i, e) {
+                        var id = $(e).find('.edui-default').attr('id'), $inputs = $(e).find('input').not('.search'),
+                            item = correspondingSchedule.Details.find(function (item) { return item.Id == id });
+                        if (item != 'undefined') {
+                            $inputs.each(function (iterator, input) {
+                                $input = $(input);
+                                item[$input.data('db-key')] = $input.val().trim();
+                            })
+                            item.Arrangement = $.htmlEncode(UE.getEditor(id).getContent());
+                        }
+                    })
+                    correspondingSchedule.Description = $.htmlEncode(UE.getEditor(descId).getContent());
+                    correspondingSchedule.Introduction = $.htmlEncode(UE.getEditor(introId).getContent());
+                }
+                console.log(Schedules)
+            })
+        },
+        SetSchedulesForPage: function () {
+            var _this = this;
+            var $scheduleContainer = $('#scheduleContainer');
+            var $menuContainer = $('#scheduleList .ui.top.menu'), menuHtml = '', active = '', tabPath = '', day = 0;
+            var scheduleItem = new ScheduleItem($.uuid(),'', '早晨5点到晚上9点', '自己安排', '没什么别的事了')
+            var scheduleItemList = new Array();
+            scheduleItemList.push(scheduleItem);
+            $.each(Schedules, function (index, element) {
+                index == 0 ? active = 'active' : active = '';
+                element.class ="ui bottom attached tab segment day "+ active;
+                day = index + 1;
+                tabPath = "单日行程/" + day;
+                menuHtml += '<div class="item-container"><a class="item ' + active + '" data-tab="' + tabPath + '">第' + day + '天</a><div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div></div>';
+                element.tabPath = tabPath;
+                element.containerId = 'day' + day + 'container';
+                element.descId = 'day' + day + 'desc';
+                element.introId = 'day' + day + 'intro';
+                $scheduleContainer.loadTemplate('#scheduleTmpl', element, tmplOpt);
+                element.Details = scheduleItemList;
+                $.each(element.Details, function (ind, ele) {
+                    $('#' + element.containerId).loadTemplate('#scheduleItemTmpl', ele, tmplOpt);
+                    var $sceneryDropdown = $('#' + scheduleItem.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
+                    $sceneryDropdown.find('.menu').html(localStorage.sceneries);
+                    $sceneryDropdown.dropdown("set selected", ele.Sceneries.split(','));
+                    UE.getEditor(ele.Id).ready(function () { this.setContent($.htmlDecode(ele.Arrangement)) })
+                })
+            })
+            $menuContainer.html(menuHtml);
+            var editorId = '', htmlContent = '';
+            $('#scheduleContainer .script-container').each(function (index, element) {
+                $element = $(element);
+                if ($element.hasClass('desc')) {
+                    editorId = 'd' + (parseInt(index / 2) + 1) + 'desc';
+                    $element.html('<script type="text/plain" Id=' + editorId + '></script>');
+                    UE.getEditor(editorId).ready(function () { this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Description)) })
+                } else if ($element.hasClass('intro')) {
+                    editorId = 'd' + (parseInt(index / 2) + 1) + 'intro';
+                    $element.html('<script type="text/plain" Id=' + editorId + '></script>');
+                    UE.getEditor(editorId).ready(function () { this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Introduction)) })
+                } 
+            })
         },
         SyncLocalData: function (data, writePage) {
             if (data.Success) {
@@ -294,7 +374,7 @@
                 UpdateObjWithFunctions(ProductInfo, data.Entity.ProductInfo);
                 UpdateObjWithFunctions(TripProperty, data.Entity.TripProperty);
                 UpdateObjWithFunctions(TripPlan, data.Entity.TripPlan);
-                _this.SetSceneriesForJs(data.Entity.Schedules);
+                _this.UpdateSchedulesObj(data.Entity.Schedules);
                 _this.Id = data.Entity.Id;
                 _this.Name = data.Entity.Name;
                 _this.ProductId = data.Entity.ProductId;
@@ -302,8 +382,10 @@
                 _this.IsVisible = data.Entity.IsVisible;
             }
             if (writePage) {
+                console.log(Schedules)
                 CommonInfo.SyncPage();
                 ProductInfo.SyncPage();
+                _this.SetSchedulesForPage();
             } else {
                 console.log(_this);
             }
@@ -345,6 +427,7 @@
                         model = ProductInfo.SyncJs();
                         break;
                     case '单日行程':
+                        Trip.SetSchedulesForJs();
                         break;
                     case '发团属性':
                         break;
@@ -356,36 +439,36 @@
                         model[p] = JSON.stringify(model[p]);
                     }
                 }
-                $.ajax({
-                    url: api.partialDataUrl,
-                    method: 'post',
-                    beforeSend: function () {
-                        $buttons.addClass('loading');
-                    },
-                    data: {
-                        tripId:Trip.Id,
-                        data: JSON.stringify(model),
-                        type: type,
-                        __RequestVerificationToken: token
-                    },
-                    success: function (result) {
-                        if (result.Success) {
-                            $.tip(".message-container", "保存成功", result.Message + " 保存成功！", "positive", 4);
-                        } else {
-                            $.tip(".message-container", "保存失败", result.Message, "negative", 4);
-                        }
-                        $buttons.removeClass('loading');
-                    },
-                    error: function (data) { $.tip(".message-container", "数据传输失败", "服务器超时，请稍后重试！", "negative", 4); $buttons.removeClass('loading'); }
-                })
+                //$.ajax({
+                //    url: api.partialDataUrl,
+                //    method: 'post',
+                //    beforeSend: function () {
+                //        $buttons.addClass('loading');
+                //    },
+                //    data: {
+                //        tripId:Trip.Id,
+                //        data: JSON.stringify(model),
+                //        type: type,
+                //        __RequestVerificationToken: token
+                //    },
+                //    success: function (result) {
+                //        if (result.Success) {
+                //            $.tip(".message-container", "保存成功", result.Message + " 保存成功！", "positive", 4);
+                //        } else {
+                //            $.tip(".message-container", "保存失败", result.Message, "negative", 4);
+                //        }
+                //        $buttons.removeClass('loading');
+                //    },
+                //    error: function (data) { $.tip(".message-container", "数据传输失败", "服务器超时，请稍后重试！", "negative", 4); $buttons.removeClass('loading'); }
+                //})
             }
             
         }
 
     };
-    var Schedule = function (ParentId,Day,Name,Description,Details,Meal,Accommodation,GroupPickUp,PickUp,Introduction) {
+    var Schedule = function (Id,Day,Name,Description,Details,Meal,Accommodation,GroupPickUp,PickUp,Introduction) {
         if (this instanceof Schedule) {
-            this.ParentId = ParentId;
+            this.Id = Id;
             this.Day = Day;
             this.Name = Name;
             this.Description = Description;
@@ -396,11 +479,12 @@
             this.PickUp = PickUp;
             this.Introduction = Introduction;
         } else {
-            return new Schedule(ParentId, Day, Name, Description, Details, Meal, Accommodation, GroupPickUp, PickUp, Introduction);
+            return new Schedule(Id, Day, Name, Description, Details, Meal, Accommodation, GroupPickUp, PickUp, Introduction);
         }
     },
-    ScheduleItem = function (Sceneries, ActivityTime, Arrangement, Memo) {
+    ScheduleItem = function (Id,Sceneries, ActivityTime, Arrangement, Memo) {
         if (this instanceof ScheduleItem) {
+            this.Id = Id;
             this.Sceneries = Sceneries;
             this.ActivityTime = ActivityTime;
             this.Arrangement = Arrangement;
@@ -457,11 +541,34 @@
         $('#tripContext .menu .item').tab({
             context: $('#tripContext'),
             onLoad: function (tabPath) {
+                if (tabPath.indexOf('单日行程/') != -1) {
+                    var $item = $('#scheduleList .menu');
+                    $item.find('.item.active').removeClass('active');
+                    $item.find('.item').each(function (index, element) {
+                        var $ele = $(element);
+                        if ($ele.data('tab') == tabPath)
+                            $ele.addClass('active');
+                    })
+                }
                 if (tabPath.indexOf('单日行程') != -1)
                     tabPath = '单日行程';
                 $('#saveTab span').text(tabPath);
             }
         });
+        $('#scheduleList').delegate('.button.add-scenery', 'click', function (e) {
+            e.preventDefault();
+            var containerId = $(e.target).siblings('.schedule-item-container').attr('id');
+            var scheduleItem = new ScheduleItem($.uuid(), '', '', '', '');
+            var scheduleId = $('.tab.active.day').attr('id');
+            var schedule = Schedules.find(function (schedule) { return schedule.Id == scheduleId });
+            typeof schedule != 'undefined' ? schedule.Details.push(scheduleItem) : $.tip(".message-container", "数据读取错误", "找不到对应行程，建议刷新页面重试", "positive", 4);
+            $('#' + containerId).loadTemplate('#scheduleItemTmpl', scheduleItem, tmplOpt);
+            var $sceneryDropdown = $('#' + scheduleItem.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
+            $sceneryDropdown.find('.menu').html(localStorage.sceneries);
+            $sceneryDropdown.dropdown();
+            UE.getEditor(scheduleItem.Id);
+            return false;
+        })
        // $('#photoListContainer .saved-photo li').popup({ on: 'click', inline: true });
         $('#photoListContainer').delegate('.content-editable.photo-desc', 'click', function (e) {
             $(e.target).attr('contenteditable', true);
@@ -539,7 +646,6 @@
             if (uploadArr.length == 0) {
                 $('#fileUpload').click();
             } else {
-                console.log(CommonInfo.PendingPhotos);
                 if (Trip.Id != '') {
                     $('.save-single.button').not('.loading').click();
                 } else {
@@ -563,6 +669,7 @@
         });
         $('.city-selection,.scenery-selection').dropdown();
         $('#saveTab').on('click', function (e) {
+            e.preventDefault();
             var tab = $(this).find('span').text().trim();
             switch (tab) {
                 case '通用信息':
@@ -743,11 +850,12 @@
         return dfd.promise();
     }
     function InitPage() {
-        BindEvents()
         InitFileUpload();
         InitFormValidators();
-        Preload().done(Trip.LoadServerData)
-        //ProductInfo.CollectFormData();
+        Preload().done(Trip.LoadServerData).done(BindEvents)
+        
+
+        
     }
     InitPage();
     

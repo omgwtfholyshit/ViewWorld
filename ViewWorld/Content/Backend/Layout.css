@@ -253,6 +253,18 @@ body {
   display: inline-block;
   min-width: 14rem; }
 
+.region-management #scheduleList .ui.tabular.menu .item-container, .scenery-management #scheduleList .ui.tabular.menu .item-container, .city-management #scheduleList .ui.tabular.menu .item-container, .trip-management #scheduleList .ui.tabular.menu .item-container {
+  width: 10rem;
+  position: relative; }
+  .region-management #scheduleList .ui.tabular.menu .item-container .icon-container, .scenery-management #scheduleList .ui.tabular.menu .item-container .icon-container, .city-management #scheduleList .ui.tabular.menu .item-container .icon-container, .trip-management #scheduleList .ui.tabular.menu .item-container .icon-container {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.5rem; }
+
+.region-management #scheduleList .scenery-selection, .scenery-management #scheduleList .scenery-selection, .city-management #scheduleList .scenery-selection, .trip-management #scheduleList .scenery-selection {
+  display: inline-block;
+  min-width: 14rem; }
+
 .region-editor .form-container, .scenery-editor .form-container, #commonInfo {
   width: 100%; }
   .region-editor .form-container #photoListContainer li, .scenery-editor .form-container #photoListContainer li, #commonInfo #photoListContainer li {
