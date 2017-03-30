@@ -264,7 +264,7 @@ body{
         .ui.tabular.menu{
             .item-container{
                 width:10rem;position:relative;
-                .icon-container{position:absolute;top:0.8rem;right:0.5rem;}
+                .icon-container{position:absolute;top:0.8rem;right:0.5rem;cursor:pointer}
             }
         }
         .scenery-selection{display:inline-block;min-width:14rem}

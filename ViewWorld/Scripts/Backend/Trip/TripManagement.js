@@ -10,7 +10,7 @@
         listSceneriesUrl: '/Trip/ListSceneriesAPI',
     }, tmplOpt = { 'append': true }, token = $('input[name=__RequestVerificationToken]').val(), uploadArr = new Array(),
     introEditor = UE.getEditor('introduction'), includeEditor = UE.getEditor('include'), excludeEditor = UE.getEditor('exclude'),
-    pIntroEditor = UE.getEditor('Intro'), pFeatureEditor = UE.getEditor('Feature');
+    pIntroEditor = UE.getEditor('Intro'), pFeatureEditor = UE.getEditor('Feature'), exsitEditor = new Array();
     var CommonInfo = {
         Name:'',
         ProviderName: '',
@@ -332,12 +332,17 @@
             var scheduleItem = new ScheduleItem($.uuid(),'', '早晨5点到晚上9点', '自己安排', '没什么别的事了')
             var scheduleItemList = new Array();
             scheduleItemList.push(scheduleItem);
+            $scheduleContainer.html('');
+            for (var i = exsitEditor.length - 1; i >= 0; i--) {
+                UE.getEditor(exsitEditor[i]).destroy();
+                exsitEditor.splice(i, 1);
+            }
             $.each(Schedules, function (index, element) {
                 index == 0 ? active = 'active' : active = '';
                 element.class ="ui bottom attached tab segment day "+ active;
                 day = index + 1;
                 tabPath = "单日行程/" + day;
-                menuHtml += '<div class="item-container"><a class="item ' + active + '" data-tab="' + tabPath + '">第' + day + '天</a><div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div></div>';
+                menuHtml += '<div class="item-container"><a class="item ' + active + '" data-tab="' + tabPath + '">第<span>' + day + '</span>天</a><div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div></div>';
                 element.tabPath = tabPath;
                 element.containerId = 'day' + day + 'container';
                 element.descId = 'day' + day + 'desc';
@@ -349,23 +354,41 @@
                     var $sceneryDropdown = $('#' + scheduleItem.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
                     $sceneryDropdown.find('.menu').html(localStorage.sceneries);
                     $sceneryDropdown.dropdown("set selected", ele.Sceneries.split(','));
-                    UE.getEditor(ele.Id).ready(function () { this.setContent($.htmlDecode(ele.Arrangement)) })
+                    if (ele.Arrangement != '') {
+                        //UE.getEditor(ele.Id).ready(function () {
+                        //    //this.setContent("自己安排")
+                        //})
+                        //exsitEditor.push(ele.Id);
+                    }
+                       
                 })
             })
+           
             $menuContainer.html(menuHtml);
             var editorId = '', htmlContent = '';
             $('#scheduleContainer .script-container').each(function (index, element) {
                 $element = $(element);
+                
                 if ($element.hasClass('desc')) {
                     editorId = 'd' + (parseInt(index / 2) + 1) + 'desc';
                     $element.html('<script type="text/plain" Id=' + editorId + '></script>');
-                    UE.getEditor(editorId).ready(function () { this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Description)) })
+                    UE.getEditor('d' + (parseInt(index / 2) + 1) + 'desc').ready(function (r) {
+                        //this.setContent(Schedules[parseInt(index / 2)].Description)
+                    })
+                    exsitEditor.push(editorId);
                 } else if ($element.hasClass('intro')) {
                     editorId = 'd' + (parseInt(index / 2) + 1) + 'intro';
                     $element.html('<script type="text/plain" Id=' + editorId + '></script>');
-                    UE.getEditor(editorId).ready(function () { this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Introduction)) })
-                } 
+                    UE.getEditor('d' + (parseInt(index / 2) + 1) + 'intro').ready(function (r) {
+                        //this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Introduction))
+                    })
+                    exsitEditor.push(editorId);
+                    // this.setContent($.htmlDecode(Schedules[parseInt(index / 2)].Introduction)) 
+                }
+                
             })
+            BindTabs();
+            console.log(Schedules);
         },
         SyncLocalData: function (data, writePage) {
             if (data.Success) {
@@ -382,7 +405,6 @@
                 _this.IsVisible = data.Entity.IsVisible;
             }
             if (writePage) {
-                console.log(Schedules)
                 CommonInfo.SyncPage();
                 ProductInfo.SyncPage();
                 _this.SetSchedulesForPage();
@@ -469,15 +491,16 @@
     var Schedule = function (Id,Day,Name,Description,Details,Meal,Accommodation,GroupPickUp,PickUp,Introduction) {
         if (this instanceof Schedule) {
             this.Id = Id;
-            this.Day = Day;
-            this.Name = Name;
-            this.Description = Description;
-            this.Details = Details;
-            this.Meal = Meal;
-            this.Accommodation = Accommodation;
-            this.GroupPickUp = GroupPickUp;
-            this.PickUp = PickUp;
-            this.Introduction = Introduction;
+            this.Day = typeof Day == 'undefined' ? Day = '' : Day;
+            this.Name = typeof Name == 'undefined' ? Name = '' : Name;
+            this.Description = typeof Description == 'undefined' ? Description = '' : Id;
+            if(typeof Details != 'object'){Details = new Array(); Details.push(new ScheduleItem($.uuid(),'','','',''))}
+            this.Details = Details;  
+            this.Meal = typeof Meal == 'undefined' ? Meal = '' : Meal;
+            this.Accommodation = typeof Accommodation == 'undefined' ? Accommodation = '' : Accommodation;
+            this.GroupPickUp = typeof GroupPickUp == 'undefined' ? GroupPickUp = '' : GroupPickUp;
+            this.PickUp = typeof PickUp == 'undefined' ? PickUp = '' : PickUp;
+            this.Introduction = typeof Introduction == 'undefined' ? Introduction = '' : Introduction;
         } else {
             return new Schedule(Id, Day, Name, Description, Details, Meal, Accommodation, GroupPickUp, PickUp, Introduction);
         }
@@ -537,7 +560,7 @@
             return new PhotoInfo(Name, Description, Description, FileLocation);
         }
     };
-    function BindEvents() {
+    function BindTabs() {
         $('#tripContext .menu .item').tab({
             context: $('#tripContext'),
             onLoad: function (tabPath) {
@@ -555,6 +578,9 @@
                 $('#saveTab span').text(tabPath);
             }
         });
+    }
+    function BindEvents() {
+        
         $('#scheduleList').delegate('.button.add-scenery', 'click', function (e) {
             e.preventDefault();
             var containerId = $(e.target).siblings('.schedule-item-container').attr('id');
@@ -568,8 +594,61 @@
             $sceneryDropdown.dropdown();
             UE.getEditor(scheduleItem.Id);
             return false;
+        }).delegate('.icon-container .plus.icon', 'click', function (e) {
+            var tabPath = $(e.target).parent().siblings().data('tab');//获取当前的tabPath;
+            var tabId = '';
+            $('#scheduleContainer .day.tab').each(function (index, element) {
+                if ($(element).data('tab') == tabPath) {
+                    return tabId = $(element).attr('id');//获取被点击添加按钮的tabid
+                }
+            })
+            var index = Schedules.findIndex(function (schedule) { return schedule.Id == tabId });//通过tabid获取对应日程
+            if (index >= 0) {
+                //添加新的日程
+                var schedule = new Schedule($.uuid(), Schedules[index].Day + 1);
+                Schedules.splice(index + 1, 0, schedule);
+                schedule.tabPath = '单日行程/' + Schedules.length;
+                schedule.containerId = $.uuid();
+                schedule.descId = $.uuid();
+                schedule.introId = $.uuid();
+                //loadTempate没找到after方法，先将生成的日程html导入到一个临时的container
+                $('#tempHtml').loadTemplate('#scheduleTmpl', schedule, { 'append': false });
+                var menuContainers = $('#scheduleList .item-container'), $span;
+                //生成tab菜单，data-tab属性根据Schedules的最大长度生成，以保证唯一性。第几天则按照该日程在日程中实际的日期数显示，跟data-tab并不一致
+                var menuHtml = '<div class="item-container"><a class="item" data-tab="单日行程/' + Schedules.length + '">第<span>' + (Schedules[index].Day + 1) + '</span>天</a><div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div></div>';
+                //在对应菜单后面写入菜单的html
+                $(menuContainers[index]).after(menuHtml);
+                //修改该菜单后面的菜单日期跟tab对应
+                $(menuContainers).each(function (i, e) {
+                    if (i > index) {
+                        $span = $(e).find('span');
+                        $span.text(parseInt($span.text()) + 1);
+                    }
+                })
+                //在当前tab的后面插入生成的tab html
+                $('#' + tabId).after($('#tempHtml').html());
+                //为插入的元素设置day
+                $('#' + schedule.Id).find('input[name=Day]').val(schedule.Day)
+                for (var i = index + 2; i <= Schedules.length - 1; i++) {
+                    //为插入的元素后面的元素设置day
+                    Schedules[i].Day++;
+                    $('#' + Schedules[i].Id).find('input[name=Day]').val(Schedules[i].Day);
+                }
+                //因为jQuery html方法在<script>标签会卡住，所以手动写入script标签
+                $('#scheduleContainer .script-container').each(function (index, element) {
+                    $element = $(element);
+                    var editorId = $.uuid();
+                    $element.html('<script type="text/plain" Id=' + editorId + '></script>');
+                    //初始化百度editor
+                    UE.getEditor(editorId);
+                })
+                //重新绑定tab
+                BindTabs();
+                //Trip.SetSchedulesForPage();
+            } else {
+                alert('本地数据错误，请刷新页面重试');
+            }
         })
-       // $('#photoListContainer .saved-photo li').popup({ on: 'click', inline: true });
         $('#photoListContainer').delegate('.content-editable.photo-desc', 'click', function (e) {
             $(e.target).attr('contenteditable', true);
         }).delegate('#pendingList .content-editable.photo-desc', 'blur', function (e) {
@@ -695,6 +774,7 @@
             
             return false;
         })
+        BindTabs();
     }
     function InitFileUpload() {
         $('#fileUpload').fileupload({
