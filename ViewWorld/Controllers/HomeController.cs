@@ -11,6 +11,8 @@ using ViewWorld.Core.Models.Identity;
 using ViewWorld.Services.Authorization;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Threading;
+using System.Security.Claims;
 
 namespace ViewWorld.Controllers
 {
@@ -64,50 +66,7 @@ namespace ViewWorld.Controllers
         }
         public ActionResult TestMethods()
         {
-            GeoPoint geo = new GeoPoint()
-            {
-                Latitude = "39.908718",
-                Longitude = "116.397495"
-
-            };
-            Location loc = new Location()
-            {
-                Country = "中国",
-                Province = "北京",
-                District = "朝阳区",
-                City = "北京市",
-                Address = "天安门",
-                PostCode = "100000"
-            };
-            Scenery scene = new Scenery()
-            {
-                Coordinate = geo,
-                LastUpdateAt = DateTime.Now,
-                //Location = loc,
-                Name = "天安门旅行",
-                Popularity = 0,
-                Publisher = "刘震",
-                PublishedAt = DateTime.Now,
-                Modificator = "刘震",
-            };
-            scene.Id = Tools.GenerateId_M2();
-            Scenery scene2 = new Scenery()
-            {
-                Coordinate = geo,
-                LastUpdateAt = DateTime.Now,
-               // Location = loc,
-                Name = "天安门旅行",
-                Popularity = 0,
-                Publisher = "刘震",
-                PublishedAt = DateTime.Now,
-                Modificator = "S2",
-            };
-            scene2.Id = Tools.GenerateId_M2();
-            List<Scenery> scenelist = new List<Scenery>();
-            scenelist.Add(scene);
-            scenelist.Add(scene2);
-            //var ts = sceneryManager.AddScenery(scenelist, db);
-            var userIdentity = User as ViewWorldPrincipal;
+            var nickname = GetClaimValue("NickName");
             return Json("hello");
         }
 

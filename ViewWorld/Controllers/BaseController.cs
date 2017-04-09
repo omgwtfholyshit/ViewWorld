@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using ViewWorld.Core;
 using ViewWorld.Core.Models;
 using ViewWorld.Core.Dal;
+using System.Security.Claims;
 
 namespace ViewWorld.Controllers
 {
@@ -108,6 +109,16 @@ namespace ViewWorld.Controllers
             {
                 return User.Identity.GetUserId();
             }
+        }
+        protected string GetClaimValue(string claimType)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            foreach(var claim in claimsIdentity.Claims)
+            {
+                if (claim.Type == claimType)
+                    return claim.Value;
+            }
+            return "";
         }
         protected void RemoveOutputCacheItem(string methodName, string controllerName)
         {

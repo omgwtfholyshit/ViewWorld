@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
@@ -13,6 +14,7 @@ using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Services.Cities;
 using ViewWorld.Services.Regions;
 using ViewWorld.Services.Sceneries;
+using ViewWorld.Services.StartingPoints;
 using ViewWorld.Services.Trips;
 
 namespace ViewWorld.Controllers.Trip
@@ -26,13 +28,15 @@ namespace ViewWorld.Controllers.Trip
         readonly ISceneryService sceneryService;
         readonly ICityService cityService;
         readonly ITripService tripService;
+        readonly IStartingPointService startingPointService;
         ICacheManager<object> cacheManager;
-        public TripController(IRegionService _regionService,ISceneryService _sceneryService, ICityService _cityService, ITripService _tripService, ICacheManager<object> _cache)
+        public TripController(IRegionService _regionService, ISceneryService _sceneryService, ICityService _cityService, ITripService _tripService, IStartingPointService _startingPointService, ICacheManager<object> _cache)
         {
             regionService = _regionService;
             sceneryService = _sceneryService;
             cityService = _cityService;
             tripService = _tripService;
+            startingPointService = _startingPointService;
             cacheManager = _cache;
         }
         #endregion
@@ -201,7 +205,8 @@ namespace ViewWorld.Controllers.Trip
         {
             if (ModelState.IsValid)
             {
-                model.Modificator = User.Identity.Name;
+
+                model.Modificator = GetClaimValue("NickName").ToUpper();
                 var result = await sceneryService.UpdateEntity(model);
                 if (result.Success)
                 {
@@ -322,11 +327,59 @@ namespace ViewWorld.Controllers.Trip
             return Json(result.Entities);
         }
         #endregion
+        #region 出发地管理
+        [HttpGet]
+        public async Task<JsonResult> ListStartingPoints(string keyword)
+        {
+            var result = await startingPointService.RetrieveEntitiesByKeyword(keyword);
+            if (result.Success)
+            {
+                return OriginJson(result);
+            }
+            return ErrorJson("服务器内部错误，请稍后再试");
+        }
+        [HttpGet]
+        public async Task<JsonResult> ListStartingPointsAPI(string keyword)
+        {
+            var result = await startingPointService.RetrieveEntitiesByKeyword(keyword);
+            if (result.Success)
+            {
+                return Json(result.Entities.Select(point => new { name = point.ProviderName + "|" + point.Address, value = point.Id }));
+            }
+            return ErrorJson("服务器内部错误，请稍后再试");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddStartingPoint(StartingPoint point)
+        {
+            point.UpdatedBy = GetClaimValue("NickName");
+            return OriginJson(await startingPointService.AddEntity(point));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> UpdateStartingPoint(StartingPoint point)
+        {
+            point.ModifiedDate = DateTime.Now;
+            point.UpdatedBy = GetClaimValue("NickName");
+            return OriginJson(await startingPointService.UpdateEntity(point));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> DeleteStartingPointById(string pointId)
+        {
+            return OriginJson(await startingPointService.DeleteEntityById(pointId));
+        }
+
+        #endregion
         #region 行程管理
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> AddTripArrangement(TripArrangement entity)
         {
+            entity.Publisher = GetClaimValue("NickName").ToUpper();
+            entity.PublisherId = UserId;
+            entity.PublishedAt = DateTime.Now;
             return OriginJson(await tripService.AddEntity(entity));
         }
         [HttpPost]
@@ -335,11 +388,17 @@ namespace ViewWorld.Controllers.Trip
         {
             return OriginJson(await tripService.UpdateEntity(entity));
         }
+        [HttpGet]
         public async Task<JsonResult> GetTripArrangementById(string tripId)
         {
             return OriginJson(await tripService.RetrieveTripArrangementById(tripId));
         }
-        #region 更新部分内容
+        [HttpGet]
+        public async Task<ActionResult> RenderTripArrangementByKeyword(string keyword)
+        {
+            var result = await tripService.RetrieveEntitiesByKeyword(keyword);
+            return PartialView("~/Views/PartialViews/_PartialTripTable.cshtml", result.Entities.OrderByDescending(trip => trip.PublishedAt));
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> UpdateTripPartial(string tripId,string data,TripTypes.TripInfoType type)
@@ -363,13 +422,12 @@ namespace ViewWorld.Controllers.Trip
                         result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<TripProperty>(data));
                         break;
                     case TripTypes.TripInfoType.发团计划:
-                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<TripPlan>(data));
+                        result = await tripService.UpdateTripPartial(tripId, serializer.Deserialize<List<TripPlan>>(data));
                         break;
                     default:
                         result.Message = "行程类型错误";
-                        return OriginJson(result);
+                        break;
                 }
-                result.Message = type.ToString();
                 return OriginJson(result);
             }catch(Exception e)
             {
@@ -378,7 +436,6 @@ namespace ViewWorld.Controllers.Trip
             }
             
         }
-        #endregion
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> UploadTripArrangementPhoto()
@@ -392,15 +449,27 @@ namespace ViewWorld.Controllers.Trip
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<JsonResult> ToggleTripArrangement(string tripId)
+        {
+            return OriginJson(await tripService.ToggleTripArrangement(tripId));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> CopyTripArrangementById(string tripId)
+        {
+            return OriginJson(await tripService.CopyTripArrangement(tripId));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> DeleteTripArrangementById(string tripId)
+        {
+            return OriginJson(await tripService.DeleteEntityById(tripId));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> DeletePhotoById(string tripId,string photoId)
         {
             return OriginJson(await tripService.DeletePhotoById(tripId, photoId));
-        }
-        public async Task<JsonResult> TestMethod()
-        {
-            var tripId = "58d3726c60c3d847c46ae1a9";
-            var result = await tripService.RetrieveTripArrangementById(tripId);
-            return OriginJson(result);
         }
         #endregion
     }

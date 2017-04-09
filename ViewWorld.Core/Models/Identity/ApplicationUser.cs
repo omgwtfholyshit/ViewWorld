@@ -8,6 +8,7 @@ using ViewWorld.Core.Enum;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ViewWorld.Core.Models.Identity
 {
@@ -64,12 +65,11 @@ namespace ViewWorld.Core.Models.Identity
 
             // Add custom user claims
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, NickName));
+            claims.Add(new Claim("NickName", NickName));
             claims.Add(new Claim(ClaimTypes.Email, Email ?? ""));
             claims.Add(new Claim(ClaimTypes.MobilePhone, PhoneNumber ?? ""));
             claims.Add(new Claim(ClaimTypes.DateOfBirth, DOB.ToString()));
             userIdentity.AddClaims(claims);
-
             //Update HttpContext.Current.User
             ViewWorldPrincipal principal = new ViewWorldPrincipal(Roles, Permissions, userIdentity);
             if(System.Web.HttpContext.Current !=null)

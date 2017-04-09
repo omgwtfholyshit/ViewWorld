@@ -29,8 +29,9 @@
         $('.header-left .search.icon').on('click', function (e) {
             BuildTable($(e.target).siblings().val());
         })
-        $('.header-left input').on('keyup', function (e) {
-            $('.header-left .search.icon').click();
+        $('.header-left input').on('keypress', function (e) {
+            if (e.keyCode == '13')
+                $('.header-left .search.icon').click();
         })
         $('.scenery-editor.confirm.modal').delegate('.positive.button', 'click', function (e) {
             var $modal = $(e.delegateTarget);
@@ -194,7 +195,7 @@
                 );
     }
     function BuildTable(keyword) {
-        var loadingHtml = '<tr class="center aligned"><td colspan="9" class="ui loading segment" height="150px"></td></tr>';
+        var loadingHtml = '<tr class="center aligned"><td colspan="10" class="ui loading segment" height="150px"></td></tr>';
         if (typeof keyword == "undefined")
             keyword = '';
 

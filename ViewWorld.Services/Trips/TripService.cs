@@ -9,6 +9,10 @@ using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Utils;
 using System.Web;
 using System.Web.Script.Serialization;
+using ViewWorld.Core.ExtensionMethods;
+using MongoDB.Driver;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace ViewWorld.Services.Trips
 {
@@ -61,123 +65,31 @@ namespace ViewWorld.Services.Trips
                 result.Message = "Id不能为空";
                 return result;
             }
-               
             return await Repo.GetOneAsync<TripArrangement>(tripId);
         }
 
-        public Task<GetListResult<TripArrangement>> RetrieveEntitiesByKeyword(string keyword)
+        public async Task<GetListResult<TripArrangement>> RetrieveEntitiesByKeyword(string keyword)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Result> TestMethod()
-        {
-            var result = new Result() { ErrorCode = 300,Message = "gg",Success=false};
-            try
+            if (string.IsNullOrWhiteSpace(keyword))
             {
-                var tripId = ObjectId.GenerateNewId().ToString();
-                #region CommonInfo
-                var cInfo = new CommonInfo();
-                var photoList = new List<CommonInfo.PhotoInfo>();
-                photoList.Add(new CommonInfo.PhotoInfo() { Name = "photo1.jpg", Description = "Heaven Lake" });
-                photoList.Add(new CommonInfo.PhotoInfo() { Name = "photo2.jpg", Description = "Hell Lake" });
-                List<string> spActivityList = new List<string>();
-                spActivityList.Add("跳水|$123");
-                spActivityList.Add("跳楼|￥10");
-                cInfo.AvailableDates = "1,2,3,4";
-                cInfo.CurrencyType = Core.Enum.CurrencyType.美元;
-                cInfo.GroupId = "10010";
-                cInfo.Include = "Nothing Included";
-                cInfo.Exclude = "Everything excluded";
-                cInfo.Introduction = "Dont ask stupid question";
-                cInfo.Keyword = "test";
-                cInfo.LowestPrice = 666;
-                cInfo.Photos = photoList;
-                cInfo.Points = 100;
-                cInfo.Promotion = "a,f,g";
-                cInfo.ProviderName = "HelloKitty";
-                cInfo.RegionId = "5822f33660c3d82f10fb062d";
-                cInfo.RegionName = "青岛";
-                cInfo.SelfPayActivities = spActivityList;
-                cInfo.Theme = "a,c,e";
-                #endregion
-                #region ProductInfo
-                string[] sids = new string[] { "58ccb76060c3d80b8ca911b0", "58ccb76060c3d80b8ca911a6", "58ccb76060c3d80b8ca9119e" };
-                var sResult = await Repo.GetManyAsync<Scenery>(sids);
-                var sceneryEntities = sResult.Entities.ToList();
-                ProductInfo pInfo = new ProductInfo();
-                pInfo.ArrivingCity = "悉尼";
-                pInfo.DepartingCity = "青岛";
-                pInfo.Feature = "嗨翻全场";
-                pInfo.Intro = "从早到晚飞一天";
-                pInfo.Sceneries = "";
-                pInfo.TotalDays = 2;
-                #endregion
-                #region ScheduleList
-                List<Schedule> scheduleList = new List<Schedule>();
-                List<ScheduleItem> siList1 = new List<ScheduleItem>();
-                List<ScheduleItem> siList2 = new List<ScheduleItem>();
-                var sceneries = new List<Scenery>();
-                sceneries.Add(sceneryEntities[0]);
-                siList1.Add(new ScheduleItem() { ActivityTime = "9am-9pm", Arrangement = "nothin", Memo = "Bring the money", Sceneries = "" });
-                sceneries.RemoveAt(0);
-                sceneries.Add(sceneryEntities[1]);
-                sceneries.Add(sceneryEntities[2]);
-                siList2.Add(new ScheduleItem() { ActivityTime = "9am-9pm", Arrangement = "nothin", Memo = "Bring the money", Sceneries = "" });
-                scheduleList.Add(new Schedule() { Accommodation = "自理", Day = 1, Description = "吃饭喝酒打屁屁", Details = siList1, GroupPickUp = "没有", Introduction = "烦死了", Meal = "不管", PickUp = "屁话真多", Id = ObjectId.GenerateNewId().ToString() });
-                scheduleList.Add(new Schedule() { Accommodation = "自理2", Day = 2, Description = "吃饭喝酒打屁屁2", Details = siList2, GroupPickUp = "没有2", Introduction = "烦死了2", Meal = "不管2", PickUp = "屁话真多2", Id = ObjectId.GenerateNewId().ToString() });
-
-                #endregion
-                #region TripProperty
-                var psid = new string[] { "58ccb76060c3d80b8ca9119a", "58ccb76060c3d80b8ca91199", "58ccb76060c3d80b8ca91198" };
-                var psid2 = new string[] { "58ccb76060c3d80b8ca91194", "58ccb76060c3d80b8ca91195", "58ccb76060c3d80b8ca91196" };
-                var psResult = await Repo.GetManyAsync<Scenery>(psid);
-                var psResult2 = await Repo.GetManyAsync<Scenery>(psid);
-                var psEntities = psResult.Entities.ToList();
-                var psEntities2 = psResult2.Entities.ToList();
-                List<TripProperty.AirportPickUp> PickUpInfos = new List<TripProperty.AirportPickUp>();
-                PickUpInfos.Add(new TripProperty.AirportPickUp() { PickUpStartAt = DateTime.Now, PickUpEndAt = DateTime.Now.AddHours(3), IsFree = true, Price = 0, Title = "悉尼接机" });
-                PickUpInfos.Add(new TripProperty.AirportPickUp() { PickUpStartAt = DateTime.Now, PickUpEndAt = DateTime.Now.AddHours(6), IsFree = false, Price = 50, Title = "悉尼又接机" });
-                TripProperty tproperty = new TripProperty();
-                tproperty.PickUpInfos = PickUpInfos;
-                tproperty.SelectableRoutes.Add("Route1", psEntities);
-                tproperty.SelectableRoutes.Add("Route2", psEntities);
-                #endregion
-                #region TripPlan
-                TripPlan.TripPriceForSpecificDate day1 = new TripPlan.TripPriceForSpecificDate()
-                {
-                    BasePrice = new HotelPrice() { Name = "a hotel", SinglePrice = 100, DoublePrice = 90, TriplePrice = 80, QuadplexPrice = 75, ChildPrice = 0, RoomDifference = 0 },
-                    RaisePriceByPercentage = 40,
-                    TripDate = DateTime.Now.AddMonths(1),
-                    AdditionalPrice = new HotelPrice() { Name = "a hotel", SinglePrice = 0, DoublePrice = 0, TriplePrice = 0, QuadplexPrice = 0, ChildPrice = 0, RoomDifference = 0 }
-                };
-                TripPlan.TripPriceForSpecificDate day2 = new TripPlan.TripPriceForSpecificDate()
-                {
-                    BasePrice = new HotelPrice() { Name = "b hotel", SinglePrice = 100, DoublePrice = 90, TriplePrice = 80, QuadplexPrice = 75, ChildPrice = 0, RoomDifference = 0 },
-                    RaisePriceByPercentage = 40,
-                    TripDate = DateTime.Now.AddMonths(2),
-                    AdditionalPrice = new HotelPrice() { Name = "b hotel", SinglePrice = 100, DoublePrice = 90, TriplePrice = 80, QuadplexPrice = 75, ChildPrice = 0, RoomDifference = 10 }
-                };
-                TripPlan tplan = new TripPlan();
-                tplan.CurrencyType = Core.Enum.CurrencyType.美元;
-                tplan.Id = ObjectId.GenerateNewId().ToString();
-                tplan.OneDayOnly = true;
-                tplan.TripId = tripId;
-                tplan.TripPrice.Add(day1);
-                tplan.TripPrice.Add(day2);
-                tplan.Type = Core.Enum.TripTypes.PlanType.指定日期发团;
-                #endregion
-                var tripModel = new TripArrangement(cInfo, pInfo, scheduleList, tplan, tproperty);
-                tripModel.Id = tripId;
-                tripModel.ProductId = Tools.GenerateId_M2();
-                result = await Repo.AddOneAsync<TripArrangement>(tripModel);
-            }catch(Exception e)
+                return (await Repo.GetAllAsync<TripArrangement>()).ManyToListResult();
+            }else
             {
-                result.Message = e.Message;
+                var builder = Builders<TripArrangement>.Filter;
+                FilterDefinition<TripArrangement> filter;
+                keyword = keyword.ToUpper();
+                int productId = 0;
+                if(int.TryParse(keyword,out productId))
+                {
+                    filter = builder.Eq("ProductId", keyword);
+                }else
+                {
+                    filter = builder.Where(obj => obj.CommonInfo.Name.Contains(keyword) || obj.Publisher.Contains(keyword));
+                }
+                return (await Repo.GetManyAsync(filter)).ManyToListResult();
             }
-            
-            return result;
         }
+
 
         public async Task<Result> UpdateEntity(TripArrangement Entity)
         {
@@ -190,7 +102,9 @@ namespace ViewWorld.Services.Trips
             if (result.Success)
             {
                 result.Entity.CommonInfo = data;
-                return await UpdateEntity(result.Entity);
+                var updateResult = await UpdateEntity(result.Entity);
+                updateResult.Message = "通用信息";
+                return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
         }
@@ -201,7 +115,9 @@ namespace ViewWorld.Services.Trips
             if (result.Success)
             {
                 result.Entity.ProductInfo = data;
-                return await UpdateEntity(result.Entity);
+                var updateResult = await UpdateEntity(result.Entity);
+                updateResult.Message = "产品概要";
+                return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
         }
@@ -212,18 +128,22 @@ namespace ViewWorld.Services.Trips
             if (result.Success)
             {
                 result.Entity.Schedules = data;
-                return await UpdateEntity(result.Entity);
+                var updateResult = await UpdateEntity(result.Entity);
+                updateResult.Message = "单日行程";
+                return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
         }
 
-        public async Task<Result> UpdateTripPartial(string tripId, TripPlan data)
+        public async Task<Result> UpdateTripPartial(string tripId, List<TripPlan> data)
         {
             var result = await Repo.GetOneAsync<TripArrangement>(tripId);
             if (result.Success)
             {
-                result.Entity.TripPlan = data;
-                return await UpdateEntity(result.Entity);
+                result.Entity.TripPlans = data;
+                var updateResult = await UpdateEntity(result.Entity);
+                updateResult.Message = "发团计划";
+                return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
         }
@@ -234,11 +154,56 @@ namespace ViewWorld.Services.Trips
             if (result.Success)
             {
                 result.Entity.TripProperty = data;
-                return await UpdateEntity(result.Entity);
+                var updateResult = await UpdateEntity(result.Entity);
+                updateResult.Message = "发团属性";
+                return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
         }
+        public async Task<Result> CopyTripArrangement(string tripId)
+        {
+            var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            if (result.Success)
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string tmp = js.Serialize(result.Entity);
 
+                TripArrangement obj = js.Deserialize<TripArrangement>(tmp);
+                var uuid = ObjectId.GenerateNewId();
+                obj.Id = uuid.ToString();
+                obj.ProductId = uuid.Increment.ToString();
+                var claimsIdentity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                foreach (var claim in claimsIdentity.Claims)
+                {
+                    if (claim.Type == "NickName")
+                        obj.Publisher = claim.Value.ToUpper();
+                }
+                obj.PublisherId = HttpContext.Current.User.Identity.GetUserId();
+                obj.PublishedAt = DateTime.Now;
+                if (obj.CommonInfo.Photos.Count() > 0)
+                {
+                    string savePath = PathHelper.MapPath(dataDirectory + obj.Id + "/TripPhotos/");
+                    if (!Directory.Exists(savePath))
+                        Directory.CreateDirectory(savePath);
+                    foreach (var photo in obj.CommonInfo.Photos)
+                    {
+                        string filePath = PathHelper.MapPath(photo.FileLocation);
+                        string newPath = savePath + Tools.GenerateId_M1() + Path.GetExtension(photo.Name).ToLower();
+                        if (File.Exists(filePath))
+                        {
+                            File.Copy(filePath, newPath);
+                            photo.FileLocation = PathHelper.absolutePathtoVirtualPath(newPath);
+                        }else
+                        {
+                            obj.CommonInfo.Photos.Remove(photo);
+                        }
+                    }
+                }
+                await Repo.AddOneAsync(obj);
+                result.Message = obj.Id;
+            }
+            return result;
+        }
         public async Task<Result> UploadPhoto(HttpRequestBase request)
         {
             var result = new Result() { ErrorCode = 300, Message = "", Success = false };
@@ -322,5 +287,25 @@ namespace ViewWorld.Services.Trips
             }
             return outcome;
         }
+
+        public async Task<Result> ToggleTripArrangement(string tripId)
+        {
+            var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            if (result.Success)
+            {
+                result.Entity.IsVisible = !result.Entity.IsVisible;
+                await UpdateEntity(result.Entity);
+                if (result.Entity.IsVisible)
+                {
+                    result.Message = "隐藏线路";
+                }else
+                {
+                    result.Message = "发布线路";
+                }
+            }
+            return result;
+        }
+
+        
     }
 }

@@ -301,7 +301,6 @@
     <Compile Include="App_Start\StyleBundleFallback.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Backend\Pages\PageController.cs" />
-    <Compile Include="Controllers\DepartureController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\ProviderController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -583,6 +582,7 @@
     <Content Include="Scripts\Backend\Login.js" />
     <Content Include="Scripts\Backend\Trip\RegionManagement.js" />
     <Content Include="Scripts\Backend\Trip\SceneryManagement.js" />
+    <Content Include="Scripts\Backend\Trip\TripList.js" />
     <Content Include="Scripts\Backend\Trip\TripManagement.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -623,8 +623,13 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Properties\PublishProfiles\ViewWorld - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\calendar.es5.js">
+      <DependentUpon>calendar.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\calendar.es5.min.js">
+      <DependentUpon>calendar.es5.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\calendar.js" />
-    <Content Include="Scripts\calendar.min.js" />
     <Content Include="Scripts\calendar.zh-cn.js" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
@@ -996,6 +1001,8 @@
     <Content Include="Scripts\UEditor\net\controller.ashx" />
     <Content Include="Scripts\UEditor\net\README.md" />
     <Content Include="Scripts\UEditor\net\Web.config" />
+    <Content Include="Views\Page\EditTripManagement.cshtml" />
+    <Content Include="Views\PartialViews\_PartialTripTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

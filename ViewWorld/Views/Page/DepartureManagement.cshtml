@@ -1,24 +1,31 @@
-﻿@model IEnumerable<ViewWorld.Core.Models.TripModels.StartingPoint>
+﻿@model IOrderedEnumerable<ViewWorld.Core.Models.TripModels.StartingPoint>
 @{
     ViewBag.Parent = "旅游管理";
     ViewBag.Title = "出发地管理";
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 
-<div class="ui fluid container admin-content">
-    <h2>出发地管理</h2>
-    <button class="ui primary button add-departure">
-        <i class="icon add"></i>
-        添加出发地
-    </button>
+<div class="trip-management">
+    <div class="tool-bar">
+        <button class="ui basic button add-departure" >
+            <i class="icon add"></i>
+            添加
+        </button>
+        <button class="ui basic button" id="clear">
+            <i class="icon refresh"></i>
+            重置
+        </button>
+        <hr />
+    </div>
     @if (Model.Any())
     {
         <table class="ui celled table">
             <thead>
                 <tr>
-                    <th>出发时间</th>
                     <th>地点/地标</th>
                     <th>地址</th>
+                    <th>出发日期</th>
+                    <th>出发时间</th>
                     <th>供应商简称</th>
                     <th>供应商</th>
                     <th>操作</th>
@@ -27,12 +34,38 @@
             <tbody>
                 @foreach (var depart in Model)
                 {
-                    <tr class="@(depart.IsArchived ? "archived-row" : "")">
-                        <td>@depart.DepartTime</td>
+                    Dictionary<string, string> days = new Dictionary<string, string>();
+                    days.Add("1", "周一");
+                    days.Add("2", "周二");
+                    days.Add("3", "周三");
+                    days.Add("4", "周四");
+                    days.Add("5", "周五");
+                    days.Add("6", "周六");
+                    days.Add("7", "周日");
+                    string availableDays = "逢";
+                    foreach (var item in days)
+                    {
+                        if (depart.AvailableDays.Contains(item.Key))
+                        {
+                            availableDays += item.Value + ",";
+                        }
+                    }
+                    availableDays.Remove(availableDays.Length - 1, 1);
+                    availableDays += "出发";
+                    <tr id="@depart.Id" data-providerId="@depart.ProviderId" data-availabledays="@depart.AvailableDays">
                         <td>@depart.Landmark</td>
                         <td>@depart.Address</td>
+                        <td>@availableDays</td>
+                        <td>@depart.DepartTime</td>
                         <td>@depart.ProviderAlias</td>
                         <td>@depart.ProviderName</td>
+                        <td class="collapsing">
+                            <button class="ui blue icon button save hidden" data-content="保存"><i class="icon save"></i></button>
+                            <button class="ui blue icon button edit" data-content="编辑"><i class="icon edit"></i></button>
+                            <button class="ui circular red icon delete button" data-content="删除">
+                                <i class="remove icon"></i>
+                            </button>
+                        </td>
                     </tr>
                 }
 
@@ -41,7 +74,7 @@
     }
     <div class="ui modal admin-modal add-departure-modal">
         <div class="header">
-            添加出发地
+            编辑出发地
         </div>
         <i class="close icon"></i>
 
@@ -58,6 +91,53 @@
             <div class="required field">
                 <label>出发时间</label>
                 <input name="depart_time" type="text" placeholder="如: 7:00am" data-db-key="DepartTime" />
+            </div>
+            <div class="required field">
+                <label>出发日期</label>
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="1">
+                            <label>星期一</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="2">
+                            <label>星期二</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="3">
+                            <label>星期三</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="4">
+                            <label>星期四</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="5">
+                            <label>星期五</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="6">
+                            <label>星期六</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox availabledates">
+                            <input type="checkbox" name="availabledates" value="7">
+                            <label>星期天</label>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="required field">
                 <label>供应商</label>

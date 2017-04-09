@@ -58,6 +58,7 @@
         $('#submitForm').on('click', function (e) {
             e.preventDefault();
             UpdateUserInfo()
+            return false;
         })
         $('#submitMobile').on('click', function (e) {
             e.preventDefault();

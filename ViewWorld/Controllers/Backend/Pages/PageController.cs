@@ -6,6 +6,9 @@ using ViewWorld.Core.Models.Identity;
 using ViewWorld.Core.Models.ProviderModels;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Models;
+using ViewWorld.Core.ExtensionMethods;
+using System.Linq;
+using MongoDB.Driver;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
@@ -57,6 +60,10 @@ namespace ViewWorld.Controllers.Backend.Pages
         {
             return View();
         }
+        public ActionResult EditTripManagement(string TripId)
+        {
+            return View();
+        }
         public ActionResult SceneryManagement()
         {
             return View();
@@ -78,10 +85,21 @@ namespace ViewWorld.Controllers.Backend.Pages
             var providers = await Repo.GetAllAsync<Provider>();
             return View(providers.Entities);
         }
-        public async Task<ActionResult> DepartureManagement()
+        public async Task<ActionResult> DepartureManagement(string keyword)
         {
-            var departures = await Repo.GetAllAsync<StartingPoint>();            
-            return View(departures.Entities);
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                var departures = await Repo.GetAllAsync<StartingPoint>();
+                return View(departures.ManyToListResult().Entities.Where(depart => !depart.IsArchived).OrderByDescending(depart => depart.AddedDate));
+            }else
+            {
+                var builder = Builders<StartingPoint>.Filter;
+                keyword = keyword.ToUpper();
+                FilterDefinition<StartingPoint> filter = builder.Where(point => point.Address.ToUpper().Contains(keyword) || point.ProviderName.ToUpper().Contains(keyword) || point.ProviderAlias.ToUpper().Contains(keyword)||point.Landmark.ToUpper().Contains(keyword));
+                var result = (await Repo.GetManyAsync(filter)).ManyToListResult();
+                return View(result.Entities.Where(depart => !depart.IsArchived).OrderByDescending(depart => depart.AddedDate));
+            }
+            
         }
         #endregion        
     }

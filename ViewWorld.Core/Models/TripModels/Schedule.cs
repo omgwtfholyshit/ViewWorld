@@ -13,7 +13,6 @@ namespace ViewWorld.Core.Models.TripModels
     /// </summary>
     public class Schedule
     {
-        [BsonRepresentation(BsonType.ObjectId)]
         [BsonRequired]
         public string Id { get; set; }
         public string Name { get; set; }

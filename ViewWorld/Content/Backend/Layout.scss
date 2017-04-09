@@ -50,6 +50,7 @@ body{
     overflow-y:hidden;
     overflow-x:auto;
     background-color:#ececec;
+    
 }
 .wrapper{
     margin:1em;
@@ -220,7 +221,7 @@ body{
     //ueditor
     .edui-default{
         z-index:1!important;
-        .edui-editor-iframeholder{min-height:150px;}
+        .edui-editor-iframeholder{min-height:150px;max-height:254px;}
     }
     #commonInfo{
     .inline.fields>.three.wide.field{min-width:20rem;}
@@ -260,7 +261,7 @@ body{
     #productInfo{
         .scenery-selection{display:inline-block;min-width:14rem}
     }
-    #scheduleList{
+    #scheduleList,#TripPlans{
         .ui.tabular.menu{
             .item-container{
                 width:10rem;position:relative;
@@ -268,6 +269,20 @@ body{
             }
         }
         .scenery-selection{display:inline-block;min-width:14rem}
+    }
+    #TripProperty{
+        #hotelUpgrade,#selectableRoutes{
+            tbody tr td:last-child{width:8rem;}
+        }
+    }
+    #TripPlans{
+        .view-port{height:20rem;overflow-y:auto;}
+        .ui.calendar .ui.popup .ui.grid{white-space:normal}
+        .highlighted {background: #ddffdd;}
+        #calendar .ui.grid>.column:not(.row), .ui.grid>.row>.column{width:auto}
+        #displayTable{
+            tbody input{width:95%;}
+        }
     }
 }
 .region-editor .form-container,.scenery-editor .form-container,#commonInfo{

@@ -93,7 +93,7 @@ namespace ViewWorld.Controllers
                 //    data.Add(doc);
                     
                 //}
-                return DropdownData(result.Success, result.Entities.Select(e => new { name = e.Name, value = e.Id, disabled = e.IsArchived }).OrderBy(e => e.name));
+                return DropdownData(result.Success, result.Entities.Select(e => new { name = e.Name + "----" + e.Alias, value = e.Id, disabled = e.IsArchived }).OrderBy(e => e.name));
             }
             else
             {

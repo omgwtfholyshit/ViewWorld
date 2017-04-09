@@ -145,6 +145,19 @@
         var uuid = s.join("");
         return uuid;
     }
+    Date.prototype.toSimpleDateString = function () {
+        var _this = this;
+        var year = _this.getFullYear();
+        var month = _this.getMonth() + 1;
+        var day = _this.getDate();
+        return year + "-" + month + "-" + day;
+    }
+    function ConvertJsonToDate(jsonDate) {
+        if (typeof jsonDate != 'string') {
+            return jsonDate;
+        }
+        return new Date(+jsonDate.replace('/Date(', '').replace(')/', ''));
+    }
     function bindEvents() {
         String.prototype.hashCode = function () {
             var hash = 0, i, chr;
@@ -163,7 +176,7 @@
     $.extend({
         tip: tip, checkEmail: checkEmail, checkMobile: checkMobile,
         getQueryString: getQueryString, getQueryStringByName: getQueryStringByName, getQueryStringByIndex: getQueryStringByIndex,
-        htmlEncode: htmlEncode, htmlDecode: htmlDecode,uuid:uuid
+        htmlEncode: htmlEncode, htmlDecode: htmlDecode, uuid: uuid, ConvertJsonToDate: ConvertJsonToDate
     });
     bindEvents();
 })(window, document, jQuery);

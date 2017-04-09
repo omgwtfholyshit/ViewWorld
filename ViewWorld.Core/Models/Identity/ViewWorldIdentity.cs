@@ -10,6 +10,7 @@ namespace ViewWorld.Core.Models.Identity
     public class ViewWorldIdentity : IIdentity
     {
         public string UserName { get; set; }
+        public string NickName { get; set; }
         public string Department { get; set; }
         public string UserPhone { get; set; }
         public ViewWorldIdentity(string username,string department,string phone)

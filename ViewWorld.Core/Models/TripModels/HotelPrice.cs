@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ViewWorld.Core.Models.TripModels
 {
-    public struct HotelPrice
+    public class HotelPrice
     {
         public string Name { get; set; }
-        public decimal SinglePrice { get; set; }
-        public decimal DoublePrice { get; set; }
-        public decimal TriplePrice { get; set; }
-        public decimal QuadplexPrice { get; set; }
-        public decimal ChildPrice { get; set; }
-        public decimal RoomDifference { get; set; }//单房差
+        public double SinglePrice { get; set; }
+        public double DoublePrice { get; set; }
+        public double TriplePrice { get; set; }
+        public double QuadplexPrice { get; set; }
+        public double ChildPrice { get; set; }
+        public double RoomDifference { get; set; } //单房差
     }
 }

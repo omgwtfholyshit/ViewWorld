@@ -210,7 +210,8 @@ body {
 .region-management .edui-default, .scenery-management .edui-default, .city-management .edui-default, .trip-management .edui-default {
   z-index: 1 !important; }
   .region-management .edui-default .edui-editor-iframeholder, .scenery-management .edui-default .edui-editor-iframeholder, .city-management .edui-default .edui-editor-iframeholder, .trip-management .edui-default .edui-editor-iframeholder {
-    min-height: 150px; }
+    min-height: 150px;
+    max-height: 254px; }
 
 .region-management #commonInfo .inline.fields > .three.wide.field, .scenery-management #commonInfo .inline.fields > .three.wide.field, .city-management #commonInfo .inline.fields > .three.wide.field, .trip-management #commonInfo .inline.fields > .three.wide.field {
   min-width: 20rem; }
@@ -253,18 +254,37 @@ body {
   display: inline-block;
   min-width: 14rem; }
 
-.region-management #scheduleList .ui.tabular.menu .item-container, .scenery-management #scheduleList .ui.tabular.menu .item-container, .city-management #scheduleList .ui.tabular.menu .item-container, .trip-management #scheduleList .ui.tabular.menu .item-container {
+.region-management #scheduleList .ui.tabular.menu .item-container, .region-management #TripPlans .ui.tabular.menu .item-container, .scenery-management #scheduleList .ui.tabular.menu .item-container, .scenery-management #TripPlans .ui.tabular.menu .item-container, .city-management #scheduleList .ui.tabular.menu .item-container, .city-management #TripPlans .ui.tabular.menu .item-container, .trip-management #scheduleList .ui.tabular.menu .item-container, .trip-management #TripPlans .ui.tabular.menu .item-container {
   width: 10rem;
   position: relative; }
-  .region-management #scheduleList .ui.tabular.menu .item-container .icon-container, .scenery-management #scheduleList .ui.tabular.menu .item-container .icon-container, .city-management #scheduleList .ui.tabular.menu .item-container .icon-container, .trip-management #scheduleList .ui.tabular.menu .item-container .icon-container {
+  .region-management #scheduleList .ui.tabular.menu .item-container .icon-container, .region-management #TripPlans .ui.tabular.menu .item-container .icon-container, .scenery-management #scheduleList .ui.tabular.menu .item-container .icon-container, .scenery-management #TripPlans .ui.tabular.menu .item-container .icon-container, .city-management #scheduleList .ui.tabular.menu .item-container .icon-container, .city-management #TripPlans .ui.tabular.menu .item-container .icon-container, .trip-management #scheduleList .ui.tabular.menu .item-container .icon-container, .trip-management #TripPlans .ui.tabular.menu .item-container .icon-container {
     position: absolute;
     top: 0.8rem;
     right: 0.5rem;
     cursor: pointer; }
 
-.region-management #scheduleList .scenery-selection, .scenery-management #scheduleList .scenery-selection, .city-management #scheduleList .scenery-selection, .trip-management #scheduleList .scenery-selection {
+.region-management #scheduleList .scenery-selection, .region-management #TripPlans .scenery-selection, .scenery-management #scheduleList .scenery-selection, .scenery-management #TripPlans .scenery-selection, .city-management #scheduleList .scenery-selection, .city-management #TripPlans .scenery-selection, .trip-management #scheduleList .scenery-selection, .trip-management #TripPlans .scenery-selection {
   display: inline-block;
   min-width: 14rem; }
+
+.region-management #TripProperty #hotelUpgrade tbody tr td:last-child, .region-management #TripProperty #selectableRoutes tbody tr td:last-child, .scenery-management #TripProperty #hotelUpgrade tbody tr td:last-child, .scenery-management #TripProperty #selectableRoutes tbody tr td:last-child, .city-management #TripProperty #hotelUpgrade tbody tr td:last-child, .city-management #TripProperty #selectableRoutes tbody tr td:last-child, .trip-management #TripProperty #hotelUpgrade tbody tr td:last-child, .trip-management #TripProperty #selectableRoutes tbody tr td:last-child {
+  width: 8rem; }
+
+.region-management #TripPlans .view-port, .scenery-management #TripPlans .view-port, .city-management #TripPlans .view-port, .trip-management #TripPlans .view-port {
+  height: 20rem;
+  overflow-y: auto; }
+
+.region-management #TripPlans .ui.calendar .ui.popup .ui.grid, .scenery-management #TripPlans .ui.calendar .ui.popup .ui.grid, .city-management #TripPlans .ui.calendar .ui.popup .ui.grid, .trip-management #TripPlans .ui.calendar .ui.popup .ui.grid {
+  white-space: normal; }
+
+.region-management #TripPlans .highlighted, .scenery-management #TripPlans .highlighted, .city-management #TripPlans .highlighted, .trip-management #TripPlans .highlighted {
+  background: #ddffdd; }
+
+.region-management #TripPlans #calendar .ui.grid > .column:not(.row), .region-management #TripPlans .ui.grid > .row > .column, .scenery-management #TripPlans #calendar .ui.grid > .column:not(.row), .scenery-management #TripPlans .ui.grid > .row > .column, .city-management #TripPlans #calendar .ui.grid > .column:not(.row), .city-management #TripPlans .ui.grid > .row > .column, .trip-management #TripPlans #calendar .ui.grid > .column:not(.row), .trip-management #TripPlans .ui.grid > .row > .column {
+  width: auto; }
+
+.region-management #TripPlans #displayTable tbody input, .scenery-management #TripPlans #displayTable tbody input, .city-management #TripPlans #displayTable tbody input, .trip-management #TripPlans #displayTable tbody input {
+  width: 95%; }
 
 .region-editor .form-container, .scenery-editor .form-container, #commonInfo {
   width: 100%; }

@@ -28,8 +28,8 @@ namespace ViewWorld.Core.Models.TripModels
         public string ProviderName { get; set; }
         public string ProviderAlias { get; set; }
         public string ProviderId { get; set; }
-        public DateTime AddedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime AddedDate { get; set; } = DateTime.Now;
+        public DateTime ModifiedDate { get; set; } = DateTime.Now;
         //管理员用户名
         public string UpdatedBy { get; set; }
         //统计该起点的热门度

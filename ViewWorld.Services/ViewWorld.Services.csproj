@@ -80,6 +80,8 @@
     <Compile Include="Regions\RegionService.cs" />
     <Compile Include="Sceneries\ISceneryService.cs" />
     <Compile Include="Sceneries\SceneryService.cs" />
+    <Compile Include="StartingPoints\IStartingPointService.cs" />
+    <Compile Include="StartingPoints\StartingPointService.cs" />
     <Compile Include="Trips\ITripService.cs" />
     <Compile Include="Trips\TripService.cs" />
   </ItemGroup>

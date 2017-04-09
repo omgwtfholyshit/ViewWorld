@@ -19,12 +19,12 @@ namespace ViewWorld.Core.Models.TripModels
     /// 
     public class TripArrangement
     {
-        public TripArrangement(CommonInfo cInfo, ProductInfo pInfo, List<Schedule> schedules, TripPlan tplan,TripProperty tproperty)
+        public TripArrangement(CommonInfo cInfo, ProductInfo pInfo, List<Schedule> schedules, List<TripPlan> tplan,TripProperty tproperty)
         {
             this.CommonInfo = cInfo;
             this.ProductInfo = pInfo;
             this.Schedules = schedules;
-            this.TripPlan = tplan;
+            this.TripPlans = tplan;
             this.TripProperty = tproperty;
         }
         public TripArrangement() { }
@@ -32,6 +32,11 @@ namespace ViewWorld.Core.Models.TripModels
         [BsonRequired]
         public string Id { get; set; }
         public string ProductId { get; set; }
+        public string Publisher { get; set; }
+        public string PublisherId { get; set; }
+        public DateTime PublishedAt { get; set; }
+        public int Popularity { get; set; } = 0;
+        public int SortOrder { get; set; } = 0;
         public CommonInfo CommonInfo {
             get
             {
@@ -73,10 +78,10 @@ namespace ViewWorld.Core.Models.TripModels
                 _tripProperty = value;
             }
         }
-        public TripPlan TripPlan {
+        public List<TripPlan> TripPlans {
             get
             {
-                return _tripPlan ?? new TripPlan();
+                return _tripPlan ?? new List<TripPlan>();
             }
             set
             {
@@ -84,12 +89,12 @@ namespace ViewWorld.Core.Models.TripModels
             }
         }
         public bool IsVisible { get; set; } = false;
-        public bool IsDeleted { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
         #region private properties
         CommonInfo _commonInfo { get; set; }
         ProductInfo _productInfo { get; set; }
         List<Schedule> _scheduleList { get; set; }
-        TripPlan _tripPlan { get; set; }
+        List<TripPlan> _tripPlan { get; set; }
         TripProperty _tripProperty { get; set; }
         #endregion
 
@@ -180,49 +185,62 @@ namespace ViewWorld.Core.Models.TripModels
     }
     public class TripProperty
     {
-        public class AirportPickUp
-        {
-            public bool IsFree { get; set; } = false;
-            public DateTime PickUpStartAt { get; set; }
-            public DateTime PickUpEndAt { get; set; }
-            public decimal Price { get; set; } = 0;
-            public string Title { get; set; }
+        //public class AirportPickUp
+        //{
+        //    public bool IsFree { get; set; } = false;
+        //    public DateTime PickUpStartAt { get; set; }
+        //    public DateTime PickUpEndAt { get; set; }
+        //    public decimal Price { get; set; } = 0;
+        //    public string Title { get; set; }
 
-        }
-        public List<AirportPickUp> PickUpInfos {
-            get
-            {
-                return _pickupInfo ?? new List<AirportPickUp>();
-            }
-            set
-            {
-                _pickupInfo = value;
-            }
-        }
-        public StartingPoint DepartingLocation
+        //}
+        //public List<AirportPickUp> PickUpInfos {
+        //    get
+        //    {
+        //        return _pickupInfo ?? new List<AirportPickUp>();
+        //    }
+        //    set
+        //    {
+        //        _pickupInfo = value;
+        //    }
+        //}
+        public List<HotelPrice> HotelPrices
         {
             get
             {
-                return _dcity ?? new StartingPoint();
+                return _priceList ?? new List<HotelPrice>();
             }
             set
             {
-                _dcity = value;
+                _priceList = value;
             }
         }
-        public Dictionary<string,List<Scenery>> SelectableRoutes {
+        
+        public string DepartingLocation { get; set; }
+        public List<string> SelectableRoutes {
             get
             {
-                return _routes ?? new Dictionary<string, List<Scenery>>();
+                return _routes ?? new List<string>();
             }
             set
             {
                 _routes = value;
             }
         }
-        List<AirportPickUp> _pickupInfo { get; set; }
-        StartingPoint _dcity { get; set; }
-        Dictionary<string, List<Scenery>> _routes;
+        public List<string> SelfChooseActivities {
+            get
+            {
+                return _activities ?? new List<string>();
+            }
+            set
+            {
+                _activities = value;
+            }
+        }
+        List<HotelPrice> _priceList { get; set; }
+        //List<AirportPickUp> _pickupInfo { get; set; }
+        List<string> _routes { get; set; }
+        List<string> _activities { get; set; }
     }
     
     //发团计划
@@ -232,28 +250,28 @@ namespace ViewWorld.Core.Models.TripModels
         {
             public DateTime TripDate { get; set; } 
             public HotelPrice BasePrice { get; set; }//原始价格
-            public int RaisePriceByPercentage { get; set; }//提价
-            public HotelPrice AdditionalPrice { get; set; }//房间加价
+            
             
         }
-        [BsonRepresentation(BsonType.ObjectId)]
         [BsonRequired]
         public string Id { get; set; }
         public TripTypes.PlanType Type { get; set; }
-        public bool OneDayOnly { get; set; }
-        public CurrencyType CurrencyType { get; set; }
-        public List<TripPriceForSpecificDate> TripPrice {
+        public bool IsOneDayOnly { get; set; } = false;
+        public bool IsRoomDiffApplied { get; set; } = false;
+        public string SelectedDates { get; set; }
+        public string WeekInfo { get; set; }
+        public int RaisePriceByPercentage { get; set; }//提价
+        public HotelPrice AdditionalPrice { get; set; }//房间加价
+        public List<TripPriceForSpecificDate> TripPrices {
             get
             {
-                return _tripPrice ?? new List<TripPriceForSpecificDate>();
+                return _tripPriceList ?? new List<TripPriceForSpecificDate>();
             }
             set
             {
-                _tripPrice = value;
+                _tripPriceList = value;
             }
         }
-        
-        List<TripPriceForSpecificDate> _tripPrice { get; set; }
-        public string TripId { get; set; }
+        List<TripPriceForSpecificDate> _tripPriceList { get; set; }
     }
 }
