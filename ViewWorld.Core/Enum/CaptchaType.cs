@@ -8,7 +8,9 @@ namespace ViewWorld.Core.Enum
 {
     public enum CaptchaType
     {
+        Invalid,
         Login,
-        Mobile
+        Mobile,
+        Email,
     }
 }

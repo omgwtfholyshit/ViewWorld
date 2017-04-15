@@ -5,11 +5,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ViewWorld.Core;
 using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Utils
@@ -43,8 +45,11 @@ namespace ViewWorld.Utils
                 case CaptchaType.Mobile:
                     sessionName = "MobileCaptcha";
                     break;
+                case CaptchaType.Email:
+                    sessionName = "EmailCaptcha";
+                    break;
                 default:
-                    sessionName = "default";
+                    sessionName = "invalid";
                     break;
             }
             return sessionName;
@@ -102,18 +107,18 @@ namespace ViewWorld.Utils
             return requireCaptcha;
         }
 
-        public static string SendToMobile(string mobileNumber,string content)
+        public async Task<string> SendToMobileAsync(string mobileNumber,string content)
         {
             string data = "mobile=" + mobileNumber + "&content=" + content;
 
-            return VerificationSender.Instance.HttpGet(VerificationSender.sendURL,data);
+            return await Task.Factory.StartNew(() => VerificationSender.Instance.HttpGet(VerificationSender.sendURL, data));
         }
-
-        public void ClearSession(string name , HttpSessionStateBase session, int timer = 60)
+        public void ClearSessionAsync(string name , HttpSessionStateBase session, int timer = 60)
         {
             Thread.Sleep(timer * 1000);
             if (session[name] != null)
             {
+                session[name] = null;
                 session.Remove(name);
             }
         }

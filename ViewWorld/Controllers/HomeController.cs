@@ -64,9 +64,8 @@ namespace ViewWorld.Controllers
             
             return View();
         }
-        public ActionResult TestMethods()
+        public async Task<ActionResult >TestMethods()
         {
-            var nickname = GetClaimValue("NickName");
             return Json("hello");
         }
 

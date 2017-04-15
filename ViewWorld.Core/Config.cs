@@ -15,10 +15,18 @@ namespace ViewWorld.Core
         /// </summary>
         public static string DB_HostIP { get; private set; }
         public static int DB_Port { get; private set; }
+        public static string SMTPHost { get; private set; }
+        public static int SMTPPort { get; private set; }
+        public static string EmailAddress { get; private set; }
+        public static string EmailPass { get; set; }
         static Config()
         {
             DB_HostIP = ConfigurationManager.AppSettings["dbHostIP"];
             DB_Port = Convert.ToInt32(ConfigurationManager.AppSettings["dbPort"]);
+            SMTPHost = ConfigurationManager.AppSettings["SmtpHost"];
+            SMTPPort = Convert.ToInt32(ConfigurationManager.AppSettings["SMTPPort"]);
+            EmailAddress = ConfigurationManager.AppSettings["FromEmailAddress"];
+            EmailPass = ConfigurationManager.AppSettings["FormEmailPassword"];
         }
     }
 }

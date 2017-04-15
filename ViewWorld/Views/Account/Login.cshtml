@@ -1,63 +1,127 @@
-﻿@using ViewWorld.Models
-@model LoginViewModel
-@{
+﻿@{
     ViewBag.Title = "登录";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
+    <script data-pace-options='{ "ajax": false }' src="~/Lib/Pace/pace.js"></script>
+    @Styles.Render("~/Content/semantic")
+    <link href="~/Content/Frontend/login.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
+    <!--[if IE 9]>
+      <style type="text/css">
+        #CaptchaDiv input{width:47%!important}
+        .social-button{display:inline-block;width:5rem!important;margin:auto}
+        .social-button .button-icon{float:left;}
+        .social-button .button-div{display:none;}
+         .vertical{display:none!important;}
+        .horizontal{display:block!important;}
+        .action.input .teal.button{text-align:center;width:49%;padding:1em 0 1em 0}
+    </style>
+      <![endif]-->
 
-<h2>@ViewBag.Title。</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>使用本地帐户登录。</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+</head>
+<body>
+    <div class="ui left aligned container">
+        <div class="header-container">
+            <div class="logo"></div>
+            <h2 class="ui header slogan">带你看遍这个世界</h2>
+        </div>
+        <div class="six wide signin-section">
+            <div class="local-signin">
+                <form class="ui left aligned large form">
+                    @Html.AntiForgeryToken()
+                    <h3 class="ui dividing header">登录</h3>
+                    <div class="field">
+                        <input type="text" name="UserName" placeholder="注册邮箱或电话">
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    <div class="field">
+                        <input type="password" name="Password" placeholder="请输入密码">
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                    @{
+                        var required = false;
+                        if (Session["RequireCaptcha"] != null && Session["RequireCaptcha"].ToString() == "1")
+                        {
+                            required = true;
+                        }
+                        <div class="field" id="captchaDiv" data-required="@required">
+                            <div class="ui action input">
+                                <input type="text" placeholder="验证码..." id="verificationCode" name="VerificationCode">
+                                <img class="ui button" style="padding:0;width:50%;" src="" id="captchaImage" />
+
+                            </div>
+                        </div>
+                    }
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" tabindex="0"  name="RememberMe">
+                            <label>记住我</label>
+                        </div>
+                        <label class="forget-password">忘记密码？</label>
+                    </div>
+                    <div class="ui error message">
+                        <ul class="list"></ul>
+                    </div>
+                    <div class="field"><button class="ui teal submit-form button" >开始旅程</button></div>
+                    <div class="field"><button class="ui teal basic button switch-mode">还没有账号？立即注册</button></div>
+                </form>
+            </div>
+            <div class="local-register">
+                <form class="ui left aligned large form">
+                    <h3 class="ui dividing header">注册</h3>
+                    <div class="field">
+                        <input type="text" name="UserName" placeholder="注册邮箱或电话">
+                    </div>
+                    <div class="field">
+                        <input type="password" name="Password" placeholder="请输入密码">
+                    </div>
+                    <div class="field" id="VerificationCodeDiv">
+                        <div class="ui action input">
+                            <input type="text" value="" name="VerificationCode">
+                            <button class="ui teal right labeled icon button" id="getCode">
+                                获取验证码
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="登录" class="btn btn-default" />
+                    <div class="ui error message">
+                        <ul class="list"></ul>
                     </div>
+                    <div class="field"><button class="ui teal submit-form button" >立即注册</button></div>
+                    <div class="field"><button class="ui teal basic switch-mode button" >已有账号？立即登录</button></div>
+                </form>
+            </div>
+            <div class="vertical divider"></div>
+            <div class="horizontal divider"></div>
+            <div class="social-signin">
+                <div class="social-button wechat-button">
+                    <div class="button-icon">
+                        <i class="icon wechat"></i>
+                    </div>
+                    <div class="button-div">使用微信登录</div>
                 </div>
-                <p>
-                    @Html.ActionLink("注册为新用户", "Register")
-                </p>
-                @* 在为密码重置功能启用帐户确认后启用此项
-                    <p>
-                        @Html.ActionLink("忘记了密码?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
+                <div class="social-button qq-button">
+                    <div class="button-icon">
+                        <i class="icon qq"></i>
+                    </div>
+                    <div class="button-div">使用QQ登录</div>
+                </div>
+                <div class="social-button weibo-button">
+                    <div class="button-icon">
+                        <i class="icon weibo"></i>
+                    </div>
+                    <div class="button-div">使用微博登录</div>
+                </div>
+            </div>
+        </div>
+        <h5 class="ui header term-of-use">点击「注册」，即代表你同意《瞰世界旅行协议》</h5>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    <script src="~/Scripts/Backend/common.js"></script>
+    <script src="~/Scripts/semantic.min.js"></script>
+    <script src="~/Scripts/Frontend/login.js"></script>
+</body>
+</html>

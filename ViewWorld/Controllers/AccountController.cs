@@ -19,6 +19,7 @@ using System.Drawing;
 using MongoDB.Driver;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.Identity;
+using CacheManager.Core;
 
 namespace ViewWorld.Controllers
 {
@@ -28,9 +29,11 @@ namespace ViewWorld.Controllers
         #region 初始化
         private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
-        public AccountController(IMongoDbRepository _repo)
+        ICacheManager<object> cacheManager;
+        public AccountController(IMongoDbRepository _repo, ICacheManager<object> _cache)
         {
             Repo = _repo;
+            cacheManager = _cache;
         }
         public ApplicationUserManager UserManager
         {
@@ -164,38 +167,62 @@ namespace ViewWorld.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<JsonResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                CaptchaType type;
+                if (Tools.isChineseMobile(model.UserName))
                 {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
-                    RegisteredAt = DateTime.Now,
-                    Sex = SexType.Unknown,
-                    Avatar = "/Images/DefaultImages/UnknownSex.jpg",
-                    Points = 0
-                };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await UserManager.AddToRoleAsync(user.Id, UserRole.User);
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
-                    // 发送包含此链接的电子邮件
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">這裏</a>来确认你的帐户");
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
-            }
-            
+                    type = CaptchaType.Mobile;
 
+                }else if (Tools.IsEmail(model.UserName))
+                {
+                    type = CaptchaType.Email;
+                }
+                else
+                {
+                    type = CaptchaType.Invalid;
+                    return ErrorJson("用户名必须是手机号或邮箱");
+                }
+                    
+                if(ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, type))
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        NickName = string.Format("新用户_{0}", Tools.Generate_Nickname()),
+                        RegisteredAt = DateTime.Now,
+                        Sex = SexType.Unknown,
+                        Avatar = "/Images/DefaultImages/UnknownSex.jpg",
+                        Points = 0,
+                    };
+                    if(type == CaptchaType.Email)
+                    {
+                        user.Email = model.UserName;
+                        user.EmailConfirmed = true;
+                    }else if(type==CaptchaType.Mobile)
+                    {
+                        user.PhoneNumber = model.UserName;
+                        user.PhoneNumberConfirmed = true;
+                    }
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await UserManager.AddToRoleAsync(user.Id, UserRole.User);
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
+                        // 发送包含此链接的电子邮件
+                        //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        //await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">這裏</a>来确认你的帐户");
+                        return Json("/Home/Index");
+                    }
+                }
+                
+            }
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            return View(model);
+            return ErrorJson("用户名必须是手机号或邮箱");
         }
 
         //
@@ -573,25 +600,75 @@ namespace ViewWorld.Controllers
         }
         [AllowAnonymous]
         [HttpGet]
-        public ActionResult GetMobileVerificationCode(string mobileNumber)
+        public async Task<ActionResult> GetMobileVerificationCode(string userName)
         {
-            if (Tools.isChineseMobile(mobileNumber))
+            if (Tools.isChineseMobile(userName))
             {
-                if (Session["MobileTimer"] == null)
+                if (cacheManager.Get("MobileTimer", Session.SessionID) == null)
                 {
-                    string code = Tools.Generate_MobileCode();
-                    Session["MobileTimer"] = "Sent";
-                    Session["MobileCaptcha"] = code;
-                    Session["MobileSubmitted"] = mobileNumber;
+                    string code = Tools.Generate_VerificationCode();
                     string content = string.Format("尊敬的会员，您的短信验证码为：{0}（20分钟有效）诚立业祝您生活愉快", code);
-                    ValidationHelper.SendToMobile(mobileNumber, content);
-                    Task.Factory.StartNew(() => ValidationHelper.Instance.ClearSession("MobileTimer", Session));
+                    try
+                    {
+                        await ValidationHelper.Instance.SendToMobileAsync(userName, content);
+                        cacheManager.Add("MobileTimer", "Sent", Session.SessionID.ToString());
+                        cacheManager.AddOrUpdate("MobileCaptcha", Session.SessionID, code, obj =>
+                        {
+                            return code;
+                        });
+                        cacheManager.AddOrUpdate("MobileSubmitted", Session.SessionID, userName, obj =>
+                        {
+                            return userName;
+                        });
+                        cacheManager.Expire("MobileTimer", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(1));
+                        cacheManager.Expire("MobileCaptcha", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(10));
+                        cacheManager.Expire("MobileSubmitted", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(10));
+                    }
+                    catch (Exception e)
+                    {
+                        Tools.WriteLog("邮件服务", "发送认证邮件", e.Message);
+                        return ErrorJson("邮箱服务暂不可用，请稍后再试");
+                    }
                     return SuccessJson();
                 }
-
                 return ErrorJson("发送速度太快,请稍候再试");
             }
             return ErrorJson("号码不正确");
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> GetEmailVerificationCode(string userName)
+        {
+            if (Tools.IsEmail(userName))
+            {
+                if (cacheManager.Get("EmailTimer", Session.SessionID) == null)
+                {
+                    string code = Tools.Generate_VerificationCode();
+                    try
+                    {
+                        cacheManager.Add("EmailTimer", "Sent", Session.SessionID.ToString());
+                        cacheManager.AddOrUpdate("EmailCaptcha", Session.SessionID, code, obj =>
+                        {
+                            return code;
+                        });
+                        cacheManager.AddOrUpdate("EmailSubmitted", Session.SessionID, userName, obj =>
+                        {
+                            return userName;
+                        });
+                        cacheManager.Expire("EmailTimer", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(1));
+                        cacheManager.Expire("EmailCaptcha", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(10));
+                        cacheManager.Expire("EmailSubmitted", Session.SessionID, ExpirationMode.Absolute, TimeSpan.FromMinutes(10));
+                        await EmailHelper.Instance.SendVerificationEmailAsync(userName, code);
+                    }catch(Exception e)
+                    {
+                        Tools.WriteLog("邮件服务", "发送认证邮件", e.Message);
+                        return ErrorJson("邮箱服务暂不可用，请稍后再试");
+                    }
+                    return SuccessJson();
+                }
+                return ErrorJson("发送速度太快,请稍候再试");
+            }
+            return ErrorJson("邮箱格式不正确");
         }
         #endregion
         #region 自定义获取用户信息
@@ -694,7 +771,7 @@ namespace ViewWorld.Controllers
             {
                 if (ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Mobile))
                 {
-                    if(Session["MobileSubmitted"] == null || Session["MobileSubmitted"].ToString() != model.Mobile)
+                    if(cacheManager.Get("MobileSubmitted",Session.SessionID.ToString())==null|| cacheManager.Get("MobileSubmitted", Session.SessionID.ToString()).ToString() != model.Mobile)
                     {
                         return ErrorJson("申请的手机号和接受验证码的手机号不匹配");
                     }

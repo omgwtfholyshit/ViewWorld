@@ -9,6 +9,7 @@ using ViewWorld.Core;
 using ViewWorld.Core.Models;
 using ViewWorld.Core.Dal;
 using System.Security.Claims;
+using CacheManager.Core;
 
 namespace ViewWorld.Controllers
 {

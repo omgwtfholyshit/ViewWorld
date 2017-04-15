@@ -483,6 +483,12 @@
     <Content Include="Content\components\visibility.min.js" />
     <Content Include="Content\components\visit.js" />
     <Content Include="Content\components\visit.min.js" />
+    <Content Include="Content\Frontend\login.css">
+      <DependentUpon>login.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\Frontend\login.min.css">
+      <DependentUpon>login.css</DependentUpon>
+    </Content>
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />
@@ -546,6 +552,9 @@
     <Content Include="Images\Backend\Login\logo.png" />
     <Content Include="Images\Backend\Login\logo_393-73.png" />
     <Content Include="Images\Backend\Login\logo_393-73_white.png" />
+    <Content Include="Images\Background\blueSky_v.jpg" />
+    <Content Include="Images\Background\loginbackground.jpg" />
+    <Content Include="Images\Background\pinkPetals.jpg" />
     <Content Include="Images\DefaultImages\add.png" />
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\icon_phone_large_150.jpg" />
@@ -554,6 +563,7 @@
     <Content Include="Images\DefaultImages\male.jpg" />
     <Content Include="Images\DefaultImages\short-paragraph.png" />
     <Content Include="Images\DefaultImages\UnknownSex.jpg" />
+    <Content Include="Images\Frontend\Login\wix-logo.svg" />
     <Content Include="Lib\AntDesign\antd.css" />
     <Content Include="Lib\AntDesign\antd.js" />
     <Content Include="Lib\FullAvatarEditor\crossdomain.xml" />
@@ -621,6 +631,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\Frontend\login.scss" />
     <None Include="Properties\PublishProfiles\ViewWorld - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\calendar.es5.js">
@@ -632,6 +643,7 @@
     <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\calendar.zh-cn.js" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="Scripts\Frontend\login.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
     <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />

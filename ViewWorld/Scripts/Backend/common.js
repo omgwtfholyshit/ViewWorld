@@ -1,4 +1,11 @@
 ﻿(function () {
+    function checkBrowser() {
+        if (navigator.userAgent.indexOf("MSIE 6.0") > 0 || navigator.userAgent.indexOf("MSIE 7.0") > 0 || navigator.userAgent.indexOf("MSIE 8.0") > 0) {
+            alert("您的浏览器版本过低，为了保护您的个人安全及正常浏览本网站，建议您使用谷歌浏览器");
+
+            window.open("https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8&rsv_pq=803e51460000430b&rsv_t=22d7eLk9jA1QOOunHmBKy7mcgXfU7GRDw7uiGYDlDd%2BbX4RGeCxdjdpFOdQ&rqlang=cn&rsv_enter=1&rsv_sug3=6&rsv_sug1=5&rsv_sug7=100&rsv_sug2=0&prefixsug=guge&rsp=1&inputT=2219&rsv_sug4=2219");
+        }
+    }
     function tip(selector, title, content, type, dismiss) {
         //type: Warning,Info,Positive,Negative 
         var id = Math.round(Math.random() * 10000);
@@ -172,6 +179,7 @@
         $('.message-container').delegate('.message .close', 'click', function () {
             $(this).closest('.message').transition('fade');
         })
+        checkBrowser();
     }
     $.extend({
         tip: tip, checkEmail: checkEmail, checkMobile: checkMobile,

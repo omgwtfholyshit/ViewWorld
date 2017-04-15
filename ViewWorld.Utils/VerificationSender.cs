@@ -6,20 +6,26 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace ViewWorld.Utils
 {
     public class VerificationSender
     {
+        //Please Move these to Config before official launch
+        #region SMSsettings
         public static string sendURL = "http://sms-cly.cn/smsSend.do";
         public static string sendDataURL = "http://sms-cly.cn/sendData.do";
         public static string queryBalanceURL = "http://sms-cly.cn/balanceQuery.do";
         public static string changePasswordURL = "http://sms-cly.cn/passwordUpdate.do";
         static string UserName = "cly";
-        static string Password { get
+        static string Password {
+            get
             {
                 return GetMD5(UserName + GetMD5("cly2016"));
-            } }
+            }
+        }
+        #endregion
         private static VerificationSender client = new VerificationSender();
         static VerificationSender()
         {
@@ -34,6 +40,7 @@ namespace ViewWorld.Utils
                 return client;
             }
         }
+        #region SMS
         /*
         * 方法名称：GetMD5
         * 功    能：字符串MD5加密
@@ -159,5 +166,8 @@ namespace ViewWorld.Utils
             sr.Close();
             return str;
         }
+        #endregion
+        #region Email
+        #endregion
     }
 }

@@ -68,6 +68,14 @@ namespace ViewWorld.Utils
             }
             return v.IsMatch(u.Substring(0, 4));
         }
+        public static bool IsEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+            string pattern = @"^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(email);
+        }
         #endregion
         #region Id生成器
         const int BITCOUNT = 30;
@@ -154,7 +162,7 @@ namespace ViewWorld.Utils
             name = name.Substring(0, 1).ToUpper() + name.Substring(1); //Capitalize first letter
             return name;
         }
-        public static string Generate_MobileCode()
+        public static string Generate_VerificationCode()
         {
             return new Random().Next(1000, 9999).ToString();
         }

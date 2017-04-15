@@ -10,5 +10,9 @@
   {
     "outputFile": "Scripts/calendar.es5.js",
     "inputFile": "Scripts/calendar.js"
+  },
+  {
+    "outputFile": "Content/Frontend/login.css",
+    "inputFile": "Content/Frontend/login.scss"
   }
 ]
