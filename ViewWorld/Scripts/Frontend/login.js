@@ -237,11 +237,17 @@
                                     _this.loginForm.find('.error.message').show();
                                     _this.loginForm.find('.error.message ul').html(data.message);
                                 } else {
+                                    _this.resetCaptcha();
                                     _this.loginForm.find('.error.message').show();
                                     _this.loginForm.find('.error.message ul').html(data.message);
                                 }
                             } else if (_this.mode == 'register') {
-
+                                if (data.status == 200) {
+                                    location.href = data.data;
+                                } else {
+                                    _this.registerForm.find('.error.message').show();
+                                    _this.registerForm.find('.error.message ul').html(data.message);
+                                }
                             }
                             $button.removeClass('loading');
 

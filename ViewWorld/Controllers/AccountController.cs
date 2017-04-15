@@ -66,6 +66,8 @@ namespace ViewWorld.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if(User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -75,6 +77,7 @@ namespace ViewWorld.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Obsolete("请使用UserLogin方法",false)]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -169,6 +172,7 @@ namespace ViewWorld.Controllers
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> Register(RegisterViewModel model)
         {
+            string errorMsg = "";
             if (ModelState.IsValid)
             {
                 CaptchaType type;
@@ -186,7 +190,7 @@ namespace ViewWorld.Controllers
                     return ErrorJson("用户名必须是手机号或邮箱");
                 }
                     
-                if(ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, type))
+                if(ValidationHelper.ValidateCaptcha(cacheManager, model.VerificationCode,Session.SessionID, type))
                 {
                     var user = new ApplicationUser
                     {
@@ -218,11 +222,19 @@ namespace ViewWorld.Controllers
                         //await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">這裏</a>来确认你的帐户");
                         return Json("/Home/Index");
                     }
+                    else
+                    {
+                        errorMsg = result.Errors.FirstOrDefault();
+                    }
+                }
+                else
+                {
+                    return ErrorJson("验证码错误或已失效");
                 }
                 
             }
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
-            return ErrorJson("用户名必须是手机号或邮箱");
+            return ErrorJson("创建用户失败," + errorMsg);
         }
 
         //
@@ -547,7 +559,7 @@ namespace ViewWorld.Controllers
                 }
             }
             #endregion
-            if (!ValidationHelper.IsCaptchaRequired(Request) || ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Login))
+            if (!ValidationHelper.IsCaptchaRequired(Request) || ValidationHelper.ValidateCaptcha( cacheManager,model.VerificationCode, Session.SessionID,CaptchaType.Login))
             {
                 try
                 {
@@ -590,13 +602,13 @@ namespace ViewWorld.Controllers
         [HttpGet]
         public FileResult GetLoginCaptcha()
         {
-            return ValidationHelper.GenerateCaptchaImage(Session,160,45,Color.DodgerBlue,Color.White,CaptchaType.Login);
+            return ValidationHelper.GenerateCaptchaImage(cacheManager, Session.SessionID, 160, 45, Color.DodgerBlue, Color.White, CaptchaType.Login);
         }
         [AllowAnonymous]
         [HttpGet]
         public FileResult GetMobileCaptcha()
         {
-            return ValidationHelper.GenerateCaptchaImage(Session, 160, 45, Color.LimeGreen, Color.White, CaptchaType.Mobile);
+            return ValidationHelper.GenerateCaptchaImage(cacheManager, Session.SessionID, 160, 45, Color.LimeGreen, Color.White, CaptchaType.Mobile);
         }
         [AllowAnonymous]
         [HttpGet]
@@ -769,7 +781,7 @@ namespace ViewWorld.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (ValidationHelper.ValidateCaptcha(Session, model.VerificationCode, CaptchaType.Mobile))
+                if (ValidationHelper.ValidateCaptcha(cacheManager, model.VerificationCode,Session.SessionID, CaptchaType.Mobile))
                 {
                     if(cacheManager.Get("MobileSubmitted",Session.SessionID.ToString())==null|| cacheManager.Get("MobileSubmitted", Session.SessionID.ToString()).ToString() != model.Mobile)
                     {

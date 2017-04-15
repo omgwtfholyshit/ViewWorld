@@ -1,17 +1,13 @@
-﻿using SRVTextToImage;
+﻿using CacheManager.Core;
+using SRVTextToImage;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using ViewWorld.Core;
 using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Utils
@@ -34,37 +30,37 @@ namespace ViewWorld.Utils
             }
         }
         #endregion
-        private static string GetSessionName(CaptchaType type)
+        private static string GetCaptchaName(CaptchaType type)
         {
-            string sessionName = "";
+            string captchaName = "";
             switch (type)
             {
                 case CaptchaType.Login:
-                    sessionName = "LoginCaptcha";
+                    captchaName = "LoginCaptcha";
                     break;
                 case CaptchaType.Mobile:
-                    sessionName = "MobileCaptcha";
+                    captchaName = "MobileCaptcha";
                     break;
                 case CaptchaType.Email:
-                    sessionName = "EmailCaptcha";
+                    captchaName = "EmailCaptcha";
                     break;
                 default:
-                    sessionName = "invalid";
+                    captchaName = "invalid";
                     break;
             }
-            return sessionName;
+            return captchaName;
         }
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")] 
-        public static FileResult GenerateCaptchaImage(HttpSessionStateBase session, int width, int height, Color textColor, Color backColor, CaptchaType type)
+        public static FileResult GenerateCaptchaImage(ICacheManager<object> cacheManager,string region, int width, int height, Color textColor, Color backColor, CaptchaType type)
         {
             MemoryStream stream = new MemoryStream();
             CaptchaRandomImage CI = new CaptchaRandomImage();
             Random rand = new Random(DateTime.Now.Millisecond);
             var randNum = rand.Next(10000, 99999);
-            string sessionName = GetSessionName(type);
-            session[sessionName] = randNum;
-            CI.GenerateImage(session[sessionName].ToString(), width, height, textColor, backColor);
+            string captchaName = GetCaptchaName(type);
+            cacheManager.AddOrUpdate(captchaName, region, randNum.ToString(), value => { return randNum; });
+            CI.GenerateImage(randNum.ToString(), width, height, textColor, backColor);
             CI.Image.Save(stream, ImageFormat.Png);
             stream.Seek(0, SeekOrigin.Begin);
             CI.Dispose();
@@ -72,7 +68,7 @@ namespace ViewWorld.Utils
         }
         public static bool ValidateCaptcha(HttpSessionStateBase session,string captcha, CaptchaType type)
         {
-            string sessionName = GetSessionName(type);
+            string sessionName = GetCaptchaName(type);
             if (session[sessionName] !=null && session[sessionName].ToString() == captcha)
             {
                 session.Remove(sessionName);
@@ -80,7 +76,16 @@ namespace ViewWorld.Utils
             }
             return false;
         }
-
+        public static bool ValidateCaptcha(ICacheManager<object> cacheManager,string captcha,string region,CaptchaType type)
+        {
+            string captchaName = GetCaptchaName(type);
+            if (cacheManager.Get(captchaName, region) != null && cacheManager.Get(captchaName, region).ToString() == captcha)
+            {
+                cacheManager.Remove(captchaName, region);
+                return true;
+            }
+            return false;
+        }
         public static bool IsCaptchaRequired(HttpRequestBase request)
         {
             var cache = HttpRuntime.Cache;
