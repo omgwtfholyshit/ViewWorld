@@ -4,7 +4,8 @@
             this.mode = 'login';
             this.api = {
                 login: '/Account/UserLogin', register: '/Account/Register',
-                getMobileCode: '/Account/GetMobileVerificationCode', getEmailCode: '/Account/GetEmailVerificationCode'
+                getMobileCode: '/Account/GetMobileVerificationCode', getEmailCode: '/Account/GetEmailVerificationCode',
+                appId: '1106103992',
             };
             this.loginForm = $('.local-signin');
             this.registerForm = $('.local-register');
@@ -16,12 +17,16 @@
             this.getVerificationBtn = $('#getCode');
             this.submitBtn = $('.submit-form.button');
             this.switchModeBtn = $('.switch-mode');
+            this.wechatBtn = $('.wechat-button');
+            this.qqBtn = $('.qq-button');
+            this.weiboBtn = $('.weibo-button');
             this.switchMode();
             this.initCaptcha();
             this.resetCaptcha();
             this.initFormValidator();
             this.getVerificatetionCode();
             this.submit();
+            this.qqLogin();
             this.onKeyDown();
         },
         switchMode: function () {
@@ -257,6 +262,13 @@
                 }
             })
             return false;
+        },
+        qqLogin:function(){
+            var _this = this;
+            _this.qqBtn.click(function (e) {
+                var loginUrl = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + _this.api.appId + '&redirect_uri='+ location.origin +'&scope=scope';
+                window.open(loginUrl, 'loginWindow', 'height=400,width=600,top=100,left=100,toobar=no,menubar=no,scrollbars=no,location=yes,resizable=no');
+            })
         },
         onKeyDown: function () {
             var _this = this;

@@ -34,6 +34,22 @@ namespace ViewWorld.Services.Cities
             return await Repo.DeleteOneAsync<CityInfo>(id);
         }
 
+        public async Task<IEnumerable<IGrouping<string, CityInfo>>> GetCitiesByGroup(string initial, bool isChinsesCity)
+        {
+            var builder = Builders<CityInfo>.Filter;
+            FilterDefinition<CityInfo> filter;
+            if (string.IsNullOrWhiteSpace(initial))
+            {
+                filter = builder.Where(city => city.IsChineseCity == isChinsesCity);
+            }
+            else
+            {
+                filter = builder.Where(city => city.IsChineseCity == isChinsesCity && city.Initial == initial.ToUpper());
+            }
+            var result = await Repo.GetManyAsync(filter);
+            return result.Entities.GroupBy(e => e.Initial).ToList(); ;
+        }
+
         public async Task<GetListResult<CityInfo>> RetrieveEntitiesByKeyword(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))

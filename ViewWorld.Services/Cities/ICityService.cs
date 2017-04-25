@@ -10,5 +10,6 @@ namespace ViewWorld.Services.Cities
 {
     public interface ICityService: ICRUDable<CityInfo>
     {
+        Task<IEnumerable<IGrouping<string, CityInfo>>> GetCitiesByGroup(string intial, bool isChinsesCity);
     }
 }

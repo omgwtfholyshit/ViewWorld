@@ -14,5 +14,13 @@
   {
     "outputFile": "Content/Frontend/login.css",
     "inputFile": "Content/Frontend/login.scss"
+  },
+  {
+    "outputFile": "Content/Frontend/layout.css",
+    "inputFile": "Content/Frontend/layout.scss"
+  },
+  {
+    "outputFile": "Scripts/Backend/common.es5.js",
+    "inputFile": "Scripts/Backend/common.js"
   }
 ]

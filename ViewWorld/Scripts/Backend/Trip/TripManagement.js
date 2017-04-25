@@ -217,7 +217,12 @@
             $inputs.each(function (index, input) {
                 $input = $(input);
                 if ($input.data('db-key') == 'DepartingCity' || $input.data('db-key') == 'ArrivingCity') {
-                    _this[$input.data('db-key')] = $input.val().trim() + ',' + $input.siblings('.text').text().split('----')[1];
+                    var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
+                    for (var i = 0; i < idArray.length; i++) {
+                        dataStr += idArray[i] + ',' + nameArray[i].innerText.split('----')[1] + '|';
+                    }
+                    dataStr = dataStr.substr(0, dataStr.length - 1);
+                    _this[$input.data('db-key')] = dataStr;
                 } else {
                     _this[$input.data('db-key')] = $input.val().trim();
                 }
@@ -227,10 +232,16 @@
             _this.Intro = $.htmlEncode(pIntroEditor.getContent());
         },
         SetFormDataForPage: function () {
-            var _this = this;
+            var _this = this, departure = new Array(), arrival = new Array();
             $('#productInfo input[name=TotalDays]').val(ProductInfo.TotalDays);
-            $('#departingCity').dropdown("set selected", ProductInfo.DepartingCity.split(',')[0]);
-            $('#arrivingCity').dropdown("set selected", ProductInfo.ArrivingCity.split(',')[0]);
+            $.each(ProductInfo.DepartingCity.split('|'), function (index, element) {
+                departure.push(element.split(',')[0]);
+            })
+            $.each(ProductInfo.ArrivingCity.split('|'), function (index, element) {
+                arrival.push(element.split(',')[0]);
+            })
+            $('#departingCity').dropdown("set selected", departure);
+            $('#arrivingCity').dropdown("set selected", arrival);
             if (ProductInfo.Sceneries != null) {
                 $('#sceneries').dropdown("set selected", ProductInfo.Sceneries.split(','));
             }

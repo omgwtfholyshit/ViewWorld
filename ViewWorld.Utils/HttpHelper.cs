@@ -106,7 +106,7 @@ namespace ViewWorld.Utils
             try
             {
                 string result = HttpGet(IpLookUpAddress + IP);
-                if (result != "-2")
+                if (result.Length > 100)
                 {
                     result = result.Remove(0, result.IndexOf('{') - 1).Replace(';', ' ');
                     LocationViewModel location = JsonConvert.DeserializeObject<LocationViewModel>(result);
@@ -119,6 +119,26 @@ namespace ViewWorld.Utils
                 return new LocationViewModel { Country = "中国", City = "北京", Province = "北京", District = "朝阳区" };
             }
             
+        }
+        /// <summary>
+        /// not sure if it is working
+        /// </summary>
+        /// <returns></returns>
+        public static string RequestUserIP()
+        {
+            System.Web.HttpContext context = System.Web.HttpContext.Current;
+            string ipAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+
+            if (!string.IsNullOrEmpty(ipAddress))
+            {
+                string[] addresses = ipAddress.Split(',');
+                if (addresses.Length != 0)
+                {
+                    return addresses[0];
+                }
+            }
+
+            return context.Request.ServerVariables["REMOTE_ADDR"];
         }
         #endregion
     }

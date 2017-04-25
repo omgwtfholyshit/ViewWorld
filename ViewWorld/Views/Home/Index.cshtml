@@ -1,31 +1,222 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "首页";
 }
+<link href="~/Lib/Swiper/css/swiper.min.css" rel="stylesheet" />
+<link href="~/Lib/VectorMap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />
+<div class="swiper-container main">
+    <div class="swiper-wrapper homepage">
+        @{
+            var rand = (new Random()).Next(1, 6);
+            var url = "/Images/Background/background_" + rand + ".jpg";
+        }
+        <div class="swiper-slide background" style="background-image:url(@url)" id="background">
+            <div class="ui container">
+                <div class="content-container">
+                    <div class="logo-container">
+                        <img src="~/Images/Logo/logo_white_web.png" />
+                        <h2 class="ui header slogan">走起 瞰世界</h2>
+                    </div>
+                    <div class="search-container">
+                        <div class="ui fluid category search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="搜索产品/城市/景点...">
+                                <i class="search icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+            </div>
+            <div class="upwards arrow-container">
+                <span></span>
+            </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="swiper-slide slideTwo">
+            <div class="ui container">
+                <div class="title-container teal" data-swiper-parallax="-1000">
+                    限时团购
+                    <div class="leftwards arrow-container">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="rightwards arrow-container">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="swiper-container swiper-container-h" data-swiper-parallax="-1000">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="ui fluid card">
+                                <div class="image">
+                                    <img src="~/Images/Background/background_3.jpg" />
+                                </div>
+                                <div class="content">
+                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    <div class="left floated sub-title">
+                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    </div>
+
+                                    <div class="right floated price-area">
+                                        <span class="teal our-price">现价 $599</span>
+                                        <span class="retail-price">原价￥866</span>
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="left floated">
+                                        美国西部
+                                    </span>
+                                    <span class="right floated favorite">
+                                        <i class="pointing right icon"></i>
+                                        查看详情
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="ui fluid card">
+                                <div class="image">
+                                    <img src="~/Images/Background/background_2.jpg" />
+                                </div>
+                                <div class="content">
+                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    <div class="left floated sub-title">
+                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    </div>
+
+                                    <div class="right floated price-area">
+                                        <span class="teal our-price">现价 $599</span>
+                                        <span class="retail-price">原价￥866</span>
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="left floated">
+                                        美国西部
+                                    </span>
+                                    <span class="right floated favorite">
+                                        <i class="pointing right icon"></i>
+                                        查看详情
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="ui fluid card">
+                                <div class="image">
+                                    <img src="~/Images/Background/background_4.jpg" />
+                                </div>
+                                <div class="content">
+                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    <div class="left floated sub-title">
+                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    </div>
+
+                                    <div class="right floated price-area">
+                                        <span class="teal our-price">现价 $599</span>
+                                        <span class="retail-price">原价￥866</span>
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="left floated">
+                                        美国西部
+                                    </span>
+                                    <span class="right floated favorite">
+                                        <i class="pointing right icon"></i>
+                                        查看详情
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="ui fluid card">
+                                <div class="image">
+                                    <img src="~/Images/Background/background_5.jpg" />
+                                </div>
+                                <div class="content">
+                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    <div class="left floated sub-title">
+                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    </div>
+
+                                    <div class="right floated price-area">
+                                        <span class="teal our-price">现价 $599</span>
+                                        <span class="retail-price">原价￥866</span>
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="left floated">
+                                        美国西部
+                                    </span>
+                                    <span class="right floated favorite">
+                                        <i class="pointing right icon"></i>
+                                        查看详情
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="ui fluid card">
+                                <div class="image">
+                                    <img src="~/Images/Background/background_1.jpg" />
+                                </div>
+                                <div class="content">
+                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    <div class="left floated sub-title">
+                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
+                                    </div>
+
+                                    <div class="right floated price-area">
+                                        <span class="teal our-price">现价 $599</span>
+                                        <span class="retail-price">原价￥866</span>
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="left floated">
+                                        美国西部
+                                    </span>
+                                    <span class="right floated favorite">
+                                        <i class="pointing right icon"></i>
+                                        查看详情
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="swiper-slide slideThree">
+            <div class="ui container">
+                <div class="title-container teal" data-swiper-parallax="-1000">
+                    您想去...
+                </div>
+                <div id="worldMap" style="height:100%"></div>
+            </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="ui container">
+                <div class="title-container teal stay" data-swiper-parallax="-1000">
+                    或者是...
+                </div>
+                <div class="button-container">
+                    <a href="/" class="ui teal button">浏览所有行程</a>
+                </div>
+                <footer class="teal">
+                    <p>© @DateTime.Now.Year - 瞰世界国际旅行社有限公司 版权所有</p>
+                    <p>京ICP备xxxxxxxx号</p>
+                </footer>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
 </div>
+<script src="~/Lib/Swiper/js/swiper.min.js"></script>
+<script src="~/Lib/VectorMap/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="~/Lib/VectorMap/vectmap-world-mill-cn.js"></script>
+<script src="~/Scripts/Frontend/Home/index.js"></script>

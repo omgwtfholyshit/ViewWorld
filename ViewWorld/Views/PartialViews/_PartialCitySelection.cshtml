@@ -1,0 +1,35 @@
+﻿@model List<System.Linq.IGrouping<string, ViewWorld.Core.Models.TripModels.CityInfo>>
+
+@{
+    if (Model.Any())
+    {
+        var isChineseCity = Convert.ToBoolean(Request.QueryString.Get("isCnCity"));
+        string prefix = ""; string postfix = "";
+        if (isChineseCity)
+        {
+            prefix = "C";
+        }
+        else
+        {
+            prefix = "F";
+        }
+        foreach (var group in Model)
+        {
+            if (group.Any())
+            {
+                postfix = group.FirstOrDefault().Initial;
+                <dl id="@(prefix + postfix)">
+                    <dt class="t">@postfix</dt>
+                    <dd>
+                        @foreach (var item in group)
+                        {
+                            <a href="javascript:void(0)">@item.Name</a>
+                        }
+                    </dd>
+                </dl>
+
+            }
+
+        }
+    }
+}

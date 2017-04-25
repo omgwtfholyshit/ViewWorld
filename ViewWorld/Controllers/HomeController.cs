@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Threading;
 using System.Security.Claims;
+using System.Linq;
 
 namespace ViewWorld.Controllers
 {
@@ -66,7 +67,7 @@ namespace ViewWorld.Controllers
         }
         public async Task<ActionResult >TestMethods()
         {
-            return Json("hello");
+            return View();
         }
 
         public async Task<ActionResult> InsertPermissions()
@@ -154,6 +155,15 @@ namespace ViewWorld.Controllers
             scenelist.Add(scene2);
             //db.DB.GetCollection<Scenery>("Scenerys").InsertMany(scenelist);
         }        
+        public async Task<JsonResult> GetCityInfo(string initial, bool isCnCity)
+        {
+            var builder = Builders<CityInfo>.Filter;
+            FilterDefinition<CityInfo> filter;
+            filter = builder.Where(city => city.IsChineseCity == isCnCity);
+            var result = await Repo.GetManyAsync(filter);
+            return Json(result.Entities.GroupBy(e=>e.Initial));
+        }
+        
         public ActionResult PermissionRequired()
         {
             return Content("您没有权限执行该操作");

@@ -1,21 +1,26 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
+    <ul class="nav-list">
+        <li class="nav-item">
+            <div class="ui compact menu">
+                <div class="ui simple dropdown item">
+                    <img class="ui avatar image" src="">
+                    <span class="nickname"></span>
+                    <div class="menu">
+                        <div class="item mail">邮件</div>
+                        <div class="item log-out">注销</div>
+                    </div>
+                </div>
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("你好，" + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </div>
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">注销</a></li>
     </ul>
-    }
+   
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("登录", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    <ul class="nav-list">
+        <li class="nav-item" data-url="/Account/Login">登录</li>
     </ul>
 }

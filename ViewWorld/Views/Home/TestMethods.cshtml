@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Mongo Test";
+}
+<link href="~/Lib/Swiper/css/swiper.min.css" rel="stylesheet" />
+<link href="~/Lib/VectorMap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />
+<div class="swiper-container main">
+    <div class="swiper-wrapper homepage">
+        <div class="swiper-slide slideThree">
+            <div class="ui container">
+                <div class="title-container teal" data-swiper-parallax="-1000">
+                    按目的地查看
+                    <div id="worldMap" style="height:100%"></div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="swiper-slide">Slide 5</div>
+        <div class="swiper-slide">
+            <hr />
+            <footer>
+                <p>© 2017 - 瞰世界（北京）国际旅行社有限公司 版权所有</p>
+                <p>京ICP备xxxxxxxx号</p>
+            </footer>
+        </div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<script src="~/Lib/VectorMap/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="~/Lib/VectorMap/jvectormap-world-mill.js"></script>
+<script>
+    $('#worldMap').vectorMap({
+        map: 'world_mill',
+        zoomOnScroll: false,
+        regionStyle: {
+            initial: {
+                fill: 'white',
+                "fill-opacity": 1,
+                stroke: 'none',
+                "stroke-width": 0,
+                "stroke-opacity": 1
+            },
+            hover: {
+                "fill-opacity": 0.8,
+                cursor: 'pointer'
+            },
+            selected: {
+                fill: 'yellow'
+            },
+            selectedHover: {
+            }
+        }
+    });
+</script>

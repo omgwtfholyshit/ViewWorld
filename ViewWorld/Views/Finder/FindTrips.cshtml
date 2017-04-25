@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewBag.Title = "搜索行程";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ui container find-items">
+    <div class="filter-container">
+        <div class="location-container">
+            <div class="cityinfo">
+                <i class="large teal location arrow icon"></i>
+                <em>@ViewBag.loc</em>
+                <span>站</span>
+                <i class="teal angle down icon"></i>
+            </div>
+            <div class="city-selection">
+                <div class="recent-city">
+                    <h5 class="ui dividing header">
+                        历史记录
+                        <i class="remove icon"></i>
+                    </h5>
+                    <div class="sub header"></div>
+                    <span class="remove-history">清空</span>
+                </div>
+                <div class="city-tab">
+                    <div class="ui top attached tabular menu">
+                        <a class="item active" data-tab="first">国内出发</a>
+                        <a class="item" data-tab="second">国际出发</a>
+                    </div>
+                    <div class="ui bottom attached tab segment active" data-tab="first">
+                        <div class="city-anchor">
+                            <a href="#CA">A</a>
+                            <a href="#CB">B</a>
+                            <a href="#CC">C</a>
+                            <a href="#CD">D</a>
+                            <a href="#CE">E</a>
+                            <a href="#CF">F</a>
+                            <a href="#CG">G</a>
+                            <a href="#CH">H</a>
+                            <a href="#CJ">J</a>
+                            <a href="#CK">K</a>
+                            <a href="#CL">L</a>
+                            <a href="#CM">M</a>
+                            <a href="#CN">N</a>
+                            <a href="#CP">P</a>
+                            <a href="#CQ">Q</a>
+                            <a href="#CR">R</a>
+                            <a href="#CS">S</a>
+                            <a href="#CT">T</a>
+                            <a href="#CW">W</a>
+                            <a href="#CX">X</a>
+                            <a href="#CY">Y</a>
+                            <a href="#CZ">Z</a>
+                        </div>
+                        <div class="city-item" id="chineseCities">
+                           
+                        </div>
+                    </div>
+                    <div class="ui bottom attached tab segment" data-tab="second">
+                        <div class="city-anchor">
+                            <a href="#FA">A</a>
+                            <a href="#FB">B</a>
+                            <a href="#FC">C</a>
+                            <a href="#FD">D</a>
+                            <a href="#FF">F</a>
+                            <a href="#FG">G</a>
+                            <a href="#FH">H</a>
+                            <a href="#FJ">J</a>
+                            <a href="#FK">K</a>
+                            <a href="#FL">L</a>
+                            <a href="#FM">M</a>
+                            <a href="#FN">N</a>
+                            <a href="#FP">P</a>
+                            <a href="#FQ">Q</a>
+                            <a href="#FR">R</a>
+                            <a href="#FS">S</a>
+                            <a href="#FT">T</a>
+                            <a href="#FW">W</a>
+                            <a href="#FX">X</a>
+                            <a href="#FY">Y</a>
+                            <a href="#FZ">Z</a>
+                        </div>
+                        <div class="city-item" id="foreignCities">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui left action right icon input">
+            <div class="ui basic floating dropdown button">
+                <div class="text">全部产品</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">全部产品</div>
+                    <div class="item">出发地参团</div>
+                    <div class="item">目的地参团</div>
+                    <div class="item">跟团游</div>
+                    <div class="item">自由行</div>
+                    <div class="item">私人定制</div>
+                </div>
+            </div>
+            <i class="search icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="ui horizontal divider">
+            <span>更多筛选<i class="angle double down icon"></i> </span>
+        </div>
+        <div class="filter-condition">
+            <a class="ui teal label">出发城市：青岛<i class="delete icon"></i></a>
+            <a class="ui label">Tag<i class="delete icon"></i></a>
+            <a class="ui label">Tag<i class="delete icon"></i></a>
+            <a class="ui label">Tag<i class="delete icon"></i></a>
+            <a class="ui label">Tag<i class="delete icon"></i></a>
+            <a class="ui label">Tag<i class="delete icon"></i></a>
+        </div>
+        <div class="filter">
+            
+        </div>
+        
+    </div>
+    <div class="results-container">
+        <div class="ui divided items">
+            <div class="item">
+                <div class="image">
+                    <img src="~/Images/Background/background_1.jpg" />
+                </div>
+                <div class="content">
+                    <a class="header">12 Years a Slave</a>
+                    <div class="meta">
+                        <span class="cinema">Union Square 14</span>
+                    </div>
+                    <div class="description">
+                        <p></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui label">IMAX</div>
+                        <div class="ui label"><i class="globe icon"></i> Additional Languages</div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="image">
+                    <img src="~/Images/Background/background_2.jpg" />
+                </div>
+                <div class="content">
+                    <a class="header">My Neighbor Totoro</a>
+                    <div class="meta">
+                        <span class="cinema">IFC Cinema</span>
+                    </div>
+                    <div class="description">
+                        <p></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui right floated primary button">
+                            Buy tickets
+                            <i class="right chevron icon"></i>
+                        </div>
+                        <div class="ui label">Limited</div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="image">
+                    <img src="~/Images/Background/background_3.jpg" />
+                </div>
+                <div class="content">
+                    <a class="header">Watchmen</a>
+                    <div class="meta">
+                        <span class="cinema">IFC</span>
+                    </div>
+                    <div class="description">
+                        <p></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui right floated primary button">
+                            Buy tickets
+                            <i class="right chevron icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Frontend/Finder/FindTrips.js"></script>

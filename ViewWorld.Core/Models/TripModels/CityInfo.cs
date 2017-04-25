@@ -14,5 +14,6 @@ namespace ViewWorld.Core.Models.TripModels
         public string Id { get; set; }
         public string Name { get; set; }
         public string Initial { get; set; }
+        public bool IsChineseCity { get; set; }
     }
 }

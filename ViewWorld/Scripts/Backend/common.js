@@ -1,10 +1,57 @@
 ﻿(function () {
-    function checkBrowser() {
-        if (navigator.userAgent.indexOf("MSIE 6.0") > 0 || navigator.userAgent.indexOf("MSIE 7.0") > 0 || navigator.userAgent.indexOf("MSIE 8.0") > 0) {
-            alert("您的浏览器版本过低，为了保护您的个人安全及正常浏览本网站，建议您使用谷歌浏览器");
+    var broswer = {
+        versions: function () {
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return {     //移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+                smallDevice: window.innerWidth < 767 //窗口尺寸小于767px判定为小尺寸设备
+            };
+        },
+        language: (navigator.browserLanguage || navigator.language).toLowerCase(),
+        device: function () {
+            var versions = this.versions();
+            if (versions.mobile) {
+                var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+                if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                    return 'weixin';
+                }
+                if (ua.match(/WeiBo/i) == "weibo") {
+                    return 'weibo';
+                }
+                if (ua.match(/QQ/i) == "qq") {
+                    return 'qq';
+                }
+                if (versions.ios) {
+                    return 'ios';
+                }
+                if (versions.android) {
+                    return 'android';
+                }
+                return 'unknown';
+            }
+            return 'desktop';
+        },
+        checkBrowser:function(){
+            if (navigator.userAgent.indexOf("MSIE 6.0") > 0 || navigator.userAgent.indexOf("MSIE 7.0") > 0 || navigator.userAgent.indexOf("MSIE 8.0") > 0 || navigator.userAgent.indexOf("MSIE 9.0") > 0) {
+                alert("您的浏览器版本过低，为了保护您的个人安全及正常浏览本网站，建议您使用谷歌浏览器");
 
-            window.open("https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8&rsv_pq=803e51460000430b&rsv_t=22d7eLk9jA1QOOunHmBKy7mcgXfU7GRDw7uiGYDlDd%2BbX4RGeCxdjdpFOdQ&rqlang=cn&rsv_enter=1&rsv_sug3=6&rsv_sug1=5&rsv_sug7=100&rsv_sug2=0&prefixsug=guge&rsp=1&inputT=2219&rsv_sug4=2219");
+                window.open("https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=0&rsv_idx=1&tn=baidu&wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8&rsv_pq=803e51460000430b&rsv_t=22d7eLk9jA1QOOunHmBKy7mcgXfU7GRDw7uiGYDlDd%2BbX4RGeCxdjdpFOdQ&rqlang=cn&rsv_enter=1&rsv_sug3=6&rsv_sug1=5&rsv_sug7=100&rsv_sug2=0&prefixsug=guge&rsp=1&inputT=2219&rsv_sug4=2219");
+            }
+        },
+        init: function () {
+            window.browser = this;
+            browser.checkBrowser();
         }
+
     }
     function tip(selector, title, content, type, dismiss) {
         //type: Warning,Info,Positive,Negative 
@@ -152,18 +199,31 @@
         var uuid = s.join("");
         return uuid;
     }
-    Date.prototype.toSimpleDateString = function () {
-        var _this = this;
-        var year = _this.getFullYear();
-        var month = _this.getMonth() + 1;
-        var day = _this.getDate();
-        return year + "-" + month + "-" + day;
-    }
+    
     function ConvertJsonToDate(jsonDate) {
         if (typeof jsonDate != 'string') {
             return jsonDate;
         }
         return new Date(+jsonDate.replace('/Date(', '').replace(')/', ''));
+    }
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            var c_start = document.cookie.indexOf(c_name + "=")
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1
+                var c_end = document.cookie.indexOf(";", c_start)
+                if (c_end == -1) c_end = document.cookie.length
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return ""
+    }
+
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) +
+        ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
     }
     function bindEvents() {
         String.prototype.hashCode = function () {
@@ -176,15 +236,22 @@
             }
             return hash;
         };
+        Date.prototype.toSimpleDateString = function () {
+            var _this = this;
+            var year = _this.getFullYear();
+            var month = _this.getMonth() + 1;
+            var day = _this.getDate();
+            return year + "-" + month + "-" + day;
+        }
         $('.message-container').delegate('.message .close', 'click', function () {
             $(this).closest('.message').transition('fade');
         })
-        checkBrowser();
+        broswer.init();
     }
     $.extend({
         tip: tip, checkEmail: checkEmail, checkMobile: checkMobile,
         getQueryString: getQueryString, getQueryStringByName: getQueryStringByName, getQueryStringByIndex: getQueryStringByIndex,
-        htmlEncode: htmlEncode, htmlDecode: htmlDecode, uuid: uuid, ConvertJsonToDate: ConvertJsonToDate
+        htmlEncode: htmlEncode, htmlDecode: htmlDecode, uuid: uuid, ConvertJsonToDate: ConvertJsonToDate,setCookie:setCookie,getCookie:getCookie
     });
     bindEvents();
 })(window, document, jQuery);

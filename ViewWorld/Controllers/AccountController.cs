@@ -456,6 +456,7 @@ namespace ViewWorld.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            RemoveOutputCacheItem("GetUserInfo", "Account");
             return SuccessJson();
         }
 
@@ -685,25 +686,30 @@ namespace ViewWorld.Controllers
         #endregion
         #region 自定义获取用户信息
         [HttpGet]
-        [OutputCache(Location =System.Web.UI.OutputCacheLocation.Server,Duration =1200)]
         [Authorize]
         public async Task<JsonResult> GetUserInfo()
         {
-            var result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
-            if (result.Success)
+            var userInfo = cacheManager.Get("userinfo", UserId);
+            if(userInfo == null)
             {
-                if (!System.IO.File.Exists(result.Entity.Avatar))
-                    result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
-                var data = new
+                var result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
+                if (result.Success)
                 {
-                    Username = result.Entity.UserName,
-                    Nickname = result.Entity.NickName,
-                    Avatar = result.Entity.Avatar,
-                };
-                return Json(data);
+                    if (!System.IO.File.Exists(result.Entity.Avatar))
+                        result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
+                    var data = new
+                    {
+                        Username = result.Entity.UserName,
+                        Nickname = result.Entity.NickName,
+                        Avatar = result.Entity.Avatar,
+                    };
+                    cacheManager.Add("userinfo", data, UserId);
+                    return Json(data);
+                }
+            }else
+            {
+                return Json(userInfo);
             }
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            RemoveOutputCacheItem("GetUserInfo", "Account");
             return ErrorJson("登录信息有误");
         }
         #endregion
@@ -768,7 +774,7 @@ namespace ViewWorld.Controllers
                 var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
                 if (Result.Success)
                 {
-                    RemoveOutputCacheItem("GetUserInfo", "Account");
+                    cacheManager.Remove("userinfo", this.UserId);
                     return SuccessJson();
                 }
                 return ErrorJson(Result.Message);

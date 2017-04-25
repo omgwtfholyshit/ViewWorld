@@ -7,7 +7,7 @@ body {
         justify-content:center;
         align-items:center;
         padding-top:8rem;
-        .logo{background:url(/Images/Frontend/Login/wix-logo.svg) no-repeat;width:15rem;height:10rem;background-size:contain}
+        .logo{background:url('/Images/Logo/logo_352-172.svg') no-repeat;width:20.04rem;height:10rem;background-size:contain}
         .slogan{}
         
     }
@@ -79,10 +79,11 @@ body {
  @media only screen and (max-width: 767px){
      .header-container{
         padding-top:2rem;
-        .logo{background:url(/Images/Frontend/Login/wix-logo.svg) no-repeat;width:10rem;height:6rem;background-size:contain}
+        .logo{width:10.02rem;height:5rem;background-size:contain}
         .slogan{}
     }
      .signin-section{
+         margin-top:1.5rem;
          align-items: center;
          flex-direction: column;
          .vertical{display:none;}

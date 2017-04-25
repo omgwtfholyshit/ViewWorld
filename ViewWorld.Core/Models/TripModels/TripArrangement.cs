@@ -36,6 +36,7 @@ namespace ViewWorld.Core.Models.TripModels
         public string PublisherId { get; set; }
         public DateTime PublishedAt { get; set; }
         public int Popularity { get; set; } = 0;
+        public int TripOrdered { get; set; } = 0;
         public int SortOrder { get; set; } = 0;
         public CommonInfo CommonInfo {
             get

@@ -12,8 +12,8 @@ body .header-container {
   align-items: center;
   padding-top: 8rem; }
   body .header-container .logo {
-    background: url(/Images/Frontend/Login/wix-logo.svg) no-repeat;
-    width: 15rem;
+    background: url("/Images/Logo/logo_352-172.svg") no-repeat;
+    width: 20.04rem;
     height: 10rem;
     background-size: contain; }
 
@@ -121,11 +121,11 @@ body .term-of-use {
   body .header-container {
     padding-top: 2rem; }
     body .header-container .logo {
-      background: url(/Images/Frontend/Login/wix-logo.svg) no-repeat;
-      width: 10rem;
-      height: 6rem;
+      width: 10.02rem;
+      height: 5rem;
       background-size: contain; }
   body .signin-section {
+    margin-top: 1.5rem;
     align-items: center;
     flex-direction: column; }
     body .signin-section .vertical {

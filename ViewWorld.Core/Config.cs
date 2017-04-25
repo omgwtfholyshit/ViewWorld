@@ -18,7 +18,9 @@ namespace ViewWorld.Core
         public static string SMTPHost { get; private set; }
         public static int SMTPPort { get; private set; }
         public static string EmailAddress { get; private set; }
-        public static string EmailPass { get; set; }
+        public static string EmailPass { get; private set; }
+        public static string QQAppId { get; private set; }
+        public static string QQAppKey { get; private set; }
         static Config()
         {
             DB_HostIP = ConfigurationManager.AppSettings["dbHostIP"];
@@ -27,6 +29,8 @@ namespace ViewWorld.Core
             SMTPPort = Convert.ToInt32(ConfigurationManager.AppSettings["SMTPPort"]);
             EmailAddress = ConfigurationManager.AppSettings["FromEmailAddress"];
             EmailPass = ConfigurationManager.AppSettings["FormEmailPassword"];
+            QQAppId = ConfigurationManager.AppSettings["QQAppId"];
+            QQAppKey = ConfigurationManager.AppSettings["QQAppKey"];
         }
     }
 }

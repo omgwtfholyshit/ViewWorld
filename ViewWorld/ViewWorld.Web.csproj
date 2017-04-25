@@ -301,6 +301,7 @@
     <Compile Include="App_Start\StyleBundleFallback.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Backend\Pages\PageController.cs" />
+    <Compile Include="Controllers\Frontend\FinderController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\ProviderController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -311,6 +312,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\FinderViewModels.cs" />
     <Compile Include="Models\GlobalSetting.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -483,6 +485,33 @@
     <Content Include="Content\components\visibility.min.js" />
     <Content Include="Content\components\visit.js" />
     <Content Include="Content\components\visit.min.js" />
+    <Content Include="Images\Background\background_1.jpg" />
+    <Content Include="Images\Background\background_4.jpg" />
+    <Content Include="Images\Background\background_5.jpg" />
+    <Content Include="Images\Background\background_3.jpg" />
+    <Content Include="Images\Logo\logo_150-218.svg" />
+    <Content Include="Images\Logo\logo_352-172.svg" />
+    <Content Include="Images\Logo\logo_60-60.svg" />
+    <Content Include="Images\Logo\logo_white.png" />
+    <Content Include="Images\Logo\logo_white_web.png" />
+    <Content Include="Images\WideBackground\wide_background_1.jpg" />
+    <Content Include="Images\WideBackground\wide_background_2.jpg" />
+    <Content Include="Lib\Parallax\parallax.js" />
+    <Content Include="Lib\Parallax\parallax.min.js" />
+    <Content Include="Lib\Swiper\css\swiper.css" />
+    <Content Include="Lib\Swiper\css\swiper.min.css" />
+    <Content Include="Lib\VectorMap\jquery-jvectormap-2.0.3.css" />
+    <Content Include="Lib\VectorMap\jquery-jvectormap-2.0.3.min.js" />
+    <Content Include="Lib\VectorMap\jvectormap-world-mill.js" />
+    <Content Include="Lib\VectorMap\vectmap-world-mill-cn.js" />
+    <Content Include="Scripts\Frontend\Finder\FindTrips.js" />
+    <Content Include="Scripts\Frontend\Home\index.js" />
+    <Content Include="Content\Frontend\layout.css">
+      <DependentUpon>layout.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\Frontend\layout.min.css">
+      <DependentUpon>layout.css</DependentUpon>
+    </Content>
     <Content Include="Content\Frontend\login.css">
       <DependentUpon>login.scss</DependentUpon>
     </Content>
@@ -553,8 +582,7 @@
     <Content Include="Images\Backend\Login\logo_393-73.png" />
     <Content Include="Images\Backend\Login\logo_393-73_white.png" />
     <Content Include="Images\Background\blueSky_v.jpg" />
-    <Content Include="Images\Background\loginbackground.jpg" />
-    <Content Include="Images\Background\pinkPetals.jpg" />
+    <Content Include="Images\Background\background_2.jpg" />
     <Content Include="Images\DefaultImages\add.png" />
     <Content Include="Images\DefaultImages\female.jpg" />
     <Content Include="Images\DefaultImages\icon_phone_large_150.jpg" />
@@ -580,9 +608,21 @@
     <Content Include="Lib\PageEffect\style.css" />
     <Content Include="Lib\React\react-dom.js" />
     <Content Include="Lib\React\react.js" />
+    <Content Include="Lib\Swiper\js\swiper.jquery.js" />
+    <Content Include="Lib\Swiper\js\swiper.jquery.min.js" />
+    <Content Include="Lib\Swiper\js\swiper.jquery.umd.js" />
+    <Content Include="Lib\Swiper\js\swiper.jquery.umd.min.js" />
+    <Content Include="Lib\Swiper\js\swiper.js" />
+    <Content Include="Lib\Swiper\js\swiper.min.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\Backend\Account\GlobalSetting.js" />
+    <Content Include="Scripts\Backend\common.es5.js">
+      <DependentUpon>common.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\Backend\common.es5.min.js">
+      <DependentUpon>common.es5.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\Backend\Trip\CityManagement.js" />
     <Content Include="Scripts\Backend\Trip\DepartureManagement.js" />
     <Content Include="Scripts\Backend\Trip\Provider.js" />
@@ -632,6 +672,10 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\Frontend\login.scss" />
+    <Content Include="Content\Frontend\layout.scss" />
+    <Content Include="Lib\Swiper\js\maps\swiper.jquery.min.js.map" />
+    <Content Include="Lib\Swiper\js\maps\swiper.jquery.umd.min.js.map" />
+    <Content Include="Lib\Swiper\js\maps\swiper.min.js.map" />
     <None Include="Properties\PublishProfiles\ViewWorld - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\calendar.es5.js">
@@ -643,6 +687,7 @@
     <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\calendar.zh-cn.js" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="Scripts\Frontend\layout.js" />
     <Content Include="Scripts\Frontend\login.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
     <Content Include="Scripts\jquery-1.12.4.min.js" />
@@ -993,7 +1038,7 @@
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\Page\UserProfile.cshtml" />
     <Content Include="Views\Page\Login.cshtml" />
-    <Content Include="Views\Home\MongoTest.cshtml" />
+    <Content Include="Views\Home\TestMethods.cshtml" />
     <Content Include="Views\Page\EditPassword.cshtml" />
     <Content Include="Views\Page\RegionManagement.cshtml" />
     <Content Include="Views\Page\GlobalSetting.cshtml" />
@@ -1015,6 +1060,8 @@
     <Content Include="Scripts\UEditor\net\Web.config" />
     <Content Include="Views\Page\EditTripManagement.cshtml" />
     <Content Include="Views\PartialViews\_PartialTripTable.cshtml" />
+    <Content Include="Views\Finder\FindTrips.cshtml" />
+    <Content Include="Views\PartialViews\_PartialCitySelection.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

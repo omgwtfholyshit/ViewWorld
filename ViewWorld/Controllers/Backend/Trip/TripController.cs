@@ -324,7 +324,7 @@ namespace ViewWorld.Controllers.Trip
         public async Task<JsonResult> SearchCityByKeyword(string keyword)
         {
             var result = await cityService.RetrieveEntitiesByKeyword(keyword);
-            return Json(result.Entities);
+            return Json(result.Entities.OrderBy(e=>e.Initial));
         }
         #endregion
         #region 出发地管理

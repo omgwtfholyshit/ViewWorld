@@ -15,16 +15,18 @@
                     var cityName = "";
                     if (!string.IsNullOrWhiteSpace(item.ProductInfo.DepartingCity))
                     {
-                        if (item.ProductInfo.DepartingCity.Split(',').Length > 1)
+                        var cityArray = item.ProductInfo.DepartingCity.Split('|');
+                        foreach (var city in cityArray)
                         {
-                            cityName = item.ProductInfo.DepartingCity.Split(',')[1];
+                            cityName += city.Split(',')[1] + ",";
                         }
+                        cityName = cityName.TrimEnd(',');
                     }
                     <td class="one wide">@cityName</td>
                 }
                 <td class="one wide">@item.Publisher</td>
                 <td class="one wide">@item.PublishedAt.ToString()</td>
-                
+
                 <td class="collapsing">
                     <button class="ui circular blue icon button" data-content="编辑">
                         <i class="edit icon"></i>
@@ -35,21 +37,21 @@
                     @{
                         if (item.IsVisible)
                         {
-                            <button class="ui circular blue icon button hidden" data-content="发布线路">
-                                <i class="unhide icon"></i>
-                            </button>
-                            <button class="ui circular red icon button" data-content="隐藏线路">
-                                <i class="hide icon"></i>
-                            </button>
+                    <button class="ui circular blue icon button hidden" data-content="发布线路">
+                        <i class="unhide icon"></i>
+                    </button>
+                    <button class="ui circular red icon button" data-content="隐藏线路">
+                        <i class="hide icon"></i>
+                    </button>
                         }
                         else
                         {
-                            <button class="ui circular blue icon button" data-content="发布线路">
-                                <i class="unhide icon"></i>
-                            </button>
-                            <button class="ui circular red icon button hidden" data-content="隐藏线路">
-                                <i class="hide icon"></i>
-                            </button>
+                    <button class="ui circular blue icon button" data-content="发布线路">
+                        <i class="unhide icon"></i>
+                    </button>
+                    <button class="ui circular red icon button hidden" data-content="隐藏线路">
+                        <i class="hide icon"></i>
+                    </button>
                         }
                     }
                     <button class="ui circular red icon button" data-content="删除">
@@ -57,10 +59,10 @@
                     </button>
                 </td>
             </tr>
-        }
-    }
-    else
-    {
+                            }
+                        }
+                        else
+                        {
         <tr class="center aligned">
             <td colspan="8" class="ui segment">没有您要搜索的数据..</td>
         </tr>
