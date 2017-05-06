@@ -1095,9 +1095,14 @@
             })
         })
         .delegate('#displayTable .delete.button', 'click', function (e) {
-            var $tr = $(e.target).parents('tr'), $input;
+            var $tr = $(e.target).parents('tr');
             var plan = TripPlans.find(function (plan) { return plan.Id == $tr.data('parentid') });
-            var priceIndex = $tr.data('index');
+            var priceIndex = -1;
+            for (var i = 0; i < plan.TripPrices.length; i++) {
+                if (plan.TripPrices[i].TripDate == $tr.find('td')[1].innerText) {
+                    priceIndex = i; break;
+                }
+            }
             plan.TripPrices.splice(priceIndex, 1);
             $tr.remove();
         })

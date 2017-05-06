@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ViewWorld.Models
+namespace ViewWorld.Core.Models.ViewModels
 {
     public class FinderViewModels
     {
@@ -12,9 +12,7 @@ namespace ViewWorld.Models
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
         public int Days { get; set; }
-        public decimal MinPrice { get; set; }
-        public decimal MaxPrice { get; set; }
-        public string Sceneries { get; set; }
+        public string Theme { get; set; }
 
     }
 }

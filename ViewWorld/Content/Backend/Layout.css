@@ -72,6 +72,12 @@ body {
   overflow-y: hidden;
   overflow-x: auto;
   background-color: #ececec; }
+  body .ui.calendar .ui.popup .ui.grid {
+    white-space: normal; }
+  body .highlighted {
+    background: #ddffdd; }
+  body #calendar .ui.grid > .column:not(.row), body .ui.grid > .row > .column {
+    width: auto; }
 
 .wrapper {
   margin: 1em;
@@ -273,15 +279,6 @@ body {
 .region-management #TripPlans .view-port, .scenery-management #TripPlans .view-port, .city-management #TripPlans .view-port, .trip-management #TripPlans .view-port {
   height: 20rem;
   overflow-y: auto; }
-
-.region-management #TripPlans .ui.calendar .ui.popup .ui.grid, .scenery-management #TripPlans .ui.calendar .ui.popup .ui.grid, .city-management #TripPlans .ui.calendar .ui.popup .ui.grid, .trip-management #TripPlans .ui.calendar .ui.popup .ui.grid {
-  white-space: normal; }
-
-.region-management #TripPlans .highlighted, .scenery-management #TripPlans .highlighted, .city-management #TripPlans .highlighted, .trip-management #TripPlans .highlighted {
-  background: #ddffdd; }
-
-.region-management #TripPlans #calendar .ui.grid > .column:not(.row), .region-management #TripPlans .ui.grid > .row > .column, .scenery-management #TripPlans #calendar .ui.grid > .column:not(.row), .scenery-management #TripPlans .ui.grid > .row > .column, .city-management #TripPlans #calendar .ui.grid > .column:not(.row), .city-management #TripPlans .ui.grid > .row > .column, .trip-management #TripPlans #calendar .ui.grid > .column:not(.row), .trip-management #TripPlans .ui.grid > .row > .column {
-  width: auto; }
 
 .region-management #TripPlans #displayTable tbody input, .scenery-management #TripPlans #displayTable tbody input, .city-management #TripPlans #displayTable tbody input, .trip-management #TripPlans #displayTable tbody input {
   width: 95%; }

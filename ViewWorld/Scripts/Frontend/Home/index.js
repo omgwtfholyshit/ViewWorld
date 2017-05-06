@@ -1,5 +1,4 @@
 ﻿$(function () {
-    var $homepage = $('.homepage');
     var homepage = {
         mainSwiper : {
             context: $('.homepage'),
@@ -9,7 +8,7 @@
             context: $('.slideTwo .swiper-wrapper'),
             obj: Object,
         },
-        sliderOneContent:$('.homepage .content-container'),
+        sliderOneContent: $('.homepage .content-container'),
         init: function () {
             this.s2LeftArrow = $('.leftwards.arrow-container');
             this.s2RightArrow = $('.rightwards.arrow-container');
@@ -141,8 +140,10 @@
                     }
                 },
                 onMarkerClick: function (e, code) {
-                    console.log($('.jvectormap-tip').text().trim());
-                    console.log(code);
+                    //console.log($('.jvectormap-tip').text().trim());
+                    //console.log(code);
+                    var region = $('.jvectormap-tip').text().trim();
+                    window.open("/Finder/FindTrips?region=" + region)
                 }
             });
         }

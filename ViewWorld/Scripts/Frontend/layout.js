@@ -68,6 +68,9 @@
                 case '/home/index':
                     text = '首页';
                     break;
+                case '/finder/findtrips':
+                    text = '浏览行程'
+                    break;
                 default:
                     break;
             }

@@ -50,7 +50,9 @@ body{
     overflow-y:hidden;
     overflow-x:auto;
     background-color:#ececec;
-    
+    .ui.calendar .ui.popup .ui.grid{white-space:normal}
+    .highlighted {background: #ddffdd;}
+    #calendar .ui.grid>.column:not(.row), .ui.grid>.row>.column{width:auto}
 }
 .wrapper{
     margin:1em;
@@ -277,13 +279,12 @@ body{
     }
     #TripPlans{
         .view-port{height:20rem;overflow-y:auto;}
-        .ui.calendar .ui.popup .ui.grid{white-space:normal}
-        .highlighted {background: #ddffdd;}
-        #calendar .ui.grid>.column:not(.row), .ui.grid>.row>.column{width:auto}
+        
         #displayTable{
             tbody input{width:95%;}
         }
     }
+    
 }
 .region-editor .form-container,.scenery-editor .form-container,#commonInfo{
     width:100%;

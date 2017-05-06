@@ -13,16 +13,20 @@ using ViewWorld.Core.ExtensionMethods;
 using MongoDB.Driver;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
+using ViewWorld.Core.Models.ViewModels;
+using CacheManager.Core;
 
 namespace ViewWorld.Services.Trips
 {
     public class TripService : ITripService
     {
         private readonly IMongoDbRepository Repo;
+        ICacheManager<GetManyResult<TripArrangement>> cacheManager;
         const string dataDirectory = "/Upload/Trips/";
-        public TripService(IMongoDbRepository _Repo)
+        public TripService(IMongoDbRepository _Repo,ICacheManager<GetManyResult<TripArrangement>> _cacheManager)
         {
             this.Repo = _Repo;
+            this.cacheManager = _cacheManager;
         }
 
         public async Task<Result> AddEntity(TripArrangement Entity)
@@ -70,29 +74,105 @@ namespace ViewWorld.Services.Trips
 
         public async Task<GetListResult<TripArrangement>> RetrieveEntitiesByKeyword(string keyword)
         {
-            if (string.IsNullOrWhiteSpace(keyword))
+            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front");
+            GetListResult<TripArrangement> listResult = new GetListResult<TripArrangement>() {
+                Success = false, ErrorCode = 300, Entities = new List<TripArrangement>(), Message = "" };
+            if (result == null || !result.Success)
             {
-                return (await Repo.GetAllAsync<TripArrangement>()).ManyToListResult();
-            }else
-            {
-                var builder = Builders<TripArrangement>.Filter;
-                FilterDefinition<TripArrangement> filter;
-                keyword = keyword.ToUpper();
-                int productId = 0;
-                if(int.TryParse(keyword,out productId))
-                {
-                    filter = builder.Eq("ProductId", keyword);
-                }else
-                {
-                    filter = builder.Where(obj => obj.CommonInfo.Name.Contains(keyword) || obj.Publisher.Contains(keyword));
-                }
-                return (await Repo.GetManyAsync(filter)).ManyToListResult();
+                result = await Repo.GetAllAsync<TripArrangement>();
             }
+            if (result.Success)
+            {
+                if (string.IsNullOrWhiteSpace(keyword))
+                    return result.ManyToListResult();
+                else
+                {
+                    keyword = keyword.ToUpper();
+                    int productId = 0;
+                    if (int.TryParse(keyword, out productId))
+                    {
+                        var trip = result.Entities.SingleOrDefault(t => t.ProductId == keyword);
+                        if (trip != null)
+                        {
+                            listResult.Entities.Add(trip);
+                            listResult.Success = true;
+                            listResult.ErrorCode = 200;
+                        }
+                       
+                    }
+                    else
+                    {
+                        var trips = result.Entities.Where(obj => obj.CommonInfo.Name.Contains(keyword) || obj.Publisher.Contains(keyword));
+                        if (trips != null)
+                        {
+                            listResult.Entities.AddRange(trips);
+                            listResult.Success = true;
+                            listResult.ErrorCode = 200;
+                        }
+                    }
+
+                }
+            }
+            return listResult;
         }
 
+        /// <summary>
+        /// 根据SearchModel遍历并筛选缓存中的list。数据多了之后测试RetrieveTripArrangementBySearchModel的效率
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<TripArrangement>> RetrieveTripArrangementBySearchModel(FinderViewModels model)
+        {
+           
+            IEnumerable<TripArrangement> filteredTrips = new List<TripArrangement>();
+            GetManyResult<TripArrangement> result = await GetCachedResult();
+            if (result.Success)
+            {
+                if (result.Entities == null || result.Entities.Count() <= 0)
+                {
+                    result.Message = "No trips located.";
 
+                }
+                else
+                {
+                    filteredTrips = result.Entities.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity));
+                    if (!string.IsNullOrWhiteSpace(model.Region))
+                        filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionId));
+                    if (model.Days > 0)
+                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
+                    if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
+                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity));
+                    if (!string.IsNullOrWhiteSpace(model.keyword))
+                        filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
+                    if (!string.IsNullOrWhiteSpace(model.Theme))
+                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.Sceneries.Contains(model.Theme));
+                }
+            }
+            return filteredTrips;
+
+        }
+        [Obsolete("Search via Filter, Please compare the efficiency with RetrieveTripArrangementBySearchModel when trip number grows up", false)]
+        public async Task<GetManyResult<TripArrangement>> RetrieveTripArrangementByFilter(FinderViewModels model)
+        {
+            var builder = Builders<TripArrangement>.Filter;
+            FilterDefinition<TripArrangement> filter = builder.Where(t => !t.IsDeleted && !t.IsVisible);
+            if(!string.IsNullOrWhiteSpace(model.DepartureCity))
+                filter = builder.And(filter, builder.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity)));
+            if (!string.IsNullOrWhiteSpace(model.Region))
+                filter = builder.And(filter, builder.Where(t => t.CommonInfo.RegionName == model.Region));
+            if (model.Days > 0)
+                filter = builder.And(filter, builder.Where(t => t.ProductInfo.TotalDays >= model.Days));
+            if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
+                filter = builder.And(filter, builder.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity)));
+            if (!string.IsNullOrWhiteSpace(model.keyword))
+                filter = builder.And(filter, builder.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword)));
+            if (!string.IsNullOrWhiteSpace(model.Theme))
+                filter = builder.And(filter, builder.Where(t => t.CommonInfo.Theme.Contains(model.Theme)));
+            return await Repo.GetManyAsync(filter);
+        }
         public async Task<Result> UpdateEntity(TripArrangement Entity)
         {
+            cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
@@ -104,6 +184,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.CommonInfo = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "通用信息";
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -117,6 +198,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.ProductInfo = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "产品概要";
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -130,6 +212,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.Schedules = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "单日行程";
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -143,6 +226,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.TripPlans = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "发团计划";
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -156,6 +240,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.TripProperty = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "发团属性";
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -236,6 +321,7 @@ namespace ViewWorld.Services.Trips
                             photoInfo.FileLocation = PathHelper.absolutePathtoVirtualPath(filePath);
                             tripResult.Entity.CommonInfo.Photos.Add(photoInfo);
                             await UpdateEntity(tripResult.Entity);
+                            cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, tripResult.Entity));
                         }
                     }
                     if (string.IsNullOrWhiteSpace(result.Message))
@@ -276,6 +362,7 @@ namespace ViewWorld.Services.Trips
                     }
                     result.Entity.CommonInfo.Photos.Remove(photoInfo);
                     await UpdateEntity(result.Entity);
+                    cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                     outcome.Success = true;
                     outcome.ErrorCode = 200;
                 }
@@ -295,6 +382,7 @@ namespace ViewWorld.Services.Trips
             {
                 result.Entity.IsVisible = !result.Entity.IsVisible;
                 await UpdateEntity(result.Entity);
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 if (result.Entity.IsVisible)
                 {
                     result.Message = "隐藏线路";
@@ -305,7 +393,37 @@ namespace ViewWorld.Services.Trips
             }
             return result;
         }
+        async Task<GetManyResult<TripArrangement>> GetCachedResult()
+        {
+            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front");
+            if (result == null || !result.Success)
+            {
+                result = await Repo.GetAllAsync<TripArrangement>();
+                cacheManager.Add("Trips", result, "Front");
+            }
+            return result;
+        }
+        GetManyResult<TripArrangement> UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
+        {
+            var update = cachedResult.Entities.FirstOrDefault(e => e.Id == entityToUpdate.Id);
+            if (update != null)
+                update = entityToUpdate;
+            return cachedResult;
+        }
 
-        
+        public static string GetCity(string cityStr)
+        {
+            var cityName = "";
+            if (!string.IsNullOrWhiteSpace(cityStr))
+            {
+                var cityArray = cityStr.Split('|');
+                foreach (var city in cityArray)
+                {
+                    cityName += city.Split(',')[1] + ",";
+                }
+                cityName = cityName.TrimEnd(',');
+            }
+            return cityName;
+        }
     }
 }

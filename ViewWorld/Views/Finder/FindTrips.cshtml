@@ -87,102 +87,187 @@
                 </div>
             </div>
         </div>
-        <div class="ui left action right icon input">
-            <div class="ui basic floating dropdown button">
-                <div class="text">全部产品</div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item">全部产品</div>
-                    <div class="item">出发地参团</div>
-                    <div class="item">目的地参团</div>
-                    <div class="item">跟团游</div>
-                    <div class="item">自由行</div>
-                    <div class="item">私人定制</div>
-                </div>
-            </div>
-            <i class="search icon"></i>
-            <input type="text" placeholder="Search">
+        <div class="ui action input search-container">
+            <input type="text" placeholder="目的地/景点/产品名称">
+            <select class="ui compact selection dropdown">
+                <option class="item" value="all">全部产品</option>
+                <option class="item" value="de">出发地参团</option>
+                <option class="item" value="ar">目的地参团</option>
+                <option class="item" value="gt">跟团游</option>
+                <option class="item" value="sg">自由行</option>
+                <option class="item" value="pt">私人定制</option>
+            </select>
+            <div type="submit" class="ui teal button">搜索</div>
+        </div>
+        
+        <div class="filter">
+            <ul class="filter-tab">
+                <li class="tab-item active">全部</li>
+                <li class="tab-item">青岛到普吉岛</li>
+                <li class="tab-item">普吉岛当地游</li>
+            </ul>
+            <ul class="filter-content">
+                <li class="content-item open">
+                    <label >所属区域:</label>
+                    <div class="options">
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                    </div>
+                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
+                </li>
+                <li class="content-item open">
+                    <label>出发城市:</label>
+                    <div class="options">
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                    </div>
+                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
+                </li>
+                <li class="content-item open">
+                    <label>结束城市:</label>
+                    <div class="options">
+                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
+                    </div>
+                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
+                </li>
+                <li class="content-item">
+                    <label>行程天数:</label>
+                    <div class="options">
+                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
+                    </div>
+                </li>
+                <li class="content-item">
+                    <label>出发城市:</label>
+                    <div class="options">
+                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
+                    </div>
+                </li>
+                <li class="content-item">
+                    <label>游玩主题:</label>
+                    <div class="options">
+                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="ui horizontal divider">
             <span>更多筛选<i class="angle double down icon"></i> </span>
         </div>
-        <div class="filter-condition">
-            <a class="ui teal label">出发城市：青岛<i class="delete icon"></i></a>
-            <a class="ui label">Tag<i class="delete icon"></i></a>
-            <a class="ui label">Tag<i class="delete icon"></i></a>
-            <a class="ui label">Tag<i class="delete icon"></i></a>
-            <a class="ui label">Tag<i class="delete icon"></i></a>
-            <a class="ui label">Tag<i class="delete icon"></i></a>
-        </div>
-        <div class="filter">
-            
-        </div>
-        
+    </div>
+    <div class="sort-container">
+        <ul class="sort">
+            <li >推荐</li>
+            <li>销量</li>
+            <li>评分</li>
+            <li class="active">价格<i class="long arrow down icon"></i></li>
+        </ul>
     </div>
     <div class="results-container">
         <div class="ui divided items">
-            <div class="item">
-                <div class="image">
-                    <img src="~/Images/Background/background_1.jpg" />
-                </div>
-                <div class="content">
-                    <a class="header">12 Years a Slave</a>
-                    <div class="meta">
-                        <span class="cinema">Union Square 14</span>
-                    </div>
-                    <div class="description">
-                        <p></p>
-                    </div>
-                    <div class="extra">
-                        <div class="ui label">IMAX</div>
-                        <div class="ui label"><i class="globe icon"></i> Additional Languages</div>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
+            @*<div class="item">
                 <div class="image">
                     <img src="~/Images/Background/background_2.jpg" />
                 </div>
                 <div class="content">
-                    <a class="header">My Neighbor Totoro</a>
+                    <a class="header">纽约市区1日游</a>
                     <div class="meta">
-                        <span class="cinema">IFC Cinema</span>
+                        <span class="cinema">纽约市区精华游：华尔街-环岛游船-帝国大厦-大无畏航母博物馆-大都会艺术博物馆</span>
                     </div>
                     <div class="description">
-                        <p></p>
+                        <p>青岛出发</p>
+                        <p>每逢周日出行</p>
                     </div>
                     <div class="extra">
-                        <div class="ui right floated primary button">
-                            Buy tickets
+                       
+                        <div class="ui teal label">热卖</div>
+                        <div class="ui teal label">特价</div>
+                        <div class="ui teal label">买二送二</div>
+                        <div class="ui teal label">买二送一</div>
+                        <div class="ui teal label">免费接机</div>
+                    </div>
+                    <div class="data-container">
+                        <div class="ui teal tiny horizontal statistic">
+                            <div class="value">
+                                ￥2,204
+                            </div>
+                            <div class="label">
+                                起
+                            </div>
+                        </div>
+                        <div class="ui teal button">
+                            查看详情
                             <i class="right chevron icon"></i>
                         </div>
-                        <div class="ui label">Limited</div>
                     </div>
                 </div>
+            </div>*@
+        </div>
+        <div class="ui right floated pagination menu">
+           
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<script src="~/Scripts/jQuery.LoadTemplate/jquery.loadTemplate.min.js"></script>
+<script src="~/Scripts/Frontend/Finder/FindTrips.js"></script>
+<script type="text/html" id="filterContentTmpl">
+    <li class="content-item" data-template-bind='[{"attribute": "data-modelname", "value": "modelname"}]'>
+        <label data-content="name">所属区域:</label>
+        <div class="options" data-content="tags">
+            
+        </div>
+        <a href="javascript:void(0)" class="toggleOptions off" data-class="className">展开<i class="caret down icon"></i></a>
+    </li>
+</script>
+<script type="text/html" id="resultContentTmpl">
+    <div class="item">
+        <div class="image">
+            <img src="/Images/Logo/logo_352-172.svg" data-template-bind='[{"attribute": "data-src", "value": "image"}]'/>
+        </div>
+        <div class="content">
+            <a class="header" data-content="title"></a>
+            <div class="meta">
+                <span class="cinema" data-content="keyword"></span>
             </div>
-            <div class="item">
-                <div class="image">
-                    <img src="~/Images/Background/background_3.jpg" />
+            <div class="description">
+                <p data-content="departcity"></p>
+                <p data-content="availabledates"></p>
+            </div>
+            <div class="extra" data-content="labels">
+
+                <div class="ui teal label">热卖</div>
+                <div class="ui teal label">特价</div>
+                <div class="ui teal label">买二送二</div>
+                <div class="ui teal label">买二送一</div>
+                <div class="ui teal label">免费接机</div>
+            </div>
+            <div class="data-container">
+                <div class="ui teal tiny horizontal statistic">
+                    <div class="value" data-content="price">
+                        ￥2,204
+                    </div>
+                    <div class="label">
+                        起
+                    </div>
                 </div>
-                <div class="content">
-                    <a class="header">Watchmen</a>
-                    <div class="meta">
-                        <span class="cinema">IFC</span>
-                    </div>
-                    <div class="description">
-                        <p></p>
-                    </div>
-                    <div class="extra">
-                        <div class="ui right floated primary button">
-                            Buy tickets
-                            <i class="right chevron icon"></i>
-                        </div>
-                    </div>
+                <div class="ui teal button">
+                    查看详情
+                    <i class="right chevron icon"></i>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
-<script src="~/Scripts/Frontend/Finder/FindTrips.js"></script>
+</script>

@@ -7,12 +7,15 @@ using System.Web;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Interfaces;
 using ViewWorld.Core.Models.TripModels;
+using ViewWorld.Core.Models.ViewModels;
 
 namespace ViewWorld.Services.Trips
 {
     public interface ITripService : ICRUDable<TripArrangement>
     {
         Task<Result> RetrieveTripArrangementById(string tripId);
+        Task<IEnumerable<TripArrangement>> RetrieveTripArrangementBySearchModel(FinderViewModels model);
+        Task<GetManyResult<TripArrangement>> RetrieveTripArrangementByFilter(FinderViewModels model);
         Task<Result> UpdateTripPartial(string tripId, CommonInfo data);
         Task<Result> UpdateTripPartial(string tripId, ProductInfo data);
         Task<Result> UpdateTripPartial(string tripId, List<Schedule> data);

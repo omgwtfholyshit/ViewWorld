@@ -1,0 +1,53 @@
+﻿@model ViewWorld.Core.Models.TripModels.TripArrangement
+@{
+    ViewBag.Title = "行程详情";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body{background-color:#f2f2f2;}
+</style>
+<div class="trip-detail">
+    <section class="intro-section">
+        <div class="slider"></div>
+        <div class="intro-container">
+            <h2 class="ui header">
+                @Model.CommonInfo.Name
+                <div class="sub header">@Model.CommonInfo.Keyword</div>
+            </h2>
+            <div class="ui small horizontal statistic lowest-price">
+                <div class="value">
+                    @{
+                        var price = "";
+                        switch (Model.CommonInfo.CurrencyType)
+                        {
+                            case ViewWorld.Core.Enum.CurrencyType.美元:
+                                price += "USD$";
+                                break;
+                            case ViewWorld.Core.Enum.CurrencyType.澳元:
+                                price += "AUD$";
+                                break;
+                            case ViewWorld.Core.Enum.CurrencyType.欧元:
+                                price += "EUR€";
+                                break;
+                            case ViewWorld.Core.Enum.CurrencyType.人民币:
+                                price += "RMB￥";
+                                break;
+                        }
+                        price += " " + Model.CommonInfo.LowestPrice;
+                    }
+                    @price
+                </div>
+                <div class="label">
+                    起/人
+                </div>
+            </div>
+            <ul class="other-info">
+                <li><label>产品编号: </label><span>@Model.ProductId</span></li>
+                <li><label>出发城市: </label><span>@ViewBag.departCity</span></li>
+                <li><label>结束城市: </label><span>@ViewBag.arrivalCity</span></li>
+                <li><label>活动优惠: </label><span>热卖</span></li>
+            </ul>
+        </div>
+    </section>
+</div>
+

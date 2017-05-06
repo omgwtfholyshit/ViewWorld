@@ -312,7 +312,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\FinderViewModels.cs" />
     <Compile Include="Models\GlobalSetting.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -1062,6 +1061,7 @@
     <Content Include="Views\PartialViews\_PartialTripTable.cshtml" />
     <Content Include="Views\Finder\FindTrips.cshtml" />
     <Content Include="Views\PartialViews\_PartialCitySelection.cshtml" />
+    <Content Include="Views\Finder\TripDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
