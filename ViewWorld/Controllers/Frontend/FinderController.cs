@@ -72,6 +72,19 @@ namespace ViewWorld.Controllers.Frontend
             {
                 ViewBag.departCity = TripService.GetCity(trip.ProductInfo.DepartingCity);
                 ViewBag.arrivalCity = TripService.GetCity(trip.ProductInfo.ArrivingCity);
+                if (trip.TripPlans.Any())
+                {
+                    string tripData = "{";
+                    foreach (var plan in trip.TripPlans)
+                    {
+                        foreach(var item in plan.TripPrices)
+                        {
+                            tripData += string.Format("%22{0}%22" + ":"+ "%22{1}_{2}%22,", item.TripDate.ToString("MM-dd-yyyy"), trip.CommonInfo.ShortPriceType + item.BasePrice.QuadplexPrice.ToString(),plan.Id);
+                        }
+                    }
+                    ViewBag.tripData = tripData.TrimEnd(',') + "}";
+                }
+                
                 return View(trip);
             }
                 
@@ -90,6 +103,16 @@ namespace ViewWorld.Controllers.Frontend
             var data = await tripService.RetrieveTripArrangementByFilter(model);
             return PageJson(data.Entities.ToPagedList(pageNum, 3));
         }
-        
+        public async Task<JsonResult> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId)
+        {
+            try
+            {
+                var price = await tripService.CalculateTripPrice(rooms, departDate, tripId, planId);
+                return Json(price);
+            }catch(ArgumentOutOfRangeException ex)
+            {
+                return ErrorJson(ex.Message);
+            }
+        }
     }
 }

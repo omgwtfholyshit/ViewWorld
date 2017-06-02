@@ -488,6 +488,12 @@
     <Content Include="Images\Background\background_4.jpg" />
     <Content Include="Images\Background\background_5.jpg" />
     <Content Include="Images\Background\background_3.jpg" />
+    <Content Include="Images\Background\background_6.jpg" />
+    <Content Include="Images\Background\background_7.jpg" />
+    <Content Include="Images\Background\background_8.jpg" />
+    <Content Include="Images\Background\background_9.jpg" />
+    <Content Include="Images\Background\background_10.jpg" />
+    <Content Include="Images\Background\background_11.jpg" />
     <Content Include="Images\Logo\logo_150-218.svg" />
     <Content Include="Images\Logo\logo_352-172.svg" />
     <Content Include="Images\Logo\logo_60-60.svg" />
@@ -495,6 +501,13 @@
     <Content Include="Images\Logo\logo_white_web.png" />
     <Content Include="Images\WideBackground\wide_background_1.jpg" />
     <Content Include="Images\WideBackground\wide_background_2.jpg" />
+    <Content Include="Lib\Calendario\calendario.js" />
+    <Content Include="Lib\FullCalendar\fullcalendar.css" />
+    <Content Include="Lib\FullCalendar\fullcalendar.js" />
+    <Content Include="Lib\FullCalendar\fullcalendar.min.css" />
+    <Content Include="Lib\FullCalendar\fullcalendar.min.js" />
+    <Content Include="Lib\FullCalendar\fullcalendar.print.css" />
+    <Content Include="Lib\FullCalendar\fullcalendar.print.min.css" />
     <Content Include="Lib\Parallax\parallax.js" />
     <Content Include="Lib\Parallax\parallax.min.js" />
     <Content Include="Lib\Swiper\css\swiper.css" />
@@ -504,6 +517,7 @@
     <Content Include="Lib\VectorMap\jvectormap-world-mill.js" />
     <Content Include="Lib\VectorMap\vectmap-world-mill-cn.js" />
     <Content Include="Scripts\Frontend\Finder\FindTrips.js" />
+    <Content Include="Scripts\Frontend\Finder\tripDetail.js" />
     <Content Include="Scripts\Frontend\Home\index.js" />
     <Content Include="Content\Frontend\layout.css">
       <DependentUpon>layout.scss</DependentUpon>

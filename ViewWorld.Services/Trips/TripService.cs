@@ -425,5 +425,47 @@ namespace ViewWorld.Services.Trips
             }
             return cityName;
         }
+
+        public async Task<string> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId)
+        {
+            var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            double finalPrice = 0;
+            string finalResult = "";
+            if (result.Success)
+            {
+                finalResult += result.Entity.CommonInfo.PriceType;
+                var plan = result.Entity.TripPlans.FirstOrDefault(p => p.Id == planId);
+                if (plan != null)
+                {
+                    var tripPrice = plan.TripPrices.FirstOrDefault(p => p.TripDate == departDate).BasePrice;
+                    if (tripPrice != null)
+                    {
+                        foreach(var room in rooms)
+                        {
+                            switch(room.Adults + room.Children)
+                            {
+                                case 1:
+                                    finalPrice += tripPrice.SinglePrice;
+                                    break;
+                                case 2:
+                                    finalPrice += tripPrice.DoublePrice;
+                                    break;
+                                case 3:
+                                    finalPrice += tripPrice.TriplePrice;
+                                    break;
+                                case 4:
+                                    finalPrice += tripPrice.QuadplexPrice;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException("PeoplePerRoomViewModel", "A maximum of 4 people can stay in one room");
+                            }
+                            finalPrice -= room.Children * tripPrice.ChildPrice;
+                            finalPrice += tripPrice.RoomDifference;
+                        }
+                    }
+                }
+            }
+            return finalResult + finalPrice.ToString();
+        }
     }
 }

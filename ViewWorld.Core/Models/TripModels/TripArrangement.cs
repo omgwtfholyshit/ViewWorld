@@ -128,6 +128,50 @@ namespace ViewWorld.Core.Models.TripModels
         /// </summary>
         public string AvailableDates { get; set; }
         public CurrencyType CurrencyType { get; set; }
+        public string PriceType {
+            get {
+                var priceType = "";
+                switch (CurrencyType)
+                {
+                    case CurrencyType.美元:
+                        priceType = "USD$";
+                        break;
+                    case CurrencyType.澳元:
+                        priceType = "AUD$";
+                        break;
+                    case CurrencyType.欧元:
+                        priceType = "EUR€";
+                        break;
+                    case CurrencyType.人民币:
+                        priceType = "RMB￥";
+                        break;
+                }
+                return priceType;
+            }
+        }
+        public string ShortPriceType
+        {
+            get
+            {
+                var priceType = "";
+                switch (CurrencyType)
+                {
+                    case CurrencyType.美元:
+                        priceType = "$";
+                        break;
+                    case CurrencyType.澳元:
+                        priceType = "$";
+                        break;
+                    case CurrencyType.欧元:
+                        priceType = "€";
+                        break;
+                    case CurrencyType.人民币:
+                        priceType = "￥";
+                        break;
+                }
+                return priceType;
+            }
+        }
         public decimal LowestPrice { get; set; }
         public bool UsePoints { get; set; } = true;
         public int Points { get; set; }

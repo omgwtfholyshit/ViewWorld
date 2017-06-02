@@ -25,5 +25,6 @@ namespace ViewWorld.Services.Trips
         Task<Result> DeletePhotoById(string tripId,string photoId);
         Task<Result> ToggleTripArrangement(string tripId);
         Task<Result> CopyTripArrangement(string tripId);
+        Task<string> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId);
     }
 }

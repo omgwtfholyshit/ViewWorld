@@ -15,4 +15,9 @@ namespace ViewWorld.Core.Models.ViewModels
         public string Theme { get; set; }
 
     }
+    public class PeoplePerRoomViewModel
+    {
+        public int Adults { get; set; }
+        public int Children { get; set; }
+    }
 }

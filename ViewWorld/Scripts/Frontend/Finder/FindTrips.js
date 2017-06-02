@@ -176,7 +176,6 @@
                     pageNum: pageNumber
                 },
                 success: function (result) {
-                    console.log(result);
                     paginationVar.PageCount = result.data.PageCount;
                     paginationVar.PageIndex = result.data.PageIndex;
                     paginationVar.PageSize = result.data.PageSize;

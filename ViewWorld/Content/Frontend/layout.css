@@ -133,8 +133,108 @@ ul {
   z-index: 1; }
 
 /******************
+    calendario
+******************/
+.fc-calendar-container {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  /* IE 9 is rounding up the calc it seems */ }
+  .fc-calendar-container .fc-calendar {
+    width: 100%;
+    height: 100%; }
+    .fc-calendar-container .fc-calendar .fc-head {
+      height: 30px;
+      line-height: 30px;
+      background: #ccc;
+      color: #fff; }
+    .fc-calendar-container .fc-calendar .fc-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      height: -moz-calc(100% - 30px);
+      height: -webkit-calc(100% - 30px);
+      height: calc(100% - 30px);
+      border: 1px solid #ddd; }
+    .fc-calendar-container .fc-calendar .fc-row {
+      width: 100%;
+      border-bottom: 1px solid #ddd; }
+  .fc-calendar-container .fc-four-rows .fc-row {
+    height: 25%; }
+  .fc-calendar-container .fc-five-rows .fc-row {
+    height: 20%; }
+  .fc-calendar-container .fc-six-rows .fc-row {
+    height: 16.66%;
+    height: -moz-calc(100%/6);
+    height: -webkit-calc(100%/6);
+    height: calc(100%/6); }
+  .fc-calendar-container .fc-calendar .fc-row > div,
+  .fc-calendar-container .fc-calendar .fc-head > div {
+    float: left;
+    height: 100%;
+    width: 14.28%;
+    /* 100% / 7 */
+    width: -moz-calc(100%/7);
+    width: -webkit-calc(100%/7);
+    width: calc(100%/7);
+    position: relative; }
+  .fc-calendar-container .ie9 .fc-calendar .fc-row > div,
+  .fc-calendar-container .ie9 .fc-calendar .fc-head > div {
+    width: 14.2%; }
+  .fc-calendar-container .fc-calendar .fc-row > div {
+    border-right: 1px solid #ddd;
+    padding: 4px;
+    overflow: hidden;
+    position: relative; }
+  .fc-calendar-container .fc-calendar .fc-head > div {
+    text-align: center; }
+  .fc-calendar-container .fc-calendar .fc-row > div > span.fc-date {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 700;
+    color: #ddd;
+    text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8);
+    bottom: 5px;
+    right: 5px;
+    text-align: right; }
+  .fc-calendar-container .fc-calendar .fc-row > div > span.fc-weekday {
+    padding-left: 5px;
+    display: none; }
+  .fc-calendar-container .fc-calendar .fc-row > div.fc-today {
+    background: #fff4c3; }
+  .fc-calendar-container .fc-calendar .fc-row > div.fc-out {
+    opacity: 0.6; }
+  .fc-calendar-container .fc-calendar .fc-row > div:last-child,
+  .fc-calendar-container .fc-calendar .fc-head > div:last-child {
+    border-right: none; }
+  .fc-calendar-container .fc-calendar .fc-row:last-child {
+    border-bottom: none; }
+
+/******************
  Override Semantic
 ******************/
+.number-spinner {
+  display: inline-block; }
+  .number-spinner .ui.right.labeled.input {
+    height: 2.2rem; }
+    .number-spinner .ui.right.labeled.input .ui.basic.label {
+      padding: 0.4rem;
+      cursor: pointer; }
+      .number-spinner .ui.right.labeled.input .ui.basic.label .icon {
+        margin: 0.2em;
+        font-size: 0.5em;
+        vertical-align: bottom; }
+    .number-spinner .ui.right.labeled.input input {
+      width: 3rem;
+      height: 2.2rem;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      font-size: 1rem; }
+
 /******************
       PaceJS
 ******************/
@@ -217,7 +317,8 @@ ul {
       Body
 ******************/
 .body-wrapper {
-  height: 100%; }
+  height: 100%;
+  overflow-x: auto; }
   .body-wrapper .swiper-container {
     width: 100%;
     height: 100%; }
@@ -289,6 +390,8 @@ ul {
         display: block; }
       .body-wrapper .swiper-container .homepage .slideTwo .ui.card .content .price-area .our-price {
         font-size: 1.5em; }
+      .body-wrapper .swiper-container .homepage .slideTwo .ui.card .extra.content span.favorite {
+        cursor: pointer; }
     .body-wrapper .swiper-container .homepage .slideTwo .swiper-slide {
       display: flex;
       align-items: center; }
@@ -518,6 +621,213 @@ ul {
       color: white; }
   .body-wrapper .trip-detail {
     padding-top: 6rem; }
+    .body-wrapper .trip-detail .ui.container {
+      background: white;
+      box-shadow: 2px 2px 2px #cccccc;
+      min-width: 933px; }
+    .body-wrapper .trip-detail .intro-section {
+      display: flex;
+      flex-direction: row;
+      padding: 1.5rem; }
+      .body-wrapper .trip-detail .intro-section .slider {
+        width: 50%;
+        height: 400px; }
+        .body-wrapper .trip-detail .intro-section .slider .swiper-container {
+          margin-left: auto;
+          margin-right: auto; }
+        .body-wrapper .trip-detail .intro-section .slider .swiper-slide {
+          background-size: cover;
+          background-position: center; }
+        .body-wrapper .trip-detail .intro-section .slider .gallery-top {
+          height: 80%;
+          width: 100%; }
+        .body-wrapper .trip-detail .intro-section .slider .gallery-thumbs {
+          height: 20%;
+          box-sizing: border-box;
+          padding: 10px 0; }
+        .body-wrapper .trip-detail .intro-section .slider .gallery-thumbs .swiper-slide {
+          width: 25%;
+          height: 100%;
+          opacity: 0.4; }
+        .body-wrapper .trip-detail .intro-section .slider .gallery-thumbs .swiper-slide-active {
+          opacity: 1; }
+      .body-wrapper .trip-detail .intro-section .intro-container {
+        width: 50%;
+        padding-left: 2rem; }
+    .body-wrapper .trip-detail .booking-section {
+      display: flex;
+      flex-direction: row;
+      padding: 1.5rem; }
+      .body-wrapper .trip-detail .booking-section .calendar-container {
+        width: 50%;
+        position: relative;
+        overflow: hidden; }
+        .body-wrapper .trip-detail .booking-section .calendar-container:before, .body-wrapper .trip-detail .booking-section .calendar-container:after {
+          content: '';
+          width: 99%;
+          height: 50%;
+          position: absolute;
+          background: #f6f6f6;
+          bottom: -4px;
+          left: 0.5%;
+          z-index: -1;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+        .body-wrapper .trip-detail .booking-section .calendar-container:after {
+          content: '';
+          width: 98%;
+          bottom: -7px;
+          left: 1%;
+          z-index: -2; }
+        .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader {
+          background: #fff;
+          padding: 5px 10px 10px 20px;
+          height: 70px;
+          position: relative;
+          border-top: 5px solid #00B5AD;
+          border-bottom: 1px solid #ddd; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader h2, .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader h3 {
+            text-align: center;
+            padding: 0;
+            margin: 0; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader h2 {
+            color: #495468;
+            font-weight: 300;
+            font-size: 1.2em;
+            padding-top: 10px; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader h3 {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #b7bbc2;
+            padding-top: 2px; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader span {
+            position: absolute;
+            top: 17px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            color: #00B5AD;
+            margin: 0 1px;
+            font-size: 1.5em;
+            display: inline-block;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none; }
+            .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader span:first-child {
+              left: 5px; }
+              .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader span:first-child:hover {
+                color: #495468; }
+            .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader span:last-child {
+              right: 5px; }
+              .body-wrapper .trip-detail .booking-section .calendar-container #calendarHeader span:last-child:hover {
+                color: #495468; }
+        .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar {
+          width: auto;
+          padding: 15px;
+          background: #f6f6f6;
+          box-shadow: inset 0 1px rgba(255, 255, 255, 0.8); }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-head {
+            background: transparent;
+            color: #00B5AD;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row .fc-disabled span.fc-date {
+            color: rgba(40, 40, 40, 0.3) !important;
+            pointer-events: none; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row .fc-disabled div {
+            display: none; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div {
+            background: #fff;
+            cursor: pointer; }
+            .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div div {
+              position: relative;
+              top: 55%;
+              text-align: center;
+              font-size: 0.5em;
+              color: #FF6100; }
+            .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div:empty {
+              background: transparent; }
+            .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div span.fc-date {
+              top: 30%;
+              left: 50%;
+              text-align: center;
+              margin: -10px 0 0 -15px;
+              color: #686a6e;
+              font-weight: 400;
+              pointer-events: none; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-today {
+            background: #00B5AD;
+            box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.1); }
+            .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-today span.fc-date, .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-today div {
+              color: #fff;
+              text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-today.fc-content:after {
+            color: #00B5AD; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-content:hover:after {
+            color: #ef4f69; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div.fc-today.fc-content:hover:after {
+            color: #fff; }
+          .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div > div a, .body-wrapper .trip-detail .booking-section .calendar-container #bookingCalendar .fc-calendar .fc-row > div > div span {
+            display: none;
+            font-size: 22px; }
+      .body-wrapper .trip-detail .booking-section .booking-container {
+        width: 50%;
+        position: relative; }
+        .body-wrapper .trip-detail .booking-section .booking-container:before, .body-wrapper .trip-detail .booking-section .booking-container:after {
+          content: '';
+          width: 99%;
+          height: 50%;
+          position: absolute;
+          background: #f6f6f6;
+          bottom: -4px;
+          left: 0.5%;
+          z-index: -1;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+        .body-wrapper .trip-detail .booking-section .booking-container:after {
+          content: '';
+          width: 98%;
+          bottom: -7px;
+          left: 1%;
+          z-index: -2; }
+        .body-wrapper .trip-detail .booking-section .booking-container .header-container {
+          height: 70px;
+          padding: 5px 10px 2rem 20px;
+          border-top: 5px solid #00B5AD; }
+          .body-wrapper .trip-detail .booking-section .booking-container .header-container h3.header {
+            line-height: 30px; }
+            .body-wrapper .trip-detail .booking-section .booking-container .header-container h3.header .sub.header {
+              line-height: 25px; }
+        .body-wrapper .trip-detail .booking-section .booking-container .content-container {
+          padding: 15px 10px 2rem 20px; }
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .fields {
+            flex-wrap: nowrap; }
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form label {
+            height: 30px;
+            line-height: 30px;
+            margin-bottom: 0px; }
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .statistics .label {
+            font-weight: 300;
+            color: #999; }
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container {
+            height: 196px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 0.3rem 0 0.3rem;
+            border-top: 1px solid #cccccc;
+            position: relative;
+            display: block; }
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container::-webkit-scrollbar {
+              width: 3px;
+              background-color: rgba(0, 0, 0, 0.34); }
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container::-webkit-scrollbar-thumb {
+              background-color: #8b8b8b;
+              border-radius: 10px; }
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container .calendar-message-container {
+              align-self: center;
+              vertical-align: middle; }
 
 /******************
     Responsive

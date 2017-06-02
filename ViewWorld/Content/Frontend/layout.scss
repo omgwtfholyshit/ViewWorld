@@ -71,10 +71,132 @@ ul{list-style-type:none;padding:0;margin:0;}
     .jvectormap-zoomin,.jvectormap-zoomout{display:none;}
 }
 .jvectormap-tip{z-index:1;}
+
+/******************
+    calendario
+******************/
+.fc-calendar-container {
+	position: relative;
+	height: 400px;
+	width: 400px;
+    .fc-calendar {
+	    width: 100%;
+	    height: 100%;
+        .fc-head {
+	        height: 30px;
+	        line-height: 30px;
+        	background: #ccc;
+        	color: #fff;
+        }
+        .fc-body {
+	        position: relative;
+	        width: 100%;
+	        height: 100%;
+	        height: -moz-calc(100% - 30px);
+	        height: -webkit-calc(100% - 30px);
+	        height: calc(100% - 30px);
+	        border: 1px solid #ddd;
+        }
+        .fc-row {
+	        width: 100%;
+	        border-bottom: 1px solid #ddd;
+        }
+    }
+    .fc-four-rows .fc-row  {
+	    height: 25%;
+    }
+
+    .fc-five-rows .fc-row  {
+	    height: 20%;
+    }
+
+    .fc-six-rows .fc-row {
+	    height: 16.66%;
+	    height: -moz-calc(100%/6);
+	    height: -webkit-calc(100%/6);
+	    height: calc(100%/6);
+    }
+
+    .fc-calendar .fc-row > div,
+    .fc-calendar .fc-head > div {
+	    float: left;
+	    height: 100%;
+	    width:  14.28%; /* 100% / 7 */
+	    width: -moz-calc(100%/7);
+	    width: -webkit-calc(100%/7);
+	    width: calc(100%/7);
+	    position: relative;
+    }
+
+    /* IE 9 is rounding up the calc it seems */
+    .ie9 .fc-calendar .fc-row > div,
+    .ie9 .fc-calendar .fc-head > div {
+	    width:  14.2%;
+    }
+
+    .fc-calendar .fc-row > div {
+	    border-right: 1px solid #ddd;
+	    padding: 4px;
+	    overflow: hidden;
+	    position: relative;
+    }
+
+    .fc-calendar .fc-head > div {
+	    text-align: center;
+    }
+
+    .fc-calendar .fc-row > div > span.fc-date {
+	    position: absolute;
+	    width: 30px;
+	    height: 20px;
+	    font-size: 20px;
+	    line-height: 20px;
+	    font-weight: 700;
+	    color: #ddd;
+	    text-shadow: 0 -1px 0 rgba(255,255,255,0.8);
+	    bottom: 5px;
+	    right: 5px;
+	    text-align: right;
+    }
+
+    .fc-calendar .fc-row > div > span.fc-weekday {
+	    padding-left: 5px;
+	    display: none;
+    }
+
+    .fc-calendar .fc-row > div.fc-today {
+	    background: #fff4c3;
+    }
+
+    .fc-calendar .fc-row > div.fc-out {
+	    opacity: 0.6;
+    }
+
+    .fc-calendar .fc-row > div:last-child,
+    .fc-calendar .fc-head > div:last-child {
+	    border-right: none;
+    }
+
+    .fc-calendar .fc-row:last-child {
+	    border-bottom: none;
+    }
+}
+
+
+
 /******************
  Override Semantic
 ******************/
-
+.number-spinner{
+    display:inline-block;
+    .ui.right.labeled.input{
+        height:2.2rem;
+        .ui.basic.label{padding:0.4rem;cursor:pointer;
+            .icon{margin:0.2em;font-size:0.5em;vertical-align:bottom}
+        }
+        input{width:3rem;height:2.2rem;padding:0;margin:0;text-align:center;font-size:1rem;}
+    }
+}
 /******************
       PaceJS
 ******************/
@@ -136,6 +258,7 @@ ul{list-style-type:none;padding:0;margin:0;}
 ******************/
 .body-wrapper{
     height:100%;
+    overflow-x:auto;
     .swiper-container {
         width: 100%;
         height: 100%;
@@ -187,6 +310,7 @@ ul{list-style-type:none;padding:0;margin:0;}
                             .our-price{font-size:1.5em}
                         }
                     }
+                    .extra.content{span.favorite{cursor:pointer;}}
                  }
                  
                  .swiper-slide{display:flex;align-items:center;.retail-price{text-decoration:line-through}
@@ -268,6 +392,167 @@ ul{list-style-type:none;padding:0;margin:0;}
     }
     .trip-detail{
         padding-top:6rem;
+        .ui.container{ background:white;box-shadow:2px 2px 2px #cccccc;min-width:933px;}
+        .intro-section{
+            display:flex;
+            flex-direction:row;
+            padding:1.5rem;
+            .slider{width:50%;height:400px;
+               .swiper-container{margin-left:auto;margin-right:auto;}
+               .swiper-slide {background-size: cover;background-position: center;}
+               .gallery-top {height: 80%;width: 100%;}
+               .gallery-thumbs{height: 20%;box-sizing: border-box;padding: 10px 0;}
+               .gallery-thumbs .swiper-slide{width: 25%;height: 100%;opacity: 0.4;}
+               .gallery-thumbs .swiper-slide-active {opacity: 1;}
+            }
+            .intro-container{width:50%;padding-left:2rem;}
+        }
+        .booking-section{
+            display:flex;
+            flex-direction:row;
+            padding:1.5rem;
+            .calendar-container{
+                width:50%;
+             	position: relative;
+             	overflow: hidden;
+                &:before,&:after{
+                    content: '';
+                	width: 99%;
+                	height: 50%;
+                	position: absolute;
+                	background: #f6f6f6;
+                	bottom: -4px;
+                	left: 0.5%;
+                	z-index: -1;
+                	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+                }
+                &:after{
+                    content: '';
+                    width: 98%;
+                    bottom: -7px;
+                    left: 1%;
+                    z-index: -2;
+                }
+                #calendarHeader{
+                    background: #fff;
+                	padding: 5px 10px 10px 20px;
+                	height: 70px;
+                	position: relative;
+                	border-top: 5px solid #00B5AD;// #ef4f69;
+                	border-bottom: 1px solid #ddd;
+                    h2,h3{text-align:center;padding:0;margin:0;}
+                    h2{color: #495468;font-weight: 300;font-size: 1.2em;padding-top: 10px;}
+                    h3{font-size: 0.8em;font-weight: 700;color: #b7bbc2;padding-top:2px;}
+                    span{
+                        position: absolute;
+                    	top: 17px;
+                    	width: 30px;
+                    	height: 30px;
+                    	cursor: pointer;
+                        color:#00B5AD;
+                    	margin: 0 1px;
+                        font-size:1.5em;
+                        display:inline-block;
+                    	-webkit-touch-callout: none;
+                    	-webkit-user-select: none;
+                    	-khtml-user-select: none;
+                    	-moz-user-select: none;
+                    	-ms-user-select: none;
+                    	user-select: none;
+                        &:first-child{left:5px;&:hover{color:#495468}}
+                        &:last-child{right:5px;&:hover{color:#495468}}
+                    }
+                }
+                #bookingCalendar{
+                    width:auto;
+                    padding: 15px;
+	                background: #f6f6f6;
+	                box-shadow: inset 0 1px rgba(255,255,255,0.8);
+                    .fc-calendar{
+                        .fc-head {
+                 	        background: transparent;
+                 	        color: #00B5AD;
+                 	        font-weight: bold;
+                 	        text-transform: uppercase;
+                 	        font-size: 12px;
+                        }
+                        .fc-row .fc-disabled{span.fc-date{color:rgba(40,40,40,0.3)!important;pointer-events:none}div{display:none}}
+                        .fc-row > div {
+                 	        background: #fff;
+                 	        cursor: pointer;
+                            div{position:relative;top:55%;text-align:center;font-size:0.5em;color:#FF6100}
+                            &:empty{background: transparent;}
+                            span.fc-date {
+                 	            top: 30%;
+                 	            left: 50%;
+                 	            text-align: center;
+                 	            margin: -10px 0 0 -15px;
+                 	            color: #686a6e;
+                 	            font-weight: 400;
+                 	            pointer-events: none;
+                            }
+                        }
+                        .fc-row > div.fc-today {
+                 	        background: #00B5AD;
+                 	        box-shadow: inset 0 -1px 1px rgba(0,0,0,0.1);
+                            span.fc-date,div{
+                                color: #fff;
+                 	            text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+                            }
+                         }
+                        .fc-row > div.fc-today.fc-content:after {
+                 	        color: #00B5AD;
+                         }
+                        .fc-row > div.fc-content:hover:after{
+                 	        color: #ef4f69;
+                         }
+                        .fc-row > div.fc-today.fc-content:hover:after{
+                 	        color: #fff;
+                         }
+                        .fc-row > div > div a,.fc-row > div > div span {
+                 	        display: none;
+                 	        font-size: 22px;
+                         }
+                    }
+               }
+            }
+            .booking-container{
+                width:50%;
+             	position: relative;
+                &:before,&:after{
+                   content: '';
+               	   width: 99%;
+               	   height: 50%;
+               	   position: absolute;
+               	   background: #f6f6f6;
+               	   bottom: -4px;
+               	   left: 0.5%;
+               	   z-index: -1;
+               	   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+               }
+                &:after{
+                   content: '';
+                   width: 98%;
+                   bottom: -7px;
+                   left: 1%;
+                   z-index: -2;
+               }
+                .header-container{height:70px;padding: 5px 10px 2rem 20px;border-top: 5px solid #00B5AD;// #ef4f69;
+                    h3.header{line-height:30px;.sub.header{line-height:25px;}}
+                }
+                .content-container{padding: 15px 10px 2rem 20px;
+                    .ui.form{.fields{flex-wrap:nowrap} label {height:30px;line-height:30px;margin-bottom:0px;}
+                             .statistics{.label{font-weight:300;color:#999}}
+                             .rooms-container{
+                                 height:196px;overflow-y:auto;overflow-x:hidden; padding:0 0.3rem 0 0.3rem;border-top:1px solid #cccccc;position:relative;display:block;
+                                              &::-webkit-scrollbar{width:3px; background-color:rgba(0,0,0,0.34);}
+                                              &::-webkit-scrollbar-thumb{background-color:#8b8b8b;border-radius:10px;}
+                                              .calendar-message-container{align-self:center;vertical-align:middle;}
+                             }
+                    }
+                }
+            }
+         }
     }
 }
 /******************

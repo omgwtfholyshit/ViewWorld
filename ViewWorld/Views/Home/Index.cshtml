@@ -9,7 +9,7 @@
 <div class="swiper-container main">
     <div class="swiper-wrapper homepage">
         @{
-            var rand = (new Random()).Next(1, 6);
+            var rand = (new Random()).Next(7, 12);
             var url = "/Images/Background/background_" + rand + ".jpg";
         }
         <div class="swiper-slide background" style="background-image:url(@url)" id="background">

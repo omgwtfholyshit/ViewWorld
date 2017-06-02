@@ -56,7 +56,7 @@
     function tip(selector, title, content, type, dismiss) {
         //type: Warning,Info,Positive,Negative 
         var id = Math.round(Math.random() * 10000);
-        html = '<div class = "ui message hidden ' + type + '" id = "' + id + '" >';
+        var html = '<div class = "ui message hidden ' + type + '" id = "' + id + '" >';
         html += '<i class="close icon"></i>';
         html += '<div class="header">' + title + '</div>';
         html += '<p>' + content + '</p></div>';
@@ -242,6 +242,15 @@
             var month = _this.getMonth() + 1;
             var day = _this.getDate();
             return year + "-" + month + "-" + day;
+        }
+        Date.prototype.toMMddyyyyString = function () {
+            var _this = this;
+            var year = _this.getFullYear();
+            var month = _this.getMonth() + 1;
+            month < 10 ? month = "0" + month : month;
+            var day = _this.getDate();
+            day < 10 ? day = "0" + day : day;
+            return month + "-" + day + "-" + year;
         }
         $('.message-container').delegate('.message .close', 'click', function () {
             $(this).closest('.message').transition('fade');
