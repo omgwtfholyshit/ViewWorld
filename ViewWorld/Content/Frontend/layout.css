@@ -624,11 +624,11 @@ ul {
     .body-wrapper .trip-detail .ui.container {
       background: white;
       box-shadow: 2px 2px 2px #cccccc;
-      min-width: 933px; }
+      min-width: 933px;
+      padding: 1.5rem; }
     .body-wrapper .trip-detail .intro-section {
       display: flex;
-      flex-direction: row;
-      padding: 1.5rem; }
+      flex-direction: row; }
       .body-wrapper .trip-detail .intro-section .slider {
         width: 50%;
         height: 400px; }
@@ -656,8 +656,7 @@ ul {
         padding-left: 2rem; }
     .body-wrapper .trip-detail .booking-section {
       display: flex;
-      flex-direction: row;
-      padding: 1.5rem; }
+      flex-direction: row; }
       .body-wrapper .trip-detail .booking-section .calendar-container {
         width: 50%;
         position: relative;
@@ -811,7 +810,7 @@ ul {
           .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .statistics .label {
             font-weight: 300;
             color: #999; }
-          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container {
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container {
             height: 196px;
             overflow-y: auto;
             overflow-x: hidden;
@@ -819,15 +818,21 @@ ul {
             border-top: 1px solid #cccccc;
             position: relative;
             display: block; }
-            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container::-webkit-scrollbar {
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container::-webkit-scrollbar {
               width: 3px;
               background-color: rgba(0, 0, 0, 0.34); }
-            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container::-webkit-scrollbar-thumb {
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container::-webkit-scrollbar-thumb {
               background-color: #8b8b8b;
               border-radius: 10px; }
-            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .rooms-container .calendar-message-container {
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container .calendar-message-container {
               align-self: center;
               vertical-align: middle; }
+    .body-wrapper .trip-detail .detail-section .navigator .item {
+      color: #00B5AD;
+      font-size: 1.2em; }
+    .body-wrapper .trip-detail .detail-section .product-detail-container .divider.header {
+      color: #00B5AD;
+      font-size: 1.6em; }
 
 /******************
     Responsive

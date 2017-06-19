@@ -20,9 +20,12 @@
                         _this.roomInfoContainer.find('.room-detail').each(function (index, element) {
                             index < +value ? $(element).removeClass('hidden') : $(element).addClass('hidden');
                         })
-                        _this.roomSelectionModal.modal('show');
                         _this.roomSelectionModal.find('#RoomTotal input[name=totalrooms]').val(+value);
                     }
+                },
+                onHide: function () {
+                    _this.roomSelectionModal.modal('show');
+                    _this.roomSelectionModal.modal('refresh');
                 }
             });
         },
@@ -127,7 +130,7 @@
             });
         },
         renderRoomList: function (totalRooms) {
-            var _this = this, $priceContainer = $('.booking-container .horizontal.statistics')
+            var _this = this, $priceContainer = $('.booking-container .horizontal.statistics'), $detailContainer = $('.roomdetail-container .ui.list');
             _this.roomInfoContainer.html("");
             for (var i = 1; i <= totalRooms; i++) {
                 _this.roomInfoContainer.loadTemplate('#roomTmpl', { 'roomNumber': "房间 " + i }, { 'append': true });
@@ -144,12 +147,19 @@
                 $input.val(roomCount);
             })
             .delegate('.positive.button', 'click', function (e) {
-                var rooms = new Array(), departtime=$('input[name=departtime]').val().split(' ')[0], tripId, planId;
+                var rooms = new Array(), planId,
+                    departtime = $('input[name=departtime]').val().split(' ')[0].replace('年', '-').replace('月', '-').replace('日', '');
+                planId = _this.tripData[(new Date(departtime)).toMMddyyyyString()].split('_')[1], adultsCount = 0, childrenCount = 0;
+                $detailContainer.html("");
                 _this.roomInfoContainer.find('.room-detail').not('.hidden').each(function (index, element) {
                     var $element = $(element);
-                    rooms.push(new PeoplePerRoom($element.find('input[name=adults]').val(), $element.find('input[name=adults]').val()));
+                    var ppr = new PeoplePerRoom(+$element.find('input[name=adults]').val(), +$element.find('input[name=children]').val());
+                    adultsCount += ppr.adults;
+                    childrenCount += ppr.children;
+                    rooms.push(ppr);
+                    console.log(ppr);
+                    $detailContainer.loadTemplate('#roomDetailTmpl', { 'roomNumber': "房间 " + (index + 1), 'roomDesc': ppr.adults + "位成人" + ppr.children + "位儿童" }, { 'append': true })
                 })
-                /*
                 $.ajax({
                     url: _this.api.calculatePriceUrl,
                     method: 'post',
@@ -158,14 +168,15 @@
                     },
                     data: {
                         rooms: rooms,
-                        departtime: departtime,
-                        tripId: tripId,
+                        departDate: departtime,
+                        tripId: TripId,
                         planId: planId,
-                        __RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
+                        //__RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
                     },
                     success: function (data) {
                         if (data.status == 200) {
-                            $priceContainer.find('.value').html(data.data)
+                            $priceContainer.find('.value').html(data.data);
+                            $priceContainer.find('.label').text("共计" + adultsCount + "位成人" + childrenCount + "位儿童");
                         } else {
                             $.tip(".message-container", "获取价格失败", data.message, "negative", 4);
                         }
@@ -173,7 +184,7 @@
                     },
                     error: function (data) { _this.roomSelectionModal.modal('hide'); $.tip(".message-container", "获取价格失败", "服务器超时，请稍后重试！", "negative", 4); return false; }
                 });
-                */
+                
             })
             .delegate('.grey.button', 'click', function (e) {
                 _this.roomSelectionModal.modal('hide');
@@ -190,7 +201,7 @@
             })
             .delegate('.spinner.label', 'click', function (e) {
                 var $target = $(e.currentTarget), $input = $target.siblings('input'), $otherInput = $target.parents('td').siblings().find('input');
-                var adultsCount = 0, childrenCount = 0, isAdults = false, coefficient = -1;
+                var adultsCount = 0, childrenCount = 0, isAdults = false, coefficient = -1, description = "";
                 $target.hasClass('plus') ? coefficient = 1 : coefficient;
                 if ($input.attr('name') == 'adults') {
                     adultsCount = +$input.val() + coefficient;
@@ -207,11 +218,12 @@
                 if (isAdults) {
                     if (adultsCount + childrenCount > 4) {
                         $.tip(".error-messages", "提示", "每个房间最多住四个人，并且必须包括一名成人", "warning", 2);
-                        $input.val(adultsCount);$otherInput.val(4 - adultsCount);
+                        $input.val(adultsCount); $otherInput.val(4 - adultsCount);
                     } else {
                         $input.val(adultsCount); $otherInput.val(childrenCount);
                     }
-                } else {
+                }
+                else {
                     if (adultsCount + childrenCount > 4) {
                         $.tip(".error-messages", "提示", "每个房间最多住四个人，并且必须包括一名成人", "warning", 2);
                         $input.val(childrenCount); $otherInput.val(4 - childrenCount);
@@ -219,6 +231,7 @@
                         $input.val(childrenCount); $otherInput.val(adultsCount);
                     }
                 }
+                
             })
         }
     }

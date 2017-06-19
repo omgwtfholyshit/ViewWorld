@@ -392,11 +392,10 @@ ul{list-style-type:none;padding:0;margin:0;}
     }
     .trip-detail{
         padding-top:6rem;
-        .ui.container{ background:white;box-shadow:2px 2px 2px #cccccc;min-width:933px;}
+        .ui.container{ background:white;box-shadow:2px 2px 2px #cccccc;min-width:933px;padding:1.5rem;}
         .intro-section{
             display:flex;
             flex-direction:row;
-            padding:1.5rem;
             .slider{width:50%;height:400px;
                .swiper-container{margin-left:auto;margin-right:auto;}
                .swiper-slide {background-size: cover;background-position: center;}
@@ -410,7 +409,6 @@ ul{list-style-type:none;padding:0;margin:0;}
         .booking-section{
             display:flex;
             flex-direction:row;
-            padding:1.5rem;
             .calendar-container{
                 width:50%;
              	position: relative;
@@ -543,7 +541,7 @@ ul{list-style-type:none;padding:0;margin:0;}
                 .content-container{padding: 15px 10px 2rem 20px;
                     .ui.form{.fields{flex-wrap:nowrap} label {height:30px;line-height:30px;margin-bottom:0px;}
                              .statistics{.label{font-weight:300;color:#999}}
-                             .rooms-container{
+                             .roomdetail-container{
                                  height:196px;overflow-y:auto;overflow-x:hidden; padding:0 0.3rem 0 0.3rem;border-top:1px solid #cccccc;position:relative;display:block;
                                               &::-webkit-scrollbar{width:3px; background-color:rgba(0,0,0,0.34);}
                                               &::-webkit-scrollbar-thumb{background-color:#8b8b8b;border-radius:10px;}
@@ -553,6 +551,12 @@ ul{list-style-type:none;padding:0;margin:0;}
                 }
             }
          }
+        .detail-section{
+            .navigator{.item{color:#00B5AD;font-size:1.2em;}}
+            .product-detail-container{
+                .divider.header{color:#00B5AD;font-size:1.6em;}
+            }
+        }
     }
 }
 /******************

@@ -437,7 +437,7 @@ namespace ViewWorld.Services.Trips
                 var plan = result.Entity.TripPlans.FirstOrDefault(p => p.Id == planId);
                 if (plan != null)
                 {
-                    var tripPrice = plan.TripPrices.FirstOrDefault(p => p.TripDate == departDate).BasePrice;
+                    var tripPrice = plan.TripPrices.FirstOrDefault(p => p.TripDate.ToShortDateString() == departDate.ToShortDateString()).BasePrice;
                     if (tripPrice != null)
                     {
                         foreach(var room in rooms)

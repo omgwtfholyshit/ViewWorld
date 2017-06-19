@@ -120,77 +120,87 @@
                             </div>
                         </div>
                         
-                        <div class="rooms-container">
+                        <div class="roomdetail-container">
                             <div class="calendar-message-container hidden">
                                 <div>请选择出游日期，房间数量及出行人数来查看价格</div>
                             </div>
-                            <div class="fields">
-                                <div class="six wide field">
-                                    <label>房间1</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="adults" min="1" max="4" placeholder="成人人数">
-                                        <i class="user icon"></i>
-                                    </div>
-
-                                </div>
-                                <div class="six wide field">
-                                    <label>&nbsp;</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="children" min="0" max="3" placeholder="儿童人数">
-                                        <i class="child icon"></i>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="fields">
-                                <div class="six wide field">
-                                    <label>房间2</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="adults" min="1" max="4" placeholder="成人人数">
-                                        <i class="user icon"></i>
-                                    </div>
-
-                                </div>
-                                <div class="six wide field">
-                                    <label>&nbsp;</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="children" min="0" max="3" placeholder="儿童人数">
-                                        <i class="child icon"></i>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="fields">
-                                <div class="six wide field">
-                                    <label>房间3</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="adults" min="1" max="4" placeholder="成人人数">
-                                        <i class="user icon"></i>
-                                    </div>
-                                    
-                                </div>
-                                <div class="six wide field">
-                                    <label>&nbsp;</label>
-                                    <div class="ui left icon input">
-                                        <input type="number" name="children" min="0" max="3" placeholder="儿童人数">
-                                        <i class="child icon"></i>
-                                    </div>
-                                    
-                                </div>
+                            <div class="ui list">
+                                
                             </div>
                         </div>
                         
                         <div class="field">
                             <div class="ui small horizontal statistics">
                                 <div class="orange statistic">
-                                    <div class="value">$9999</div>
-                                    <div class="label">1位成人0位儿童</div>
+                                    <div class="value">￥0</div>
+                                    <div class="label">请选择日期及人数查看行程价格</div>
                                 </div>
                             </div>
                         </div>
                         <div class="ui labeled orange icon button"><i class="payment icon"></i>立即购买</div>
                         <div class="ui labeled teal icon button"><i class="bookmark icon"></i>收藏</div>
                     </form>
+                </div>
+            </div>
+        </section>
+        <section class="detail-section">
+            <div class="ui divider" style="margin:0"></div>
+            <div class="ui pointing menu navigator">
+                <a class="active item">
+                    线路特色
+                </a>
+                <a class="item">
+                    产品详情
+                </a>
+                <a class="item">
+                    费用说明
+                </a>
+                <a class="item">
+                    订购须知
+                </a>
+                <a class="item">
+                    注意事项
+                </a>
+                <div class="right menu">
+                    <a class="ui item">
+                        保存行程
+                    </a>
+                    <a class="ui item">
+                        立即预定
+                    </a>
+                </div>
+            </div>
+            <div class="ui segment product-detail-container">
+                <div class="product-feature">
+                    <h4 class="ui horizontal divider header">
+                        <i class="trophy icon"></i>
+                        线路特色
+                    </h4>
+
+                </div>
+                <div class="product-detail">
+                    <h4 class="ui horizontal divider header">
+                        <i class="list layout icon"></i>
+                        产品详情
+                    </h4>
+                </div>
+                <div class="price-detail">
+                    <h4 class="ui horizontal divider header">
+                        <i class="calculator icon"></i>
+                        费用说明
+                    </h4>
+                </div>
+                <div class="order-info">
+                    <h4 class="ui horizontal divider header">
+                        <i class="info icon"></i>
+                        订购须知
+                    </h4>
+                </div>
+                <div class="product-announcement">
+                    <h4 class="ui horizontal divider header">
+                        <i class="warning sign icon"></i>
+                        注意事项
+                    </h4>
                 </div>
             </div>
         </section>
@@ -302,6 +312,7 @@
 </div>
 <script>
     var calendarData = '@ViewBag.tripData';
+    var TripId = '@Model.Id';
 </script>
 <script type="text/html" id="roomTmpl">
     <tr class="room-detail fields hidden">
@@ -325,6 +336,15 @@
             </div>
         </td>
     </tr>
+</script>
+<script id="roomDetailTmpl" type="text/html">
+    <div class="item">
+        <i class="home icon"></i>
+        <div class="content">
+            <div class="header" data-content="roomNumber">房间1</div>
+            <div class="description" data-content="roomDesc"></div>
+        </div>
+    </div>
 </script>
 <script src="~/Lib/Swiper/js/swiper.min.js"></script>
 <script src="~/Lib/Calendario/calendario.js"></script>
