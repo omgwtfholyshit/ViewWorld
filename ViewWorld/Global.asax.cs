@@ -10,6 +10,8 @@ using System.Web.Routing;
 using ViewWorld.Core;
 using ViewWorld.Core.Dal;
 using Newtonsoft.Json;
+using System.Web;
+using System.Diagnostics;
 
 namespace ViewWorld
 {
@@ -53,12 +55,27 @@ namespace ViewWorld
             builder.RegisterFilterProvider();
 
             //Register Cache
+            //var cacheConfig = new ConfigurationBuilder()
+            //    .WithSystemRuntimeCacheHandle("inprocess")
+            //    .WithExpiration(ExpirationMode.Absolute, TimeSpan.FromMinutes(15))
+            //    .And
+            //    .WithRedisConfiguration("redisConnection", config =>
+            //    config
+            //    .WithConnectionTimeout(10000)
+            //    .WithEndpoint(ConfigurationManager.AppSettings["cacheHostIP"],
+            //     Convert.ToInt32(ConfigurationManager.AppSettings["cachePort"])))
+            //    .WithJsonSerializer()
+            //    .WithMaxRetries(100)
+            //    .WithRetryTimeout(50)
+            //    .WithRedisCacheHandle("redisConnection", true)
+            //    .WithExpiration(ExpirationMode.Sliding, TimeSpan.FromMinutes(15)).Build();
+
             var cacheConfig = ConfigurationBuilder.BuildConfiguration(settings =>
             {
                 settings.WithSystemRuntimeCacheHandle("inprocess")
                 .WithExpiration(ExpirationMode.Absolute, TimeSpan.FromMinutes(15))
                 .And
-                .WithRedisConfiguration("redisConnection", config => 
+                .WithRedisConfiguration("redisConnection", config =>
                 config
                 .WithConnectionTimeout(10000)
                 .WithEndpoint(ConfigurationManager.AppSettings["cacheHostIP"],
@@ -67,16 +84,13 @@ namespace ViewWorld
                 .WithMaxRetries(100)
                 .WithRetryTimeout(50)
                 .WithRedisCacheHandle("redisConnection", true)
-                .WithExpiration(ExpirationMode.Sliding,TimeSpan.FromMinutes(15));
-            });
+                .WithExpiration(ExpirationMode.Sliding, TimeSpan.FromMinutes(15));
+            }).Builder.Build();
             builder
                 .RegisterGeneric(typeof(BaseCacheManager<>))
-                .WithParameters(new[]
-                {
-                    new TypedParameter(typeof(string), "redisCache"),
-                    new TypedParameter(typeof(CacheManagerConfiguration), cacheConfig)
-                })
                 .As(typeof(ICacheManager<>))
+                .WithParameter(new TypedParameter(typeof(ICacheManagerConfiguration), cacheConfig))
+                
                 .SingleInstance();
             // OPTIONAL: Enable action method parameter injection (RARE).
             //builder.InjectActionInvoker();
@@ -86,6 +100,10 @@ namespace ViewWorld
            
             
             #endregion
+        }
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            
         }
     }
 }

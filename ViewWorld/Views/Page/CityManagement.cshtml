@@ -16,6 +16,7 @@
             <tr>
                 <th>城市名称</th>
                 <th>简称/英文</th>
+                <th>国内城市</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -30,6 +31,9 @@
                             ID: @city.Id
                         </td>
                         <td><div class="editable-cell" data-db-key="Initial">@city.Initial</div></td>
+                        <td>
+                            <input type="checkbox"  checked="@city.IsChineseCity"/>
+                        </td>
                         <td>
                             <button class="ui blue icon button save hidden"><i class="icon save"></i></button>
                             <button class="ui blue icon button edit"><i class="icon edit"></i></button>
@@ -60,6 +64,12 @@
             <div class="required field">
                 <label>简称/英文</label>
                 <input name="alias" type="text" placeholder="英文缩写" data-db-key="Initial" maxlength="1" />
+            </div>
+            <div class="field">
+                <div class="ui checkbox cncity">
+                    <input type="checkbox" data-db-key="isChineseCity">
+                    <label>国内城市</label>
+                </div>
             </div>
             <div class="actions">
                 <div class="ui primary button" id="submit-form">

@@ -87,7 +87,6 @@ namespace ViewWorld.Controllers.Frontend
                 
                 return View(trip);
             }
-                
             return new HttpStatusCodeResult(HttpStatusCode.NotFound);
         }
         [HttpGet]

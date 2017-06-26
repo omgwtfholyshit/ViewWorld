@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("ViewWorld")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("瞰世界旅游官网")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ViewWorld")]
+[assembly: AssemblyCompany("瞰世界国际旅行社")]
+[assembly: AssemblyProduct("瞰世界旅行网")]
 [assembly: AssemblyCopyright("版权所有(C)  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

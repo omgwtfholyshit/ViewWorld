@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var history = {Name:'',Initial:''};
+    var history = { Name: '', Initial: '', isChineseCity: true };
     function bindEvents() {
         $('#addCity').on('click', function () {
             $('.ui.modal.add-city-modal').modal('show');

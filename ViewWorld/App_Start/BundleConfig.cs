@@ -12,7 +12,7 @@ namespace ViewWorld
             BundleTable.EnableOptimizations = true;
 
             var jQuery = new ScriptBundle("~/bundles/jquery", "//cdn.bootcss.com/jquery/3.1.1/jquery.min.js").Include(
-                        "~/Scripts/jquery-{version}.js");
+                        "~/Scripts/jquery-{version}.min.js");
             jQuery.CdnFallbackExpression = "window.jQuery";
             bundles.Add(jQuery);
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -23,13 +23,13 @@ namespace ViewWorld
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+            //          "~/Scripts/bootstrap.js",
+            //          "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+            //bundles.Add(new StyleBundle("~/Content/css").Include(
+            //          "~/Content/bootstrap.css",
+            //          "~/Content/site.css"));
 
 
             #region 后端

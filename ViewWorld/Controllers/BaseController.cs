@@ -127,5 +127,22 @@ namespace ViewWorld.Controllers
             HttpResponse.RemoveOutputCacheItem(urlToRemove);
         }
         #endregion
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            var result = filterContext.Result;
+            if(result is HttpStatusCodeResult)
+            {
+                switch (((HttpStatusCodeResult)result).StatusCode)
+                {
+                    case 404:
+                    case 500:
+                        Response.Redirect(string.Format("/Error/Error{0}?errorpath={1}", ((HttpStatusCodeResult)result).StatusCode,filterContext.HttpContext.Request.Url.LocalPath));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            base.OnActionExecuted(filterContext);
+        }
     }
 }

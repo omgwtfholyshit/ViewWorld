@@ -35,24 +35,24 @@
       <HintPath>..\packages\AspNet.Identity.MongoDB.2.0.8\lib\net45\AspNet.Identity.MongoDB.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CacheManager.Core, Version=0.9.2.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
-      <HintPath>..\packages\CacheManager.Core.0.9.2\lib\net45\CacheManager.Core.dll</HintPath>
+    <Reference Include="CacheManager.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=5b450b4fb65c4cdb, processorArchitecture=MSIL">
+      <HintPath>..\packages\CacheManager.Core.1.1.0\lib\net45\CacheManager.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Bson, Version=2.4.0.70, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Bson.2.4.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=2.4.0.70, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.2.4.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.4.4\lib\net45\MongoDB.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Driver.Core, Version=2.4.0.70, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.Core.2.4.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    <Reference Include="MongoDB.Driver.Core, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.4.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
