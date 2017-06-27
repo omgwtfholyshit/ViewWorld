@@ -13,7 +13,6 @@
                 if ($(e.target).val() != '')
                     $('#submit-form').click();
             }
-
         })
         $('.ui.celled.table tbody').delegate('.button.edit', 'click', function (e) {
             e.preventDefault();
@@ -56,15 +55,17 @@
             return;
         }
         $this.addClass('loading');
-
         var $cells = $this.closest('tr').find('.editable-cell');
 
         var model = {
-            Id: $this.closest('tr').data('city-id')
+            Id: $this.closest('tr').data('city-id'),
+            IsChineseCity: $this.closest('tr').find('input[name=IsChineseCity]').prop('checked')
         };
         $cells.each(function (index, cell) {
             model[$(cell).data('db-key')] = $(cell).text().trim();
         });
+        
+       
         $.ajax({
             url: '/Trip/EditCity',
             method: 'POST',
@@ -156,7 +157,7 @@
             if (data.status == 200) {
                 var html = '';
                 $.each(data.data, function (index, element) {
-                    html += '<tr data-city-id="'+ element.Id + '"><td><div class="editable-cell" data-db-key="name">'+ element.Name + '</div>ID: '+element.Id + ' </td><td><div class="editable-cell" data-db-key="initial">'+ element.Initial +'</div></td><td><button class="ui blue icon button save hidden"><i class="icon save"></i></button><button class="ui blue icon button edit"><i class="icon edit"></i></button><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
+                    html += '<tr data-city-id="' + element.Id + '"><td><div class="editable-cell" data-db-key="name">' + element.Name + '</div>ID: ' + element.Id + ' </td><td><div class="editable-cell" data-db-key="initial">' + element.Initial + '</div></td><td><input type="checkbox"  checked="' + element.IsChineseCity + '"/></td><td><button class="ui blue icon button save hidden"><i class="icon save"></i></button><button class="ui blue icon button edit"><i class="icon edit"></i></button><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
                 })
                 $('.ui.celled.table tbody').html(html);
             }
@@ -196,10 +197,11 @@
         if (!valid) {
             return;
         }
-        var model = {};
+        var model = { Id: "" };
         $inputs.each(function (index, input) {
             model[$(input).data('db-key')] = $(input).val().trim().toUpperCase();
         });
+        $('.checkbox.cncity').checkbox('is checked') ? model.IsChineseCity = true : model.IsChineseCity = false;
         if (!$this.hasClass('loading')) {
             $.ajax({
                 url: "/Trip/AddCity",
@@ -213,8 +215,8 @@
                 },
                 success: function (data) {
                     if (data.Success) {
-                        $form[0].reset();
-                        $form[0][1].focus();
+                        //$form[0].reset();
+                        //$form[0][1].focus();
                         $this.removeClass('loading');
                         $.tip(".message-container", "操作成功", "供应商已保存", "positive", 4);
                         searchCity();

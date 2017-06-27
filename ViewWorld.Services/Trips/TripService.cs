@@ -172,7 +172,9 @@ namespace ViewWorld.Services.Trips
         }
         public async Task<Result> UpdateEntity(TripArrangement Entity)
         {
-            cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
+            var prevCache = cacheManager.Get("Trips","Front");
+            if(prevCache != null)
+                cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
@@ -184,7 +186,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.CommonInfo = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "通用信息";
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
+                //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -198,7 +200,6 @@ namespace ViewWorld.Services.Trips
                 result.Entity.ProductInfo = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "产品概要";
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -212,7 +213,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.Schedules = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "单日行程";
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
+                //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -226,7 +227,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.TripPlans = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "发团计划";
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
+                //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };
@@ -240,7 +241,7 @@ namespace ViewWorld.Services.Trips
                 result.Entity.TripProperty = data;
                 var updateResult = await UpdateEntity(result.Entity);
                 updateResult.Message = "发团属性";
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
+                //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 return updateResult;
             }
             return new Result() { ErrorCode = 300, Message = "找不到该行程", Success = false };

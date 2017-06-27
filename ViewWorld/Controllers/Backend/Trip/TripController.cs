@@ -282,15 +282,10 @@ namespace ViewWorld.Controllers.Trip
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> AddCity(CityInfo model)
         {
-
-            if (ModelState.IsValid)
-            {
-                var result = await cityService.AddEntity(model);
-                if (result.Success)
-                    return OriginJson(result);
-                return ErrorJson(result.Message);
-            }
-            return ErrorJson("参数错误");
+            var result = await cityService.AddEntity(model);
+            if (result.Success)
+                return OriginJson(result);
+            return ErrorJson(result.Message);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
