@@ -33,6 +33,7 @@
             _this.bindFilterEvents();
             _this.bindSortEvents();
             _this.bindPaginationEvents();
+            _this.bindResultEvents();
             _this.initCityInfo();
             _this.setCityHistory();
             _this.initSearch();
@@ -230,7 +231,9 @@
                             if (element.CommonInfo.Theme.indexOf(e[0]) > -1)
                                 labelHtml += '<div class="ui teal label">' + e[1] + '</div>';
                         })
-                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.Photos[0].FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml), { 'append': true });
+                        typeof element.CommonInfo.Photos[0] == 'undefined' ? element.CommonInfo.Photos[0] = { FileLocation: '' } : element.CommonInfo.Photos[0];
+                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.Photos[0].FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
+                        temp = cityStr = '';
                     })
                     regionTags.split(',').length >= 5 ? className = '' : className = 'hidden';
                     _this.searchModel.Region == '' ? regionTags = regionTags.replace('>不限', ' class="active">不限') : regionTags = regionTags.replace('>' + _this.searchModel.Region, ' class="active">' + _this.searchModel.Region);
@@ -253,7 +256,9 @@
                     _this.searchModel.Theme == '' ? themeTags = themeTags.replace('>不限', ' class="active">不限') : themeTags = themeTags.replace(_this.searchModel.Theme + '"', _this.searchModel.Theme + '" class="active"');
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Theme", _this.filterLabels[4], themeTags), { 'append': true });
                 }
-                
+                else {
+                    $.tip(".message-container", "没有行程", "您选择的城市暂时没有行程，请看看其他城市的行程吧！", "negative", 4);
+                }
             } catch (ex) {
                 console.log(ex);
             }
@@ -304,6 +309,14 @@
                 _this.loadTrips(paginationVar.PageIndex);
             })
         },
+        bindResultEvents: function () {
+            var _this = this;
+            _this.result
+            .delegate('.item .header,.item .detail-button', 'click', function (e) {
+                var productId = $(e.target).parents('.item').data('productid');
+                window.open('/Finder/TripDetail?ProductId=' + productId);
+            })
+        },
     }
     page.init();
     var filterItem = function (modelname, name, tags, className) {
@@ -312,7 +325,7 @@
         this.tags = tags;
         typeof className !== 'string' ? this.className = 'toggleOptions off ' : this.className = 'toggleOptions off ' + className;
     }
-    var contentItem = function (title, keyword, image, price, departcity, availabledates, labels) {
+    var contentItem = function (title, keyword, image, price, departcity, availabledates, labels, productId) {
         this.title = title;
         this.keyword = keyword;
         this.image = image;
@@ -320,6 +333,7 @@
         this.departcity = departcity;
         this.availabledates = availabledates;
         this.labels = labels;
+        this.productId = productId;
     }
     function getCity(cityStr) {
         return cityStr.split('|');

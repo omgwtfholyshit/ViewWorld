@@ -15,6 +15,7 @@ using ViewWorld.Core.Models.ViewModels;
 using ViewWorld.Services.Cities;
 using ViewWorld.Services.Trips;
 using ViewWorld.Utils;
+using ViewWorld.Utils.ViewModels;
 
 namespace ViewWorld.Controllers.Frontend
 {
@@ -67,11 +68,15 @@ namespace ViewWorld.Controllers.Frontend
         }
         public async Task<ActionResult> TripDetail(string productId)
         {
+           
             var trip = (await tripService.RetrieveEntitiesByKeyword(productId)).Entities.FirstOrDefault();
             if (trip != null)
             {
-                ViewBag.departCity = TripService.GetCity(trip.ProductInfo.DepartingCity);
-                ViewBag.arrivalCity = TripService.GetCity(trip.ProductInfo.ArrivingCity);
+                var vm = new FinderTripDetailViewModel();
+                vm.Trip = trip;
+                vm.DepartCity = TripService.GetCity(trip.ProductInfo.DepartingCity);
+                vm.ArrivalCity = TripService.GetCity(trip.ProductInfo.ArrivingCity);
+                var firstAvaiableDate = DateTime.Now;
                 if (trip.TripPlans.Any())
                 {
                     string tripData = "{";
@@ -79,13 +84,26 @@ namespace ViewWorld.Controllers.Frontend
                     {
                         foreach(var item in plan.TripPrices)
                         {
-                            tripData += string.Format("%22{0}%22" + ":"+ "%22{1}_{2}%22,", item.TripDate.ToString("MM-dd-yyyy"), trip.CommonInfo.ShortPriceType + item.BasePrice.QuadplexPrice.ToString(),plan.Id);
+                            if (item.TripDate.ToLocalTime() > DateTime.Now)
+                            {
+                                if(firstAvaiableDate == DateTime.Now)
+                                {
+                                    firstAvaiableDate = item.TripDate;
+                                }else
+                                {
+                                    firstAvaiableDate = firstAvaiableDate > item.TripDate ? 
+                                        item.TripDate : firstAvaiableDate;
+                                }
+                                
+                                tripData += string.Format("%22{0}%22" + ":" + "%22{1}_{2}%22,", item.TripDate.ToLocalTime().ToString("MM-dd-yyyy"), trip.CommonInfo.ShortPriceType + item.BasePrice.QuadplexPrice.ToString(), plan.Id);
+                            }
                         }
                     }
-                    ViewBag.tripData = tripData.TrimEnd(',') + "}";
+                    vm.FirstAvaiableDate = firstAvaiableDate.ToLocalTime().ToString("MM-dd-yyyy");
+                    vm.TripData = tripData.TrimEnd(',') + "}";
                 }
                 
-                return View(trip);
+                return View(vm);
             }
             return new HttpStatusCodeResult(HttpStatusCode.NotFound);
         }
@@ -99,8 +117,8 @@ namespace ViewWorld.Controllers.Frontend
 
         public async Task<JsonResult> GetTripsBySearchModel(FinderViewModels model,int pageNum = 1)
         {
-            var data = await tripService.RetrieveTripArrangementByFilter(model);
-            return PageJson(data.Entities.ToPagedList(pageNum, 3));
+            var data = await tripService.RetrieveTripArrangementBySearchModel(model);
+            return PageJson(data.OrderByDescending(m=>m.ProductInfo.DepartingCity).ToPagedList(pageNum, 3));
         }
         public async Task<JsonResult> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId)
         {

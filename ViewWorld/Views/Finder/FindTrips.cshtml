@@ -111,20 +111,6 @@
                     <label >所属区域:</label>
                     <div class="options">
                         <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
                     </div>
                     <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
                 </li>
@@ -233,7 +219,7 @@
     </li>
 </script>
 <script type="text/html" id="resultContentTmpl">
-    <div class="item">
+    <div class="item" data-template-bind='[{"attribute": "data-productId", "value": "productId"}]' >
         <div class="image">
             <img src="/Images/Logo/logo_352-172.svg" data-template-bind='[{"attribute": "data-src", "value": "image"}]'/>
         </div>
@@ -263,7 +249,7 @@
                         起
                     </div>
                 </div>
-                <div class="ui teal button">
+                <div class="ui teal button detail-button">
                     查看详情
                     <i class="right chevron icon"></i>
                 </div>

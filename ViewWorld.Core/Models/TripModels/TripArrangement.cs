@@ -17,6 +17,7 @@ namespace ViewWorld.Core.Models.TripModels
     /// 行程信息
     /// </summary>
     /// 
+    [Serializable]
     public class TripArrangement
     {
         public TripArrangement(CommonInfo cInfo, ProductInfo pInfo, List<Schedule> schedules, List<TripPlan> tplan,TripProperty tproperty)

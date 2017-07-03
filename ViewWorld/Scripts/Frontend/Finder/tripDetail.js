@@ -51,6 +51,7 @@
             $.each(_this.tripData, function (index, element) {
                 tripData[index] = element.split('_')[0];
             })
+            console.log(tripData)
             //Big Calendar
             var calendarObj = _this.calendar.calendario({
                 weeks: _this.weekArray,

@@ -15,15 +15,17 @@ using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using ViewWorld.Core.Models.ViewModels;
 using CacheManager.Core;
+using Newtonsoft.Json;
 
 namespace ViewWorld.Services.Trips
 {
     public class TripService : ITripService
     {
         private readonly IMongoDbRepository Repo;
-        ICacheManager<GetManyResult<TripArrangement>> cacheManager;
+        ICacheManager<string> cacheManager;
         const string dataDirectory = "/Upload/Trips/";
-        public TripService(IMongoDbRepository _Repo,ICacheManager<GetManyResult<TripArrangement>> _cacheManager)
+        JavaScriptSerializer JSSerializer = new JavaScriptSerializer();
+        public TripService(IMongoDbRepository _Repo,ICacheManager<string> _cacheManager)
         {
             this.Repo = _Repo;
             this.cacheManager = _cacheManager;
@@ -74,9 +76,17 @@ namespace ViewWorld.Services.Trips
 
         public async Task<GetListResult<TripArrangement>> RetrieveEntitiesByKeyword(string keyword)
         {
-            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front");
-            GetListResult<TripArrangement> listResult = new GetListResult<TripArrangement>() {
-                Success = false, ErrorCode = 300, Entities = new List<TripArrangement>(), Message = "" };
+            var resultStr = cacheManager.Get("Trips", "Front");
+            GetManyResult<TripArrangement> result;
+            GetListResult<TripArrangement> listResult = new GetListResult<TripArrangement>()
+            {
+                Success = false,
+                ErrorCode = 300,
+                Entities = new List<TripArrangement>(),
+                Message = ""
+            };
+            result = !string.IsNullOrWhiteSpace(resultStr)? 
+                JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr): await Repo.GetAllAsync<TripArrangement>();
             if (result == null || !result.Success)
             {
                 result = await Repo.GetAllAsync<TripArrangement>();
@@ -135,9 +145,9 @@ namespace ViewWorld.Services.Trips
                 }
                 else
                 {
-                    filteredTrips = result.Entities.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity));
+                    filteredTrips = result.Entities;
                     if (!string.IsNullOrWhiteSpace(model.Region))
-                        filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionId));
+                        filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
                     if (model.Days > 0)
                         filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
                     if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
@@ -156,8 +166,8 @@ namespace ViewWorld.Services.Trips
         {
             var builder = Builders<TripArrangement>.Filter;
             FilterDefinition<TripArrangement> filter = builder.Where(t => !t.IsDeleted && !t.IsVisible);
-            if(!string.IsNullOrWhiteSpace(model.DepartureCity))
-                filter = builder.And(filter, builder.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity)));
+            //if(!string.IsNullOrWhiteSpace(model.DepartureCity))
+            //    filter = builder.And(filter, builder.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity)));
             if (!string.IsNullOrWhiteSpace(model.Region))
                 filter = builder.And(filter, builder.Where(t => t.CommonInfo.RegionName == model.Region));
             if (model.Days > 0)
@@ -172,9 +182,15 @@ namespace ViewWorld.Services.Trips
         }
         public async Task<Result> UpdateEntity(TripArrangement Entity)
         {
-            var prevCache = cacheManager.Get("Trips","Front");
-            if(prevCache != null)
-                cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
+            var resultStr = cacheManager.Get("Trips","Front");
+            GetManyResult<TripArrangement> result;
+            if (!string.IsNullOrWhiteSpace(resultStr))
+            {
+                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
+                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(result, Entity));
+            }
+            //if(prevCache != null)
+            //    cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
@@ -322,7 +338,7 @@ namespace ViewWorld.Services.Trips
                             photoInfo.FileLocation = PathHelper.absolutePathtoVirtualPath(filePath);
                             tripResult.Entity.CommonInfo.Photos.Add(photoInfo);
                             await UpdateEntity(tripResult.Entity);
-                            cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, tripResult.Entity));
+                            //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, tripResult.Entity));
                         }
                     }
                     if (string.IsNullOrWhiteSpace(result.Message))
@@ -363,7 +379,6 @@ namespace ViewWorld.Services.Trips
                     }
                     result.Entity.CommonInfo.Photos.Remove(photoInfo);
                     await UpdateEntity(result.Entity);
-                    cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                     outcome.Success = true;
                     outcome.ErrorCode = 200;
                 }
@@ -383,7 +398,6 @@ namespace ViewWorld.Services.Trips
             {
                 result.Entity.IsVisible = !result.Entity.IsVisible;
                 await UpdateEntity(result.Entity);
-                cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, result.Entity));
                 if (result.Entity.IsVisible)
                 {
                     result.Message = "隐藏线路";
@@ -396,20 +410,35 @@ namespace ViewWorld.Services.Trips
         }
         async Task<GetManyResult<TripArrangement>> GetCachedResult()
         {
-            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front");
-            if (result == null || !result.Success)
+            var resultStr = cacheManager.Get("Trips", "Front");
+            GetManyResult<TripArrangement> result;
+            if (!string.IsNullOrWhiteSpace(resultStr))
+            {
+                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
+                if (result == null || !result.Success)
+                {
+                    result = await Repo.GetAllAsync<TripArrangement>();
+                    cacheManager.Add("Trips", JSSerializer.Serialize(result), "Front");
+                }
+            }
+            else
             {
                 result = await Repo.GetAllAsync<TripArrangement>();
-                cacheManager.Add("Trips", result, "Front");
+                cacheManager.Add("Trips", JSSerializer.Serialize(result), "Front");
             }
             return result;
         }
-        GetManyResult<TripArrangement> UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
+        string UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
         {
-            var update = cachedResult.Entities.FirstOrDefault(e => e.Id == entityToUpdate.Id);
-            if (update != null)
-                update = entityToUpdate;
-            return cachedResult;
+            var cachedItems = cachedResult.Entities as List<TripArrangement>;
+            var cachedTarget = cachedItems.Find(e => e.Id == entityToUpdate.Id);
+            if (cachedTarget != null)
+            {
+                cachedItems.Remove(cachedTarget);
+                cachedItems.Add(entityToUpdate);
+            }
+                
+            return JSSerializer.Serialize(cachedResult);
         }
 
         public static string GetCity(string cityStr)
@@ -438,7 +467,7 @@ namespace ViewWorld.Services.Trips
                 var plan = result.Entity.TripPlans.FirstOrDefault(p => p.Id == planId);
                 if (plan != null)
                 {
-                    var tripPrice = plan.TripPrices.FirstOrDefault(p => p.TripDate.ToShortDateString() == departDate.ToShortDateString()).BasePrice;
+                    var tripPrice = plan.TripPrices.FirstOrDefault(p => p.TripDate.ToLocalTime().ToShortDateString() == departDate.ToShortDateString()).BasePrice;
                     if (tripPrice != null)
                     {
                         foreach(var room in rooms)
@@ -449,13 +478,13 @@ namespace ViewWorld.Services.Trips
                                     finalPrice += tripPrice.SinglePrice;
                                     break;
                                 case 2:
-                                    finalPrice += tripPrice.DoublePrice;
+                                    finalPrice += tripPrice.DoublePrice * 2;
                                     break;
                                 case 3:
-                                    finalPrice += tripPrice.TriplePrice;
+                                    finalPrice += tripPrice.TriplePrice * 3;
                                     break;
                                 case 4:
-                                    finalPrice += tripPrice.QuadplexPrice;
+                                    finalPrice += tripPrice.QuadplexPrice * 4;
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException("PeoplePerRoomViewModel", "A maximum of 4 people can stay in one room");

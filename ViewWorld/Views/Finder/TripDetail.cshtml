@@ -1,4 +1,4 @@
-﻿@model ViewWorld.Core.Models.TripModels.TripArrangement
+﻿@model ViewWorld.Utils.ViewModels.FinderTripDetailViewModel
 
 @{
     ViewBag.Title = "行程详情";
@@ -14,16 +14,20 @@
             <div class="slider">
                 <div class="swiper-container gallery-top">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/1)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/2)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/3)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/4)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/5)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/6)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/7)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/8)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/9)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/10)"></div>
+                        @{
+                            if (Model.Trip.CommonInfo.Photos.Count() > 0)
+                            {
+                                foreach (var photo in Model.Trip.CommonInfo.Photos)
+                                {
+                                    <div class="swiper-slide" style="background-image:url(@photo.FileLocation)"></div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>
+                            }
+
+                        }
                     </div>
                     <!-- Add Arrows -->
                     <div class="swiper-button-next swiper-button-white"></div>
@@ -31,28 +35,32 @@
                 </div>
                 <div class="swiper-container gallery-thumbs">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/1)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/2)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/3)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/4)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/5)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/6)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/7)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/8)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/9)"></div>
-                        <div class="swiper-slide" style="background-image:url(http://lorempixel.com/1200/1200/nature/10)"></div>
+                        @{
+                            if (Model.Trip.CommonInfo.Photos.Count() > 0)
+                            {
+                                foreach (var photo in Model.Trip.CommonInfo.Photos)
+                                {
+                                    <div class="swiper-slide" style="background-image:url(@photo.FileLocation)"></div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>
+                            }
+
+                        }
                     </div>
                 </div>
             </div>
             <div class="intro-container">
                 <h2 class="ui header">
-                    @Model.CommonInfo.Name
-                    <div class="sub header">@Model.CommonInfo.Keyword</div>
+                    @Model.Trip.CommonInfo.Name
+                    <div class="sub header">@Model.Trip.CommonInfo.Keyword</div>
                 </h2>
                 <div class="ui small horizontal statistic lowest-price">
                     <div class="value">
                         @{
-                            var price = Model.CommonInfo.PriceType + " " + Model.CommonInfo.LowestPrice;
+                            var price = Model.Trip.CommonInfo.PriceType + " " + Model.Trip.CommonInfo.LowestPrice;
                         }
                         @price
                     </div>
@@ -61,9 +69,9 @@
                     </div>
                 </div>
                 <ul class="other-info">
-                    <li><label>产品编号: </label><span>@Model.ProductId</span></li>
-                    <li><label>出发城市: </label><span>@ViewBag.departCity</span></li>
-                    <li><label>结束城市: </label><span>@ViewBag.arrivalCity</span></li>
+                    <li><label>产品编号: </label><span>@Model.Trip.ProductId</span></li>
+                    <li><label>出发城市: </label><span>@Model.DepartCity</span></li>
+                    <li><label>结束城市: </label><span>@Model.ArrivalCity</span></li>
                     <li><label>活动优惠: </label><span>热卖</span></li>
                 </ul>
             </div>
@@ -93,7 +101,7 @@
                             <div class="field">
                                 <label>出游日期</label>
                                 <div class="ui icon input toggleCalendar">
-                                    <input type="text" name="departtime" value="@DateTime.Now.AddDays(2).ToString("yyyy年M月dd日")" readonly>
+                                    <input type="text" name="departtime" value="@Model.FirstAvaiableDate" readonly>
                                     <i class="calendar icon"></i>
                                 </div>
                                 <span class="description"></span>
@@ -176,19 +184,31 @@
                         <i class="trophy icon"></i>
                         线路特色
                     </h4>
-
+                    <div class="data-container">
+                        
+                        @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.ProductInfo.Feature))
+                    </div>
+                    
                 </div>
                 <div class="product-detail">
                     <h4 class="ui horizontal divider header">
                         <i class="list layout icon"></i>
                         产品详情
                     </h4>
+                    <div class="data-container">
+
+                        @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.ProductInfo.Intro))
+                    </div>
                 </div>
                 <div class="price-detail">
                     <h4 class="ui horizontal divider header">
                         <i class="calculator icon"></i>
                         费用说明
                     </h4>
+                    <div class="data-container">
+
+                        
+                    </div>
                 </div>
                 <div class="order-info">
                     <h4 class="ui horizontal divider header">
@@ -311,8 +331,8 @@
     </div>
 </div>
 <script>
-    var calendarData = '@ViewBag.tripData';
-    var TripId = '@Model.Id';
+    var calendarData = '@Model.TripData';
+    var TripId = '@Model.Trip.Id';
 </script>
 <script type="text/html" id="roomTmpl">
     <tr class="room-detail fields hidden">

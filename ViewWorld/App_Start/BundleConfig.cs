@@ -8,7 +8,8 @@ namespace ViewWorld
         // 有关绑定的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.UseCdn = true;
+            //发布时打开
+            bundles.UseCdn = false;
             BundleTable.EnableOptimizations = true;
 
             var jQuery = new ScriptBundle("~/bundles/jquery", "//cdn.bootcss.com/jquery/3.1.1/jquery.min.js").Include(

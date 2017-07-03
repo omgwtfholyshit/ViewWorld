@@ -95,6 +95,7 @@
     <Compile Include="Tools.cs" />
     <Compile Include="ValidationHelper.cs" />
     <Compile Include="VerificationSender.cs" />
+    <Compile Include="ViewModels\FinderTripDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
