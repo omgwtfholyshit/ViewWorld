@@ -450,6 +450,12 @@ namespace ViewWorld.Controllers.Trip
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<JsonResult> DisplayTripOnFrontPage(string tripId)
+        {
+            return OriginJson(await tripService.DisplayTripOnFrontPage(tripId));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> CopyTripArrangementById(string tripId)
         {
             return OriginJson(await tripService.CopyTripArrangement(tripId));
@@ -459,6 +465,12 @@ namespace ViewWorld.Controllers.Trip
         public async Task<JsonResult> DeleteTripArrangementById(string tripId)
         {
             return OriginJson(await tripService.DeleteEntityById(tripId));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> SetFrontCoverById(string tripId, string photoId)
+        {
+            return OriginJson(await tripService.SetFrontCover(tripId, photoId));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

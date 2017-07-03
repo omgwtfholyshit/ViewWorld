@@ -20,6 +20,7 @@ using MongoDB.Driver;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.Identity;
 using CacheManager.Core;
+using ViewWorld.Services.Users;
 
 namespace ViewWorld.Controllers
 {
@@ -29,11 +30,13 @@ namespace ViewWorld.Controllers
         #region 初始化
         private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
+        private IUserService userService;
         ICacheManager<object> cacheManager;
-        public AccountController(IMongoDbRepository _repo, ICacheManager<object> _cache)
+        public AccountController(IMongoDbRepository _repo, ICacheManager<object> _cache, IUserService _userService)
         {
             Repo = _repo;
             cacheManager = _cache;
+            userService = _userService;
         }
         public ApplicationUserManager UserManager
         {
@@ -689,28 +692,13 @@ namespace ViewWorld.Controllers
         [Authorize]
         public async Task<JsonResult> GetUserInfo()
         {
-            var userInfo = cacheManager.Get("userinfo", UserId);
-            if(userInfo == null)
+
+            var userInfo = await userService.GetUserInfo(UserId);
+            if (userInfo == null)
             {
-                var result = await Repo.GetOneAsync<ApplicationUser>(this.UserId);
-                if (result.Success)
-                {
-                    if (!System.IO.File.Exists(result.Entity.Avatar))
-                        result.Entity.Avatar = "/Images/DefaultImages/UnknownSex.jpg";
-                    var data = new
-                    {
-                        Username = result.Entity.UserName,
-                        Nickname = result.Entity.NickName,
-                        Avatar = result.Entity.Avatar,
-                    };
-                    cacheManager.Add("userinfo", data, UserId);
-                    return Json(data);
-                }
-            }else
-            {
-                return Json(userInfo);
+                return ErrorJson("登录信息有误");
             }
-            return ErrorJson("登录信息有误");
+            return Json(userInfo);
         }
         #endregion
         #region 自定义修改用户信息
@@ -770,14 +758,12 @@ namespace ViewWorld.Controllers
         {
             if (ModelState.IsValid)
             {
-                var updateDef = Builders<ApplicationUser>.Update.Set("NickName", model.NickName).Set("DOB", model.DOB).Set("Sex", model.Sex);
-                var Result = await Repo.UpdateOneAsync(this.UserId, updateDef);
-                if (Result.Success)
+                var result = await userService.UpdateUserInfo(model.NickName, model.Sex, model.DOB, UserId);
+                if (result.Success)
                 {
-                    cacheManager.Remove("userinfo", this.UserId);
                     return SuccessJson();
                 }
-                return ErrorJson(Result.Message);
+                return ErrorJson(result.Message);
             }
             return ErrorJson("保存失败,请检查您的输入");
         }

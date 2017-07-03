@@ -37,21 +37,39 @@
                     @{
                         if (item.IsVisible)
                         {
-                    <button class="ui circular blue icon button hidden" data-content="发布线路">
-                        <i class="unhide icon"></i>
-                    </button>
-                    <button class="ui circular red icon button" data-content="隐藏线路">
-                        <i class="hide icon"></i>
-                    </button>
+                            <button class="ui circular blue icon route button hidden " data-content="发布线路">
+                                <i class="unhide icon"></i>
+                            </button>
+                            <button class="ui circular red icon route button" data-content="隐藏线路">
+                                <i class="hide icon"></i>
+                            </button>
                         }
                         else
                         {
-                    <button class="ui circular blue icon button" data-content="发布线路">
-                        <i class="unhide icon"></i>
-                    </button>
-                    <button class="ui circular red icon button hidden" data-content="隐藏线路">
-                        <i class="hide icon"></i>
-                    </button>
+                            <button class="ui circular blue icon route button" data-content="发布线路">
+                                <i class="unhide icon"></i>
+                            </button>
+                            <button class="ui circular red icon route button hidden" data-content="隐藏线路">
+                                <i class="hide icon"></i>
+                            </button>
+                        }
+                        if (item.DisplayOnFrontPage)
+                        {
+                            <button class="ui circular blue icon frontpage button hidden" data-content="首页显示">
+                                <i class="arrow up icon"></i>
+                            </button>
+                            <button class="ui circular red icon frontpage button" data-content="首页隐藏">
+                                <i class="arrow down icon"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="ui circular blue icon frontpage button" data-content="首页显示">
+                                <i class="arrow up icon"></i>
+                            </button>
+                            <button class="ui circular red icon frontpage button hidden" data-content="首页隐藏">
+                                <i class="arrow down icon"></i>
+                            </button>
                         }
                     }
                     <button class="ui circular red icon button" data-content="删除">

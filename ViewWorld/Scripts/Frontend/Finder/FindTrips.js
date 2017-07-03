@@ -231,8 +231,8 @@
                             if (element.CommonInfo.Theme.indexOf(e[0]) > -1)
                                 labelHtml += '<div class="ui teal label">' + e[1] + '</div>';
                         })
-                        typeof element.CommonInfo.Photos[0] == 'undefined' ? element.CommonInfo.Photos[0] = { FileLocation: '' } : element.CommonInfo.Photos[0];
-                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.Photos[0].FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
+                        element.CommonInfo.FrontCover == null ? element.CommonInfo.FrontCover = { FileLocation: '' } : element.CommonInfo.FrontCover;
+                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.FrontCover.FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
                         temp = cityStr = '';
                     })
                     regionTags.split(',').length >= 5 ? className = '' : className = 'hidden';

@@ -93,6 +93,8 @@
     <Compile Include="StartingPoints\StartingPointService.cs" />
     <Compile Include="Trips\ITripService.cs" />
     <Compile Include="Trips\TripService.cs" />
+    <Compile Include="Users\IUserService.cs" />
+    <Compile Include="Users\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

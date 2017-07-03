@@ -39,6 +39,8 @@ namespace ViewWorld.Core.Models.TripModels
         public int Popularity { get; set; } = 0;
         public int TripOrdered { get; set; } = 0;
         public int SortOrder { get; set; } = 0;
+
+        public bool DisplayOnFrontPage = false;
         public CommonInfo CommonInfo {
             get
             {
@@ -192,6 +194,8 @@ namespace ViewWorld.Core.Models.TripModels
         public string Keyword { get; set; }
         [Obsolete("没有使用")]
         public string Description { get; set; }
+
+        public PhotoInfo FrontCover { get; set; }
         public List<PhotoInfo> Photos {
             get
             {

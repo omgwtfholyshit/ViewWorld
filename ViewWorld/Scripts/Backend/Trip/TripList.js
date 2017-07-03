@@ -2,6 +2,7 @@
     var api = {
         getTripList: '/Trip/RenderTripArrangementByKeyword',
         toggleTrip: '/Trip/ToggleTripArrangement',
+        frontPageDisplay: '/Trip/DisplayTripOnFrontPage',
         copyTrip: '/Trip/CopyTripArrangementById',
         deleteTrip: '/Trip/DeleteTripArrangementById'
     }, globalVar = { tripId: '', token: $('input[name=__RequestVerificationToken]').val() };
@@ -75,7 +76,7 @@
                         $button.addClass('loading');
                         $.post(api.toggleTrip, { tripId: tripId, __RequestVerificationToken: globalVar.token }).done(function (result) {
                             if (result.Success) {
-                                $button.siblings('.hidden').removeClass('hidden');
+                                $button.siblings('.hidden.route').removeClass('hidden');
                                 $button.addClass('hidden')
                             } else {
                                 $.tip(".message-container", "设置失败", result.Message, "negative", 4);
@@ -88,6 +89,24 @@
                         })
                     }
                     break;
+                case '首页显示':
+                case '首页隐藏':
+                    if (!$button.hasClass('loading')) {
+                        $button.addClass('loading');
+                        $.post(api.frontPageDisplay, { tripId: tripId, __RequestVerificationToken: globalVar.token }).done(function (result) {
+                            if (result.Success) {
+                                $button.siblings('.hidden.frontpage').removeClass('hidden');
+                                $button.addClass('hidden')
+                            } else {
+                                $.tip(".message-container", "设置失败", result.Message, "negative", 4);
+                            }
+                            $button.removeClass('loading');
+
+                        }).fail(function () {
+                            $.tip(".message-container", "设置失败", "服务器超时，请稍后重试！", "negative", 4);
+                            $button.removeClass('loading');
+                        })
+                    }
                 default:
                     break;
             }

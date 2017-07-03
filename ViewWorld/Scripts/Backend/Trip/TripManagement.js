@@ -7,6 +7,7 @@
         addTripUrl: '/Trip/AddTripArrangement',
         updateTripUrl: '/Trip/UpdateTripArrangement',
         uploadPhotoUrl: '/Trip/UploadTripArrangementPhoto',
+        setCoverUrl: '/Trip/SetFrontCoverById',
         deletePhotoUrl: '/Trip/DeletePhotoById',
         listCitiesUrl: '/Trip/SearchCityByKeyword',
         listSceneriesUrl: '/Trip/ListSceneriesAPI',
@@ -35,6 +36,7 @@
         Keyword: '',
         Description: '',
         Photos: new Array(),
+        FrontCover: '',
         PendingPhotos: new Array(),
         LoadRegionData: function (url) {
             $.get(url, { displaySubRegions: true }).done(function (data) {
@@ -159,7 +161,14 @@
                 $container.loadTemplate('#savedTmpl', ele, tmplOpt)
                 var img = document.createElement('img');
                 img.src = ele.FileLocation;
-                $('#' + ele.Id).find('.image').append(img);
+                labelHtml = '<a class="ui red right corner label"><i class="newspaper icon" ></i ></a >';
+                var $image = $('#' + ele.Id).find('.image');
+                if (CommonInfo.FrontCover != null && CommonInfo.FrontCover.Id == ele.Id) {
+                    $image.addClass('cover').append(labelHtml).append(img);
+                    $image.find('.button.setCover').addClass('hidden');
+                } else {
+                    $image.append(img);
+                }
             })
         },
         SyncJs: function () {
@@ -382,6 +391,10 @@
         IsVisible: false,
         IsDeleted: false,
         ProductId: '',
+        Popularity: 0,
+        TripOrdered: 0,
+        SortOrder: 0,
+        DisplayOnFrontPage: false,
         LoadServerData: function () {
             Trip.Id = $.getQueryStringByName('tripId');
             if (Trip.Id.length == 24) {
@@ -582,6 +595,10 @@
                 _this.ProductId = data.Entity.ProductId;
                 _this.IsDeleted = data.Entity.IsDeleted;
                 _this.IsVisible = data.Entity.IsVisible;
+                _this.Popularity = data.Entity.Popularity;
+                _this.TripOrdered = data.Entity.TripOrdered;
+                _this.SortOrder = data.Entity.SortOrder;
+                _this.DisplayOnFrontPage = data.Entity.DisplayOnFrontPage;
             }
             if (writePage) {
                 _this.SetSaveButtonForPage(_this.IsVisible);
@@ -776,21 +793,25 @@
         });
     }
     function BindCommonInfo() {
-        $('#photoListContainer').delegate('.content-editable.photo-desc', 'click', function (e) {
+        $('#photoListContainer')
+            .delegate('.content-editable.photo-desc', 'click', function (e) {
             $(e.target).attr('contenteditable', true);
-        }).delegate('#pendingList .content-editable.photo-desc', 'blur', function (e) {
+            })
+            .delegate('#pendingList .content-editable.photo-desc', 'blur', function (e) {
             var id = $(e.target).parents('.photo-item').attr('id');
             var photo = CommonInfo.PendingPhotos.find(function (element) {
                 return element.Id == id;
             });
             photo.Description = $(e.target).text();
-        }).delegate('.saved-photo .content-editable.photo-desc', 'blur', function (e) {
+            })
+            .delegate('.saved-photo .content-editable.photo-desc', 'blur', function (e) {
             var id = $(e.target).parents('.photo-item').attr('id');
             var photo = CommonInfo.Photos.find(function (element) {
                 return element.Id == id;
             });
             photo.Description = $(e.target).text();
-        }).delegate('.saved-photo .button.delete', 'click', function (e) {
+            })
+            .delegate('.saved-photo .button.delete', 'click', function (e) {
             e.preventDefault();
             var id = $(e.target).parents('.photo-item').attr('id');
             $.ajax({
@@ -812,13 +833,44 @@
                             }
                         }
                         $('#' + id).remove();
+                        $.tip(".message-container", "删除成功", "图片已删除", "positive", 4);
+                    } else {
+                        $.tip(".message-container", "删除失败", result.Message, "negative", 4);
                     }
-                    $.tip(".message-container", "删除成功", "图片已删除", "positive", 4);
+                    $(e.target).removeClass('loading');
                 },
                 error: function (data) { $.tip(".message-container", "图片删除失败", "服务器超时，请稍后重试！", "negative", 4); $(e.target).removeClass('loading'); }
             })
             return false;
-        }).delegate('.save-single.button', 'click', function (e) {
+            })
+            .delegate('.saved-photo .button.setCover', 'click', function (e) {
+                e.preventDefault();
+                var id = $(e.target).parents('.photo-item').attr('id');
+                $.ajax({
+                    url: api.setCoverUrl,
+                    method: 'post',
+                    beforeSend: function () {
+                        $(e.target).addClass('loading');
+                    },
+                    data: {
+                        tripId: Trip.Id,
+                        photoId: id,
+                        __RequestVerificationToken: token
+                    },
+                    success: function (result) {
+                        if (result.Success) {
+                            $('.image.cover').removeClass('.cover').find('a').remove();
+                            var labelHtml = '<a class="ui red right corner label"><i class="newspaper icon" ></i ></a >';
+                            var $target = $('#' + id).find('.image');
+                            $target.addClass('cover').append(labelHtml);
+                        }
+                        $(e.target).removeClass('loading');
+                    },
+                    error: function (data) { $.tip(".message-container", "图片删除失败", "服务器超时，请稍后重试！", "negative", 4); $(e.target).removeClass('loading'); }
+                })
+                return false;
+            })
+            .delegate('.save-single.button', 'click', function (e) {
             e.preventDefault();
             $(e.target).addClass('loading');
             if (Trip.Id != '') {

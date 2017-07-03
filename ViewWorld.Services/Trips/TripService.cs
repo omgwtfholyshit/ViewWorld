@@ -145,7 +145,7 @@ namespace ViewWorld.Services.Trips
                 }
                 else
                 {
-                    filteredTrips = result.Entities;
+                    filteredTrips = result.Entities.Where(e => e.IsVisible && !e.IsDeleted);
                     if (!string.IsNullOrWhiteSpace(model.Region))
                         filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
                     if (model.Days > 0)
@@ -165,7 +165,7 @@ namespace ViewWorld.Services.Trips
         public async Task<GetManyResult<TripArrangement>> RetrieveTripArrangementByFilter(FinderViewModels model)
         {
             var builder = Builders<TripArrangement>.Filter;
-            FilterDefinition<TripArrangement> filter = builder.Where(t => !t.IsDeleted && !t.IsVisible);
+            FilterDefinition<TripArrangement> filter = builder.Where(t => !t.IsDeleted && t.IsVisible);
             //if(!string.IsNullOrWhiteSpace(model.DepartureCity))
             //    filter = builder.And(filter, builder.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity)));
             if (!string.IsNullOrWhiteSpace(model.Region))
@@ -337,6 +337,8 @@ namespace ViewWorld.Services.Trips
                             file.SaveAs(filePath);
                             photoInfo.FileLocation = PathHelper.absolutePathtoVirtualPath(filePath);
                             tripResult.Entity.CommonInfo.Photos.Add(photoInfo);
+                            if (tripResult.Entity.CommonInfo.FrontCover == null)
+                                tripResult.Entity.CommonInfo.FrontCover = photoInfo;
                             await UpdateEntity(tripResult.Entity);
                             //cacheManager.Update("Trips", "Front", r => UpdateCachedResult(r, tripResult.Entity));
                         }
@@ -372,17 +374,28 @@ namespace ViewWorld.Services.Trips
                 var photoInfo = result.Entity.CommonInfo.Photos.FirstOrDefault(p => p.Id == photoId);
                 if (photoInfo != null)
                 {
-                    string photoPath = PathHelper.MapPath(photoInfo.FileLocation);
-                    if (File.Exists(photoPath))
+                    if(photoInfo.Id != result.Entity.CommonInfo.FrontCover.Id)
                     {
-                        File.Delete(photoPath);
+                        string photoPath = PathHelper.MapPath(photoInfo.FileLocation);
+                        if (File.Exists(photoPath))
+                        {
+                            File.Delete(photoPath);
+                        }
+                        result.Entity.CommonInfo.Photos.Remove(photoInfo);
+                        await UpdateEntity(result.Entity);
+                        outcome.Success = true;
+                        outcome.ErrorCode = 200;
                     }
-                    result.Entity.CommonInfo.Photos.Remove(photoInfo);
-                    await UpdateEntity(result.Entity);
-                    outcome.Success = true;
-                    outcome.ErrorCode = 200;
+                    else
+                    {
+                        outcome.Message = "封面图不能删除";
+                    }
+
                 }
-                outcome.Message = "找不到对应图片";
+                else
+                {
+                    outcome.Message = "找不到对应图片";
+                }
             }
             else
             {
@@ -390,7 +403,24 @@ namespace ViewWorld.Services.Trips
             }
             return outcome;
         }
-
+        public async Task<Result> DisplayTripOnFrontPage(string tripId)
+        {
+            var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            if (result.Success)
+            {
+                result.Entity.DisplayOnFrontPage = !result.Entity.DisplayOnFrontPage;
+                await UpdateEntity(result.Entity);
+                if (result.Entity.DisplayOnFrontPage)
+                {
+                    result.Message = "首页显示";
+                }
+                else
+                {
+                    result.Message = "首页隐藏";
+                }
+            }
+            return result;
+        }
         public async Task<Result> ToggleTripArrangement(string tripId)
         {
             var result = await Repo.GetOneAsync<TripArrangement>(tripId);
@@ -404,6 +434,26 @@ namespace ViewWorld.Services.Trips
                 }else
                 {
                     result.Message = "发布线路";
+                }
+            }
+            return result;
+        }
+        public async Task<Result> SetFrontCover(string tripId, string photoId)
+        {
+            var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            if (result.Success)
+            {
+                var photo = result.Entity.CommonInfo.Photos.SingleOrDefault(p => p.Id == photoId);
+                if (photo != null)
+                {
+                    result.Entity.CommonInfo.FrontCover = photo;
+                    await UpdateEntity(result.Entity);
+                }
+                else
+                {
+                    result.Success = false;
+                    result.Message = "找不到该图片";
+                    result.ErrorCode = 300;
                 }
             }
             return result;
@@ -497,5 +547,7 @@ namespace ViewWorld.Services.Trips
             }
             return finalResult + finalPrice.ToString();
         }
+
+        
     }
 }
