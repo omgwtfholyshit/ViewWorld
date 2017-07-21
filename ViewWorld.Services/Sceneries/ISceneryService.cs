@@ -22,6 +22,7 @@ namespace ViewWorld.Services.Sceneries
         Task<Result> DeletePhotoByFileName(string sceneryId, string fileName);
         Task<List<string>> ListPhotos(string id);
         Task<GetOneResult<Scenery>> RetrieveEntitiesById(GetListResult<Scenery> cachedData, string id);
+        Task<GetOneResult<Scenery>> RetrieveEntitiesById(string id);
         Task<GetListResult<Scenery>> RetrieveEntitiesByKeyword(GetListResult<Scenery> cachedData, string keyword);
     }
 }

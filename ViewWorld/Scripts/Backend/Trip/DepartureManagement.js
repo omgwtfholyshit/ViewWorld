@@ -71,7 +71,7 @@
                 method: 'post',
                 data: {
                     pointId: $this.closest('tr').attr('id'),
-                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"').val()
+                    __RequestVerificationToken: token
                 },
                 success: function (response) {
                     if (response.Success) {

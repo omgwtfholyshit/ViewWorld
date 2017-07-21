@@ -56,6 +56,20 @@
         }
 
     };
+    var loginHelper = {
+        isLoggedIn: !($('.nav ul.nav-list>.nav-item').text().indexOf('登录') > -1),
+        isValidEmail: function isValidEmail(email) {
+            return (/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email)
+            );
+        },
+        isValidMobile: function isValidMobile(mobileNumber) {
+            return (/^0?(13|14|15|17|18)[0-9]{9}$/.test(mobileNumber)
+            );
+        },
+        init: function init() {
+            window.loginHelper = this;
+        }
+    };
     function tip(selector, title, content, type, dismiss) {
         //type: Warning,Info,Positive,Negative
         var id = Math.round(Math.random() * 10000);
@@ -88,14 +102,6 @@
         if (typeof fileref != "undefined") {
             document.getElementsByTagName("head")[0].appendChild(fileref);
         }
-    }
-    function checkEmail(email) {
-        return (/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email)
-        );
-    }
-    function checkMobile(mobile) {
-        return (/^0?(13|14|15|17|18)[0-9]{9}$/.test(mobile)
-        );
     }
     function validator($form, $inputs) {
         var error = false;
@@ -213,10 +219,11 @@
         return "";
     }
 
-    function setCookie(c_name, value, expiredays) {
+    function setCookie(c_name, value, expireHours) {
         var exdate = new Date();
-        exdate.setDate(exdate.getDate() + expiredays);
-        document.cookie = c_name + "=" + escape(value) + (expiredays == null ? "" : ";expires=" + exdate.toGMTString());
+        exdate.setHours(exdate.getHours + expireHours);
+        //exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) + (expireHours == null ? "" : ";expires=" + exdate.toGMTString());
     }
     function bindEvents() {
         String.prototype.hashCode = function () {
@@ -230,6 +237,9 @@
                 hash |= 0; // Convert to 32bit integer
             }
             return hash;
+        };
+        String.prototype.replaceAll = function (s1, s2) {
+            return this.replace(new RegExp(s1, "gm"), s2);
         };
         Date.prototype.toSimpleDateString = function () {
             var _this = this;
@@ -251,11 +261,12 @@
             $(this).closest('.message').transition('fade');
         });
         broswer.init();
+        loginHelper.init();
     }
     $.extend({
-        tip: tip, checkEmail: checkEmail, checkMobile: checkMobile,
+        tip: tip, uuid: uuid, ConvertJsonToDate: ConvertJsonToDate, setCookie: setCookie, getCookie: getCookie,
         getQueryString: getQueryString, getQueryStringByName: getQueryStringByName, getQueryStringByIndex: getQueryStringByIndex,
-        htmlEncode: htmlEncode, htmlDecode: htmlDecode, uuid: uuid, ConvertJsonToDate: ConvertJsonToDate, setCookie: setCookie, getCookie: getCookie
+        htmlEncode: htmlEncode, htmlDecode: htmlDecode
     });
     bindEvents();
 })(window, document, jQuery);

@@ -1,6 +1,14 @@
 ﻿$(function () {
     var $table = $('#dataTable tbody'), $modalCatMenu = $('.scenery-editor .dropdown .menu'), $modalCatDropDown = $('.scenery-editor .dropdown'), $sceneryPhotos = $('#photoList'),
-        globalVar = { Id: "", fileUpload: "" };
+        globalVar = {
+            Id: "", fileUpload: "", ParentSceneryId: "",
+            reset: function () {
+                var _this = this;
+                this.Id = "";
+                this.ParentSceneryId = "";
+            }
+        };
+    var editor = UE.getEditor('descEditor')
     var api = {
         modalCategory: '/Trip/ListRegionsAPI?displaySubRegions=true',
         tablePartial: '/Trip/_PartialSceneryTable',
@@ -8,6 +16,8 @@
         deleteScenery: '/Trip/DeleteScenery',
         changeScenery: '/Trip/UpdateScenery',
         photos: '/Trip/ListSceneryPhotos',
+        deletePhotos: '/Trip/DeleteSceneryPhotoByFileName',
+        getSceneryDesc:'/Trip/GetSceneryDescription'
     }
     function BindEvents() {
         $('#addScenery').on('click', function () {
@@ -15,7 +25,10 @@
             if ($modal.hasClass('modifying')) {
                 $modal.removeClass('modifying');
                 $(".scenery-editor .ui.form")[0].reset();
-            }
+                globalVar.reset();
+                $sceneryPhotos.html("");
+                editor.setContent("");
+            } 
             $('.scenery-editor .ui.form .checkbox').checkbox('check');
             $modal.modal('show');
         })
@@ -38,19 +51,22 @@
             var modal = $('.scenery-editor.confirm.modal'),$dataSource=$(e.target).closest('tr');
             modal.find('.content span').html($dataSource.data('name'));
             modal.modal('show');
-        }).delegate('button.modify', 'click', function (e) {
-            
+        })
+        .delegate('button.modify', 'click', function (e) {
             var $dataSource = $(e.target).closest('tr'), $form = $(".scenery-editor .ui.form");
             globalVar.Id = $dataSource.data('id');
             var uploadUrl = '/Trip/UploadSceneryPhotos?sceneryId=' + globalVar.Id;
             $('#fileUpload').fileupload({ url: uploadUrl });
             InitFileUpload();
-            LoadSceneryPhtotos();
+            LoadSceneryPhotos();
             FillForm($dataSource, $form);
             $('.scenery-editor.add').addClass('modifying').modal('show');
-        }).delegate('.sceneryPhoto add-photo', 'click', function () {
-
-        })
+            })
+        $sceneryPhotos
+            .delegate('.sceneryPhoto .delete.label', 'click', function (e) {
+                var photoName = $(e.target).parents('li').data('photoname');
+                DeleteSceneryPhoto(photoName);
+            })
     }
     function InitFileUpload() {
         $('#fileUpload').fileupload({
@@ -79,6 +95,7 @@
                         $('<p/>').text(file.name).appendTo(data.context);
                     }
                 });
+                LoadSceneryPhotos();
                 //data.context.text('Upload finished.');
             },
             progress: function (e, data) {
@@ -96,7 +113,14 @@
                 );
             },
 
-        }).bind('fileuploadadd', function (e, data) { console.log(data) });
+        }).bind('fileuploadadd', function (e, data) {
+            if (globalVar.Id == "") {
+                $.tip(".message-container", "请先保存", "必须保存完后才能上传图片！", "warning", 4);
+            } else {
+                data.submit();
+            }
+            
+        });
     }
     function BuildTable(keyword) {
         var loadingHtml = '<tr class="center aligned"><td colspan="9" class="ui loading segment" height="150px"></td></tr>';
@@ -128,14 +152,17 @@
                 url: api.modalCategory,
                 saveRemoteData: false,
             },
+            onChange: function (value, text, $choice) {
+                globalVar.ParentSceneryId = value;
+            }
         })
     }
-    function LoadSceneryPhtotos() {
+    function LoadSceneryPhotos() {
         $.ajax({
             url: api.photos,
             method: 'get',
             beforeSend: function () {
-                console.log(globalVar.Id);
+               // console.log(globalVar.Id);
             },
             data: {
                 sceneryId: globalVar.Id,
@@ -146,16 +173,41 @@
                 if (data.status == 200) {
                     if (data.data.length > 0) {
                         $.each(data.data, function (index, element) {
-                            html += '<li class="sceneryPhoto" style="background:url(' + element + ')no-repeat;background-position: center;background-size: contain;"></li>';
+                            html += '<li class="sceneryPhoto" data-photoName="' + element.split('/')[4] +'" style="background:url(' + element + ')no-repeat;background-position: center;background-size: cover;"><a class="ui red right corner delete label"><i class="trash outline icon" ></i ></a ></li>';
                         })
                     }
                 }
                // html += '<li class="sceneryPhoto add-photo" style="background:url(/Images/DefaultImages/add.png) no-repeat;background-position: center;background-size: contain;"></li>';
-                $sceneryPhotos.append(html);
+                $sceneryPhotos.html(html);
                 $('.scenery-editor.add').modal('refresh');
             },
             error: function (data) {
                 console.log(data);
+            }
+        })
+    }
+    function DeleteSceneryPhoto(photoName) {
+        $.ajax({
+            url: api.deletePhotos,
+            method: 'post',
+            beforeSend: function () {
+                console.log(globalVar.Id);
+            },
+            data: {
+                sceneryId: globalVar.Id,
+                fileName: photoName,
+                __RequestVerificationToken: $('.scenery-editor .ui.form').find('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                console.log(data)
+                if (data.Success) {
+                    LoadSceneryPhotos();
+                } else {
+                    $.tip(".message-container", "删除图片失败", data.Message, "negative", 4);
+                }
+            },
+            error: function (data) {
+                $.tip(".message-container", "服务器没有响应", "服务器连接超时，请稍后再试", "negative", 4);
             }
         })
     }
@@ -189,7 +241,14 @@
 
         })
     }
-    function FillForm($dataSource,$form) {
+    function FillForm($dataSource, $form) {
+        $.get(api.getSceneryDesc, { sceneryId: globalVar.Id }).done(function (data) {
+            if (data.status == 200) {
+                editor.ready(function () { setTimeout(function () { editor.setContent($.htmlDecode(data.data));},500) })
+            }
+        }).fail(function () {
+            $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4);
+            })
         $form.find('input[name="Name"]').val($dataSource.data('name'));
         $form.find('input[name="SortOrder"]').val($dataSource.data('sort'));
         $form.find('input[name="EnglishName"]').val($dataSource.data('englishname'));
@@ -199,10 +258,13 @@
         } else {
             $form.find('.checkbox').checkbox('uncheck');
         }
-        if (typeof $dataSource.data('parentname') == "undefined" || $dataSource.data('parentname') == "-1") {
-            $modalCatDropDown.find('input').click().after(function () { $modalCatDropDown.dropdown("set selected", "无") })
+        globalVar.ParentSceneryId = $dataSource.data('regionid');
+        if (typeof globalVar.ParentSceneryId == "undefined" || globalVar.ParentSceneryId == "-1") {
+            $modalCatDropDown.find('input').click();
+            setTimeout(function () { $modalCatDropDown.dropdown("set selected", "无") },200)
         } else {
-            $modalCatDropDown.find('input').click().after(function () { $modalCatDropDown.dropdown("set selected", $dataSource.data('parentname')) })
+            $modalCatDropDown.find('input').click();
+            setTimeout(function () { $modalCatDropDown.dropdown("set selected", globalVar.ParentSceneryId) }, 200)
         }
     }
     function SubmitForm($form) {
@@ -216,35 +278,33 @@
                 model[$input.data('db-key')] = $input.val().trim();
             }
         });
+        model.Description = $.htmlEncode(editor.getContent());
         if (!$button.hasClass('loading')) {
             if ($('.scenery-editor.add').hasClass('modifying')) {
-                //model['Id'] = globalVar.Id
-                //$.ajax({
-                //    url: api.changeScenery,
-                //    method: 'post',
-                //    beforeSend: function () {
-                //        $button.addClass('loading');
-                //    },
-                //    data: {
-                //        model: model,
-                //        prevParentId: globalVar.ParentSceneryId,
-                //        __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
-                //    },
-                //    success: function (data) {
-                //        if (data.Success) {
-                //            $form[0].reset();
-                //            $button.removeClass('loading');
-                //            $.tip(".message-container", "操作成功", "分类已更新成功", "positive", 4);
-                //            BuildTable();
-                //        } else {
-                //            $button.removeClass('loading');
-                //            $.tip(".message-container", "保存失败", data.Message, "negative", 4);
-                //            return false;
-                //        }
-
-                //    },
-                //    error: function (data) { $button.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
-                //})
+                model['Id'] = globalVar.Id
+                $.ajax({
+                    url: api.changeScenery,
+                    method: 'post',
+                    beforeSend: function () {
+                        $button.addClass('loading');
+                    },
+                    data: {
+                        model: model,
+                        prevParentId: globalVar.ParentSceneryId,
+                        __RequestVerificationToken: $form.find('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (data) {
+                        if (data.Success) {
+                            $.tip(".message-container", "操作成功", "分类已更新成功", "positive", 4);
+                            BuildTable();
+                        } else {
+                            $.tip(".message-container", "保存失败", data.Message, "negative", 4);
+                            return false;
+                        }
+                        $button.removeClass('loading');
+                    },
+                    error: function (data) { $button.removeClass('loading'); $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4); }
+                })
             } else {
                 $.ajax({
                     url: api.addScenery,
@@ -281,7 +341,6 @@
         BuildTable();
         BindEvents();
         LoadModalCategory();
-        
     }
     InitPage();
 })

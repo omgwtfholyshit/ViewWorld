@@ -313,6 +313,10 @@ body {
     .region-editor .form-container #photoListContainer #photoList li span:hover i, .scenery-editor .form-container #photoListContainer #photoList li span:hover i, #commonInfo #photoListContainer #photoList li span:hover i {
       transform: scale(1.5);
       transition: all ease 0.4s; }
+  .region-editor .form-container #photoListContainer #photoList li .corner.label, .scenery-editor .form-container #photoListContainer #photoList li .corner.label, #commonInfo #photoListContainer #photoList li .corner.label {
+    cursor: pointer; }
+    .region-editor .form-container #photoListContainer #photoList li .corner.label i, .scenery-editor .form-container #photoListContainer #photoList li .corner.label i, #commonInfo #photoListContainer #photoList li .corner.label i {
+      cursor: pointer; }
   .region-editor .form-container #photoListContainer #fileUpload, .scenery-editor .form-container #photoListContainer #fileUpload, #commonInfo #photoListContainer #fileUpload {
     width: 100%;
     height: 100%;

@@ -201,7 +201,7 @@ namespace ViewWorld.Controllers.Trip
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> UpdateScenery([Bind(Include = "Id,Name,EnglishName,Coordinate,Initial,Address,RegionId,ExtraCost")] Scenery model)
+        public async Task<JsonResult> UpdateScenery([Bind(Include = "Id,Name,EnglishName,Coordinate,Initial,Address,RegionId,ExtraCost,Description")] Scenery model)
         {
             if (ModelState.IsValid)
             {
@@ -216,6 +216,7 @@ namespace ViewWorld.Controllers.Trip
             }
             return ErrorJson("Model Invalid");
         }
+        [HttpGet]
         public async Task<JsonResult> ListSceneriesAPI()
         {
             GetListResult<Scenery> result;
@@ -239,13 +240,23 @@ namespace ViewWorld.Controllers.Trip
             return ErrorJson("服务器内部错误，请稍后再试");
         }
         [HttpGet]
+        public async Task<JsonResult> GetSceneryDescription(string sceneryId)
+        {
+            var result = await sceneryService.RetrieveEntitiesById(sceneryId);
+            if (result.Success)
+            {
+                return Json(result.Entity.Description);
+            }
+            return ErrorJson(result.Message);
+        }
+        [HttpGet]
         public async Task<JsonResult> ListSceneryPhotos(string sceneryId)
         {
             var result = await sceneryService.ListPhotos(sceneryId);
             return Json(result);
 
         }
-        [HttpDelete]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> DeleteSceneryPhotoByFileName(string sceneryId,string fileName)
         {
@@ -272,9 +283,13 @@ namespace ViewWorld.Controllers.Trip
                 result = await sceneryService.RetrieveEntitiesByKeyword("");
                 cacheManager.Add(cachedMethods[1], result);
             }
-            List<Scenery> sceneries = (await sceneryService.RetrieveEntitiesByKeyword(result, keyword)).Entities;
-
-            return PartialView("~/Views/PartialViews/_PartialSceneryTable.cshtml", sceneries.OrderByDescending(s=>s.Popularity));
+            var searchResult = await sceneryService.RetrieveEntitiesByKeyword(result, keyword);
+            if (searchResult.Success)
+            {
+                List<Scenery> sceneries = searchResult.Entities;
+                return PartialView("~/Views/PartialViews/_PartialSceneryTable.cshtml", sceneries.OrderByDescending(s => s.LastUpdateAt).ThenByDescending(s => s.Popularity));
+            }
+            return null;
         }
         #endregion
         #region 城市管理
@@ -367,7 +382,17 @@ namespace ViewWorld.Controllers.Trip
 
         #endregion
         #region 行程管理
-
+        [HttpGet]
+        public JsonResult ListTripTypeAPI()
+        {
+            var list = tripService.ListTripType();
+            var data = new
+            {
+                success = true,
+                results = list
+            };
+            return OriginJson(data);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> AddTripArrangement(TripArrangement entity)

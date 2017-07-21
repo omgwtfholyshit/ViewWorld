@@ -137,9 +137,9 @@
             _this.getVerificationBtn.click(function (e) {
                 e.preventDefault();
                 var username = _this.registerForm.find('input[name=UserName]').val();
-                if ($.checkEmail(username)) {
+                if (loginHelper.isValidEmail(username)) {
                     requestUrl = _this.api.getEmailCode;
-                } else if ($.checkMobile(username)) {
+                } else if (loginHelper.isValidMobile(username)) {
                     requestUrl = _this.api.getMobileCode;
                 } else {
                     _this.registerForm.find('.error.message').show();

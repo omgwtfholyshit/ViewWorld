@@ -53,7 +53,24 @@ namespace ViewWorld.Services.Sceneries
                 
             return await Repo.DeleteOneAsync<Scenery>(id);
         }
-
+        public async Task<GetOneResult<Scenery>> RetrieveEntitiesById(string id)
+        {
+            GetOneResult<Scenery> result = new GetOneResult<Scenery>() { Entity = null, ErrorCode = 300, Message = "", Success = false };
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                result.Message = "id不能为空";
+                return result;
+            }
+            else
+            {
+                result = await Repo.GetOneAsync<Scenery>(id);
+                if (result.Success)
+                {
+                    result.Entity.Photos = await ListPhotos(id);
+                }
+            }
+            return result;
+        }
         public async Task<GetOneResult<Scenery>> RetrieveEntitiesById(GetListResult<Scenery> cachedData, string id)
         {
             GetOneResult<Scenery> result = new GetOneResult<Scenery>() { Entity = null, ErrorCode = 300, Message = "", Success = false };
@@ -121,8 +138,11 @@ namespace ViewWorld.Services.Sceneries
                     filteredResult.Entities = cachedData.Entities.FindAll(e => e.Initial == keyword);
                 }else
                 {
-                    filteredResult.Entities = cachedData.Entities.FindAll(obj => obj.Name.Contains(keyword) || obj.EnglishName.Contains(keyword) ||
-                    obj.Address.ToUpper().Contains(keyword) || obj.Publisher.ToUpper().Contains(keyword) || obj.Modificator.ToUpper().Contains(keyword));
+                    var matched = cachedData.Entities.Where(obj => obj.Name.Contains(keyword) || obj.EnglishName.Contains(keyword) || obj.Publisher.ToUpper().Contains(keyword) 
+                    || obj.Modificator.ToUpper().Contains(keyword));
+
+                    if (matched != null)
+                        filteredResult.Entities = matched.ToList();
                 }
 
                 return await Task.FromResult(filteredResult);
@@ -143,6 +163,7 @@ namespace ViewWorld.Services.Sceneries
                 prevEntity.Entity.RegionId = Entity.RegionId;
                 prevEntity.Entity.LastUpdateAt = DateTime.Now;
                 prevEntity.Entity.ExtraCost = Entity.ExtraCost;
+                prevEntity.Entity.Description = Entity.Description;
                 return await Repo.ReplaceOneAsync(Entity.Id, prevEntity.Entity);
             }
             return new Result() { ErrorCode = 300, Message = "找不到该数据", Success = false };
@@ -194,7 +215,6 @@ namespace ViewWorld.Services.Sceneries
             result.AddRange(Directory.EnumerateFiles(photoPath).ToVirtualPaths());
             return Task.FromResult(result);
         }
-
         public Task<Result> DeletePhotoByFileName(string sceneryId, string fileName)
         {
             var result = new Result() { ErrorCode = 300, Message = "", Success = false };
@@ -211,5 +231,7 @@ namespace ViewWorld.Services.Sceneries
             }
             return Task.FromResult(result);
         }
+
+        
     }
 }

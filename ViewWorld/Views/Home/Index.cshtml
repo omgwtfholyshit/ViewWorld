@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ViewWorld.ViewModels.HomeIndexViewModel
+@{
     ViewBag.Title = "首页";
 }
 <link href="~/Lib/Swiper/css/swiper.min.css" rel="stylesheet" />
@@ -8,11 +9,7 @@
 </style>
 <div class="swiper-container main">
     <div class="swiper-wrapper homepage">
-        @{
-            var rand = (new Random()).Next(7, 12);
-            var url = "/Images/Background/background_" + rand + ".jpg";
-        }
-        <div class="swiper-slide background" style="background-image:url(@url)" id="background">
+        <div class="swiper-slide background" style="background-image:url(@Model.BackgroundUrl)" id="background">
             <div class="ui container">
                 <div class="content-container">
                     <div class="logo-container">
@@ -53,142 +50,45 @@
                 </div>
                 <div class="swiper-container swiper-container-h" data-swiper-parallax="-1000">
                     <div class="swiper-wrapper">
-                        
-                        <div class="swiper-slide">
-                            <div class="ui fluid card">
-                                <div class="image">
-                                    <img src="~/Images/Background/background_3.jpg" />
-                                </div>
-                                <div class="content">
-                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    <div class="left floated sub-title">
-                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    </div>
+                        @{
+                            if (Model.RecommendationList.Any())
+                            {
+                                foreach (var trip in Model.RecommendationList)
+                                {
+                                    if (trip.CommonInfo.FrontCover != null)
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="ui fluid card">
+                                                <div class="image">
+                                                    <img src="@trip.CommonInfo.FrontCover.FileLocation" />
+                                                </div>
+                                                <div class="content">
+                                                    <span class="header">@trip.CommonInfo.Name</span>
+                                                    <div class="left floated sub-title">
+                                                        <span class="date">@trip.Popularity 人已出行</span>
+                                                    </div>
 
-                                    <div class="right floated price-area">
-                                        <span class="teal our-price">现价 $599</span>
-                                        <span class="retail-price">原价￥866</span>
-                                    </div>
-                                </div>
-                                <div class="extra content">
-                                    <span class="left floated">
-                                        美国西部
-                                    </span>
-                                    <span class="right floated favorite">
-                                        <i class="pointing right icon"></i>
-                                        查看详情
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="ui fluid card">
-                                <div class="image">
-                                    <img src="~/Images/Background/background_2.jpg" />
-                                </div>
-                                <div class="content">
-                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    <div class="left floated sub-title">
-                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    </div>
+                                                    <div class="right floated price-area">
+                                                        <span class="teal our-price">现价 @trip.CommonInfo.ShortPriceType@trip.CommonInfo.LowestPrice</span>
+                                                        <span class="retail-price">原价 @trip.CommonInfo.ShortPriceType@Math.Round(trip.CommonInfo.LowestPrice*(decimal)1.2)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="extra content">
+                                                    <span class="left floated">
+                                                        @trip.CommonInfo.RegionName
+                                                    </span>
+                                                    <span class="right floated favorite" data-productid="@trip.ProductId">
+                                                        <i class="pointing right icon"></i>
+                                                        查看详情
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
 
-                                    <div class="right floated price-area">
-                                        <span class="teal our-price">现价 $599</span>
-                                        <span class="retail-price">原价￥866</span>
-                                    </div>
-                                </div>
-                                <div class="extra content">
-                                    <span class="left floated">
-                                        美国西部
-                                    </span>
-                                    <span class="right floated favorite">
-                                        <i class="pointing right icon"></i>
-                                        查看详情
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="ui fluid card">
-                                <div class="image">
-                                    <img src="~/Images/Background/background_4.jpg" />
-                                </div>
-                                <div class="content">
-                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    <div class="left floated sub-title">
-                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    </div>
-
-                                    <div class="right floated price-area">
-                                        <span class="teal our-price">现价 $599</span>
-                                        <span class="retail-price">原价￥866</span>
-                                    </div>
-                                </div>
-                                <div class="extra content">
-                                    <span class="left floated">
-                                        美国西部
-                                    </span>
-                                    <span class="right floated favorite">
-                                        <i class="pointing right icon"></i>
-                                        查看详情
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="ui fluid card">
-                                <div class="image">
-                                    <img src="~/Images/Background/background_5.jpg" />
-                                </div>
-                                <div class="content">
-                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    <div class="left floated sub-title">
-                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    </div>
-
-                                    <div class="right floated price-area">
-                                        <span class="teal our-price">现价 $599</span>
-                                        <span class="retail-price">原价￥866</span>
-                                    </div>
-                                </div>
-                                <div class="extra content">
-                                    <span class="left floated">
-                                        美国西部
-                                    </span>
-                                    <span class="right floated favorite">
-                                        <i class="pointing right icon"></i>
-                                        查看详情
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="ui fluid card">
-                                <div class="image">
-                                    <img src="~/Images/Background/background_1.jpg" />
-                                </div>
-                                <div class="content">
-                                    <span class="header">秋日森林 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    <div class="left floated sub-title">
-                                        <span class="date">美西印象 拉斯维加斯、大峡谷、洛杉矶7天6夜豪华之旅</span>
-                                    </div>
-
-                                    <div class="right floated price-area">
-                                        <span class="teal our-price">现价 $599</span>
-                                        <span class="retail-price">原价￥866</span>
-                                    </div>
-                                </div>
-                                <div class="extra content">
-                                    <span class="left floated">
-                                        美国西部
-                                    </span>
-                                    <span class="right floated favorite">
-                                        <i class="pointing right icon"></i>
-                                        查看详情
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                                }
+                            }
+                        }
                     </div>
                 </div>
             </div>

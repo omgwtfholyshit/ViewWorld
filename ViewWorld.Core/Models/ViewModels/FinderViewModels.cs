@@ -13,6 +13,10 @@ namespace ViewWorld.Core.Models.ViewModels
         public string ArrivalCity { get; set; }
         public int Days { get; set; }
         public string Theme { get; set; }
+        /// <summary>
+        /// True时只显示该属性为true时的行程，false显示所有行程
+        /// </summary>
+        public bool DisplayOnFrontPageTripsOnly { get; set; } = false;
 
     }
     public class PeoplePerRoomViewModel

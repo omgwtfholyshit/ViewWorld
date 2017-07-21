@@ -9,10 +9,11 @@
     body{background-color:#f2f2f2;}
 </style>
 <div class="trip-detail">
+    @Html.AntiForgeryToken()
     <div class="ui container">
         <section class="intro-section">
             <div class="slider">
-                <div class="swiper-container gallery-top">
+                <div class="swiper-container gallery-top main-slider">
                     <div class="swiper-wrapper">
                         @{
                             if (Model.Trip.CommonInfo.Photos.Count() > 0)
@@ -33,7 +34,7 @@
                     <div class="swiper-button-next swiper-button-white"></div>
                     <div class="swiper-button-prev swiper-button-white"></div>
                 </div>
-                <div class="swiper-container gallery-thumbs">
+                <div class="swiper-container gallery-thumbs main-slider">
                     <div class="swiper-wrapper">
                         @{
                             if (Model.Trip.CommonInfo.Photos.Count() > 0)
@@ -145,28 +146,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="ui labeled orange icon button"><i class="payment icon"></i>立即购买</div>
-                        <div class="ui labeled teal icon button"><i class="bookmark icon"></i>收藏</div>
+                        <div class="ui labeled orange icon button" id="reserve"><i class="payment icon"></i>立即预订</div>
+                        <div class="ui labeled teal icon button" id="collect"><i class="bookmark icon"></i>收藏</div>
                     </form>
                 </div>
             </div>
         </section>
         <section class="detail-section">
             <div class="ui divider" style="margin:0"></div>
-            <div class="ui pointing menu navigator">
-                <a class="active item">
+            <div class="ui menu navigator" id="detailNav">
+                <a class="active item" href="javascript:void(0)">
                     线路特色
                 </a>
-                <a class="item">
-                    产品详情
+                <a class="item" href="javascript:void(0)">
+                    参考行程
                 </a>
-                <a class="item">
+                <a class="item" href="javascript:void(0)">
                     费用说明
                 </a>
-                <a class="item">
+                <a class="item" href="javascript:void(0)">
                     订购须知
                 </a>
-                <a class="item">
+                <a class="item" href="javascript:void(0)">
                     注意事项
                 </a>
                 <div class="right menu">
@@ -178,52 +179,227 @@
                     </a>
                 </div>
             </div>
-            <div class="ui segment product-detail-container">
-                <div class="product-feature">
+            <div class="ui segment product-detail-container" id="detailContainer">
+                <div class="product-feature" id="productFeature">
                     <h4 class="ui horizontal divider header">
                         <i class="trophy icon"></i>
-                        线路特色
+                        线路简介
                     </h4>
                     <div class="data-container">
-                        
+                        <h2 class="ui small header">
+                            <div class="content">
+                                线路特色
+                            </div>
+                        </h2>
                         @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.ProductInfo.Feature))
+                        @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.ProductInfo.Intro))
+
                     </div>
-                    
+
                 </div>
-                <div class="product-detail">
+                <div class="product-detail" id="productDetail">
                     <h4 class="ui horizontal divider header">
                         <i class="list layout icon"></i>
-                        产品详情
+                        参考行程
                     </h4>
                     <div class="data-container">
+                        @{
+                            if (Model.Trip.Schedules.Any())
+                            {
+                                foreach (var schedule in Model.Trip.Schedules)
+                                {
+                                    <h2 class="ui small header">
+                                        <div class="content">
+                                            第 @schedule.Day 天 : @schedule.Name
+                                        </div>
+                                    </h2>
+                                        <div>
+                                            @{
+                                                if (schedule.Details.Any())
+                                                {
+                                                    <p>路过景点：</p>
+                                                    foreach (var item in schedule.Details)
+                                                    {
+                                                        var sceneries = item.Sceneries.Split('|');
+                                                        foreach (var scene in sceneries)
+                                                        {
+                                                            if (!string.IsNullOrWhiteSpace(scene))
+                                                            {
+                                                                var data = @scene.Split(',');
+                                                                <a class="ui teal tag label scenery" data-id="@data[0]" href="javascript:void(0);">@data[1]</a>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                                    }
+                                                }
 
-                        @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.ProductInfo.Intro))
+                        }
+
                     </div>
                 </div>
-                <div class="price-detail">
+                <div class="price-detail" id="priceDetail">
                     <h4 class="ui horizontal divider header">
                         <i class="calculator icon"></i>
                         费用说明
                     </h4>
                     <div class="data-container">
+                        @{
+                            if (!string.IsNullOrWhiteSpace(Model.Trip.CommonInfo.Introduction))
+                            {
+                                <h2 class="ui small header">
+                                    <div class="content">
+                                        费用介绍
+                                    </div>
+                                </h2>
+                                    @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.CommonInfo.Introduction))
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Trip.CommonInfo.Include))
+                            {
+                                <h2 class="ui small header">
+                                    <div class="content">
+                                        包含费用
+                                    </div>
+                                </h2>
+                                    @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.CommonInfo.Include))
+                            }
+                            if (!string.IsNullOrWhiteSpace(Model.Trip.CommonInfo.Exclude))
+                            {
+                                <h2 class="ui small header">
+                                    <div class="content">
+                                        不包含费用
+                                    </div>
+                                </h2>
+                                    @MvcHtmlString.Create(Server.HtmlDecode(Model.Trip.CommonInfo.Exclude))
+                            }
+                            if (Model.Trip.CommonInfo.SelfPayActivities.Any())
+                            {
+                                <h2 class="ui small header">
+                                    <div class="content">
+                                        自费项目
+                                    </div>
+                                </h2>
+                                    <table class="ui center aligned celled table">
+                                        <thead>
+                                            <tr>
+                                                <th class="five wide">名称</th>
+                                                <th class="five wide">价格</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                foreach (var item in Model.Trip.CommonInfo.SelfPayActivities)
+                                                {
+                                                    var detail = item.Split('|');
+                                                    <tr>
+                                                        <td>@detail[0]</td>
+                                                        <td>@detail[1]</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                                }
+                        }
 
-                        
                     </div>
                 </div>
-                <div class="order-info">
+                <div class="order-info" id="orderInfo">
                     <h4 class="ui horizontal divider header">
                         <i class="info icon"></i>
                         订购须知
                     </h4>
+                    <div class="data-container">
+                        <p>
+                            <span>1.订购必须经过一定的购买流程。我们会在1－2个工作日内通过电子邮件与您进行确认。</span><br /><br />
+                            <span>2.请您尽快预订，因位价格可能在不同时间会有所不同。例如，在公众假期价格会有涨幅。</span><br /><br />
+                            <span>3.请在预订前仔细阅读 取消和退款条例 。</span><br /><br />
+                            <span>4.为了确保您的安全及旅途愉快，当地旅行团供应商会保留对行程安排进行更改的权利。</span><br /><br />
+                            <span>5.凡订购标有买二送一，买二送二的旅行团产品，赠送者如不能参团，请在参团日期前5个工作日书面告知，否则会产生大巴空座费用$168/人（由该参团的同伴支付）</span><br /><br />
+                            <span>6.此旅游产品为打包产品，自愿放弃或减少行程中的项目（如接送机，景点，酒店等）或行程天数均无费用的减免或退还。</span>
+                        </p>
+
+                    </div>
                 </div>
-                <div class="product-announcement">
+                <div class="product-announcement" id="productAnnouncement">
                     <h4 class="ui horizontal divider header">
                         <i class="warning sign icon"></i>
                         注意事项
                     </h4>
+                    <div class="data-container">
+                        <h2 class="ui small header">
+                            <div class="content">
+                                预定电子票
+                            </div>
+                        </h2>
+                        <p>
+                            <span>1.在您提交预订后会立即通过电子邮件收到一份预订收据。</span><br /><br />
+                            <span>2.在您提交预订的1－2个工作日内您会收到我们发出的确认邮件。</span><br /><br />
+                            <span>3.一旦您的预订详情得到确认或者我们确认收到您的相关个人信息，您就会通过邮箱收到您的电子票。在您的电子票上我们会逐条详尽说明您所定购旅行团的信息。还会提供地方旅游机构的联系方式，以方便您在出行或者要求再次确认信息时使用。</span><br /><br />
+                            <span>4.您只需要打印出您的电子票，并在出团当天附上您带有照片的有效身份证，出示给导游便可以了。请记住，电子票是您的购买凭证。</span><br /><br />
+                        </p>
+                        <h2 class="ui small header">
+                            <div class="content">
+                                特别事项
+                            </div>
+                        </h2>
+                        <p>
+                            <span>如遇因天气或其他无法预料的情况而导致当天您乘坐的航班延误超过45分钟的，请您自行安排前往下榻酒店，您也可以联系当地的旅行团供应商，看是否能给予您一些帮助。</span><br /><br />
+                            <span>我们强烈建议您在出发前联系航空公司和地方旅行团供应商以确认好您的航班抵达时间和接机安排事宜。</span><br /><br />
+                            <span>住宿饭店时请随时将房门扣上安全锁，以测安全；勿在灯上晾衣物；勿在床上吸烟，听到警报器响，请由紧急出口迅速离开。</span><br /><br />
+                            <span>每个酒店房间只安排两张床;三人/四人同房如需加床请自行向酒店服务台查询。</span><br /><br />
+                            <span>团体需一起活动，途中若要离队需征得导游同意以免发生意外。</span><br /><br />
+                            <span>夜间或自由活动时间若需自行外出，请告知导游或团友，并应特别注意安全。</span><br /><br />
+                            <span>行走雪地及陡峭之路请谨慎小心。</span><br /><br />
+                            <span>遵守导游所宣布的观光区、餐厅、饭店、游乐设施等各种场所的注意事项。</span><br /><br />
+                            <span>药物：胃肠药、感冒药、晕车药、私人习惯性药物。</span><br /><br />
+                            <span>圣诞节、新年、国庆日、劳动节或其他长周末假期,团费会有适当的调整, 请在订团前先确认价钱。</span><br /><br />
+                            <span>如遇特别情形, (天气,修路,罢工,封山,旅游车特殊状况) 为保障旅客权益, 本公司保留调整取消行程的最终解释权。</span><br /><br />
+                            <span>春夏两季：请您注意穿著轻便的衣物和舒适的鞋子。</span><br /><br />
+                            <span>秋冬两季：请您注意穿著厚实的衣物以保暖。</span><br /><br />
+                            <span>每位客人最多允许携带两件托运行李参团，多出的行李将收取附加费 。</span><br /><br />
+                            <span>部分酒店入住需要支付押金，请随身携带个人信用卡或现金，以便于办理酒店入住，入住时间从下午3:00时开始;退房时间为下午12:00时前，第一天自行前往酒店入住的客人，请尽量安排在当地时间下午3：00pm以后办理入住手续；提早到达酒店的客人，有可能会出现等候的现象，请谅解。</span><br /><br />
+                            <span>请出行前务必检查携带的旅行证件是否齐全和有效（如签证，护照），对于前往第三国旅游的游客请自行确认是否需要签证。我公司对旅行证件的解释只作为参考不承担任何法律责任，请您务必再于相关国使领馆确认</span>
+
+                        </p>
+
+                    </div>
                 </div>
             </div>
         </section>
+    </div>
+</div>
+<div class="ui modal" id="sceneryModal">
+    <i class="close icon"></i>
+    <div class="header">
+        景点介绍
+    </div>
+    <div class="image content">
+        <div class="slider">
+            <div class="swiper-container gallery-top modal-slider">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>
+                    <div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>
+                    <div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>
+                </div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next swiper-button-white"></div>
+                <div class="swiper-button-prev swiper-button-white"></div>
+            </div>
+
+        </div>
+
+        <div class="description" data-content="description">
+            很好很强大
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button">
+            知道啦！
+            <i class="checkmark icon"></i>
+        </div>
     </div>
 </div>
 <div class="ui modal" id="roomSelectModal">
@@ -330,9 +506,14 @@
         <div class="error-messages"></div>
     </div>
 </div>
+
 <script>
     var calendarData = '@Model.TripData';
-    var TripId = '@Model.Trip.Id';
+    var ProductInfo = {
+        ProductId: '@Model.Trip.ProductId',
+        TripId: '@Model.Trip.Id',
+        ProductName:'@Model.Trip.CommonInfo.Name'
+    }
 </script>
 <script type="text/html" id="roomTmpl">
     <tr class="room-detail fields hidden">

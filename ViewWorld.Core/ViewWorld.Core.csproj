@@ -113,6 +113,8 @@
     <Compile Include="Dal\MongoDbRepository.cs" />
     <Compile Include="Dal\MongoDbResult.cs" />
     <Compile Include="Enum\CaptchaType.cs" />
+    <Compile Include="Enum\OrderStatus.cs" />
+    <Compile Include="Enum\ProductType.cs" />
     <Compile Include="Enum\CurrencyType.cs" />
     <Compile Include="Enum\DiscountType.cs" />
     <Compile Include="Enum\SexType.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="ExtensionMethods\MongoDbResultExtensions.cs" />
     <Compile Include="Interfaces\ICRUDable.cs" />
     <Compile Include="JsonNetResult.cs" />
+    <Compile Include="Models\BusinessModels\BusinessOrder.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
     <Compile Include="Models\AvatarUploadResult.cs" />
     <Compile Include="Models\Identity\Permission.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Models\TripModels\StartingPoint.cs" />
     <Compile Include="Models\TripModels\TripArrangement.cs" />
     <Compile Include="Models\Identity\UserRole.cs" />
+    <Compile Include="Models\BusinessModels\Collection.cs" />
     <Compile Include="Models\ViewModels\FinderViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -14,5 +14,9 @@ namespace ViewWorld.Services.Users
         Task<Result> UpdateUserInfo(string Nickname, SexType Sex, DateTime DOB, string UserId);
 
         Task<object> GetUserInfo(string UserId);
+
+        Task<Result> AddToCollection(string userId,string itemId, string itemName,string memo, ProductType type);
+        Task<bool> CheckIfItemCollected(string userId, string itemId);
+        Task<Result> RemoveFromCollection(string userId, string itemId);
     }
 }

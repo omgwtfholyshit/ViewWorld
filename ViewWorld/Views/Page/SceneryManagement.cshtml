@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_backLayout.cshtml";
 }
 <link href="~/Content/jQuery.FileUpload/css/jquery.fileupload.css" rel="stylesheet" />
-
+<link href="~/Scripts/UEditor/themes/default/css/ueditor.min.css" rel="stylesheet" />
 <div class="scenery-management">
     <div class="tool-bar">
         <button class="ui basic button" id="addScenery">
@@ -119,6 +119,10 @@
                         <div id="some-image"></div>
                         <div class="clearboth"></div>
                     </div>
+                    <div class="field">
+                        <label>景点描述</label>
+                        <div id="descEditor"> </div>
+                    </div>
                     <div class="ui error message">
                     </div>
                 </form>
@@ -164,4 +168,7 @@
 <script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-validate.js"></script>
 <script src="~/Scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
 <script src="~/Scripts/jQuery.FileUpload/canvas-to-blob.min.js"></script>
+<script src="~/Scripts/UEditor/ueditor.config.js"></script>
+<script src="~/Scripts/UEditor/ueditor.all.min.js"></script>
+<script src="~/Scripts/UEditor/lang/zh-cn/zh-cn.js"></script>
 <script src="~/Scripts/Backend/Trip/SceneryManagement.js"></script>

@@ -167,7 +167,7 @@
                 _this.searchModel.Region = decodeURIComponent($.getQueryStringByName('region'));
                 _this.searchModel.keyword = decodeURIComponent($.getQueryStringByName('keyword'));
                 _this.search.find('input').val(decodeURIComponent($.getQueryStringByName('keyword')));
-                firstRequest = false;
+                
             }
             $.ajax({
                 url: _this.api.getTrips,
@@ -180,7 +180,8 @@
                     paginationVar.PageCount = result.data.PageCount;
                     paginationVar.PageIndex = result.data.PageIndex;
                     paginationVar.PageSize = result.data.PageSize;
-                    _this.buildFilter(result.data.Data);
+                    paginationVar.PageCount == 0 && firstRequest ? _this.buildFirstRequestFilter() : _this.buildFilter(result.data.Data);
+                    firstRequest = false;
                     callback && callback();
                     _this.loadImage();
                 },
@@ -198,7 +199,7 @@
             })
         },
         buildFilter: function (tripData) {
-            console.log(tripData);
+            //console.log(tripData);
             var _this = this, $filterTab = _this.filter.find('.filter-tab'), $filterContent = _this.filter.find('.filter-content'), $content = $('.results-container .items');
             var regionTags = departTags = arrivalTags = dayTags = themeTags = '<span>不限</span>';
             var departCities, arrivalCities, dayArray = new Array(), temp, className = '', cityStr = '',
@@ -208,6 +209,7 @@
             try {
                 $content.html("");
                 if (typeof tripData != 'undefined' && tripData.length > 0) {
+                    //build filter item list
                     $.each(tripData, function (index, element) {
                         regionTags.indexOf(element.CommonInfo.RegionName) > 0 ? regionTags : regionTags += '<span>' + element.CommonInfo.RegionName + '</span>';
                         departCities = getCity(element.ProductInfo.DepartingCity);
@@ -235,15 +237,21 @@
                         $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.FrontCover.FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
                         temp = cityStr = '';
                     })
+
+                    //build filter
+                    //区域
                     regionTags.split(',').length >= 5 ? className = '' : className = 'hidden';
                     _this.searchModel.Region == '' ? regionTags = regionTags.replace('>不限', ' class="active">不限') : regionTags = regionTags.replace('>' + _this.searchModel.Region, ' class="active">' + _this.searchModel.Region);
-                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Region",_this.filterLabels[0], regionTags, className), { 'append': false });
+                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Region", _this.filterLabels[0], regionTags, className), { 'append': false });
+                    //出发城市
                     departTags.length >= 5 ? className = '' : className = 'hidden';
                     _this.searchModel.DepartureCity == '' ? departTags = departTags.replace('>不限', ' class="active">不限') : departTags = departTags.replace('>' + _this.searchModel.DepartureCity, ' class="active">' + _this.searchModel.DepartureCity);
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("DepartureCity", _this.filterLabels[1], departTags, className), { 'append': true });
+                    //到达城市
                     arrivalTags.length >= 5 ? className = '' : className = 'hidden';
                     _this.searchModel.ArrivalCity == '' ? arrivalTags = arrivalTags.replace('>不限', ' class="active">不限') : arrivalTags = arrivalTags.replace('>' + _this.searchModel.ArrivalCity, ' class="active">' + _this.searchModel.ArrivalCity);
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("ArrivalCity", _this.filterLabels[2], arrivalTags, className), { 'append': true });
+                    //行程日期
                     dayArray.sort(function (a, b) { return a - b; });
                     for (var i = 0; i < dayArray.length; i++) {
                         _this.searchModel.Days == dayArray[i] ? dayTags += '<span class="active">' + dayArray[i] + '日</span>' : dayTags += '<span>' + dayArray[i] + '日</span>';
@@ -252,6 +260,7 @@
                         dayTags = dayTags.replace('>不限', ' class="active">不限');
                     dayArray.length >= 5 ? className = '' : className = 'hidden';
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Days", _this.filterLabels[3], dayTags, className), { 'append': true });
+                    //主题
                     themeTags += '<span data-theme="a">亲子游</span><span data-theme="b">自然风光</span><span data-theme="c">主题公园</span><span data-theme="d">都市名城</span><span data-theme="e">冒险之旅</span><span data-theme="f">毕业旅行</span><span data-theme="g">蜜月之旅</span><span data-theme="h">时尚购物</span><span data-theme="i">商务之旅</span><span data-theme="j">父母游</span><span data-theme="k">假期特惠</span><span data-theme="l">自由行</span><span data-theme="m">新年特惠</span><span data-theme="n">特色游</span>';
                     _this.searchModel.Theme == '' ? themeTags = themeTags.replace('>不限', ' class="active">不限') : themeTags = themeTags.replace(_this.searchModel.Theme + '"', _this.searchModel.Theme + '" class="active"');
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Theme", _this.filterLabels[4], themeTags), { 'append': true });
@@ -261,6 +270,17 @@
                 }
             } catch (ex) {
                 console.log(ex);
+            }
+        },
+        buildFirstRequestFilter: function () {
+            var _this = this, $filterContent = _this.filter.find('.filter-content'), spanTag = '', index = -1;
+            for (var property in _this.searchModel) {
+                if (index >= 0) {
+                    //console.log(property + ' | ' + _this.filterLabels[index]);
+                    _this.searchModel[property] == '' ? spanTag = '<span class="active">不限</span>' : spanTag = '<span>不限</span><span class="active">' + _this.searchModel[property] + '</span>';
+                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem(property, _this.filterLabels[index], spanTag, ''), { 'append': true });
+                }
+                index++;
             }
         },
         buildPagination:function(){

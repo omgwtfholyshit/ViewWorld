@@ -12,6 +12,7 @@
         listCitiesUrl: '/Trip/SearchCityByKeyword',
         listSceneriesUrl: '/Trip/ListSceneriesAPI',
         listStartPointsUrl: '/Trip/ListStartingPointsAPI',
+        listTypeUrl: '/Trip/ListTripTypeAPI',
         toggleTrip: '/Trip/ToggleTripArrangement',
     }, tmplOpt = { 'append': true }, token = $('input[name=__RequestVerificationToken]').val(), uploadArr = new Array(),
     introEditor = UE.getEditor('introduction'), includeEditor = UE.getEditor('include'), excludeEditor = UE.getEditor('exclude'),
@@ -22,6 +23,7 @@
         GroupId: '',//团号
         RegionId: '',
         RegionName: '',
+        TripType:'',
         Promotion: '',//优惠政策。a.特价 b.限时促销 c.热卖 d.买二送二 e.买二送一 f.推荐 g.积分优惠 h.免费接机
         Theme: '',//主题。a.亲子游 b.自然风光 c.主题公园 d.都市名城 e.冒险之旅 f.毕业旅行 g.蜜月之旅 h.时尚购物 i.商务之旅 j.父母游 k.假期特惠 l.自由行 m.新年特惠 n.特色游
         AvailableDates: '',
@@ -52,7 +54,21 @@
                     })
                 }
                 $('#regionSelection .menu').html(html);
-            }).fail(function (xhr) { $.tip(".message-container", "删除图片失败", "服务器超时，请稍后重试！", "negative", 4); });
+            }).fail(function (xhr) { $.tip(".message-container", "载入区域失败", "服务器超时，请稍后重试！", "negative", 4); });
+        },
+        LoadTypeData: function (url) {
+            $.get(url).done(function (data) {
+                var html = '';
+                if (data.success) {
+                    $.each(data.results, function (index, element) {
+                        if (element != null) {
+                            html += '<div class="item" data-value="' + element.value + '">' + element.name + '</div>'
+                        }
+                    })
+                    $('#typeSelection .menu').html(html);
+                }
+            }).fail(function (xhr) { $.tip(".message-container", "载入类型失败", "服务器超时，请稍后重试！", "negative", 4); });
+            
         },
         SetCheckBoxForJs:function(){
             var promotion = theme = availabledates = '', usepoints = false;
@@ -79,10 +95,15 @@
         },
         SetFormDataForJs: function () {
             var $inputs = $('#commonInfo').find('input').not('.search,#fileUpload,input[type=checkbox],#selfpayActivities input,input[name=__RequestVerificationToken]');
-            var $input,_this=this;
+            var $input, _this = this, key;
             $inputs.each(function (index, input) {
-                $input = $(input);
-                _this[$input.data('db-key')] = $input.val().trim();
+                $input = $(input), key = $input.data('db-key');
+                if (key == 'TripType') {
+                    _this[key] = $input.val().trim().replaceAll(',', '|');
+                } else {
+                    _this[key] = $input.val().trim();
+                }
+                
             });
             _this.RegionName = $('#regionSelection .text').text().split('----')[1];
             _this.Introduction =$.htmlEncode(introEditor.getContent());
@@ -141,6 +162,7 @@
                 $input.val(_this[$input.data('db-key')]);
             });
             $('#regionSelection').dropdown("set selected", CommonInfo.RegionId);
+            $('#typeSelection').dropdown("set selected", CommonInfo.TripType.split('|'));
             $('#currency').dropdown("set selected", CommonInfo.CurrencyType);
             introEditor.ready(function () { introEditor.setContent($.htmlDecode(_this.Introduction));})
             includeEditor.ready(function () { includeEditor.setContent($.htmlDecode(_this.Include)); })
@@ -232,16 +254,22 @@
                     }
                     dataStr = dataStr.substr(0, dataStr.length - 1);
                     _this[$input.data('db-key')] = dataStr;
+                    
+                } else if ($input.data('db-key') == 'Sceneries') {
+                    var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
+                    for (var i = 0; i < idArray.length; i++) {
+                        dataStr += idArray[i] + ',' + nameArray[i].innerText + '|';
+                    }
+                    _this[$input.data('db-key')] = dataStr;
                 } else {
                     _this[$input.data('db-key')] = $input.val().trim();
                 }
-                
             });
             _this.Feature = $.htmlEncode(pFeatureEditor.getContent());
             _this.Intro = $.htmlEncode(pIntroEditor.getContent());
         },
         SetFormDataForPage: function () {
-            var _this = this, departure = new Array(), arrival = new Array();
+            var _this = this, departure = new Array(), arrival = new Array(), sceneries = new Array();
             $('#productInfo input[name=TotalDays]').val(ProductInfo.TotalDays);
             $.each(ProductInfo.DepartingCity.split('|'), function (index, element) {
                 departure.push(element.split(',')[0]);
@@ -249,11 +277,14 @@
             $.each(ProductInfo.ArrivingCity.split('|'), function (index, element) {
                 arrival.push(element.split(',')[0]);
             })
+            if (ProductInfo.Sceneries != null) {
+                $.each(ProductInfo.Sceneries.split('|'), function (index, element) {
+                    sceneries.push(element.split(',')[0]);
+                })
+            }
             $('#departingCity').dropdown("set selected", departure);
             $('#arrivingCity').dropdown("set selected", arrival);
-            if (ProductInfo.Sceneries != null) {
-                $('#sceneries').dropdown("set selected", ProductInfo.Sceneries.split(','));
-            }
+            $('#sceneries').dropdown("set selected", sceneries);
             
             pIntroEditor.ready(function () { pIntroEditor.setContent($.htmlDecode(_this.Intro)); })
             pFeatureEditor.ready(function () { pFeatureEditor.setContent($.htmlDecode(_this.Feature)); })
@@ -515,8 +546,9 @@
         SetSchedulesForJs: function () {
             var _this = this, $tabs = $('#scheduleContainer .day.tab');
             $tabs.each(function (index, element) {
+                //每天的schedule
                 var correspondingSchedule = Schedules.find(function (schedule) { return schedule.Id == $(element).attr('id') });
-                if (correspondingSchedule != 'undefined') {
+                if (correspondingSchedule != null) {
                     var $inputs = $(element).find('input').not($('#' + correspondingSchedule.containerId).find('input')), $input;
                     $inputs.each(function (ind, ele) {
                         $input = $(ele);
@@ -529,16 +561,31 @@
                         if (item != 'undefined') {
                             $inputs.each(function (iterator, input) {
                                 $input = $(input);
-                                item[$input.data('db-key')] = $input.val().trim();
+                                if ($input.data('db-key') == 'Sceneries') {
+                                    if ($input.val() == "" || $input.val() == "-1") {
+                                        RemoveElementFromArray(correspondingSchedule.Details, item);
+                                        return false;
+                                    } else {
+                                        var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
+                                        for (var i = 0; i < idArray.length; i++) {
+                                            dataStr += idArray[i] + ',' + nameArray[i].innerText + '|';
+                                        }
+                                        item[$input.data('db-key')] = dataStr;
+                                    }
+                                } else {
+                                    item[$input.data('db-key')] = $input.val().trim();
+                                }
+                                
                             })
-                            item.Arrangement = $.htmlEncode(UE.getEditor(id).getContent());
+                            if(item!=null)
+                                item.Arrangement = $.htmlEncode(UE.getEditor(id).getContent());
                         }
                     })
                     correspondingSchedule.Description = $.htmlEncode(UE.getEditor(correspondingSchedule.descId).getContent());
                     correspondingSchedule.Introduction = $.htmlEncode(UE.getEditor(correspondingSchedule.introId).getContent());
                 }
-                return Schedules;
             })
+            return Schedules;
         },
         SetSchedulesForPage: function () {
             var _this = this;
@@ -562,10 +609,16 @@
                     this.setContent($.htmlDecode(element.Description))
                 })
                 $.each(element.Details, function (ind, ele) {
+                    var sceneries = new Array();
                     $('#' + element.containerId).loadTemplate('#scheduleItemTmpl', ele, tmplOpt);
                     var $sceneryDropdown = $('#' + ele.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
                     $sceneryDropdown.find('.menu').html(localStorage.sceneries);
-                    $sceneryDropdown.dropdown("set selected", ele.Sceneries.split(','));
+                    if (ele.Sceneries != null) {
+                        $.each(ele.Sceneries.split('|'), function (index, element) {
+                            sceneries.push(element.split(',')[0]);
+                        })
+                        $sceneryDropdown.dropdown("set selected", sceneries);
+                    }
                     UE.getEditor(ele.Id).ready(function () {
                         this.setContent($.htmlDecode(ele.Arrangement))
                     })
@@ -647,8 +700,7 @@
                         model = ProductInfo.SyncJs();
                         break;
                     case '单日行程':
-                        Trip.SetSchedulesForJs();
-                        model = Schedules;
+                        model = Trip.SetSchedulesForJs();
                         break;
                     case '发团属性':
                         TripProperty.SyncJs();
@@ -1548,11 +1600,18 @@
         }
         
     }
+    function RemoveElementFromArray(array,element) {
+        var index = array.indexOf(element);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
     function Preload() {
         var dfd = $.Deferred();
         ProductInfo.LoadCityData(api.listCitiesUrl);
         ProductInfo.LoadSceneryData(api.listSceneriesUrl);
         CommonInfo.LoadRegionData(api.regionDataUrl);
+        CommonInfo.LoadTypeData(api.listTypeUrl);
         TripProperty.LoadStartingPointsData(api.listStartPointsUrl);
         setTimeout(function () {
             dfd.resolve();

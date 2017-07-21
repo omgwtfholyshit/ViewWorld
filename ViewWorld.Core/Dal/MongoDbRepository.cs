@@ -338,7 +338,7 @@ namespace ViewWorld.Core.Dal
         public async Task<Result> DeleteOneAsync<TEntity>(string id) where TEntity : class, new()
         {
             var filter = new FilterDefinitionBuilder<TEntity>().Eq("Id", id);
-            return await DeleteOne<TEntity>(filter);
+            return await DeleteOneAsync<TEntity>(filter);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace ViewWorld.Core.Dal
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Result> DeleteOne<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
+        public async Task<Result> DeleteOneAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
         {
             var result = new Result();
             try

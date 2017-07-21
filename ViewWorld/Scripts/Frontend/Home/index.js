@@ -15,12 +15,13 @@
             this.upArrow = $('.upwards.arrow-container');
             this.initSwiper();
             this.arrowEvents();
+            this.bindEvents();
             this.initWorldMap();
         },
         initSwiper: function () {
             var _this = this, $nav = $('.nav'), tempArr = [], transform = '', s2SlideCount = _this.s2Swiper.context.find('.swiper-slide').length;
             _this.mainSwiper.obj = new Swiper('.main.swiper-container', {
-                //pagination: '.swiper-pagination',
+                pagination: '.swiper-pagination',
                 speed:1000,
                 paginationClickable: true,
                 threshold: 100,
@@ -80,6 +81,15 @@
                 _this.s2Swiper.obj.slideNext();
             })
             
+        },
+        bindEvents: function () {
+            var _this = this;
+            _this.s2Swiper.context
+            .delegate('span.floated', 'click', function (e) {
+                var $target = $(e.currentTarget), redirectUrl = '/Finder';
+                $target.hasClass('favorite') ? redirectUrl += '/TripDetail/productid=' + $target.data('productid') : redirectUrl += '/FindTrips/region=' + $target.text().trim();
+                window.open(redirectUrl);
+            })
         },
         initWorldMap: function () {
             var regions = {

@@ -390,7 +390,7 @@ ul {
         display: block; }
       .body-wrapper .swiper-container .homepage .slideTwo .ui.card .content .price-area .our-price {
         font-size: 1.5em; }
-      .body-wrapper .swiper-container .homepage .slideTwo .ui.card .extra.content span.favorite {
+      .body-wrapper .swiper-container .homepage .slideTwo .ui.card .extra.content span.floated {
         cursor: pointer; }
     .body-wrapper .swiper-container .homepage .slideTwo .swiper-slide {
       display: flex;
@@ -517,7 +517,7 @@ ul {
       .body-wrapper .find-items .filter-container .search-container .search.icon {
         cursor: pointer; }
       .body-wrapper .find-items .filter-container .search-container .dropdown .text {
-        min-width: 5rem; }
+        min-width: 6.8rem; }
       .body-wrapper .find-items .filter-container .search-container input, .body-wrapper .find-items .filter-container .search-container .dropdown {
         border-color: #00B5AD; }
       .body-wrapper .find-items .filter-container .filter {
@@ -827,12 +827,48 @@ ul {
             .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container .calendar-message-container {
               align-self: center;
               vertical-align: middle; }
-    .body-wrapper .trip-detail .detail-section .navigator .item {
-      color: #00B5AD;
-      font-size: 1.2em; }
+    .body-wrapper .trip-detail .detail-section .navigator {
+      z-index: 10;
+      transition: all 0.3s ease; }
+      .body-wrapper .trip-detail .detail-section .navigator .item {
+        color: #00B5AD;
+        font-size: 1.2em; }
     .body-wrapper .trip-detail .detail-section .product-detail-container .divider.header {
       color: #00B5AD;
-      font-size: 1.6em; }
+      font-size: 1.6em;
+      padding: 1rem 0 1rem 0; }
+    .body-wrapper .trip-detail .detail-section .product-detail-container .data-container p {
+      color: #666666; }
+
+/***********************************
+    SceneryModal For TripDetail Page
+*************************************/
+#sceneryModal .slider {
+  width: 50%;
+  min-height: 300px; }
+  #sceneryModal .slider .swiper-container {
+    margin-left: auto;
+    margin-right: auto; }
+  #sceneryModal .slider .swiper-slide {
+    background-size: cover;
+    background-position: center; }
+  #sceneryModal .slider .gallery-top {
+    height: 80%;
+    width: 100%; }
+  #sceneryModal .slider .gallery-thumbs {
+    height: 20%;
+    box-sizing: border-box;
+    padding: 10px 0; }
+  #sceneryModal .slider .gallery-thumbs .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4; }
+  #sceneryModal .slider .gallery-thumbs .swiper-slide-active {
+    opacity: 1; }
+
+#sceneryModal .image.content .description {
+  width: 50%;
+  padding-left: 2rem; }
 
 /******************
     Responsive

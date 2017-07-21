@@ -91,11 +91,14 @@
             <input type="text" placeholder="目的地/景点/产品名称">
             <select class="ui compact selection dropdown">
                 <option class="item" value="all">全部产品</option>
-                <option class="item" value="de">出发地参团</option>
-                <option class="item" value="ar">目的地参团</option>
-                <option class="item" value="gt">跟团游</option>
-                <option class="item" value="sg">自由行</option>
-                <option class="item" value="pt">私人定制</option>
+                <option class="item" value="0">出发地参团</option>
+                <option class="item" value="1">目的地参团</option>
+                <option class="item" value="2">自由行</option>
+                <option class="item" value="3">目的地自由行</option>
+                <option class="item" value="4">游轮</option>
+                <option class="item" value="5">游学</option>
+                <option class="item" value="6">私人定制</option>
+                <option class="item" value="7">机票</option>
             </select>
             <div type="submit" class="ui teal button">搜索</div>
         </div>
@@ -103,49 +106,11 @@
         <div class="filter">
             <ul class="filter-tab">
                 <li class="tab-item active">全部</li>
-                <li class="tab-item">青岛到普吉岛</li>
-                <li class="tab-item">普吉岛当地游</li>
+                @*<li class="tab-item">青岛到普吉岛</li>
+                <li class="tab-item">普吉岛当地游</li>*@
             </ul>
             <ul class="filter-content">
-                <li class="content-item open">
-                    <label >所属区域:</label>
-                    <div class="options">
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                    </div>
-                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
-                </li>
-                <li class="content-item open">
-                    <label>出发城市:</label>
-                    <div class="options">
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                    </div>
-                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
-                </li>
-                <li class="content-item open">
-                    <label>结束城市:</label>
-                    <div class="options">
-                        <span class="active">不限</span><span>跟团游</span><span>自由行</span>
-                    </div>
-                    <a href="javascript:void(0)" class="toggleOptions off">展开<i class="caret down icon"></i></a>
-                </li>
-                <li class="content-item">
-                    <label>行程天数:</label>
-                    <div class="options">
-                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
-                    </div>
-                </li>
-                <li class="content-item">
-                    <label>出发城市:</label>
-                    <div class="options">
-                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
-                    </div>
-                </li>
-                <li class="content-item">
-                    <label>游玩主题:</label>
-                    <div class="options">
-                        <span>不限</span><span>跟团游</span><span class="active">自由行</span>
-                    </div>
-                </li>
+               
             </ul>
         </div>
         <div class="ui horizontal divider">

@@ -60,7 +60,12 @@ namespace ViewWorld.Services.Trips
                 }
 
             }
-            return await Repo.DeleteOneAsync<TripArrangement>(id);
+            var result = await Repo.DeleteOneAsync<TripArrangement>(id);
+            if (result.Success)
+            {
+                cacheManager.Update("Trips", "Front", r => DeleteFromCachedResult(id));
+            }
+            return result;
         }
 
         public async Task<Result> RetrieveTripArrangementById(string tripId)
@@ -127,7 +132,7 @@ namespace ViewWorld.Services.Trips
         }
 
         /// <summary>
-        /// 根据SearchModel遍历并筛选缓存中的list。数据多了之后测试RetrieveTripArrangementBySearchModel的效率
+        /// 根据SearchModel遍历并筛选缓存中的list。数据多了之后测试RetrieveTripArrangementBySearchModel的效率(CachedMethod)
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -146,6 +151,8 @@ namespace ViewWorld.Services.Trips
                 else
                 {
                     filteredTrips = result.Entities.Where(e => e.IsVisible && !e.IsDeleted);
+                    if (model.DisplayOnFrontPageTripsOnly)
+                        filteredTrips = result.Entities.Where(e => e.DisplayOnFrontPage);
                     if (!string.IsNullOrWhiteSpace(model.Region))
                         filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
                     if (model.Days > 0)
@@ -155,7 +162,7 @@ namespace ViewWorld.Services.Trips
                     if (!string.IsNullOrWhiteSpace(model.keyword))
                         filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
                     if (!string.IsNullOrWhiteSpace(model.Theme))
-                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.Sceneries.Contains(model.Theme));
+                        filteredTrips = filteredTrips.Where(t => t.CommonInfo.Theme.Contains(model.Theme));
                 }
             }
             return filteredTrips;
@@ -166,8 +173,8 @@ namespace ViewWorld.Services.Trips
         {
             var builder = Builders<TripArrangement>.Filter;
             FilterDefinition<TripArrangement> filter = builder.Where(t => !t.IsDeleted && t.IsVisible);
-            //if(!string.IsNullOrWhiteSpace(model.DepartureCity))
-            //    filter = builder.And(filter, builder.Where(t => t.ProductInfo.DepartingCity.Contains(model.DepartureCity)));
+            if (model.DisplayOnFrontPageTripsOnly)
+                filter = builder.And(filter, builder.Where(t => t.DisplayOnFrontPage));
             if (!string.IsNullOrWhiteSpace(model.Region))
                 filter = builder.And(filter, builder.Where(t => t.CommonInfo.RegionName == model.Region));
             if (model.Days > 0)
@@ -189,8 +196,6 @@ namespace ViewWorld.Services.Trips
                 result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
                 cacheManager.Update("Trips", "Front", r => UpdateCachedResult(result, Entity));
             }
-            //if(prevCache != null)
-            //    cacheManager.Update("Trips", "Front", result => UpdateCachedResult(result, Entity));
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
         }
 
@@ -468,7 +473,7 @@ namespace ViewWorld.Services.Trips
                 if (result == null || !result.Success)
                 {
                     result = await Repo.GetAllAsync<TripArrangement>();
-                    cacheManager.Add("Trips", JSSerializer.Serialize(result), "Front");
+                    cacheManager.Put("Trips", JSSerializer.Serialize(result), "Front");
                 }
             }
             else
@@ -485,12 +490,26 @@ namespace ViewWorld.Services.Trips
             if (cachedTarget != null)
             {
                 cachedItems.Remove(cachedTarget);
-                cachedItems.Add(entityToUpdate);
             }
-                
+            cachedItems.Add(entityToUpdate);
             return JSSerializer.Serialize(cachedResult);
         }
-
+        string DeleteFromCachedResult(string entityId)
+        {
+            var resultStr = cacheManager.Get("Trips", "Front");
+            GetManyResult<TripArrangement> cachedResult = new GetManyResult<TripArrangement>();
+            if (!string.IsNullOrWhiteSpace(resultStr))
+            {
+                cachedResult = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
+            }
+            var cachedItems = cachedResult.Entities as List<TripArrangement>;
+            var cachedTarget = cachedItems.Find(e => e.Id == entityId);
+            if (cachedTarget != null)
+            {
+                cachedItems.Remove(cachedTarget);
+            }
+            return JSSerializer.Serialize(cachedResult);
+        }
         public static string GetCity(string cityStr)
         {
             var cityName = "";
@@ -548,6 +567,33 @@ namespace ViewWorld.Services.Trips
             return finalResult + finalPrice.ToString();
         }
 
-        
+        GetManyResult<TripArrangement> CacheStrToObj(string cacheStr)
+        {
+            GetManyResult<TripArrangement> result = new GetManyResult<TripArrangement>();
+            if (!string.IsNullOrWhiteSpace(cacheStr))
+            {
+                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(cacheStr);
+            }
+            return result;
+        }
+
+        public List<object> ListTripType()
+        {
+            string types = "出发地参团|目的地参团|自由行|目的地自由行|游轮|游学|私人定制|机票";
+            //var typeList = types.Split('|');
+            List<object> typeList = new List<object>();
+            var index = 0;
+            foreach(var type in types.Split('|'))
+            {
+                var data = new
+                {
+                    name = type,
+                    value = index
+                };
+                typeList.Add(data);
+                index++;
+            }
+            return typeList;
+        }
     }
 }

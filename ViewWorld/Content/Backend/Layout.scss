@@ -309,6 +309,7 @@ body{
             li{
                 &:hover{ span{opacity:1}}
                 span{float:right;opacity:0;transition:all ease 0.4s;cursor:pointer; i{font-size:1.5rem;} &:hover{ i{transform: scale(1.5);transition:all ease 0.4s;}}}
+                .corner.label{cursor:pointer; i{cursor:pointer;}}
             }
         }
         #fileUpload{

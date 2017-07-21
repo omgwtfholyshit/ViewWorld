@@ -112,7 +112,7 @@ namespace ViewWorld.Core.Dal
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Result> DeleteOneAsync<TEntity>(string id) where TEntity : class, new();
-
+        Task<Result> DeleteOneAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new();
         /// <summary>
         /// A generic delete many method
         /// </summary>

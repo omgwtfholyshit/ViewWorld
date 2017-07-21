@@ -411,6 +411,7 @@
     <Compile Include="Controllers\Backend\Pages\PageController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Frontend\FinderController.cs" />
+    <Compile Include="Controllers\Frontend\UserController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\ProviderController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -424,8 +425,6 @@
     <Compile Include="Models\GlobalSetting.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Managers\SceneryManager.cs" />
-    <Compile Include="Models\Managers\TripManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\UEditor\net\App_Code\Config.cs" />
     <Compile Include="Scripts\UEditor\net\App_Code\ConfigHandler.cs" />
@@ -436,6 +435,7 @@
     <Compile Include="Scripts\UEditor\net\App_Code\PathFormater.cs" />
     <Compile Include="Scripts\UEditor\net\App_Code\UploadHandler.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\HomeIndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Backend\Layout.css">
@@ -1199,6 +1199,7 @@
     <Folder Include="Views\Install\" />
     <Folder Include="Views\Provider\" />
     <Folder Include="Views\Trip\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

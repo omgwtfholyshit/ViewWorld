@@ -31,12 +31,12 @@
             errorMessage += '<li>用户名不能为空</li>'
         } else {
             if (!isNaN(username)) {
-                if (!$.checkMobile(username)) {
+                if (!loginHelper.isValidMobile(username)) {
                     status = false;
                     errorMessage += '<li>手机号错误</li>'
                 }
             } else {
-                if (!$.checkEmail(username)) {
+                if (!loginHelper.isValidEmail(username)) {
                     status = false;
                     errorMessage += '<li>邮箱错误</li>';
                 }

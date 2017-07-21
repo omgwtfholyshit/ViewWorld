@@ -52,13 +52,16 @@ namespace ViewWorld.Core.Models.TripModels
         public string ParentRegionId { get; set; }
         public string Address { get; set; }
         public string Publisher { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime PublishedAt { get; set; }
         public string Modificator { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime LastUpdateAt { get; set; }
         public string Initial { get; set; }
         public decimal ExtraCost { get; set; } = 0;
         //统计该景点热门度
         public int Popularity { get; set; }
+        public string Description { get; set; }
         private GeoPoint _coord { get; set; }
         private List<string> _photos { get; set; }
     }

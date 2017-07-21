@@ -35,17 +35,19 @@ namespace ViewWorld.Controllers
             {
                 status = "200",
                 message = "",
-                data = data
+                data = data,
+                Success = true
             };
             return Json(data2, JsonRequestBehavior.AllowGet);
         }
-        protected JsonResult Json(string status, Object data)
+        protected JsonResult Json(string status,bool success, Object data)
         {
             var data2 = new
             {
                 status = status,
                 message = "",
-                data = data
+                data = data,
+                Success = success
             };
             return Json(data2, JsonRequestBehavior.AllowGet);
         }
@@ -74,7 +76,8 @@ namespace ViewWorld.Controllers
         {
             var result = new
             {
-                status = "200"
+                status = "200",
+                Success = true
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +87,8 @@ namespace ViewWorld.Controllers
             var result = new
             {
                 status = "300",
-                message = msg
+                message = msg,
+                Success = false
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -93,7 +97,8 @@ namespace ViewWorld.Controllers
             var result = new
             {
                 status = status,
-                message = msg
+                message = msg,
+                Success = false
             };
             return Json(result, JsonRequestBehavior.AllowGet);
         }

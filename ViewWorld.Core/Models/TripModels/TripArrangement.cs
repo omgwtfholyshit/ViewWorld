@@ -39,7 +39,7 @@ namespace ViewWorld.Core.Models.TripModels
         public int Popularity { get; set; } = 0;
         public int TripOrdered { get; set; } = 0;
         public int SortOrder { get; set; } = 0;
-
+        
         public bool DisplayOnFrontPage = false;
         public CommonInfo CommonInfo {
             get
@@ -119,6 +119,10 @@ namespace ViewWorld.Core.Models.TripModels
         public string RegionId { get; set; }
         public string RegionName { get; set; }
         /// <summary>
+        /// 0.出发地参团|1.目的地参团|2.自由行|3.目的地自由行|4.游轮|5.游学|6.私人定制|7.机票|
+        /// </summary>
+        public string TripType { get; set; } 
+        /// <summary>
         /// 优惠政策。a.特价 b.限时促销 c.热卖 d.买二送二 e.买二送一 f.推荐 g.积分优惠 h.免费接机
         /// </summary>
         public string Promotion { get; set; }
@@ -192,7 +196,9 @@ namespace ViewWorld.Core.Models.TripModels
             }
         }
         public string Keyword { get; set; }
-        [Obsolete("没有使用")]
+        /// <summary>
+        /// 用作自费项目前的介绍
+        /// </summary>
         public string Description { get; set; }
 
         public PhotoInfo FrontCover { get; set; }

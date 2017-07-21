@@ -14,6 +14,8 @@ using MongoDB.Driver;
 using System.Threading;
 using System.Security.Claims;
 using System.Linq;
+using ViewWorld.ViewModels;
+using ViewWorld.Services.Trips;
 
 namespace ViewWorld.Controllers
 {
@@ -22,15 +24,20 @@ namespace ViewWorld.Controllers
         ICacheManager<object> cache;
         private readonly IMongoDbRepository Repo;
         readonly IAuthService AuthService;
-        public HomeController(ICacheManager<object> _cache,IMongoDbRepository _repo, IAuthService _auth)
+        readonly ITripService TripService;
+        public HomeController(ICacheManager<object> _cache, IMongoDbRepository _repo, IAuthService _auth, ITripService _trip)
         {
             this.cache = _cache;
             this.Repo = _repo;
             this.AuthService = _auth;
+            this.TripService = _trip;
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var vm = new HomeIndexViewModel();
+            var searchModel = new Core.Models.ViewModels.FinderViewModels() { DisplayOnFrontPageTripsOnly = true };
+            vm.RecommendationList = await TripService.RetrieveTripArrangementBySearchModel(searchModel);
+            return View(vm);
         }
         [RequirePermission(Permission ="Region,Trip")]
         public ActionResult AddToCacheTest()

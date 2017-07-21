@@ -28,5 +28,6 @@ namespace ViewWorld.Services.Trips
         Task<Result> DisplayTripOnFrontPage(string tripId);
         Task<Result> CopyTripArrangement(string tripId);
         Task<string> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId);
+        List<object> ListTripType();
     }
 }

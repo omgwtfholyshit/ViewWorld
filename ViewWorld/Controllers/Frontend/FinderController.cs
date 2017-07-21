@@ -13,6 +13,7 @@ using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Core.Models.ViewModels;
 using ViewWorld.Services.Cities;
+using ViewWorld.Services.Sceneries;
 using ViewWorld.Services.Trips;
 using ViewWorld.Utils;
 using ViewWorld.Utils.ViewModels;
@@ -24,11 +25,13 @@ namespace ViewWorld.Controllers.Frontend
         ICacheManager<object> cacheManager;
         ICityService cityService;
         ITripService tripService;
-        public FinderController(ICacheManager<object> _cache, ICityService _city,ITripService _trip)
+        ISceneryService sceneryService;
+        public FinderController(ICacheManager<object> _cache, ICityService _city, ITripService _trip, ISceneryService _scenery)
         {
             cacheManager = _cache;
             cityService = _city;
             tripService = _trip;
+            sceneryService = _scenery;
         }
         // GET: Finder
         public ActionResult Index()
@@ -130,6 +133,26 @@ namespace ViewWorld.Controllers.Frontend
             {
                 return ErrorJson(ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetSceneryDetail(string sceneryId)
+        {
+            var result = await sceneryService.RetrieveEntitiesById(sceneryId);
+            if (result.Success)
+            {
+                var data = new
+                {
+                    Name = result.Entity.Name,
+                    Address = result.Entity.Address,
+                    Coordinate = result.Entity.Coordinate,
+                    Description = result.Entity.Description,
+                    EnglishName = result.Entity.EnglishName,
+                    Photos = result.Entity.Photos
+                };
+                return Json(data);
+            }
+            return ErrorJson(result.Message);
         }
     }
 }

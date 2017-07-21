@@ -23,8 +23,8 @@ namespace ViewWorld.Core.Dal
         {
             Client = new MongoClient(connectionStr);
             DB = Client.GetDatabase(dbName);
-            Users = DB.GetCollection<ApplicationUser>("users");
-            Roles =DB.GetCollection<IdentityRole>("roles");
+            Users = DB.GetCollection<ApplicationUser>("Users");
+            Roles =DB.GetCollection<IdentityRole>("Roles");
         }
         public static ApplicationIdentityContext Create()
         {
@@ -42,7 +42,7 @@ namespace ViewWorld.Core.Dal
         {
             if (typeof(TEntity).Name == "ApplicationUser")
             {
-                return DB.GetCollection<TEntity>("users");
+                return DB.GetCollection<TEntity>("Users");
             }
             return DB.GetCollection<TEntity>(typeof(TEntity).Name + "s");
         }
