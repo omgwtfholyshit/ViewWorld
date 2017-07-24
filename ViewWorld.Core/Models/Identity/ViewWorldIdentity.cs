@@ -13,12 +13,12 @@ namespace ViewWorld.Core.Models.Identity
         public string NickName { get; set; }
         public string Department { get; set; }
         public string UserPhone { get; set; }
-        public ViewWorldIdentity(string username,string department,string phone)
+        public ViewWorldIdentity(string username,string department,string phone,string nickname)
         {
             this.UserName = username;
             this.Department = department;
             this.UserPhone = phone;
-
+            this.NickName = nickname;
         }
         public string AuthenticationType
         {

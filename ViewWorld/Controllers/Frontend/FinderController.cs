@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ViewWorld.Core.Dal;
+using ViewWorld.Core.Models.Identity;
 using ViewWorld.Core.Models.TripModels;
 using ViewWorld.Core.Models.ViewModels;
 using ViewWorld.Services.Cities;
@@ -104,8 +106,14 @@ namespace ViewWorld.Controllers.Frontend
                     }
                     vm.FirstAvaiableDate = firstAvaiableDate.ToLocalTime().ToString("MM-dd-yyyy");
                     vm.TripData = tripData.TrimEnd(',') + "}";
+                    vm.UserName = "";
+                    vm.Phone = "";
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        vm.UserName = GetClaimValue("NickName");
+                        vm.Phone = GetClaimValue(ClaimTypes.MobilePhone);
+                    }
                 }
-                
                 return View(vm);
             }
             return new HttpStatusCodeResult(HttpStatusCode.NotFound);

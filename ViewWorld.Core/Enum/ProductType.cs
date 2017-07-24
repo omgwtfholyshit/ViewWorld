@@ -8,7 +8,7 @@ namespace ViewWorld.Core.Enum
 {
     public enum ProductType
     {
-        TripArrangment,
-        GuideService,
+        旅行团订单,
+        导游服务,
     }
 }

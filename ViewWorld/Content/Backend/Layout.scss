@@ -16,7 +16,16 @@ ul{list-style-type:none;padding:0;margin:0;}
 /******************
  Override Semantic
 ******************/
-
+.number-spinner{
+    display:inline-block;
+    .ui.right.labeled.input{
+        height:2.2rem;
+        .ui.basic.label{padding:0.4rem;cursor:pointer;
+            .icon{margin:0.2em;font-size:0.5em;vertical-align:bottom}
+        }
+        input{width:3rem;height:2.2rem;padding:0;margin:0;text-align:center;font-size:1rem;}
+    }
+}
 /******************
       PaceJS
 ******************/
@@ -202,14 +211,15 @@ body{
     }
 }
 
-/************************************
-    Region & Scenery
-************************************/
-.region-management,.scenery-management,.city-management,.trip-management{
+/****************************************
+  Region & Scenery & City & Trip & Order
+****************************************/
+.region-management,.scenery-management,.city-management,.trip-management,.order-management{
    
     .tool-bar,.table-container{
         padding:0.5rem;
     }
+    .table-container .roomdetail-container{display:inline-block;vertical-align:text-top;}
      i.caret{
         transition:all ease-in-out 0.3s;
         cursor:pointer;

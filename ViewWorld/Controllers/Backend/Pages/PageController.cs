@@ -9,6 +9,7 @@ using ViewWorld.Models;
 using ViewWorld.Core.ExtensionMethods;
 using System.Linq;
 using MongoDB.Driver;
+using System.Security.Claims;
 
 namespace ViewWorld.Controllers.Backend.Pages
 {
@@ -101,6 +102,14 @@ namespace ViewWorld.Controllers.Backend.Pages
             }
             
         }
-        #endregion        
+        #endregion
+        #region 订单管理
+        public ActionResult Orders()
+        {
+            ViewBag.UserId = UserId;
+            ViewBag.Role = GetClaimValue(ClaimTypes.Role);
+            return View();
+        }
+        #endregion
     }
 }

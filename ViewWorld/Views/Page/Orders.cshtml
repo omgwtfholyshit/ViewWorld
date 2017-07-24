@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Parent = "订单管理";
+    ViewBag.Title = "旅行团订单";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+
+<div class="order-management">
+    <div class="tool-bar">
+        <button class="ui basic button" id="myOrders">
+            <i class="icon list layout"></i>
+            与我相关
+        </button>
+        <button class="ui basic button" id="clear">
+            <i class="icon refresh"></i>
+            重置
+        </button>
+    </div>
+    <div class="table-container">
+        <div class="ui fitted divider"></div>
+        @Html.AntiForgeryToken()
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>订单编号</th>
+                    <th>客户名称</th>
+                    <th>联系方式</th>
+                    <th>货币类型</th>
+                    <th>金额</th>
+                    <th>订单状态</th>
+                    <th>订单类型</th>
+                    <th>负责人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="9">
+                        <div class="ui right floated pagination menu">
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    
+</div>
+<script>
+    var userInfo = {
+        myId: '@ViewBag.UserId',
+        myRole:'@ViewBag.Role'
+    }
+</script>
+<script type="text/html" id="tbodyTmpl">
+    <tr data-template-bind='[{"attribute": "Id", "value": "Id"}]'>
+        <td data-content="OrderId"></td>
+        <td data-content="ContactName"></td>
+        <td data-content="ContactNumber"></td>
+        <td data-content="OrderCurrency"></td>
+        <td data-content="Price"></td>
+        <td data-content="OrderStatus"></td>
+        <td data-content="OrderType"></td>
+        <td data-content="SalesName"></td>
+        <td data-content="Operations">
+            <button class="ui labeled blue icon button modify">
+                <i class="edit icon"></i>
+                修改
+            </button>
+            <button class="ui labeled red icon button delete">
+                <i class="delete icon"></i>
+                删除
+            </button>
+        </td>
+    </tr>
+</script>
+<script src="~/Scripts/jQuery.LoadTemplate/jquery.loadTemplate.min.js"></script>
+<script src="~/Scripts/Backend/Business/orderList.js"></script>

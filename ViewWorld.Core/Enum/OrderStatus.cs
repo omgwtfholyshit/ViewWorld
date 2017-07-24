@@ -8,13 +8,13 @@ namespace ViewWorld.Core.Enum
 {
     public enum OrderStatus
     {
-        Created,//Pending to confirm
-        Confirmed,//Waiting for customers to pay
-        PaymentReceived,//Waiting for the journey to start.
-        PaymentSentToProvider,
-        Completed,
-        Closed,
-        Deleted
+        新创建订单,//Pending to confirm
+        行程已确认,//Waiting for customers to pay
+        现金收讫,//Waiting for the journey to start.
+        现金已付给供应商,
+        订单已完成,
+        订单已关闭,
+        订单已删除
     }
 
 }

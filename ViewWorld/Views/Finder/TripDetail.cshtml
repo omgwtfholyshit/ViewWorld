@@ -93,7 +93,7 @@
                 <div class="header-container">
                     <h3 class="ui header">
                         选择出游日期和人数
-                        <div class="sub header">建议提前两天预定</div>
+                        <div class="sub header">建议提前两天预订</div>
                     </h3>
                 </div>
                 <div class="content-container">
@@ -145,9 +145,10 @@
                                     <div class="label">请选择日期及人数查看行程价格</div>
                                 </div>
                             </div>
+                            <p class="red">*最低价格一般指每个房间住四人的情况，具体价格根据房间人数得出</p>
                         </div>
-                        <div class="ui labeled orange icon button" id="reserve"><i class="payment icon"></i>立即预订</div>
-                        <div class="ui labeled teal icon button" id="collect"><i class="bookmark icon"></i>收藏</div>
+                        <div class="ui labeled orange icon reserve button" id="reserve"><i class="payment icon"></i>立即预订</div>
+                        <div class="ui labeled teal icon collect button" id="collect"><i class="bookmark icon"></i>收藏</div>
                     </form>
                 </div>
             </div>
@@ -171,11 +172,11 @@
                     注意事项
                 </a>
                 <div class="right menu">
-                    <a class="ui item">
-                        保存行程
+                    <a class="ui item collect">
+                        收藏行程
                     </a>
-                    <a class="ui item">
-                        立即预定
+                    <a class="ui item reserve">
+                        立即预订
                     </a>
                 </div>
             </div>
@@ -331,7 +332,7 @@
                     <div class="data-container">
                         <h2 class="ui small header">
                             <div class="content">
-                                预定电子票
+                                预订电子票
                             </div>
                         </h2>
                         <p>
@@ -506,13 +507,58 @@
         <div class="error-messages"></div>
     </div>
 </div>
-
+<div class="ui first contact mini modal">
+    <div class="header">
+        预订信息：
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>您的姓名</label>
+                <input type="text" name="name" placeholder="您的姓名" value="@Model.UserName">
+            </div>
+            <div class="field">
+                <label>您的电话</label>
+                <input type="text" name="phone" placeholder="您的电话" value="@Model.Phone">
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button">
+            确定
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<div class="ui second contact mini modal">
+    <div class="header">
+        预订成功！
+    </div>
+    <div class="content" style="text-align:center">
+        <i class="green check circle icon" style="font-size:10em"></i>
+        <br />
+        <br />
+        <br />
+        <label>我们的服务人员会尽快与您联系</label>
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button">
+            确定
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
 <script>
     var calendarData = '@Model.TripData';
     var ProductInfo = {
         ProductId: '@Model.Trip.ProductId',
         TripId: '@Model.Trip.Id',
-        ProductName:'@Model.Trip.CommonInfo.Name'
+        ProductName: '@Model.Trip.CommonInfo.Name',
+        TotalDays:@Model.Trip.ProductInfo.TotalDays,
+        ProviderName:'@Model.Trip.CommonInfo.ProviderName',
     }
 </script>
 <script type="text/html" id="roomTmpl">

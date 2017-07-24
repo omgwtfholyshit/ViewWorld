@@ -49,7 +49,6 @@ namespace ViewWorld.Core.Models.Identity
         public string Department { get; set; }
         [NotMapped]
         List<Permission> _Permissions;
-        [DataMember]
         public List<Permission> Permissions {
             get {
                 return _Permissions ?? new List<Permission>();

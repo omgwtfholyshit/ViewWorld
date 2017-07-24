@@ -11,40 +11,43 @@
             添加
         </button>
     </div>
-    <table class="ui celled table">
-        <thead>
-            <tr>
-                <th>城市名称</th>
-                <th>简称/英文</th>
-                <th>国内城市</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Any())
+    <div class="table-container">
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>城市名称</th>
+                    <th>简称/英文</th>
+                    <th>国内城市</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
             {
                 foreach (var city in Model)
                 {
-                    <tr data-city-id="@city.Id">
-                        <td>
-                            <div class="editable-cell" data-db-key="Name">@city.Name</div>
-                            ID: @city.Id
-                        </td>
-                        <td><div class="editable-cell" data-db-key="Initial">@city.Initial</div></td>
-                        <td>
-                            <input type="checkbox"  checked="@city.IsChineseCity" name="IsChineseCity"/>
-                        </td>
-                        <td>
-                            <button class="ui blue icon button save hidden"><i class="icon save"></i></button>
-                            <button class="ui blue icon button edit"><i class="icon edit"></i></button>
-                            <button class="ui red icon button delete"><i class="icon delete"></i></button>
-                        </td>
-                    </tr>
+                        <tr data-city-id="@city.Id">
+                            <td>
+                                <div class="editable-cell" data-db-key="Name">@city.Name</div>
+                                ID: @city.Id
+                            </td>
+                            <td><div class="editable-cell" data-db-key="Initial">@city.Initial</div></td>
+                            <td>
+                                <input type="checkbox" checked="@city.IsChineseCity" name="IsChineseCity" />
+                            </td>
+                            <td>
+                                <button class="ui blue icon button save hidden"><i class="icon save"></i></button>
+                                <button class="ui blue icon button edit"><i class="icon edit"></i></button>
+                                <button class="ui red icon button delete"><i class="icon delete"></i></button>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-            
-        </tbody>
-    </table>
+
+            </tbody>
+        </table>
+    </div>
+    
     <div class="ui modal add-city-modal admin-modal">
         <div class="header">
             添加城市

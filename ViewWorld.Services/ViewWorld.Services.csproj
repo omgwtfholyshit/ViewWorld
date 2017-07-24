@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\AdminService.cs" />
+    <Compile Include="Admin\IAdminService.cs" />
     <Compile Include="Authorization\AuthService.cs" />
     <Compile Include="Authorization\IAuthService.cs" />
     <Compile Include="Cities\CityService.cs" />

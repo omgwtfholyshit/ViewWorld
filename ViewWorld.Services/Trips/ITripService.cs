@@ -16,6 +16,7 @@ namespace ViewWorld.Services.Trips
         Task<Result> RetrieveTripArrangementById(string tripId);
         Task<IEnumerable<TripArrangement>> RetrieveTripArrangementBySearchModel(FinderViewModels model);
         Task<GetManyResult<TripArrangement>> RetrieveTripArrangementByFilter(FinderViewModels model);
+        Task<GetOneResult<TripArrangement>> RetrieveTripArrangementByProductId(string productId);
         Task<Result> UpdateTripPartial(string tripId, CommonInfo data);
         Task<Result> UpdateTripPartial(string tripId, ProductInfo data);
         Task<Result> UpdateTripPartial(string tripId, List<Schedule> data);

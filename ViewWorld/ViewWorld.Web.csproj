@@ -408,6 +408,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StyleBundleFallback.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Backend\Order\OrderController.cs" />
     <Compile Include="Controllers\Backend\Pages\PageController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Frontend\FinderController.cs" />
@@ -436,6 +437,7 @@
     <Compile Include="Scripts\UEditor\net\App_Code\UploadHandler.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\HomeIndexViewModel.cs" />
+    <Compile Include="ViewModels\OrderOrderDetailViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Backend\Layout.css">
@@ -631,6 +633,8 @@
     <Content Include="Lib\VectorMap\jquery-jvectormap-2.0.3.min.js" />
     <Content Include="Lib\VectorMap\jvectormap-world-mill.js" />
     <Content Include="Lib\VectorMap\vectmap-world-mill-cn.js" />
+    <Content Include="Scripts\Backend\Business\orderDetail.js" />
+    <Content Include="Scripts\Backend\Business\orderList.js" />
     <Content Include="Scripts\Frontend\Finder\FindTrips.js" />
     <Content Include="Scripts\Frontend\Finder\tripDetail.js" />
     <Content Include="Scripts\Frontend\Home\index.js" />
@@ -761,7 +765,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Backend\JSX\layout.jsx" />
+    <Content Include="Scripts\Backend\Trip\JSX\layout.jsx" />
     <Content Include="Content\themes\default\assets\fonts\icons.woff2" />
     <Content Include="Content\themes\default\assets\fonts\icons.woff" />
     <Content Include="Content\themes\default\assets\fonts\icons.ttf" />
@@ -1190,6 +1194,8 @@
     <Content Include="Views\Finder\FindTrips.cshtml" />
     <Content Include="Views\PartialViews\_PartialCitySelection.cshtml" />
     <Content Include="Views\Finder\TripDetail.cshtml" />
+    <Content Include="Views\Page\Orders.cshtml" />
+    <Content Include="Views\Order\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

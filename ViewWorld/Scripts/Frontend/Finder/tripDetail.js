@@ -26,13 +26,15 @@
             departtime: '',
             tripId: ProductInfo.TripId,
             productId: ProductInfo.ProductId,
-            productName:ProductInfo.ProductName,
+            productName: ProductInfo.ProductName,
+            price: 0,
+            currencyType: '',
             timeStamp: '',
         },
         api: {
             calculatePriceUrl: '/Finder/CalculateTripPrice', getSceneryDetail: '/Finder/GetSceneryDetail',
             addToCollection: '/User/AddToCollection', checkIfcollected: '/User/CheckIfItemCollected', removeFromCollection: '/User/RemoveFromCollection',
-
+            addToOrder: '/User/AddToOrder'
         },
         init: function () {
             var _this = this;
@@ -64,9 +66,10 @@
         initCalendar: function () {
             var _this = this, timeStr = "", tripData = new Array();
             $.each(_this.tripData, function (index, element) {
-                tripData[index] = element.split('_')[0];
+                tripData[index] ="最低" + element.split('_')[0];
             })
             //console.log(tripData)
+
             //Big Calendar
             var calendarObj = _this.calendar.calendario({
                 weeks: _this.weekArray,
@@ -87,6 +90,8 @@
                         _this.smallCalendar.calendar("set date", new Date(dateProperties.year + '-' + dateProperties.month + '-' + dateProperties.day), false, false);
                         timeStr = dateProperties.year + "年" + dateProperties.month + "月" + dateProperties.day + "日 " + dateProperties.weekdayname;
                         $('input[name=departtime]').val(timeStr);
+                        _this.tripSettings.departtime = dateProperties.year + '-' + dateProperties.month + '-' + dateProperties.day;
+                        _this.calculatePrice($('.booking-container .horizontal.statistics'));
                     } else {
                         $.tip(".message-container", "暂无行程", "选择的日期没有行程,换个日子试试看吧.", "negative", 2);
                     }
@@ -119,7 +124,12 @@
                 }(),
                 onChange: function (date, text) {
                     var validDate = (text !== "false");
-                    validDate ? validDate : $.tip(".message-container", "暂无行程", "选择的日期没有行程,换个日子试试看吧.", "negative", 2);
+                    if (validDate) {
+                        _this.tripSettings.departtime = date.toSimpleDateString();
+                        _this.calculatePrice($('.booking-container .horizontal.statistics'))
+                    } else {
+                        $.tip(".message-container", "暂无行程", "选择的日期没有行程,换个日子试试看吧.", "negative", 2);
+                    }
                     return validDate;
                 },
                 formatter: {
@@ -161,6 +171,7 @@
                     index < roomCount ? $(element).removeClass('hidden') : $(element).addClass('hidden');
                 })
                 $input.val(roomCount);
+                _this.roomSelectionModal.modal('refresh');
             })
             .delegate('.positive.button', 'click', function (e) {
                 var rooms = new Array(), planId,
@@ -176,37 +187,16 @@
                     childrenCount += ppr.children;
                     rooms.push(ppr);
                     //console.log(ppr);
+
                     $detailContainer.loadTemplate('#roomDetailTmpl', { 'roomNumber': "房间 " + (index + 1), 'roomDesc': ppr.adults + "位成人" + ppr.children + "位儿童" }, { 'append': true })
                 })
                 if (rooms.length == 0) {
                     return $.tip(".message-container", "获取价格失败", "先选个房间吧！", "negative", 4);
                 }
-                $.ajax({
-                    url: _this.api.calculatePriceUrl,
-                    method: 'post',
-                    beforeSend: function () {
-                        _this.tripSettings.rooms = rooms;
-                        _this.tripSettings.planId = planId;
-                        _this.tripSettings.departtime = departtime;
-                    },
-                    data: {
-                        rooms: rooms,
-                        departDate: departtime,
-                        tripId: ProductInfo.TripId,
-                        planId: planId,
-                        //__RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
-                    },
-                    success: function (data) {
-                        if (data.status == 200) {
-                            $priceContainer.find('.value').html(data.data);
-                            $priceContainer.find('.label').text("共计" + adultsCount + "位成人" + childrenCount + "位儿童");
-                        } else {
-                            $.tip(".message-container", "获取价格失败", data.message, "negative", 4);
-                        }
-                        _this.roomSelectionModal.modal('hide');
-                    },
-                    error: function (data) { _this.roomSelectionModal.modal('hide'); $.tip(".message-container", "获取价格失败", "服务器超时，请稍后重试！", "negative", 4); return false; }
-                });
+                _this.tripSettings.rooms = rooms;
+                _this.tripSettings.planId = planId;
+                _this.tripSettings.departtime = departtime;
+                _this.calculatePrice($priceContainer);
                 
             })
             .delegate('.grey.button', 'click', function (e) {
@@ -284,11 +274,13 @@
             }
         },
         updateCollectionStatus: function (collected) {
-            var $collected = $('#collect');
+            var $collected = $('#collect'), $navBarCollect = $('#detailNav .right.menu .collect');
             if (collected) {
                 $collected.removeClass('teal').addClass('grey').html('<i class="bookmark icon"></i>已收藏');
+                $navBarCollect.text("已收藏行程");
             } else {
                 $collected.removeClass('grey').addClass('teal').html('<i class="bookmark icon"></i>收藏');
+                $navBarCollect.text("收藏行程");
             }
             
         },
@@ -306,6 +298,72 @@
                     $(_this.detailNav.find('>.item')[index]).addClass('active').siblings().removeClass('active');
                 }
             })
+        },
+        calculatePrice: function ($priceContainer) {
+            var _this = this;
+            if (_this.tripSettings.rooms.length == 0)
+                return;
+            $.ajax({
+                url: _this.api.calculatePriceUrl,
+                method: 'post',
+                beforeSend: function () {
+                    
+                },
+                data: {
+                    rooms: _this.tripSettings.rooms,
+                    departDate: _this.tripSettings.departtime,
+                    tripId: ProductInfo.TripId,
+                    planId: _this.tripSettings.planId,
+                    //__RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        $priceContainer.find('.value').html(data.data.replace('|'," "));
+                        $priceContainer.find('.label').text("共计" + adultsCount + "位成人" + childrenCount + "位儿童");
+                        switch(data.data.split('|')[0]){
+                            case "USD$":
+                                _this.tripSettings.currencyType = "美元";
+                                break;
+                            case "AUD$":
+                                _this.tripSettings.currencyType = "澳元";
+                            case "EUR€":
+                                _this.tripSettings.currencyType = "欧元";
+                            default:
+                                _this.tripSettings.currencyType = "人民币";
+                        }
+                        _this.tripSettings.price = data.data.split('|')[1];
+                    } else {
+                        $.tip(".message-container", "获取价格失败", data.message, "negative", 4);
+                    }
+                    _this.roomSelectionModal.modal('hide');
+                },
+                error: function (data) { _this.roomSelectionModal.modal('hide'); $.tip(".message-container", "获取价格失败", "服务器超时，请稍后重试！", "negative", 4); return false; }
+            });
+        },
+        submitOrder: function ($target, order) {
+            var _this = this, token = $('input[name="__RequestVerificationToken"').val();
+            $.ajax({
+                url: _this.api.addToOrder,
+                method: 'post',
+                beforeSend: function () {
+                    $target.addClass('loading');
+                },
+                data: {
+                    order: order, __RequestVerificationToken: token
+                },
+                success: function (data) {
+                    if (data.Success) {
+                        $('.second.contact.modal').modal('show');
+                    } else {
+                        $.tip(".message-container", "提交失败", data.Message, "warning", 4);
+                    }
+                    $target.removeClass('loading');
+                },
+                error: function (data) {
+                    $.tip(".message-container", "预定失败", "服务器超时，请稍后重试！", "negative", 4);
+                    $target.removeClass('loading');
+                }
+            });
         },
         bindEvents: function () {
             var _this = this;
@@ -343,7 +401,8 @@
                     _this.tripSettings.timeStamp = new Date().getTime();
                     $.setCookie('tripSettings', JSON.stringify(_this.tripSettings), 2);
                     if (loginHelper.isLoggedIn) {
-                        console.log($.getCookie('tripSettings'));
+                        $('.first.contact.modal').modal('show');
+                       
                     } else {
                         window.location.href = '/Account/Login?returnUrl=' + location.pathname + location.search;
                     }
@@ -383,7 +442,7 @@
                             },
                             data: {
                                 itemId: ProductInfo.TripId, itemName: ProductInfo.ProductName,
-                                type: 'TripArrangment', __RequestVerificationToken: token
+                                type: '旅行团订单', __RequestVerificationToken: token
                             },
                             success: function (data) {
                                 _this.updateCollectionStatus(data.Success);
@@ -406,7 +465,23 @@
                     headerPosition += _this.stickyBar.detailHeaders[index].offsetTop;
                     _this.stickyBar.body.stop().animate({ scrollTop: headerPosition }, 300);
                 })
+                .delegate('.collect', 'click', function (e) {
+                    return $('#collect').click();
+                })
+                .delegate('.reserve', 'click', function () {
+                    return $('#reserve').click();
+                })
             _this.stickyBar.body.scroll(_this.onScrollEvents);
+            $('.first.contact.modal .positive.button').on('click', function (e) {
+                var $modal = $(e.target).parents('.modal');
+                var name = $modal.find('input[name=name]').val(), phone = $modal.find('input[name=phone]').val();
+                var departTime = new Date(_this.tripSettings.departtime);
+                var finishTime = departTime.setDate(departTime.getDate() + ProductInfo.TotalDays);
+                var order = new Order(ProductInfo.TripId, ProductInfo.ProductName, name, phone, ProductInfo.ProviderName, _this.tripSettings.departtime, new Date(finishTime).toSimpleDateString(), "旅行团订单", JSON.stringify(_this.tripSettings.rooms), _this.tripSettings.price, _this.tripSettings.currencyType);
+                //console.log(order)
+                _this.submitOrder($(e.target), order);
+                return false;
+            })
         }
     }
     page.init();
@@ -418,5 +493,18 @@
     function PeoplePerRoom(adults, children) {
         this.adults = adults;
         this.children = children;
+    }
+    function Order(ItemId, ItemName, ContactName, ContactNumber, ProviderName, CommenceDate, FinishDate, Type, OrderDetail, Price, CurrencyType) {
+        this.ItemId = ItemId;
+        this.ItemName = ItemName;
+        this.ContactName = ContactName;
+        this.ContactNumber = ContactNumber;
+        this.ProviderName = ProviderName;
+        this.CommenceDate = CommenceDate;
+        this.FinishDate = FinishDate;
+        this.Type = Type;
+        this.OrderDetail = OrderDetail;
+        this.Price = Price;
+        this.CurrencyType = CurrencyType;
     }
 })

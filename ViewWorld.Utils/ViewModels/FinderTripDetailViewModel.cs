@@ -14,6 +14,8 @@ namespace ViewWorld.Utils.ViewModels
         public string ArrivalCity { get; set; }
         public string FirstAvaiableDate { get; set; }
         public string TripData { get; set; }
+        public string UserName { get; set; }
+        public string Phone { get; set; }
 
     }
 }

@@ -419,6 +419,11 @@ namespace ViewWorld.Controllers.Trip
             var result = await tripService.RetrieveEntitiesByKeyword(keyword);
             return PartialView("~/Views/PartialViews/_PartialTripTable.cshtml", result.Entities.OrderByDescending(trip => trip.PublishedAt));
         }
+        [HttpGet]
+        public async Task<JsonResult> RetrieveTripArrangementByProductId(string productId)
+        {
+            return OriginJson(await tripService.RetrieveTripArrangementByProductId(productId));
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> UpdateTripPartial(string tripId,string data,TripTypes.TripInfoType type)

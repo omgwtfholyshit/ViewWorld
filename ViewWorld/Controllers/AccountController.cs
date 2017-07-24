@@ -21,6 +21,8 @@ using ViewWorld.Core.Dal;
 using ViewWorld.Core.Models.Identity;
 using CacheManager.Core;
 using ViewWorld.Services.Users;
+using ViewWorld.Services.Admin;
+using System.Collections.Generic;
 
 namespace ViewWorld.Controllers
 {
@@ -31,12 +33,14 @@ namespace ViewWorld.Controllers
         private readonly IMongoDbRepository Repo;
         private ApplicationUserManager _userManager;
         private IUserService userService;
+        private IAdminService adminService;
         ICacheManager<object> cacheManager;
-        public AccountController(IMongoDbRepository _repo, ICacheManager<object> _cache, IUserService _userService)
+        public AccountController(IMongoDbRepository _repo, ICacheManager<object> _cache, IUserService _userService, IAdminService _adminService)
         {
             Repo = _repo;
             cacheManager = _cache;
             userService = _userService;
+            adminService = _adminService;
         }
         public ApplicationUserManager UserManager
         {
@@ -822,6 +826,30 @@ namespace ViewWorld.Controllers
             }
             return ErrorJson("两次密码输入不匹配");
         }
-        #endregion        
+        #endregion
+        #region 拉取用户列表的方法
+        [Authorize(Roles ="管理员,销售")]
+        [HttpGet]
+        [OutputCache(Location = System.Web.UI.OutputCacheLocation.Server, VaryByParam = "roles", Duration = 900)]
+        public async Task<JsonResult> ListUsersByRoles(string roles)
+        {
+            var result = await adminService.ListUsersByRoles(roles);
+            List<object> dataList = new List<object>();
+            if (result.Success)
+            {
+                foreach(var entity in result.Entities)
+                {
+                    var data = new
+                    {
+                        id = entity.Id,
+                        nickname = entity.NickName,
+                        role = entity.Roles
+                    };
+                    dataList.Add(data);
+                }
+            }
+            return OriginJson(dataList);
+        }
+        #endregion
     }
 }

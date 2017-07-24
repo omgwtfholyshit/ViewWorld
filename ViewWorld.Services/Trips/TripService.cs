@@ -529,10 +529,8 @@ namespace ViewWorld.Services.Trips
         {
             var result = await Repo.GetOneAsync<TripArrangement>(tripId);
             double finalPrice = 0;
-            string finalResult = "";
             if (result.Success)
             {
-                finalResult += result.Entity.CommonInfo.PriceType;
                 var plan = result.Entity.TripPlans.FirstOrDefault(p => p.Id == planId);
                 if (plan != null)
                 {
@@ -564,7 +562,7 @@ namespace ViewWorld.Services.Trips
                     }
                 }
             }
-            return finalResult + finalPrice.ToString();
+            return result.Entity.CommonInfo.PriceType + "|" + finalPrice.ToString();
         }
 
         GetManyResult<TripArrangement> CacheStrToObj(string cacheStr)
@@ -594,6 +592,23 @@ namespace ViewWorld.Services.Trips
                 index++;
             }
             return typeList;
+        }
+
+        public async Task<GetOneResult<TripArrangement>> RetrieveTripArrangementByProductId(string productId)
+        {
+            GetOneResult<TripArrangement> result = new GetOneResult<TripArrangement>();
+            if (!string.IsNullOrWhiteSpace(productId))
+            {
+                var filter = Builders<TripArrangement>.Filter.Where(t => t.ProductId == productId && !t.IsDeleted);
+                result = await Repo.GetOneAsync(filter);
+                if (result.Entity == null)
+                    result.Message = "行程不存在或已删除";
+            }
+            else
+            {
+                result.Message = "产品编号不能为空！";
+            }
+            return result;
         }
     }
 }

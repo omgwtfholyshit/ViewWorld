@@ -2,9 +2,11 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using ViewWorld.Core.Enum;
 
 namespace ViewWorld.Core.Models.BusinessModels
@@ -27,6 +29,7 @@ namespace ViewWorld.Core.Models.BusinessModels
         [BsonRequired]
         public string ItemId { get; set; }
         public string ItemName { get; set; }
+        public string ContactName { get; set; }
         public string ContactNumber { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime OrderedAt { get; set; } = DateTime.Now;
@@ -41,13 +44,25 @@ namespace ViewWorld.Core.Models.BusinessModels
         public DateTime FinishDate { get; set; }
         public string ModificatorId { get; set; }
         public string ModificatorName { get; set; }
+        //销售人员
         public string SalesId { get; set; }
         public string SalesName { get; set; }
+        //供应商
+        public string ProviderName { get; set; }
         public ProductType Type { get; set; }
         public OrderStatus Status { get; set; }
-
+        //json string
+        public string OrderDetail { get; set; }
         public double Price { get; set; }
+        public CurrencyType CurrencyType { get; set; }
         public string PaymentSource { get; set; }
+        public string PaymentId { get; set; }
+        public string ThirdPartyPaymentId { get; set; }
+        [NotMapped]
+        public string OrderStatus { get { return this.Status.ToString(); } }
+        [NotMapped]
+        public string OrderType { get { return this.Type.ToString(); } }
+        public string OrderCurrency { get { return this.CurrencyType.ToString(); } }
     }
 
 }

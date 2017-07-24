@@ -27,12 +27,12 @@ namespace ViewWorld.Core.Models.Identity
                 {
                     Roles = result.Entity.Roles;
                     this._PermissionList = result.Entity.Permissions;
-                    Identity = new ViewWorldIdentity(result.Entity.UserName, result.Entity.Department, result.Entity.PhoneNumber);
+                    Identity = new ViewWorldIdentity(result.Entity.UserName, result.Entity.Department, result.Entity.PhoneNumber,result.Entity.NickName);
                 }
                     
             }else
             {
-                Identity = new ViewWorldIdentity("", "", "");
+                Identity = new ViewWorldIdentity("", "", "", "");
             }
         }
         public ViewWorldPrincipal(List<string> roles,List<Permission> permission,IIdentity identity)

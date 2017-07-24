@@ -35,6 +35,7 @@ namespace ViewWorld.Core.Models.TripModels
         public string ProductId { get; set; }
         public string Publisher { get; set; }
         public string PublisherId { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime PublishedAt { get; set; }
         public int Popularity { get; set; } = 0;
         public int TripOrdered { get; set; } = 0;
@@ -121,7 +122,7 @@ namespace ViewWorld.Core.Models.TripModels
         /// <summary>
         /// 0.出发地参团|1.目的地参团|2.自由行|3.目的地自由行|4.游轮|5.游学|6.私人定制|7.机票|
         /// </summary>
-        public string TripType { get; set; } 
+        public string TripType { get; set; } = "";
         /// <summary>
         /// 优惠政策。a.特价 b.限时促销 c.热卖 d.买二送二 e.买二送一 f.推荐 g.积分优惠 h.免费接机
         /// </summary>
@@ -304,6 +305,7 @@ namespace ViewWorld.Core.Models.TripModels
     {
         public class TripPriceForSpecificDate
         {
+            [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
             public DateTime TripDate { get; set; } 
             public HotelPrice BasePrice { get; set; }//原始价格
             

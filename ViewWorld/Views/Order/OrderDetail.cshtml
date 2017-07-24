@@ -1,0 +1,247 @@
+﻿@model ViewWorld.ViewModels.OrderOrderDetailViewModel
+@{
+    ViewBag.Title = "订单详情";
+    ViewBag.Parent = "订单管理";
+    Layout = "~/Views/Shared/_backLayout.cshtml";
+}
+
+<div class="order-management">
+    <div class="tool-bar">
+        <button class="ui basic button" id="updateOrders">
+            <i class="icon save"></i>
+            保存
+        </button>
+        <button class="ui basic button" id="editTrip">
+            <i class="icon edit"></i>
+            修改行程
+        </button>
+        <button class="ui basic button" id="editDetail">
+            <i class="icon edit"></i>
+            修改订单详情
+        </button>
+    </div>
+    <div class="table-container">
+        <div class="ui fitted divider"></div>
+        <div class="ui segment">
+            <form class="ui small form">
+                @Html.AntiForgeryToken()
+                <div class="field">
+                    <div class="inline field">
+                        <label>订单编号:</label>
+                        <input type="text" name="orderId" disabled value="@Model.Order.OrderId">
+                    </div>
+                    <div class="inline field">
+                        <label>下单时间:</label>
+                        <input type="text" name="orderTime" disabled value="@Model.Order.OrderedAt.ToShortDateString()" />
+                    </div>
+                    <div class="inline field">
+                        <label>行程名称:</label>
+                        <input type="text" name="itemName" disabled value="@Model.Order.ItemName" >
+                    </div>
+                    <div class="inline field">
+                        <label>供应商家:</label>
+                        <input type="text" name="providerName" disabled value="@Model.Order.ProviderName">
+                    </div>
+                    <div class="inline field">
+                        <label>客人名称:</label>
+                        <input type="text" name="contactName" value="@Model.Order.ContactName" disabled="@(!Model.validUser)">
+                    </div>
+                    <div class="inline field">
+                        <label>联系方式:</label>
+                        <input type="text" name="contactNumber" value="@Model.Order.ContactNumber" disabled="@(!Model.validUser)">
+                    </div>
+                    <div class="inline field">
+                        <label>负责人员:</label>
+                        <div class="ui selection dropdown sales">
+                            <input type="hidden" name="salesId">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">人员昵称</div>
+                            <div class="menu">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inline field">
+                        <label>货币种类:</label>
+                        <input type="text" name="currencyType" disabled value="@Model.Order.CurrencyType.ToString()" />
+                    </div>
+                    <div class="inline field">
+                        <label>订单金额:</label>
+                        <input type="number" name="price" value="@Model.Order.Price" disabled="@(!Model.validUser)" />
+                    </div>
+                    <div class="inline field">
+                        <label>订单状态:</label>
+                        <div class="ui selection dropdown status">
+                            <input type="hidden" name="status">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">状态</div>
+                            <div class="menu">
+                                <div class="item" data-value="0">新创建订单</div>
+                                <div class="item" data-value="1">行程已确认</div>
+                                <div class="item" data-value="2">现金收讫</div>
+                                <div class="item" data-value="3">现金已付给供应商</div>
+                                <div class="item" data-value="4">订单已完成</div>
+                                <div class="item" data-value="5">订单已关闭</div>
+                                <div class="item" data-value="6">订单已删除</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inline field">
+                        <label>订单详情:</label>
+                        <div class="roomdetail-container">
+                            <div class="ui list">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inline field">
+                        <label>出发时间:</label>
+                        <input type="text" name="commenceDate" value="@Model.Order.CommenceDate.ToShortDateString()" disabled="@(!Model.validUser)"/>
+                    </div>
+                    <div class="inline field">
+                        <label>结束时间:</label>
+                        <input type="text" name="finishDate" value="@Model.Order.FinishDate.ToShortDateString()" disabled="@(!Model.validUser)"/>
+                    </div>
+                    <div class="inline field">
+                        <label>支付方式:</label>
+                        <input type="text" name="paymentSource" disabled value="@Model.Order.PaymentSource" />
+                    </div>
+                    <div class="inline field">
+                        <label>支付凭据:</label>
+                        <input type="text" name="paymentId" disabled value="@Model.Order.PaymentId" />
+                    </div>
+                    <div class="inline field">
+                        <label>第三方凭据:</label>
+                        <input type="text" name="thirdPartyPaymentId" disabled value="@Model.Order.ThirdPartyPaymentId" />
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+<div class="ui first trip mini modal">
+    <div class="header">
+        修改行程
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>行程编号</label>
+                <input type="text" name="productId" placeholder="行程ID" value="" />
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button">
+            确定
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<div class="ui second trip mini modal">
+    <div class="header">
+        新的行程信息如下：
+    </div>
+    <div class="content" style="text-align:center">
+        
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button">
+            确定
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<div class="ui modal" id="roomSelectModal">
+    <i class="close icon"></i>
+    <div class="header">
+        房间数量:
+        <div class="number-spinner" id="RoomTotal">
+            <div class="ui right labeled input">
+                <div class="ui basic spinner label plus"><i class="plus icon"></i></div>
+                <input type="text" name="totalrooms" value="0" max="10" min="0" readonly>
+                <div class="ui basic spinner label minus"><i class="minus icon"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <table class="ui very basic table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>成人</th>
+                    <th>儿童</th>
+                </tr>
+            </thead>
+            <tbody class="rooms-container">
+
+            </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th></th>
+                    <th colspan="4">
+                        <div class="ui right floated small positive labeled icon button">
+                            <i class="checkmark icon"></i> 确定
+                        </div>
+                        <div class="ui right floated small grey labeled icon button">
+                            <i class="close icon"></i> 取消
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="error-messages"></div>
+    </div>
+</div>
+<script type="text/html" id="roomTmpl">
+    <tr class="room-detail fields" data-class="roomClass">
+        <td data-content="roomNumber"></td>
+        <td>
+            <div class="number-spinner">
+                <div class="ui right labeled input">
+                    <div class="ui basic spinner plus label"><i class="plus icon"></i></div>
+                    <input type="text" name="adults" value="2" readonly>
+                    <div class="ui basic spinner minus label"><i class="minus icon"></i></div>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="number-spinner">
+                <div class="ui right labeled input">
+                    <div class="ui basic spinner plus label"><i class="plus icon"></i></div>
+                    <input type="text" name="children" value="0" readonly>
+                    <div class="ui basic spinner minus label"><i class="minus icon"></i></div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</script>
+<script id="roomDetailTmpl" type="text/html">
+    <div class="item">
+        <i class="home icon"></i>
+        <div class="content">
+            <div class="header" data-content="roomNumber">房间1</div>
+            <div class="description" data-content="roomDesc"></div>
+        </div>
+    </div>
+</script>
+<script>
+    var orderVar = {
+        status: '@Model.Order.Status',
+        role: '@Model.Role',
+        isMyOrder: '@Model.validUser',
+        salesId: '@Model.Order.SalesId',
+        detail: '@Model.Order.OrderDetail',
+        Id: '@Model.Order.Id',
+        itemId:'@Model.Order.ItemId'
+    }
+</script>
+<script src="~/Scripts/jQuery.LoadTemplate/jquery.loadTemplate.min.js"></script>
+<script src="~/Scripts/Backend/Business/orderDetail.js"></script>
