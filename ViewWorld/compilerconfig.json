@@ -22,5 +22,9 @@
   {
     "outputFile": "Scripts/Backend/common.es5.js",
     "inputFile": "Scripts/Backend/common.js"
+  },
+  {
+    "outputFile": "Content/Frontend/userCenterLayout.css",
+    "inputFile": "Content/Frontend/userCenterLayout.scss"
   }
 ]

@@ -9,6 +9,7 @@ namespace ViewWorld.Core.Enum
     public enum ProductType
     {
         旅行团订单,
+        补差价订单,
         导游服务,
     }
 }

@@ -14,7 +14,7 @@ namespace ViewWorld.Services.Order
         Task<GetOneResult<BusinessOrder>> RetrieveOrderById(string id);
         Task<GetListResult<BusinessOrder>> RetrieveOrdersByKeyword(string keyword, string salesId);
         Task<Result> AssignOrderToSales(string salesId, string orderId);
-        Task<Result> SwitchOrderBetweenSales(string salesId, string orderId);
         Task<Result> UpdateOrderById(string salesId, BusinessOrder order, bool authorized);
+        Task<Result> CreatePriceGapOrder(string orderId, double price, string salesId, bool authorized);
     }
 }
