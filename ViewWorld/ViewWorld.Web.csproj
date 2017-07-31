@@ -1206,7 +1206,7 @@
     <Content Include="Views\Shared\_UserCenterLayout.cshtml" />
     <Content Include="Views\Shared\_NavPartial.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\Shared\_LeftNavPatial.cshtml" />
+    <Content Include="Views\Shared\_LeftNavPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

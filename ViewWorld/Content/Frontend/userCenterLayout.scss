@@ -2,9 +2,50 @@
 .nav.topNav {
     background: #fff !important;
     opacity: 1;
-    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.1);
 }
-.body-wrapper{
-    padding-top:5rem;
+.body-wrapper {
+    padding-top: 5rem;
+
+    .ui.container {
+        min-width: 933px
+    }
+
+    .subNav-wrapper {
+        height: 8rem;
+        background-color: #00b5ad;
+
+        .ui.container {
+            height: 100%;
+        }
+
+        .left-content-wrapper, .right-content-wrapper {
+            float: left;
+            width: 50%;
+            height: 100%;
+        }
+
+        .left-content-wrapper {
+            .image-container {
+                width: 6rem;
+                overflow: hidden;
+                border-radius: 6rem;
+                height: 6rem;
+                margin-top:1rem;
+                img {
+                    width: 100%;
+                }
+            }
+        }
+
+        .right-content-wrapper {
+            float: right;
+        }
+    }
+
+    .leftNav-wrapper, .content-wrapper {
+        display: inline-block;
+        vertical-align: top;
+        padding-top: 2rem;
+    }
 }
 
