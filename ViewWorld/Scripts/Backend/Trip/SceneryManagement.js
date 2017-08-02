@@ -8,7 +8,8 @@
                 this.ParentSceneryId = "";
             }
         };
-    var editor = UE.getEditor('descEditor')
+    var E = window.wangEditor, editor = new E('#descEditor');
+    editor.create();
     var api = {
         modalCategory: '/Trip/ListRegionsAPI?displaySubRegions=true',
         tablePartial: '/Trip/_PartialSceneryTable',
@@ -27,7 +28,7 @@
                 $(".scenery-editor .ui.form")[0].reset();
                 globalVar.reset();
                 $sceneryPhotos.html("");
-                editor.setContent("");
+                editor.txt.clear();
             } 
             $('.scenery-editor .ui.form .checkbox').checkbox('check');
             $modal.modal('show');
@@ -61,6 +62,7 @@
             LoadSceneryPhotos();
             FillForm($dataSource, $form);
             $('.scenery-editor.add').addClass('modifying').modal('show');
+            setTimeout(function () { $('.scenery-editor.add').modal('refresh'); },100)
             })
         $sceneryPhotos
             .delegate('.sceneryPhoto .delete.label', 'click', function (e) {
@@ -100,7 +102,7 @@
             },
             progress: function (e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
-                console.log(data.files[0].name + "     " + progress);
+                //console.log(data.files[0].name + "     " + progress);
                 //console.log(data);
             },
             progressall: function (e, data) {
@@ -168,7 +170,7 @@
                 sceneryId: globalVar.Id,
             },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 var html = "";
                 if (data.status == 200) {
                     if (data.data.length > 0) {
@@ -182,7 +184,7 @@
                 $('.scenery-editor.add').modal('refresh');
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
             }
         })
     }
@@ -191,7 +193,7 @@
             url: api.deletePhotos,
             method: 'post',
             beforeSend: function () {
-                console.log(globalVar.Id);
+                //console.log(globalVar.Id);
             },
             data: {
                 sceneryId: globalVar.Id,
@@ -199,7 +201,7 @@
                 __RequestVerificationToken: $('.scenery-editor .ui.form').find('input[name="__RequestVerificationToken"]').val()
             },
             success: function (data) {
-                console.log(data)
+                //console.log(data)
                 if (data.Success) {
                     LoadSceneryPhotos();
                 } else {
@@ -244,7 +246,8 @@
     function FillForm($dataSource, $form) {
         $.get(api.getSceneryDesc, { sceneryId: globalVar.Id }).done(function (data) {
             if (data.status == 200) {
-                editor.ready(function () { setTimeout(function () { editor.setContent($.htmlDecode(data.data));},500) })
+                //console.log(editor)
+                editor.txt.html($.htmlDecode(data.data))
             }
         }).fail(function () {
             $.tip(".message-container", "保存失败", "服务器超时，请稍后重试！", "negative", 4);
@@ -278,7 +281,7 @@
                 model[$input.data('db-key')] = $input.val().trim();
             }
         });
-        model.Description = $.htmlEncode(editor.getContent());
+        model.Description = $.htmlEncode(editor.txt.html());
         if (!$button.hasClass('loading')) {
             if ($('.scenery-editor.add').hasClass('modifying')) {
                 model['Id'] = globalVar.Id

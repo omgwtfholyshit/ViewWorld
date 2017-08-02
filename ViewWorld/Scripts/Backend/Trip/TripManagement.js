@@ -1,5 +1,5 @@
 ﻿$(function () {
-    
+    var E = window.wangEditor;
     var api = {
         regionDataUrl: '/Trip/ListRegionsAPI',
         tripDataUrl: '/Trip/GetTripArrangementById',
@@ -15,8 +15,9 @@
         listTypeUrl: '/Trip/ListTripTypeAPI',
         toggleTrip: '/Trip/ToggleTripArrangement',
     }, tmplOpt = { 'append': true }, token = $('input[name=__RequestVerificationToken]').val(), uploadArr = new Array(),
-    introEditor = UE.getEditor('introduction'), includeEditor = UE.getEditor('include'), excludeEditor = UE.getEditor('exclude'),
-    pIntroEditor = UE.getEditor('Intro'), pFeatureEditor = UE.getEditor('Feature'), exsitEditor = new Array(), highlight = new Array(), publishable = true;
+    introEditor = new E('#introduction'), includeEditor = new E('#include'), excludeEditor = new E('#exclude'),
+    pIntroEditor = new E('#Intro'), pFeatureEditor = new E('#Feature'), exsitEditor = new Array(), highlight = new Array(), publishable = true;
+    introEditor.create(); includeEditor.create(); excludeEditor.create(); pIntroEditor.create(); pFeatureEditor.create();
     var CommonInfo = {
         Name:'',
         ProviderName: '',
@@ -106,9 +107,9 @@
                 
             });
             _this.RegionName = $('#regionSelection .text').text().split('----')[1];
-            _this.Introduction =$.htmlEncode(introEditor.getContent());
-            _this.Include = $.htmlEncode(includeEditor.getContent());
-            _this.Exclude = $.htmlEncode(excludeEditor.getContent());
+            _this.Introduction = $.htmlEncode(introEditor.txt.html());
+            _this.Include = $.htmlEncode(includeEditor.txt.html());
+            _this.Exclude = $.htmlEncode(excludeEditor.txt.html());
         },
         SetSelfPayTableForJs: function () {
             var $trs = $('#selfpayActivities tbody tr'), $tr, name, price;
@@ -164,9 +165,9 @@
             $('#regionSelection').dropdown("set selected", CommonInfo.RegionId);
             $('#typeSelection').dropdown("set selected", CommonInfo.TripType.split('|'));
             $('#currency').dropdown("set selected", CommonInfo.CurrencyType);
-            introEditor.ready(function () { introEditor.setContent($.htmlDecode(_this.Introduction));})
-            includeEditor.ready(function () { includeEditor.setContent($.htmlDecode(_this.Include)); })
-            excludeEditor.ready(function () { excludeEditor.setContent($.htmlDecode(_this.Exclude)); })
+            introEditor.txt.html($.htmlDecode(_this.Introduction));
+            includeEditor.txt.html($.htmlDecode(_this.Include));
+            excludeEditor.txt.html($.htmlDecode(_this.Exclude));
         },
         SetSelfPayTableForPage: function () {
             var _this = this, $table = $('#selfpayActivities tbody'), html = '', elementArray;
@@ -265,8 +266,8 @@
                     _this[$input.data('db-key')] = $input.val().trim();
                 }
             });
-            _this.Feature = $.htmlEncode(pFeatureEditor.getContent());
-            _this.Intro = $.htmlEncode(pIntroEditor.getContent());
+            _this.Feature = $.htmlEncode(pFeatureEditor.txt.html());
+            _this.Intro = $.htmlEncode(pIntroEditor.txt.html());
         },
         SetFormDataForPage: function () {
             var _this = this, departure = new Array(), arrival = new Array(), sceneries = new Array();
@@ -285,9 +286,8 @@
             $('#departingCity').dropdown("set selected", departure);
             $('#arrivingCity').dropdown("set selected", arrival);
             $('#sceneries').dropdown("set selected", sceneries);
-            
-            pIntroEditor.ready(function () { pIntroEditor.setContent($.htmlDecode(_this.Intro)); })
-            pFeatureEditor.ready(function () { pFeatureEditor.setContent($.htmlDecode(_this.Feature)); })
+            pIntroEditor.txt.html($.htmlDecode(_this.Intro));
+            pFeatureEditor.txt.html($.htmlDecode(_this.Feature))
         },
         SyncJs: function () {
             var _this = this, object = {};

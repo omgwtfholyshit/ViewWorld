@@ -1136,6 +1136,11 @@
     <Content Include="Scripts\UEditor\ueditor.parse.min.js" />
     <Content Include="Scripts\UnderScore\underscore-min.js" />
     <Content Include="Scripts\UnderScore\underscore.js" />
+    <Content Include="Scripts\WangEditor\fonts\icomoon.svg" />
+    <Content Include="Scripts\WangEditor\wangEditor.css" />
+    <Content Include="Scripts\WangEditor\wangEditor.js" />
+    <Content Include="Scripts\WangEditor\wangEditor.min.css" />
+    <Content Include="Scripts\WangEditor\wangEditor.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1207,6 +1212,10 @@
     <Content Include="Views\Shared\_NavPartial.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Shared\_LeftNavPartial.cshtml" />
+    <Content Include="Scripts\WangEditor\fonts\icomoon.eot" />
+    <Content Include="Scripts\WangEditor\fonts\icomoon.ttf" />
+    <Content Include="Scripts\WangEditor\fonts\icomoon.woff" />
+    <Content Include="Scripts\WangEditor\wangEditor.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
