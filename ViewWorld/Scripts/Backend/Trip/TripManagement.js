@@ -509,13 +509,17 @@
             //写入TripPlan生成器信息
             try{
                 var activePlan = TripPlans[activeIndex];
+                //console.log(activePlan)
                 $form.find('.trip-type').dropdown('set selected', activePlan.Type);
                 $form.find('.oneday-only').dropdown('set selected', activePlan.IsOneDayOnly);
                 $form.find('.room-diff').dropdown('set selected', activePlan.IsRoomDiffApplied);
-                $tableBody.find('input').each(function (index, input) {
-                    $input = $(input);
-                    $input.val(activePlan.TripPrices[0].BasePrice[$input.attr('name')]);
-                })
+                if (activePlan.TripPrices.length > 0) {
+                    $tableBody.find('input').each(function (index, input) {
+                        $input = $(input);
+                        $input.val(activePlan.TripPrices[0].BasePrice[$input.attr('name')]);
+                    })
+                }
+                
                 switch (activePlan.Type) {
                     case '天天发团':
                     case '定期发团':
@@ -716,6 +720,7 @@
                         model[p] = JSON.stringify(model[p]);
                     }
                 }
+                console.log(model);
                 $.ajax({
                     url: api.partialDataUrl,
                     method: 'post',
