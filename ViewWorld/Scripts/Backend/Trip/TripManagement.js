@@ -17,6 +17,7 @@
     }, tmplOpt = { 'append': true }, token = $('input[name=__RequestVerificationToken]').val(), uploadArr = new Array(),
     introEditor = new E('#introduction'), includeEditor = new E('#include'), excludeEditor = new E('#exclude'),
     pIntroEditor = new E('#Intro'), pFeatureEditor = new E('#Feature'), scheduleEditor = new Array(), highlight = new Array(), publishable = true;
+    introEditor.customConfig.zIndex = 1; includeEditor.customConfig.zIndex = 1; excludeEditor.customConfig.zIndex = 1; pIntroEditor.customConfig.zIndex = 1; pFeatureEditor.customConfig.zIndex = 1;
     introEditor.create(); includeEditor.create(); excludeEditor.create(); pIntroEditor.create(); pFeatureEditor.create();
     var CommonInfo = {
         Name:'',
