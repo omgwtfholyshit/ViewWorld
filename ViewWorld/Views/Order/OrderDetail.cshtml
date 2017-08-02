@@ -19,6 +19,10 @@
             <i class="icon edit"></i>
             修改订单详情
         </button>
+        <button class="ui basic button" id="priceDiff">
+            <i class="icon edit"></i>
+            补差价
+        </button>
     </div>
     <div class="table-container">
         <div class="ui fitted divider"></div>
@@ -148,6 +152,28 @@
     </div>
     <div class="content" style="text-align:center">
         
+    </div>
+    <div class="actions">
+        <div class="ui negative button">
+            取消
+        </div>
+        <div class="ui positive right labeled icon button">
+            确定
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<div class="ui trip priceGap mini modal">
+    <div class="header">
+        修改行程
+    </div>
+    <div class="content">
+        <form class="ui form">
+            <div class="field">
+                <label>订单差价</label>
+                <input type="number" name="priceGap" placeholder="差价" value="" min="1" />
+            </div>
+        </form>
     </div>
     <div class="actions">
         <div class="ui negative button">

@@ -184,13 +184,56 @@ namespace ViewWorld.Services.Order
             return result;
         }
 
-        public Task<Result> SwitchOrderBetweenSales(string salesId, string orderId)
+        public async Task<Result> CreatePriceGapOrder(string orderId, double price , string salesId,bool authorized)
         {
-            var result = new Result();
+            var result = await Repo.GetOneAsync<BusinessOrder>(orderId);
+            if (result.Success)
+            {
+                if(result.Entity.SalesId == salesId || authorized)
+                {
+                    var GapOrder = new BusinessOrder()
+                    {
+                        CommenceDate = result.Entity.CommenceDate,
+                        ContactName = result.Entity.ContactName,
+                        ContactNumber = result.Entity.ContactNumber,
+                        CurrencyType = result.Entity.CurrencyType,
+                        FinishDate = result.Entity.FinishDate,
+                        ItemId = result.Entity.ItemId,
+                        ItemName = result.Entity.ItemName,
+                        LastModifiedAt = DateTime.Now,
+                        ModificatorId = result.Entity.ModificatorId,
+                        ModificatorName = result.Entity.ModificatorId,
+                        OrderDetail = result.Entity.OrderDetail,
+                        OrderedAt = DateTime.Now,
+                        OrderId = result.Entity.OrderId,
+                        Price = price,
+                        ProviderName = result.Entity.ProviderName,
+                        SalesId = result.Entity.SalesId,
+                        SalesName = result.Entity.SalesName,
+                        Status = OrderStatus.行程已确认,
+                        Type = ProductType.补差价订单,
+                        UserId = result.Entity.UserId
+                    };
+                    var insertResult = await Repo.AddOneAsync(GapOrder);
+                    result.Success = insertResult.Success;
+                    result.Message = insertResult.Message;
+                    result.ErrorCode = insertResult.ErrorCode;
+                }
+                else
+                {
+                    result.Success = false;
+                    result.Message = "您没有权限执行该操作";
+                    result.ErrorCode = 401;
+                }
+            }
+            else
+            {
+                result.Success = false;
+                result.Message = "找不到该订单";
+                result.ErrorCode = 404;
+            }
+            return result;
 
-            throw new NotImplementedException();
         }
-
-        
     }
 }

@@ -5,7 +5,8 @@
             updateOrder: "/Order/UpdateOrder",
             listSales: '/Account/ListUsersByRoles',
             listProviders: '/Order/ListProviders',
-            getTrip: '/Trip/RetrieveTripArrangementByProductId'
+            getTrip: '/Trip/RetrieveTripArrangementByProductId',
+            priceGap:'/Order/CreatePriceGapOrder'
         },
         orderData: {
             contactName: '',
@@ -107,6 +108,35 @@
             }
             
         },
+        createPriceGapOrder: function ($button, price) {
+            var _this = this;
+            if (!$button.hasClass('loading')) {
+                if (_this.validUser) {
+                    $.ajax({
+                        url: _this.api.priceGap,
+                        method: 'post',
+                        beforeSend: function () {
+                            $button.addClass('loading');
+                        },
+                        data: {
+                            orderId: orderVar.Id,
+                            price: price,
+                            __RequestVerificationToken: $('.ui.form input[name="__RequestVerificationToken"]').val(),
+                        },
+                        success: function (data) {
+                            if (data.Success) {
+                                $.tip(".message-container", "补差价订单创建成功", "订单创建成功", "positive", 4);
+                            } else {
+                                var message = data.Message == null ? message = data.message : message = data.Message;
+                                $.tip(".message-container", "补差价订单创建失败", message, "negative", 4);
+                            }
+                            $button.removeClass('loading');
+                        },
+                        error: function (data) { $.tip(".message-container", "补差价订单创建失败", "服务器超时，请稍后重试！", "negative", 4); $button.removeClass('loading'); }
+                    });
+                }
+            }
+        },
         renderRoomList: function (totalRooms, orderedRooms) {
             var _this = this, roomClass = '';
             _this.detailContainer.roomInfoContainer.html("");
@@ -196,7 +226,7 @@
                         url: _this.api.updateOrder,
                         method: 'post',
                         beforeSend: function () {
-                            $target.addClass('loading');
+                            $button.addClass('loading');
                         },
                         data: {
                             order: order,
@@ -206,6 +236,7 @@
                             if (data.Success) {
                                 $.tip(".message-container", "订单保存成功", "订单数据已更新，请刷新页面核查。", "positive", 4); 
                             } else {
+                                
                                 $.tip(".message-container", "订单保存失败", data.Message, "negative", 4); 
                             }
                             $button.removeClass('loading');
@@ -230,7 +261,11 @@
             })
             .delegate('#editDetail', 'click', function (e) {
                 _this.detailContainer.roomSelectModal.modal('show');
+             })
+            .delegate('#priceDiff', 'click', function (e) {
+                    $('.trip.priceGap.modal').modal('show');
             })
+
             $('.first.trip.modal .positive.button').on('click', function (e) {
                 var $modal = $(e.target).parents('.modal'),id = $modal.find('input[name=productId]').val();
                 _this.getTripById($(e.target), id);
@@ -243,7 +278,10 @@
                 $('input[name=itemName]').val(_this.orderData.itemName);
                 $('input[name=providerName]').val(_this.orderData.providerName);
             })
-
+            $('.trip.priceGap.modal .positive.button').on('click', function (e) {
+                var $modal = $(e.target).parents('.modal'), price = $modal.find('input[name=priceGap]').val();
+                _this.createPriceGapOrder($(e.target), price);
+            })
         },
         init: function () {
             var _this = this;

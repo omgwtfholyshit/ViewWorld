@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>@ViewBag.Title - 瞰世界</title>
+    @Styles.Render("~/Content/semantic", "~/Content/Frontend/userCenterLayout.min.css")
+    @Scripts.Render("~/bundles/jquery")
+    <script data-pace-options='{ "ajax": false }' src="~/Lib/Pace/pace.js"></script>
+</head>
+<body>
+    @Html.Partial("_NavPartial")
+    <div class="body-wrapper">
+        <div class="subNav-wrapper">
+            <div class="ui container">
+                <div class="left-content-wrapper">
+                    <div class="image-container">
+                        <img src="~/Images/DefaultImages/UnknownSex.jpg" />
+                    </div>
+                    <div class="info-container">
+                        <div class="welcome-message">欢迎你！</div>
+
+                    </div>
+                </div>
+                <div class="right-content-wrapper"></div>
+            </div>
+        </div>
+        <div class="ui container">
+            <div class="leftNav-wrapper">
+                @Html.Partial("_LeftNavPartial")
+            </div>
+            <div class="content-wrapper">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="message-container"></div>
+    </div>
+    @Scripts.Render("~/bundles/semantic")
+    <script src="~/Scripts/Backend/common.es5.min.js"></script>
+    <script src="~/Scripts/Frontend/layout.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

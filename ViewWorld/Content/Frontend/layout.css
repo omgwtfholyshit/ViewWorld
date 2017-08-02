@@ -260,7 +260,7 @@ ul {
 /******************
       Nav
 ******************/
-.nav {
+.nav.topNav {
   height: 5rem;
   width: 100%;
   transition: all ease-in-out 0.3s;
@@ -268,28 +268,28 @@ ul {
   z-index: 99;
   background-color: #fff;
   outline: none; }
-  .nav:hover {
+  .nav.topNav:hover {
     background: #fff !important;
     opacity: 0.9;
     box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.1); }
-  .nav .navbar-brand {
+  .nav.topNav .navbar-brand {
     line-height: 5rem;
     display: inline-block;
     padding-right: 5rem; }
-    .nav .navbar-brand img {
+    .nav.topNav .navbar-brand img {
       height: auto;
       vertical-align: middle;
       width: 7rem; }
-    .nav .navbar-brand .icon.button {
+    .nav.topNav .navbar-brand .icon.button {
       display: none; }
-  .nav .left-menu {
+  .nav.topNav .left-menu {
     display: inline-block; }
-  .nav .nav-menu {
+  .nav.topNav .nav-menu {
     line-height: 5rem; }
-    .nav .nav-menu .nav-list .active.nav-item {
+    .nav.topNav .nav-menu .nav-list .active.nav-item {
       color: #00b5ad;
       font-weight: 700; }
-    .nav .nav-menu .nav-list .nav-item {
+    .nav.topNav .nav-menu .nav-list .nav-item {
       display: inline-block;
       width: 8rem;
       text-align: left;
@@ -297,20 +297,20 @@ ul {
       color: #666;
       font-weight: 400;
       cursor: pointer; }
-      .nav .nav-menu .nav-list .nav-item .ui.compact.menu {
+      .nav.topNav .nav-menu .nav-list .nav-item .ui.compact.menu {
         height: 2rem;
         border: none;
         box-shadow: none;
         display: none; }
-      .nav .nav-menu .nav-list .nav-item:hover {
+      .nav.topNav .nav-menu .nav-list .nav-item:hover {
         color: #00b5ad; }
-  .nav .right-menu {
+  .nav.topNav .right-menu {
     float: right; }
-    .nav .right-menu .nav-list .nav-item {
+    .nav.topNav .right-menu .nav-list .nav-item {
       width: auto;
       height: 3.5rem;
       line-height: 3.5rem; }
-      .nav .right-menu .nav-list .nav-item .compact.menu {
+      .nav.topNav .right-menu .nav-list .nav-item .compact.menu {
         background-color: transparent; }
 
 /******************

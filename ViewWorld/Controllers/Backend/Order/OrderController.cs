@@ -24,6 +24,7 @@ namespace ViewWorld.Controllers.Backend.Order
         {
             cacheManager = _cache;
             orderService = _order;
+            
         }
         // GET: Order
         [HttpGet]
@@ -70,10 +71,24 @@ namespace ViewWorld.Controllers.Backend.Order
             {
                 order.ModificatorId = UserId;
                 order.ModificatorName = GetClaimValue("NickName");
-                bool authorized = GetClaimValue(ClaimTypes.Role) == "管理员";
-                return OriginJson((await orderService.UpdateOrderById(UserId, order, authorized)));
+                return OriginJson((await orderService.UpdateOrderById(UserId, order, IsAuthorized())));
             }
             return ErrorJson("模型错误");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> CreatePriceGapOrder(string orderId, double price = 0.0)
+        {
+            if (string.IsNullOrWhiteSpace(orderId))
+                return ErrorJson("订单号为空");
+            if (price <= 0)
+                return ErrorJson("价格不能小于0");
+            return OriginJson(await orderService.CreatePriceGapOrder(orderId, price, UserId, IsAuthorized()));
+        }
+
+        bool IsAuthorized()
+        {
+            return GetClaimValue(ClaimTypes.Role) == "管理员"; 
         }
     }
 }

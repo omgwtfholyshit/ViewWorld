@@ -595,6 +595,12 @@
     <Content Include="Content\components\visibility.min.js" />
     <Content Include="Content\components\visit.js" />
     <Content Include="Content\components\visit.min.js" />
+    <Content Include="Content\Frontend\userCenterLayout.css">
+      <DependentUpon>userCenterLayout.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\Frontend\userCenterLayout.min.css">
+      <DependentUpon>userCenterLayout.css</DependentUpon>
+    </Content>
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />
@@ -802,6 +808,7 @@
     <Content Include="Lib\Swiper\js\maps\swiper.jquery.min.js.map" />
     <Content Include="Lib\Swiper\js\maps\swiper.jquery.umd.min.js.map" />
     <Content Include="Lib\Swiper\js\maps\swiper.min.js.map" />
+    <Content Include="Content\Frontend\userCenterLayout.scss" />
     <None Include="Properties\PublishProfiles\ViewWorld - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\calendar.es5.js">
@@ -1196,6 +1203,10 @@
     <Content Include="Views\Finder\TripDetail.cshtml" />
     <Content Include="Views\Page\Orders.cshtml" />
     <Content Include="Views\Order\OrderDetail.cshtml" />
+    <Content Include="Views\Shared\_UserCenterLayout.cshtml" />
+    <Content Include="Views\Shared\_NavPartial.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Shared\_LeftNavPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1205,7 +1216,6 @@
     <Folder Include="Views\Install\" />
     <Folder Include="Views\Provider\" />
     <Folder Include="Views\Trip\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -1,0 +1,33 @@
+﻿@import url(layout.min.css);
+.nav.topNav {
+  background: #fff !important;
+  opacity: 1; }
+
+.body-wrapper {
+  padding-top: 5rem; }
+  .body-wrapper .ui.container {
+    min-width: 933px; }
+  .body-wrapper .subNav-wrapper {
+    height: 8rem;
+    background-color: #00b5ad; }
+    .body-wrapper .subNav-wrapper .ui.container {
+      height: 100%; }
+    .body-wrapper .subNav-wrapper .left-content-wrapper, .body-wrapper .subNav-wrapper .right-content-wrapper {
+      float: left;
+      width: 50%;
+      height: 100%; }
+    .body-wrapper .subNav-wrapper .left-content-wrapper .image-container {
+      width: 6rem;
+      overflow: hidden;
+      border-radius: 6rem;
+      height: 6rem;
+      margin-top: 1rem; }
+      .body-wrapper .subNav-wrapper .left-content-wrapper .image-container img {
+        width: 100%; }
+    .body-wrapper .subNav-wrapper .right-content-wrapper {
+      float: right; }
+  .body-wrapper .leftNav-wrapper, .body-wrapper .content-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 2rem; }
+

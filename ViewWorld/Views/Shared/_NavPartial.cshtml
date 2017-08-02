@@ -1,0 +1,25 @@
+﻿<div class="nav topNav" tabindex="1">
+    <div class="ui container">
+        <div class="nav-container">
+            <div class="navbar-brand">
+                <img src="~/Images/Logo/logo_352-172.svg" />
+                <div class="menu-toggle">
+                    <div class="line-one"></div>
+                    <div class="line-two"></div>
+                    <div class="line-three"></div>
+                </div>
+            </div>
+            <div class="nav-menu left-menu">
+                <ul class="nav-list">
+                    <li class="nav-item" data-url="/">首页</li>
+                    <li class="nav-item">目的地</li>
+                    <li class="nav-item" data-url="/Finder/FindTrips">浏览行程</li>
+                    <li class="nav-item" data-url="/User/Index">个人中心</li>
+                </ul>
+            </div>
+            <div class="nav-menu right-menu">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+</div>
