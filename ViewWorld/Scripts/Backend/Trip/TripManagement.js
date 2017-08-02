@@ -16,7 +16,7 @@
         toggleTrip: '/Trip/ToggleTripArrangement',
     }, tmplOpt = { 'append': true }, token = $('input[name=__RequestVerificationToken]').val(), uploadArr = new Array(),
     introEditor = new E('#introduction'), includeEditor = new E('#include'), excludeEditor = new E('#exclude'),
-    pIntroEditor = new E('#Intro'), pFeatureEditor = new E('#Feature'), exsitEditor = new Array(), highlight = new Array(), publishable = true;
+    pIntroEditor = new E('#Intro'), pFeatureEditor = new E('#Feature'), scheduleEditor = new Array(), highlight = new Array(), publishable = true;
     introEditor.create(); includeEditor.create(); excludeEditor.create(); pIntroEditor.create(); pFeatureEditor.create();
     var CommonInfo = {
         Name:'',
@@ -560,7 +560,7 @@
                     })
                     var $scheduleItems = $('#' + correspondingSchedule.containerId).find('.schedule-item');
                     $scheduleItems.each(function (i, e) {
-                        var id = $(e).find('.edui-default').attr('id'), $inputs = $(e).find('input').not('.search'),
+                        var id = $(e).find('.weditor-default').attr('id'), $inputs = $(e).find('input').not('.search'),
                             item = correspondingSchedule.Details.find(function (item) { return item.Id == id });
                         if (item != 'undefined') {
                             $inputs.each(function (iterator, input) {
@@ -581,12 +581,12 @@
                                 }
                                 
                             })
-                            if(item!=null)
-                                item.Arrangement = $.htmlEncode(UE.getEditor(id).getContent());
+                            if (item != null)
+                                item.Arrangement = $.htmlEncode(scheduleEditor[id].txt.html());
                         }
                     })
-                    correspondingSchedule.Description = $.htmlEncode(UE.getEditor(correspondingSchedule.descId).getContent());
-                    correspondingSchedule.Introduction = $.htmlEncode(UE.getEditor(correspondingSchedule.introId).getContent());
+                    //correspondingSchedule.Description = $.htmlEncode(UE.getEditor(correspondingSchedule.descId).getContent());
+                    //correspondingSchedule.Introduction = $.htmlEncode(UE.getEditor(correspondingSchedule.introId).getContent());
                 }
             })
             return Schedules;
@@ -603,16 +603,17 @@
                 menuHtml += '<div class="item-container"><a class="item ' + active + '" data-tab="' + tabPath + '">第<span>' + element.Day + '</span>天</a><div class="icon-container"><i class="plus icon"></i><i class="remove icon"></i></div></div>';
                 element.tabPath = tabPath;
                 element.containerId = $.uuid();
-                element.descId = $.uuid();
-                element.introId = $.uuid();
+                //element.descId = $.uuid();
+                //element.introId = $.uuid();
                 $scheduleContainer.loadTemplate('#scheduleTmpl', element, tmplOpt);
-                UE.getEditor(element.descId).ready(function (r) {
-                    this.setContent($.htmlDecode(element.Description))
-                })
-                UE.getEditor(element.introId).ready(function (r) {
-                    this.setContent($.htmlDecode(element.Description))
-                })
+                //UE.getEditor(element.descId).ready(function (r) {
+                //    this.setContent($.htmlDecode(element.Description))
+                //})
+                //UE.getEditor(element.introId).ready(function (r) {
+                //    this.setContent($.htmlDecode(element.Description))
+                //})
                 $.each(element.Details, function (ind, ele) {
+                    ele.Id = 's' + ele.Id;
                     var sceneries = new Array();
                     $('#' + element.containerId).loadTemplate('#scheduleItemTmpl', ele, tmplOpt);
                     var $sceneryDropdown = $('#' + ele.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
@@ -623,9 +624,14 @@
                         })
                         $sceneryDropdown.dropdown("set selected", sceneries);
                     }
-                    UE.getEditor(ele.Id).ready(function () {
-                        this.setContent($.htmlDecode(ele.Arrangement))
-                    })
+                    var editor = new E('#' + ele.Id);
+                    editor.customConfig.zIndex = 1;
+                    editor.create();
+                    scheduleEditor[ele.Id] = editor;
+                    editor.txt.html($.htmlDecode(ele.Arrangement))
+                    //UE.getEditor(ele.Id).ready(function () {
+                    //    this.setContent($.htmlDecode(ele.Arrangement))
+                    //})
                 })
             })
            
@@ -1311,7 +1317,7 @@
         $('#scheduleList').delegate('.button.add-scenery', 'click', function (e) {
             e.preventDefault();
             var containerId = $(e.target).siblings('.schedule-item-container').attr('id');
-            var scheduleItem = new ScheduleItem($.uuid(), '', '', '', '');
+            var scheduleItem = new ScheduleItem('s' + $.uuid(), '', '', '', '');
             var scheduleId = $('.tab.active.day').attr('id');
             var schedule = Schedules.find(function (schedule) { return schedule.Id == scheduleId });
             typeof schedule != 'undefined' ? schedule.Details.push(scheduleItem) : $.tip(".message-container", "数据读取错误", "找不到对应行程，建议刷新页面重试", "positive", 4);
@@ -1319,7 +1325,10 @@
             var $sceneryDropdown = $('#' + scheduleItem.Id).parents('.inline.fields').siblings('.inline.field').find('.scenery-selection');
             $sceneryDropdown.find('.menu').html(localStorage.sceneries);
             $sceneryDropdown.dropdown();
-            UE.getEditor(scheduleItem.Id);
+            var editor = new E('#' + scheduleItem.Id);
+            editor.customConfig.zIndex = 1;
+            editor.create();
+            scheduleEditor[scheduleItem.Id] = editor;
             return false;
         }).delegate('.icon-container .plus.icon', 'click', function (e) {
             var tabPath = $(e.target).parent().siblings().data('tab');//获取当前的tabPath;
@@ -1362,8 +1371,8 @@
                     Schedules[i].Day++;
                     $('#' + Schedules[i].Id).find('input[name=Day]').val(Schedules[i].Day);
                 }
-                UE.getEditor(schedule.descId);
-                UE.getEditor(schedule.introId);
+                //UE.getEditor(schedule.descId);
+                //UE.getEditor(schedule.introId);
 
                 //重新绑定tab
                 BindTabs();

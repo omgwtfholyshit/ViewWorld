@@ -3,5 +3,24 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
-<h2>Index</h2>
+<div id="div1">
+    <p>div1</p>
+</div>
+<div id="div2"></div>
+<div id="div3"></div>
+
+<!-- 引用js -->
+<script src="~/Scripts/WangEditor/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editorList = new Array();
+    for (i = 1; i <= 3; i++) {
+        var id = '#div' + i;
+        var editor = new E(id);
+        editor.create();
+        editorList[id] = editor;
+    }
+    var ed = editorList['#div2'];
+    console.log(ed.txt.html());
+</script>
 
