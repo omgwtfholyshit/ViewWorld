@@ -284,9 +284,13 @@
                     sceneries.push(element.split(',')[0]);
                 })
             }
-            $('#departingCity').dropdown("set selected", departure);
-            $('#arrivingCity').dropdown("set selected", arrival);
-            $('#sceneries').dropdown("set selected", sceneries);
+            console.log(sceneries)
+            setTimeout(function () {
+                $('#departingCity').dropdown("set selected", departure);
+                $('#arrivingCity').dropdown("set selected", arrival);
+                $('#sceneries').dropdown("set selected", sceneries);
+            }, 150)
+            
             pIntroEditor.txt.html($.htmlDecode(_this.Intro));
             pFeatureEditor.txt.html($.htmlDecode(_this.Feature))
         },
