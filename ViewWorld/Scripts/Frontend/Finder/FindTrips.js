@@ -188,14 +188,18 @@
                     pageNum: pageNumber
                 },
                 success: function (result) {
-                    console.log(result)
-                    paginationVar.PageCount = result.data.PageCount;
-                    paginationVar.PageIndex = result.data.PageIndex;
-                    paginationVar.PageSize = result.data.PageSize;
-                    paginationVar.PageCount == 0 && firstRequest ? _this.buildFirstRequestFilter() : _this.buildFilter(result.data.Data);
-                    firstRequest = false;
-                    callback && callback();
-                    _this.loadImage();
+                    if (result.Success) {
+                        paginationVar.PageCount = result.data.PageCount;
+                        paginationVar.PageIndex = result.data.PageIndex;
+                        paginationVar.PageSize = result.data.PageSize;
+                        paginationVar.PageCount == 0 && firstRequest ? _this.buildFirstRequestFilter() : _this.buildFilter(result.data.Data);
+                        firstRequest = false;
+                        callback && callback();
+                        _this.loadImage();
+                    } else {
+                        $.tip(".message-container", "操作失败", result.message, "negative", 4);
+                    }
+                    
                 },
                 error: function (xhr) {
                     $.tip(".message-container", "操作失败", "服务器超时，请稍后重试！", "negative", 4);

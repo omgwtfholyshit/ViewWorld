@@ -157,7 +157,7 @@ namespace ViewWorld.Services.Trips
                         if (model.DisplayOnFrontPageTripsOnly)
                             filteredTrips = result.Entities.Where(e => e.DisplayOnFrontPage);
                         if (!string.IsNullOrWhiteSpace(model.Region)||model.Region=="null")
-                            filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
+                            filteredTrips = filteredTrips.Where(t => t.CommonInfo.RegionName.Contains(model.Region));
                         if (model.Days > 0)
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
                         if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
