@@ -156,7 +156,7 @@
             })
         },
         SetFormDataForPage: function () {
-            var $inputs = $('#commonInfo').find('input').not('.search,#fileUpload,input[type=checkbox],#selfpayActivities input,input[name=__RequestVerificationToken],.saved-photo input');
+            var $inputs = $('#commonInfo').find('input').not('.search,#fileUpload,input[type=checkbox],#selfpayActivities input,input[name=__RequestVerificationToken],.saved-photo input,#typeSelection input');
             var $input, outcome, _this = this;
             $inputs.each(function (index, input) {
                 $input = $(input);

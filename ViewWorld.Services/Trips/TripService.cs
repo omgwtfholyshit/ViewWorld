@@ -611,7 +611,7 @@ namespace ViewWorld.Services.Trips
             string types = "出发地参团|目的地参团|自由行|目的地自由行|游轮|游学|私人定制|机票";
             //var typeList = types.Split('|');
             List<object> typeList = new List<object>();
-            var index = 0;
+            var index = 1;
             foreach(var type in types.Split('|'))
             {
                 var data = new
