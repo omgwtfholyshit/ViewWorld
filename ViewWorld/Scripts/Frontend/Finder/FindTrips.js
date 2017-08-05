@@ -227,6 +227,7 @@
                 if (typeof tripData != 'undefined' && tripData.length > 0) {
                     //build filter item list
                     $.each(tripData, function (index, element) {
+                        console.log(element)
                         regionTags.indexOf(element.CommonInfo.RegionName) > 0 ? regionTags : regionTags += '<span>' + element.CommonInfo.RegionName + '</span>';
                         departCities = getCity(element.ProductInfo.DepartingCity);
                         arrivalCities = getCity(element.ProductInfo.ArrivingCity);
@@ -250,7 +251,7 @@
                                 labelHtml += '<div class="ui teal label">' + e[1] + '</div>';
                         })
                         element.CommonInfo.FrontCover == null ? element.CommonInfo.FrontCover = { FileLocation: '' } : element.CommonInfo.FrontCover;
-                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.FrontCover.FileLocation.replace('~', ''), "$" + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
+                        $content.loadTemplate('#resultContentTmpl', new contentItem(element.CommonInfo.Name, element.CommonInfo.Keyword, element.CommonInfo.FrontCover.FileLocation.replace('~', ''), getCurrencyType(+element.CommonInfo.CurrencyType) + element.CommonInfo.LowestPrice, cityStr.substr(0, cityStr.length - 1) + "出发", dayStr.substr(0, dayStr.length - 1) + "出行", labelHtml, element.ProductId), { 'append': true });
                         temp = cityStr = '';
                     })
 
@@ -373,5 +374,19 @@
     }
     function getCity(cityStr) {
         return cityStr.split('|');
+    }
+    function getCurrencyType(type) {
+        var symbol = "￥";
+        switch (type) {
+            case 2:
+                symbol = "A$"; break;
+            case 3:
+                symbol = "$"; break;
+            case 4:
+                symbol = "€"; break;
+            default:
+                symbol = "￥";
+        }
+        return symbol;
     }
 })
