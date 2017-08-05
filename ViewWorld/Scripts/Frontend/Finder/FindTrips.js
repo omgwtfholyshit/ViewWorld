@@ -227,7 +227,6 @@
                 if (typeof tripData != 'undefined' && tripData.length > 0) {
                     //build filter item list
                     $.each(tripData, function (index, element) {
-                        console.log(element)
                         regionTags.indexOf(element.CommonInfo.RegionName) > 0 ? regionTags : regionTags += '<span>' + element.CommonInfo.RegionName + '</span>';
                         departCities = getCity(element.ProductInfo.DepartingCity);
                         arrivalCities = getCity(element.ProductInfo.ArrivingCity);
