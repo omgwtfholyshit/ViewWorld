@@ -8,7 +8,7 @@ namespace ViewWorld.Core.Enum
 {
     public enum CurrencyType
     {
-        人民币 = 0,
+        人民币 = 1,
         澳元,
         美元,
         欧元

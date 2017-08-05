@@ -64,7 +64,7 @@
                 if (data.success) {
                     $.each(data.results, function (index, element) {
                         if (element != null) {
-                            html += '<div class="item" data-value="' + element.value + '">' + element.name + '</div>'
+                            html += '<div class="item" data-value="' + element.value  + '">' + element.name + '</div>';
                         }
                     })
                     $('#typeSelection .menu').html(html);
