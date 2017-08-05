@@ -49,6 +49,16 @@
                 $anchor = $(e.target);
                 $anchor.siblings().removeClass('selected');
                 $anchor.addClass('selected');
+                var href = $anchor.data('href');
+                if ($anchor.data('href').startsWith('C')) {
+                    _this.cnCityContainer.animate({
+                        scrollTop: _this.cnCityContainer.find('#' + $anchor.data('href')).offset().top - _this.cnCityContainer.offset().top + _this.cnCityContainer.scrollTop()
+                    },500)
+                } else if ($anchor.data('href').startsWith('F')) {
+                    _this.fnCityContainer.animate({
+                        scrollTop: _this.fnCityContainer.find('#' + $anchor.data('href')).offset().top - _this.fnCityContainer.offset().top + _this.fnCityContainer.scrollTop()
+                    }, 500)
+                }
             })
             .delegate('.city-item a,.recent-city .sub.header span', 'click', function (e) {
                 text = $(e.target).text();
@@ -96,6 +106,7 @@
                         _this.searchModel[modelname] = $target.text();
                     }
                 }
+                _this.searchModel.keyword = _this.search.find('input[name=keyword]').val();
                 _this.loadTrips(1, _this.buildPagination.bind(_this));
             })
             .delegate('.filter-content .content-item .toggleOptions', 'click', function (e) {
@@ -177,6 +188,7 @@
                     pageNum: pageNumber
                 },
                 success: function (result) {
+                    console.log(result)
                     paginationVar.PageCount = result.data.PageCount;
                     paginationVar.PageIndex = result.data.PageIndex;
                     paginationVar.PageSize = result.data.PageSize;

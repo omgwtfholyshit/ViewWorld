@@ -47,7 +47,7 @@ namespace ViewWorld.Services.Cities
                 filter = builder.Where(city => city.IsChineseCity == isChinsesCity && city.Initial == initial.ToUpper());
             }
             var result = await Repo.GetManyAsync(filter);
-            return result.Entities.GroupBy(e => e.Initial).ToList(); ;
+            return result.Entities.OrderBy(e=>e.Initial).GroupBy(e => e.Initial).ToList(); 
         }
 
         public async Task<GetListResult<CityInfo>> RetrieveEntitiesByKeyword(string keyword)

@@ -16,7 +16,7 @@ namespace ViewWorld.Core.Models.TripModels
         /// <summary>
         /// 如果儿童价比成人价便宜，则这里填差价。例如成人价80元，儿童价60元，ChildPrice = 20。
         /// </summary>
-        public double ChildPrice { get; set; }
-        public double RoomDifference { get; set; } //单房差
+        public double ChildPrice { get; set; } = 0;
+        public double ShareRoomPrice { get; set; } //单房差
     }
 }

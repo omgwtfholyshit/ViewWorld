@@ -64,7 +64,7 @@
         $cells.each(function (index, cell) {
             model[$(cell).data('db-key')] = $(cell).text().trim();
         });
-        
+        console.log(model);
        
         $.ajax({
             url: '/Trip/EditCity',
@@ -157,7 +157,9 @@
             if (data.status == 200) {
                 var html = '';
                 $.each(data.data, function (index, element) {
-                    html += '<tr data-city-id="' + element.Id + '"><td><div class="editable-cell" data-db-key="name">' + element.Name + '</div>ID: ' + element.Id + ' </td><td><div class="editable-cell" data-db-key="initial">' + element.Initial + '</div></td><td><input type="checkbox"  checked="' + element.IsChineseCity + '"/></td><td><button class="ui blue icon button save hidden"><i class="icon save"></i></button><button class="ui blue icon button edit"><i class="icon edit"></i></button><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
+                    element.IsChineseCity?
+                        html += '<tr data-city-id="' + element.Id + '"><td><div class="editable-cell" data-db-key="name">' + element.Name + '</div>ID: ' + element.Id + ' </td><td><div class="editable-cell" data-db-key="initial">' + element.Initial + '</div></td><td><input type="checkbox" name="IsChineseCity"  checked="' + element.IsChineseCity + '"/></td><td><button class="ui blue icon button save hidden"><i class="icon save"></i></button><button class="ui blue icon button edit"><i class="icon edit"></i></button><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>' :
+                        html += '<tr data-city-id="' + element.Id + '"><td><div class="editable-cell" data-db-key="name">' + element.Name + '</div>ID: ' + element.Id + ' </td><td><div class="editable-cell" data-db-key="initial">' + element.Initial + '</div></td><td><input type="checkbox" name="IsChineseCity" /></td><td><button class="ui blue icon button save hidden"><i class="icon save"></i></button><button class="ui blue icon button edit"><i class="icon edit"></i></button><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
                 })
                 $('.ui.celled.table tbody').html(html);
             }
@@ -218,7 +220,7 @@
                         //$form[0].reset();
                         //$form[0][1].focus();
                         $this.removeClass('loading');
-                        $.tip(".message-container", "操作成功", "供应商已保存", "positive", 4);
+                        $.tip(".message-container", "操作成功", "城市已保存", "positive", 4);
                         searchCity();
                     } else {
                         $this.removeClass('loading');

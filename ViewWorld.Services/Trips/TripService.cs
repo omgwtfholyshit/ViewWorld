@@ -16,6 +16,7 @@ using System.Security.Claims;
 using ViewWorld.Core.Models.ViewModels;
 using CacheManager.Core;
 using Newtonsoft.Json;
+using static ViewWorld.Core.Models.TripModels.CommonInfo;
 
 namespace ViewWorld.Services.Trips
 {
@@ -150,19 +151,26 @@ namespace ViewWorld.Services.Trips
                 }
                 else
                 {
-                    filteredTrips = result.Entities.Where(e => e.IsVisible && !e.IsDeleted);
-                    if (model.DisplayOnFrontPageTripsOnly)
-                        filteredTrips = result.Entities.Where(e => e.DisplayOnFrontPage);
-                    if (!string.IsNullOrWhiteSpace(model.Region))
-                        filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
-                    if (model.Days > 0)
-                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
-                    if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
-                        filteredTrips = filteredTrips.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity));
-                    if (!string.IsNullOrWhiteSpace(model.keyword))
-                        filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
-                    if (!string.IsNullOrWhiteSpace(model.Theme))
-                        filteredTrips = filteredTrips.Where(t => t.CommonInfo.Theme.Contains(model.Theme));
+                    try
+                    {
+                        filteredTrips = result.Entities.Where(e => e.IsVisible && !e.IsDeleted);
+                        if (model.DisplayOnFrontPageTripsOnly)
+                            filteredTrips = result.Entities.Where(e => e.DisplayOnFrontPage);
+                        if (!string.IsNullOrWhiteSpace(model.Region)||model.Region=="null")
+                            filteredTrips = filteredTrips.Where(t => model.Region.Contains(t.CommonInfo.RegionName));
+                        if (model.Days > 0)
+                            filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
+                        if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
+                            filteredTrips = filteredTrips.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity));
+                        if (!string.IsNullOrWhiteSpace(model.keyword))
+                            filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
+                        if (!string.IsNullOrWhiteSpace(model.Theme))
+                            filteredTrips = filteredTrips.Where(t => t.CommonInfo.Theme.Contains(model.Theme));
+                    }catch(Exception ex)
+                    {
+                        result.Message = ex.Message;
+                    }
+                    
                 }
             }
             return filteredTrips;
@@ -270,6 +278,7 @@ namespace ViewWorld.Services.Trips
         public async Task<Result> CopyTripArrangement(string tripId)
         {
             var result = await Repo.GetOneAsync<TripArrangement>(tripId);
+            List<PhotoInfo> photoList = new List<PhotoInfo>();
             if (result.Success)
             {
                 JavaScriptSerializer js = new JavaScriptSerializer();
@@ -283,7 +292,11 @@ namespace ViewWorld.Services.Trips
                 foreach (var claim in claimsIdentity.Claims)
                 {
                     if (claim.Type == "NickName")
+                    {
                         obj.Publisher = claim.Value.ToUpper();
+                        break;
+                    }
+                        
                 }
                 obj.PublisherId = HttpContext.Current.User.Identity.GetUserId();
                 obj.PublishedAt = DateTime.Now;
@@ -292,19 +305,30 @@ namespace ViewWorld.Services.Trips
                     string savePath = PathHelper.MapPath(dataDirectory + obj.Id + "/TripPhotos/");
                     if (!Directory.Exists(savePath))
                         Directory.CreateDirectory(savePath);
-                    foreach (var photo in obj.CommonInfo.Photos)
+                    try
                     {
-                        string filePath = PathHelper.MapPath(photo.FileLocation);
-                        string newPath = savePath + Tools.GenerateId_M1() + Path.GetExtension(photo.Name).ToLower();
-                        if (File.Exists(filePath))
+                        foreach (var photo in obj.CommonInfo.Photos)
                         {
-                            File.Copy(filePath, newPath);
-                            photo.FileLocation = PathHelper.absolutePathtoVirtualPath(newPath);
-                        }else
-                        {
-                            obj.CommonInfo.Photos.Remove(photo);
+                            string filePath = PathHelper.MapPath(photo.FileLocation);
+                            string newPath = savePath + Tools.GenerateId_M1() + Path.GetExtension(photo.Name).ToLower();
+                            if (File.Exists(filePath))
+                            {
+                                File.Copy(filePath, newPath);
+                                photo.FileLocation = PathHelper.absolutePathtoVirtualPath(newPath);
+                            }
+                            else
+                            {
+                                photoList.Add(photo);
+                            }
                         }
+                        if (photoList.Count() > 0)
+                            photoList.ForEach(p => { obj.CommonInfo.Photos.Remove(p); });
+
+                    }catch(Exception ex)
+                    {
+                        result.Message = ex.Message;
                     }
+                    
                 }
                 await Repo.AddOneAsync(obj);
                 result.Message = obj.Id;
@@ -525,7 +549,7 @@ namespace ViewWorld.Services.Trips
             return cityName;
         }
 
-        public async Task<string> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId)
+        public async Task<string> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId, bool shareRoom)
         {
             var result = await Repo.GetOneAsync<TripArrangement>(tripId);
             double finalPrice = 0;
@@ -542,7 +566,14 @@ namespace ViewWorld.Services.Trips
                             switch(room.Adults + room.Children)
                             {
                                 case 1:
-                                    finalPrice += tripPrice.SinglePrice;
+                                    if (shareRoom)
+                                    {
+                                        finalPrice += tripPrice.ShareRoomPrice;
+                                    }
+                                    else
+                                    {
+                                        finalPrice += tripPrice.SinglePrice;
+                                    }
                                     break;
                                 case 2:
                                     finalPrice += tripPrice.DoublePrice * 2;
@@ -556,8 +587,8 @@ namespace ViewWorld.Services.Trips
                                 default:
                                     throw new ArgumentOutOfRangeException("PeoplePerRoomViewModel", "A maximum of 4 people can stay in one room");
                             }
-                            finalPrice -= room.Children * tripPrice.ChildPrice;
-                            finalPrice += tripPrice.RoomDifference;
+                            //finalPrice -= room.Children * tripPrice.ChildPrice;
+                            //finalPrice += tripPrice.ShareRoomPrice;
                         }
                     }
                 }

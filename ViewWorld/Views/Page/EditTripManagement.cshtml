@@ -413,6 +413,18 @@
                 </div>
                 <div class="field">
                     <div class="inline field">
+                        <label>终点城市</label>
+                        <div class="ui multiple search selection dropdown city-selection" id="finishingCity">
+                            <input type="hidden" name="FinishingCity" data-category="ProductInfo" data-db-key="FinishingCity">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">选择城市</div>
+                            <div class="menu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="inline field">
                         <label>途经景点</label>
                         <div class="ui fluid multiple search selection dropdown scenery-selection" id="sceneries">
                             <input type="hidden" name="Sceneries" data-category="ProductInfo" data-db-key="Sceneries">
@@ -593,12 +605,12 @@
                     </div>
                     <div class="inline fields">
                         <div class="sixteen wide field">
-                            <label>单房差折扣</label>
+                            <label>单人配房折扣</label>
                             <div class="ten wide field">
                                 <div class="ui selection dropdown tripplan-dropdown room-diff">
                                     <input type="hidden" name="IsRoomDiffApplied" data-category="TripPlan" data-db-key="IsRoomDiffApplied" value="false">
                                     <i class="dropdown icon"></i>
-                                    <div class="default text">是否单方差</div>
+                                    <div class="default text">单人配房折扣</div>
                                     <div class="menu">
                                         <div class="item " data-value="true">是</div>
                                         <div class="item selected" data-value="false">否</div>
@@ -693,8 +705,8 @@
                                             <th>双人间</th>
                                             <th>三人间</th>
                                             <th>四人间</th>
-                                            <th>儿童加价</th>
-                                            <th>单房差</th>
+                                            @*<th>儿童加价</th>*@
+                                            <th>单人配房</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -703,8 +715,8 @@
                                             <td><input type="number" name="DoublePrice" min="1" data-value="DoublePrice" value="0" /></td>
                                             <td><input type="number" name="TriplePrice" min="1" data-value="TriplePrice" value="0" /></td>
                                             <td><input type="number" name="QuadplexPrice" min="1" data-value="QuadplexPrice" value="0" /></td>
-                                            <td><input type="number" name="ChildPrice" min="1" data-value="ChildPrice" value="0" /></td>
-                                            <td><input type="number" name="RoomDifference" min="1" data-value="RoomDifference" value="0" /></td>
+                                            @*<td><input type="number" name="ChildPrice" min="1" data-value="ChildPrice" value="0" /></td>*@
+                                            <td><input type="number" name="ShareRoomPrice" min="1" data-value="ShareRoomPrice" value="0" /></td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
@@ -729,7 +741,7 @@
                 <table class="ui small celled striped table" id="displayTable">
                     <thead>
                         <tr>
-                            <th colspan="9" style="text-align:center">
+                            <th colspan="8" style="text-align:center">
                                 发团计划表
                             </th>
                         </tr>
@@ -740,8 +752,8 @@
                             <th>双人间</th>
                             <th>三人间</th>
                             <th>四人间</th>
-                            <th>儿童加价</th>
-                            <th>单房差</th>
+                            @*<th>儿童加价</th>*@
+                            <th>单人配房</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -955,8 +967,8 @@
         <td><input type="number" name="DoublePrice" min="1" data-value="DoublePrice" value="0" /></td>
         <td><input type="number" name="TriplePrice" min="1" data-value="TriplePrice" value="0" /></td>
         <td><input type="number" name="QuadplexPrice" min="1" data-value="QuadplexPrice" value="0" /></td>
-        <td><input type="number" name="ChildPrice" min="1" data-value="ChildPrice" value="0" /></td>
-        <td><input type="number" name="RoomDifference" min="1" data-value="RoomDifference" value="0" /></td>
+        @*<td><input type="number" name="ChildPrice" min="1" data-value="ChildPrice" value="0" /></td>*@
+        <td><input type="number" name="ShareRoomPrice" min="1" data-value="ShareRoomPrice" value="0" /></td>
         <td>
             <button class="ui blue icon button save"><i class="icon save"></i></button>
             <button class="ui red icon button delete"><i class="icon delete"></i></button>

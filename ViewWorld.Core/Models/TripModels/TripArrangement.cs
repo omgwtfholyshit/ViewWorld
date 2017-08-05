@@ -223,6 +223,7 @@ namespace ViewWorld.Core.Models.TripModels
     {
         public string DepartingCity { get; set; }
         public string ArrivingCity { get; set; }
+        public string FinishingCity { get; set; }
         /// <summary>
         /// 途经景点
         /// </summary>

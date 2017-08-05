@@ -129,7 +129,16 @@ namespace ViewWorld.Controllers.Frontend
         public async Task<JsonResult> GetTripsBySearchModel(FinderViewModels model,int pageNum = 1)
         {
             var data = await tripService.RetrieveTripArrangementBySearchModel(model);
-            return PageJson(data.OrderByDescending(m=>m.ProductInfo.DepartingCity).ToPagedList(pageNum, 3));
+            try
+            {
+                if (data == null)
+                    data = new List<TripArrangement>();
+                return PageJson(data.OrderByDescending(m => m.ProductInfo.DepartingCity).ToPagedList(pageNum, 15));
+            }catch(Exception ex)
+            {
+                return ErrorJson(ex.Message);
+            }
+            
         }
         public async Task<JsonResult> CalculateTripPrice(List<PeoplePerRoomViewModel> rooms, DateTime departDate, string tripId, string planId)
         {

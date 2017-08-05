@@ -490,7 +490,8 @@ ul {
               padding-bottom: 0.5rem; }
               .body-wrapper .find-items .filter-container .location-container .city-selection .city-tab .city-anchor a {
                 color: #666;
-                padding-right: 0.2rem; }
+                padding-right: 0.2rem;
+                cursor: pointer; }
                 .body-wrapper .find-items .filter-container .location-container .city-selection .city-tab .city-anchor a:hover {
                   color: #00B5AD; }
               .body-wrapper .find-items .filter-container .location-container .city-selection .city-tab .city-anchor a.selected {

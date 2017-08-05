@@ -174,7 +174,7 @@
             var _this = this, $table = $('#selfpayActivities tbody'), html = '', elementArray;
             $.each(_this.SelfPayActivities, function (index, ele) {
                 elementArray = ele.split('|');
-                html += '<tr><td><input type="text" class="selfpay-name" value=' + elementArray[0] + ' /></td><td><input type="text" class="selfpay-price" value=' + elementArray[1] + ' /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>'
+                html += '<tr><td><input type="text" class="selfpay-name" value="' + elementArray[0] + '" /></td><td><input type="text" class="selfpay-price" value="' + elementArray[1] + '" /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>'
             })
             $table.html(html);
         },
@@ -217,6 +217,7 @@
     ProductInfo = {
         DepartingCity: '',
         ArrivingCity: '',
+        FinishingCity: '',
         Sceneries: '',
         TotalDays: 1,
         Feature: '',
@@ -249,7 +250,7 @@
             var $input, _this = this;
             $inputs.each(function (index, input) {
                 $input = $(input);
-                if ($input.data('db-key') == 'DepartingCity' || $input.data('db-key') == 'ArrivingCity') {
+                if ($input.data('db-key') == 'DepartingCity' || $input.data('db-key') == 'ArrivingCity' || $input.data('db-key') == 'FinishingCity') {
                     var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
                     for (var i = 0; i < idArray.length; i++) {
                         dataStr += idArray[i] + ',' + nameArray[i].innerText.split('----')[1] + '|';
@@ -271,13 +272,16 @@
             _this.Intro = $.htmlEncode(pIntroEditor.txt.html());
         },
         SetFormDataForPage: function () {
-            var _this = this, departure = new Array(), arrival = new Array(), sceneries = new Array();
+            var _this = this, departure = new Array(), arrival = new Array(), finish = new Array(),sceneries = new Array();
             $('#productInfo input[name=TotalDays]').val(ProductInfo.TotalDays);
             $.each(ProductInfo.DepartingCity.split('|'), function (index, element) {
                 departure.push(element.split(',')[0]);
             })
             $.each(ProductInfo.ArrivingCity.split('|'), function (index, element) {
                 arrival.push(element.split(',')[0]);
+            })
+            $.each(ProductInfo.FinishingCity.split('|'), function (index, element) {
+                finish.push(element.split(',')[0]);
             })
             if (ProductInfo.Sceneries != null) {
                 $.each(ProductInfo.Sceneries.split('|'), function (index, element) {
@@ -286,6 +290,7 @@
             }
             $('#departingCity').dropdown("set selected", departure);
             $('#arrivingCity').dropdown("set selected", arrival);
+            $('#finishingCity').dropdown("set selected", finish);
             $('#sceneries').dropdown("set selected", sceneries);
             pIntroEditor.txt.html($.htmlDecode(_this.Intro));
             pFeatureEditor.txt.html($.htmlDecode(_this.Feature))
@@ -795,7 +800,7 @@
             return new PickUpInfo(IsFree, PickUpStartAt, PickUpEndAt, Price, Title);
         }
     },
-    HotelPrice = function (Name, SinglePrice, DoublePrice, TriplePrice, QuadplexPrice, ChildPrice, RoomDifference) {
+    HotelPrice = function (Name, SinglePrice, DoublePrice, TriplePrice, QuadplexPrice, ChildPrice, ShareRoomPrice) {
         if (this instanceof HotelPrice) {
             this.Name = typeof Name == 'undefined' ? Name = '' : Name;
             this.SinglePrice = SinglePrice;
@@ -803,9 +808,9 @@
             this.TriplePrice = TriplePrice;
             this.QuadplexPrice = QuadplexPrice;
             this.ChildPrice = ChildPrice;
-            this.RoomDifference = typeof RoomDifference == 'undefined' ? RoomDifference = '0' : RoomDifference;
+            this.ShareRoomPrice = typeof ShareRoomPrice == 'undefined' ? ShareRoomPrice = '0' : ShareRoomPrice;
         } else {
-            return new HotelPrice(Name, SinglePrice, DoublePrice, TriplePrice, QuadplexPrice, ChildPrice, RoomDifference);
+            return new HotelPrice(Name, SinglePrice, DoublePrice, TriplePrice, QuadplexPrice, ChildPrice, ShareRoomPrice);
         }
     },
     TripPricesForSpecificDate = function (TripDate, BasePrice) {
@@ -1073,7 +1078,7 @@
         .delegate('.plan-option.selected-days input', 'click', function () {
             $('.modal.calendar-modal').modal('show');
         })
-        .delegate('#generatorTable input[name=RoomDifference]', 'focus', function (e) {
+        .delegate('#generatorTable input[name=ShareRoomPrice]', 'focus', function (e) {
             var $tr = $(e.target).parents('tr'), diff = 0;
             diff = $tr.find('input[name=SinglePrice]').val() - $tr.find('input[name=DoublePrice]').val();
             $(e.target).val(diff);
@@ -1107,7 +1112,7 @@
                             for (var i = 0; i <= dateRange; i++) {
                                 source.TripDate = (new Date(startDate.getTime() + i * day)).toSimpleDateString();
                                 source.Name = '计划' + (TripPlans.indexOf(tripPlan) + 1);
-                                tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.RoomDifference)));
+                                tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.ShareRoomPrice)));
                             }
                             Trip.SetTripPlansForPage(activeIndex);
                         } else {
@@ -1145,7 +1150,7 @@
                                 if (weekInfo.indexOf(source.TripDate.getDay().toString()) != -1) {
                                     source.Name = '计划' + (TripPlans.indexOf(tripPlan) + 1);
                                     source.TripDate = source.TripDate.toSimpleDateString();
-                                    tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.RoomDifference)));
+                                    tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.ShareRoomPrice)));
                                 }
                             }
                             Trip.SetTripPlansForPage(activeIndex);
@@ -1162,7 +1167,7 @@
                             if (element != '') {
                                 source.Name = '计划' + (TripPlans.indexOf(tripPlan) + 1);
                                 source.TripDate = element;
-                                tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.RoomDifference)));
+                                tripPlan.TripPrices.push(new TripPricesForSpecificDate(source.TripDate, new HotelPrice(source.Name, source.SinglePrice, source.DoublePrice, source.TriplePrice, source.QuadplexPrice, source.ChildPrice, source.ShareRoomPrice)));
                             }
                         })
                     }
@@ -1586,6 +1591,10 @@
                 ArrivingCity: {
                     identifier: 'ArrivingCity',
                     rules: [{ type: 'empty', prompt: '到达城市不能为空' }]
+                },
+                FinishingCity: {
+                    identifier: 'FinishingCity',
+                    rules: [{ type: 'empty', prompt: '结束城市不能为空' }]
                 },
             },
             onSuccess: function (event, fields) {
