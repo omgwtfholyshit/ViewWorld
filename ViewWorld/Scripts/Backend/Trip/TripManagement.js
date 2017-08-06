@@ -259,11 +259,11 @@
                     _this[$input.data('db-key')] = dataStr;
                     
                 } else if ($input.data('db-key') == 'Sceneries') {
-                    var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
-                    for (var i = 0; i < idArray.length; i++) {
-                        dataStr += idArray[i] + ',' + nameArray[i].innerText + '|';
-                    }
-                    _this[$input.data('db-key')] = dataStr;
+                    //var idArray = $input.val().trim().split(','), nameArray = $input.siblings('a'), dataStr = '';
+                    //for (var i = 0; i < idArray.length; i++) {
+                    //    dataStr += idArray[i] + ',' + nameArray[i].innerText + '|';
+                    //}
+                    //_this[$input.data('db-key')] = dataStr;
                 } else {
                     _this[$input.data('db-key')] = $input.val().trim();
                 }
@@ -283,16 +283,16 @@
             $.each(ProductInfo.FinishingCity.split('|'), function (index, element) {
                 finish.push(element.split(',')[0]);
             })
-            if (ProductInfo.Sceneries != null) {
-                $.each(ProductInfo.Sceneries.split('|'), function (index, element) {
-                    sceneries.push(element.split(',')[0]);
-                })
-            }
+            //if (ProductInfo.Sceneries != null) {
+            //    $.each(ProductInfo.Sceneries.split('|'), function (index, element) {
+            //        sceneries.push(element.split(',')[0]);
+            //    })
+            //}
             setTimeout(function () {
                 $('#departingCity').dropdown("set selected", departure);
                 $('#arrivingCity').dropdown("set selected", arrival);
                 $('#finishingCity').dropdown("set selected", finish);
-                $('#sceneries').dropdown("set selected", sceneries);
+                //$('#sceneries').dropdown("set selected", sceneries);
             }, 150);
             pIntroEditor.txt.html($.htmlDecode(_this.Intro));
             pFeatureEditor.txt.html($.htmlDecode(_this.Feature))

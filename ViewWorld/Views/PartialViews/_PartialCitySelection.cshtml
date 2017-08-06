@@ -23,7 +23,10 @@
                     <dd>
                         @foreach (var item in group)
                         {
-                            <a href="javascript:void(0)">@item.Name</a>
+                            if (item.Name != "不限")
+                            {
+                                <a href="javascript:void(0)">@item.Name</a>
+                            }
                         }
                     </dd>
                 </dl>

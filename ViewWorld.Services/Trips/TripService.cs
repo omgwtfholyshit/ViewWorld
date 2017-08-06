@@ -162,6 +162,8 @@ namespace ViewWorld.Services.Trips
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
                         if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity));
+                        if (!string.IsNullOrWhiteSpace(model.FinishCity))
+                            filteredTrips = filteredTrips.Where(t => t.ProductInfo.FinishingCity.Contains(model.FinishCity));
                         if (!string.IsNullOrWhiteSpace(model.keyword))
                             filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
                         if (!string.IsNullOrWhiteSpace(model.Theme))

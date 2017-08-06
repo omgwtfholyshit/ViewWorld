@@ -11,6 +11,7 @@ namespace ViewWorld.Core.Models.ViewModels
         public string Region { get; set; }
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
+        public string FinishCity { get; set; } = "不限";
         public int Days { get; set; }
         public string Theme { get; set; }
         /// <summary>

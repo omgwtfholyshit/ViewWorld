@@ -22,7 +22,7 @@
         result: $('.results-container'),
         pagination: $('.pagination.menu'),
         api: { renderCities: '/Finder/RenderCityPartial', getTrips: '/Finder/GetTripsBySearchModel' },
-        searchModel: { keyword: '', Region: '', DepartureCity: '', ArrivalCity: '', Days: 0, Theme :''},
+        searchModel: { keyword: '', Region: '', DepartureCity: '', ArrivalCity: '', FinishCity:'', Days: 0, Theme :''},
         init: function () {
             var _this = this;
             _this.initCityTab();
@@ -228,8 +228,9 @@
                     //build filter item list
                     $.each(tripData, function (index, element) {
                         regionTags.indexOf(element.CommonInfo.RegionName) > 0 ? regionTags : regionTags += '<span>' + element.CommonInfo.RegionName + '</span>';
-                        departCities = getCity(element.ProductInfo.DepartingCity);
-                        arrivalCities = getCity(element.ProductInfo.ArrivingCity);
+                        /*出发城市为后台的到达城市，到达城市为后台结束城市*/
+                        departCities = getCity(element.ProductInfo.ArrivingCity);
+                        arrivalCities = getCity(element.ProductInfo.FinishingCity);
                         $.each(departCities, function (i, e) {
                             temp = e.split(',')[1];
                             departTags.indexOf(temp) >= 0 ? departTags : departTags += '<span>' + temp + '</span>';
@@ -261,12 +262,12 @@
                     $filterContent.loadTemplate("#filterContentTmpl", new filterItem("Region", _this.filterLabels[0], regionTags, className), { 'append': false });
                     //出发城市
                     departTags.length >= 5 ? className = '' : className = 'hidden';
-                    _this.searchModel.DepartureCity == '' ? departTags = departTags.replace('>不限', ' class="active">不限') : departTags = departTags.replace('>' + _this.searchModel.DepartureCity, ' class="active">' + _this.searchModel.DepartureCity);
-                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("DepartureCity", _this.filterLabels[1], departTags, className), { 'append': true });
+                    _this.searchModel.ArrivalCity == '' ? departTags = departTags.replace('>不限', ' class="active">不限') : departTags = departTags.replace('>' + _this.searchModel.ArrivalCity, ' class="active">' + _this.searchModel.ArrivalCity);
+                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("ArrivalCity", _this.filterLabels[1], departTags, className), { 'append': true });
                     //到达城市
                     arrivalTags.length >= 5 ? className = '' : className = 'hidden';
-                    _this.searchModel.ArrivalCity == '' ? arrivalTags = arrivalTags.replace('>不限', ' class="active">不限') : arrivalTags = arrivalTags.replace('>' + _this.searchModel.ArrivalCity, ' class="active">' + _this.searchModel.ArrivalCity);
-                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("ArrivalCity", _this.filterLabels[2], arrivalTags, className), { 'append': true });
+                    _this.searchModel.FinishCity == '' ? arrivalTags = arrivalTags.replace('>不限', ' class="active">不限') : arrivalTags = arrivalTags.replace('>' + _this.searchModel.FinishCity, ' class="active">' + _this.searchModel.FinishCity);
+                    $filterContent.loadTemplate("#filterContentTmpl", new filterItem("FinishCity", _this.filterLabels[2], arrivalTags, className), { 'append': true });
                     //行程日期
                     dayArray.sort(function (a, b) { return a - b; });
                     for (var i = 0; i < dayArray.length; i++) {
