@@ -227,7 +227,7 @@
                 },
                 EnglishName: {
                     identifier: 'EnglishName',
-                    rules: [{ type: 'regExp[^[a-zA-Z ]+$]', prompt: '英文名称仅限英文及空格' }]
+                    rules: [{ type: 'empty', prompt: '英文名称不能为空' }]
                 },
                 Initial: {
                     identifier: 'Initial',
