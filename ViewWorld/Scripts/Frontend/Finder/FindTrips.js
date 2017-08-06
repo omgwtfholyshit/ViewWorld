@@ -22,7 +22,7 @@
         result: $('.results-container'),
         pagination: $('.pagination.menu'),
         api: { renderCities: '/Finder/RenderCityPartial', getTrips: '/Finder/GetTripsBySearchModel' },
-        searchModel: { keyword: '', Region: '', DepartureCity: '', ArrivalCity: '', FinishCity:'', Days: 0, Theme :''},
+        searchModel: { keyword: '', Region: '', DepartureCity: '', ArrivalCity: '', FinishCity: '', Days: 0, Theme: '', Type: '' },
         init: function () {
             var _this = this;
             _this.initCityTab();
@@ -85,6 +85,10 @@
             })
             $button.click(function () {
                 _this.searchModel.keyword = $input.val();
+                _this.searchModel.Type = _this.search.find('.dropdown').dropdown("get value")[0];
+                if (_this.searchModel.Type.toLowerCase() == "all")
+                    _this.searchModel.Type = "";
+                console.log(_this.searchModel.Type)
                 _this.loadTrips(1, _this.buildPagination.bind(_this));
             })
         },

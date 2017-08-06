@@ -14,6 +14,7 @@ namespace ViewWorld.Core.Models.ViewModels
         public string FinishCity { get; set; } = "不限";
         public int Days { get; set; }
         public string Theme { get; set; }
+        public string Type { get; set; }
         /// <summary>
         /// True时只显示该属性为true时的行程，false显示所有行程
         /// </summary>

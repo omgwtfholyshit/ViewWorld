@@ -1596,7 +1596,7 @@
                 },
                 FinishingCity: {
                     identifier: 'FinishingCity',
-                    rules: [{ type: 'empty', prompt: '结束城市不能为空' }]
+                    rules: [{ type: 'empty', prompt: '终点城市不能为空' }]
                 },
             },
             onSuccess: function (event, fields) {

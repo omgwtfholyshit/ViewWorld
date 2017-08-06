@@ -166,6 +166,8 @@ namespace ViewWorld.Services.Trips
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.FinishingCity.Contains(model.FinishCity));
                         if (!string.IsNullOrWhiteSpace(model.keyword))
                             filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
+                        if (!string.IsNullOrWhiteSpace(model.Type))
+                            filteredTrips = filteredTrips.Where(t => t.CommonInfo.TripType.Contains(model.Type));
                         if (!string.IsNullOrWhiteSpace(model.Theme))
                             filteredTrips = filteredTrips.Where(t => t.CommonInfo.Theme.Contains(model.Theme));
                     }catch(Exception ex)
@@ -613,7 +615,7 @@ namespace ViewWorld.Services.Trips
             string types = "出发地参团|目的地参团|自由行|目的地自由行|游轮|游学|私人定制|机票";
             //var typeList = types.Split('|');
             List<object> typeList = new List<object>();
-            var index = 1;
+            var index = 0;
             foreach(var type in types.Split('|'))
             {
                 var data = new
