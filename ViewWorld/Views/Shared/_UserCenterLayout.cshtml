@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1, maximum-scale=1, user-scalable=no">
     <title>@ViewBag.Title - 瞰世界</title>
-    @Styles.Render("~/Content/semantic", "~/Content/Frontend/userCenterLayout.min.css")
+    @Styles.Render("~/Content/semantic.min.css", "~/Content/Frontend/userCenterLayout.min.css")
     @Scripts.Render("~/bundles/jquery")
     <script data-pace-options='{ "ajax": false }' src="~/Lib/Pace/pace.js"></script>
 </head>
@@ -19,11 +19,35 @@
                         <img src="~/Images/DefaultImages/UnknownSex.jpg" />
                     </div>
                     <div class="info-container">
-                        <div class="welcome-message">欢迎你！</div>
-
+                        <div class="welcome-message"></div>
+                        <div class="level-message"></div>
+                        <div class="level-progress">
+                            <div class="ui inverted teal tiny progress">
+                                <div class="bar"></div>
+                                <div class="label">100/1000</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="right-content-wrapper"></div>
+                <div class="right-content-wrapper">
+                    <div class="nav-divider"></div>
+                    <div class="section-1 section">
+                        <p>您的积分</p>
+                        <p></p>
+                    </div>
+                    <div class="nav-divider"></div>
+                    <div class="section-2 section">
+                        <p>您的优惠券</p>
+                        <p></p>
+                        
+                    </div>
+                    <div class="nav-divider"></div>
+                    <div class="section-3 section">
+                        <p>订单总数</p>
+                        <p></p>
+                    </div>
+                    <div class="nav-divider"></div>
+                </div>
             </div>
         </div>
         <div class="ui container">

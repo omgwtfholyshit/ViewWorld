@@ -20,6 +20,8 @@
             this.resize();
             this.setActivePage();
             this.getUserProfile();
+            if (location.pathname.toLowerCase().indexOf('/user/') == 0)
+                ucLayout.init()
         },
         rightMenuEvents: function () {
             var _this = this;
@@ -100,6 +102,46 @@
                 })
             }
         }
+    }
+    var ucLayout = {
+        api: {
+            getUserProfile: '/Account/GetUserInfo',
+            getOrderCount:'/User/GetOrderCount'
+        },
+        portraitContainer: $('image-container'),
+        infoContainer: $('.info-container'),
+        leftContent: $('.left-content-wrapper'),
+        rightContent: $('.right-content-wrapper'),
+        setProfile: function () {
+            var _this = this;
+            if (layout.authorised()) {
+                $.get(_this.api.getUserProfile)
+                    .done(function (data) {
+                        _this.portraitContainer.find('img').attr('src', data.data.Avatar);
+                        _this.infoContainer.find('.welcome-message').text("欢迎您！" + data.data.Nickname);
+                        _this.infoContainer.find('.level-message').text("您的身份: " + data.data.Role);
+                    })
+                    .fail(function (data) {
+                        $.tip(".message-container", data.message, "请重新登陆,4秒后为您跳转....", "negative", 4);
+                        setTimeout(function () {
+                            location.href = "../Account/Login?returnUrl=" + location.pathname;
+                        }, 4000)
+                    });
+                $.get(_this.api.getOrderCount)
+                    .then(function (data) {
+                        _this.rightContent.find('.section-3').html('<p>订单总数</p><p>' + data.data + '个</p>')
+                    })
+            }
+        },
+        init: function () {
+            var _this = this;
+            _this.setProfile();
+            $('.left-content-wrapper,.right-content-wrapper').transition({
+                animation: 'fade in',
+                displayType:'flex'
+            });
+        }
+
     }
     window.onresize = function () {
         layout.isSmallDevice = browser.versions().smallDevice;

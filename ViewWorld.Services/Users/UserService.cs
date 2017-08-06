@@ -37,6 +37,8 @@ namespace ViewWorld.Services.Users
                         Username = result.Entity.UserName,
                         Nickname = result.Entity.NickName,
                         Avatar = result.Entity.Avatar,
+                        Points = result.Entity.Points,
+                        Role = result.Entity.Roles.FirstOrDefault()
                     };
                     userInfo = data;
                     cacheManager.Add("userinfo", data, UserId);

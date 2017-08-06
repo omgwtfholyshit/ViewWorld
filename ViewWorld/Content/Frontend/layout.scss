@@ -1138,8 +1138,13 @@ ul{list-style-type:none;padding:0;margin:0;}
 /******************
     Responsive
 ******************/
+@media only screen and (min-width:768px) and (max-width:992px){
+    .nav.topNav {
+        .nav-container>.nav-menu.left-menu .nav-item{width:6rem;}
+    }
+}
  @media only screen and (max-width: 767px){
-    .nav{
+    .nav.topNav{
         box-shadow: 0 5px 10px 0 rgba(50, 50, 50, 0.1);
         background-color:transparent;
         position:absolute;

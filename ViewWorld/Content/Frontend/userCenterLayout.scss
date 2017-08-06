@@ -13,7 +13,12 @@
     .subNav-wrapper {
         height: 8rem;
         background-color: #00b5ad;
-
+        .nav-divider{
+            width:2px;
+            height:80%;
+            background-color:white;
+            opacity:0.2;
+        }
         .ui.container {
             height: 100%;
         }
@@ -22,6 +27,10 @@
             float: left;
             width: 50%;
             height: 100%;
+            display:none;
+            padding-top:1rem;
+            color:white;
+            position:relative;
         }
 
         .left-content-wrapper {
@@ -30,15 +39,19 @@
                 overflow: hidden;
                 border-radius: 6rem;
                 height: 6rem;
-                margin-top:1rem;
                 img {
                     width: 100%;
                 }
+            }
+            .info-container{
+                padding-left:2rem;
+                >div{height:2rem;font-size:1.1rem}
             }
         }
 
         .right-content-wrapper {
             float: right;
+            .section{width:10rem;padding:0.3rem 1rem 0 1rem;text-align:center;vertical-align:middle;font-size:1.2rem}
         }
     }
 

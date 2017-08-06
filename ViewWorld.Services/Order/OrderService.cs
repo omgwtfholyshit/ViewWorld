@@ -235,5 +235,16 @@ namespace ViewWorld.Services.Order
             return result;
 
         }
+
+        public Task<long> CountOrders(string userId, bool deletedOrders = false)
+        {
+            var builder = Builders<BusinessOrder>.Filter;
+            FilterDefinition<BusinessOrder> filter = builder.Empty;
+            if (!deletedOrders)
+            {
+                filter = builder.Where(o => o.Status != OrderStatus.订单已删除);
+            }
+            return Repo.CountAsync(filter);
+        }
     }
 }

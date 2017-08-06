@@ -16,5 +16,6 @@ namespace ViewWorld.Services.Order
         Task<Result> AssignOrderToSales(string salesId, string orderId);
         Task<Result> UpdateOrderById(string salesId, BusinessOrder order, bool authorized);
         Task<Result> CreatePriceGapOrder(string orderId, double price, string salesId, bool authorized);
+        Task<long> CountOrders(string userId, bool deletedOrders = false);
     }
 }

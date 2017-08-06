@@ -15,6 +15,7 @@ using ViewWorld.Services.Users;
 
 namespace ViewWorld.Controllers.Frontend
 {
+    [Authorize]
     public class UserController : BaseController
     {
         #region constructor
@@ -91,6 +92,12 @@ namespace ViewWorld.Controllers.Frontend
                 result = await orderService.UpdateEntity(order);
             }
             return OriginJson(result);
+        }
+        [HttpGet]
+        [OutputCache(Location = System.Web.UI.OutputCacheLocation.Server,  Duration = 20)]
+        public async Task<JsonResult> GetOrderCount()
+        {
+            return Json(await orderService.CountOrders(UserId));
         }
         #endregion
     }
