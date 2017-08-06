@@ -158,17 +158,27 @@
         SetFormDataForPage: function () {
             var $inputs = $('#commonInfo').find('input').not('.search,#fileUpload,input[type=checkbox],#selfpayActivities input,input[name=__RequestVerificationToken],.saved-photo input,#typeSelection input');
             var $input, outcome, _this = this;
-            $inputs.each(function (index, input) {
-                $input = $(input);
-                //console.log($input.data('db-key') + " :" + $input.val().trim());
-                $input.val(_this[$input.data('db-key')]);
-            });
-            $('#regionSelection').dropdown("set selected", CommonInfo.RegionId);
-            $('#typeSelection').dropdown("set selected", CommonInfo.TripType.split('|'));
-            $('#currency').dropdown("set selected", CommonInfo.CurrencyType);
-            introEditor.txt.html($.htmlDecode(_this.Introduction));
-            includeEditor.txt.html($.htmlDecode(_this.Include));
-            excludeEditor.txt.html($.htmlDecode(_this.Exclude));
+            function PendingQueue() {
+                var dfd = $.Deferred();
+                $inputs.each(function (index, input) {
+                    $input = $(input);
+                    //console.log($input.data('db-key') + " :" + $input.val().trim());
+                    $input.val(_this[$input.data('db-key')]);
+                });
+                setTimeout(function () {
+                    dfd.resolve();
+                }, 100);
+                return dfd.promise();
+            }
+            PendingQueue().done(function () {
+                $('#regionSelection').dropdown("set selected", CommonInfo.RegionId);
+                $('#typeSelection').dropdown("set selected", CommonInfo.TripType.split('|'));
+                $('#currency').dropdown("set selected", CommonInfo.CurrencyType);
+            }).then(function () {
+                introEditor.txt.html($.htmlDecode(_this.Introduction));
+                includeEditor.txt.html($.htmlDecode(_this.Include));
+                excludeEditor.txt.html($.htmlDecode(_this.Exclude));
+            })
         },
         SetSelfPayTableForPage: function () {
             var _this = this, $table = $('#selfpayActivities tbody'), html = '', elementArray;
