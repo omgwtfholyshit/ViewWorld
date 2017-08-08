@@ -840,6 +840,8 @@ ul {
       padding: 1rem 0 1rem 0; }
     .body-wrapper .trip-detail .detail-section .product-detail-container .data-container p {
       color: #666666; }
+    .body-wrapper .trip-detail .detail-section .product-detail-container .data-container .tag.label.scenery {
+      margin-bottom: 1rem; }
 
 /***********************************
     SceneryModal For TripDetail Page

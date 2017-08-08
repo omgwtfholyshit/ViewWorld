@@ -23,10 +23,10 @@ namespace ViewWorld.Services.Trips
     public class TripService : ITripService
     {
         private readonly IMongoDbRepository Repo;
-        ICacheManager<string> cacheManager;
+        ICacheManager<GetManyResult<TripArrangement>> cacheManager;
         const string dataDirectory = "/Upload/Trips/";
         JavaScriptSerializer JSSerializer = new JavaScriptSerializer();
-        public TripService(IMongoDbRepository _Repo,ICacheManager<string> _cacheManager)
+        public TripService(IMongoDbRepository _Repo,ICacheManager<GetManyResult<TripArrangement>> _cacheManager)
         {
             this.Repo = _Repo;
             this.cacheManager = _cacheManager;
@@ -82,8 +82,7 @@ namespace ViewWorld.Services.Trips
 
         public async Task<GetListResult<TripArrangement>> RetrieveEntitiesByKeyword(string keyword)
         {
-            var resultStr = cacheManager.Get("Trips", "Front");
-            GetManyResult<TripArrangement> result;
+            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); ;
             GetListResult<TripArrangement> listResult = new GetListResult<TripArrangement>()
             {
                 Success = false,
@@ -91,8 +90,7 @@ namespace ViewWorld.Services.Trips
                 Entities = new List<TripArrangement>(),
                 Message = ""
             };
-            result = !string.IsNullOrWhiteSpace(resultStr)? 
-                JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr): await Repo.GetAllAsync<TripArrangement>();
+            
             if (result == null || !result.Success)
             {
                 result = await Repo.GetAllAsync<TripArrangement>();
@@ -201,11 +199,9 @@ namespace ViewWorld.Services.Trips
         }
         public async Task<Result> UpdateEntity(TripArrangement Entity)
         {
-            var resultStr = cacheManager.Get("Trips","Front");
-            GetManyResult<TripArrangement> result;
-            if (!string.IsNullOrWhiteSpace(resultStr))
+            GetManyResult<TripArrangement> result= cacheManager.Get("Trips", "Front");
+            if (result != null && result.Success)
             {
-                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
                 cacheManager.Update("Trips", "Front", r => UpdateCachedResult(result, Entity));
             }
             return await Repo.ReplaceOneAsync(Entity.Id, Entity);
@@ -493,25 +489,15 @@ namespace ViewWorld.Services.Trips
         }
         async Task<GetManyResult<TripArrangement>> GetCachedResult()
         {
-            var resultStr = cacheManager.Get("Trips", "Front");
-            GetManyResult<TripArrangement> result;
-            if (!string.IsNullOrWhiteSpace(resultStr))
-            {
-                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
-                if (result == null || !result.Success)
-                {
-                    result = await Repo.GetAllAsync<TripArrangement>();
-                    cacheManager.Put("Trips", JSSerializer.Serialize(result), "Front");
-                }
-            }
-            else
+            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); ;
+            if (result == null || !result.Success)
             {
                 result = await Repo.GetAllAsync<TripArrangement>();
-                cacheManager.Add("Trips", JSSerializer.Serialize(result), "Front");
+                cacheManager.Put("Trips", result, "Front");
             }
             return result;
         }
-        string UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
+        GetManyResult<TripArrangement> UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
         {
             var cachedItems = cachedResult.Entities as List<TripArrangement>;
             var cachedTarget = cachedItems.Find(e => e.Id == entityToUpdate.Id);
@@ -520,23 +506,19 @@ namespace ViewWorld.Services.Trips
                 cachedItems.Remove(cachedTarget);
             }
             cachedItems.Add(entityToUpdate);
-            return JSSerializer.Serialize(cachedResult);
+            return cachedResult;
         }
-        string DeleteFromCachedResult(string entityId)
+        GetManyResult<TripArrangement> DeleteFromCachedResult(string entityId)
         {
             var resultStr = cacheManager.Get("Trips", "Front");
-            GetManyResult<TripArrangement> cachedResult = new GetManyResult<TripArrangement>();
-            if (!string.IsNullOrWhiteSpace(resultStr))
-            {
-                cachedResult = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(resultStr);
-            }
+            GetManyResult<TripArrangement> cachedResult = cacheManager.Get("Trips", "Front");
             var cachedItems = cachedResult.Entities as List<TripArrangement>;
             var cachedTarget = cachedItems.Find(e => e.Id == entityId);
             if (cachedTarget != null)
             {
                 cachedItems.Remove(cachedTarget);
             }
-            return JSSerializer.Serialize(cachedResult);
+            return cachedResult;
         }
         public static string GetCity(string cityStr)
         {

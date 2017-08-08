@@ -354,7 +354,7 @@ namespace ViewWorld.Controllers.Trip
             var result = await startingPointService.RetrieveEntitiesByKeyword(keyword);
             if (result.Success)
             {
-                return Json(result.Entities.Select(point => new { name = point.ProviderName + "|" + point.Address, value = point.Id }));
+                return Json(result.Entities.Select(point => new { name = point.DepartTime + "|" + point.Address, value = point.Id }));
             }
             return ErrorJson("服务器内部错误，请稍后再试");
         }

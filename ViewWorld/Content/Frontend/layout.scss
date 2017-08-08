@@ -538,7 +538,8 @@ ul{list-style-type:none;padding:0;margin:0;}
                             a {
                                 color: #666;
                                 padding-right: 0.2rem;
-                                cursor:pointer;
+                                cursor: pointer;
+
                                 &:hover {
                                     color: #00B5AD
                                 }
@@ -748,6 +749,7 @@ ul{list-style-type:none;padding:0;margin:0;}
 
     .trip-detail {
         padding-top: 6rem;
+
         .ui.container {
             background: white;
             box-shadow: 2px 2px 2px #cccccc;
@@ -1065,8 +1067,9 @@ ul{list-style-type:none;padding:0;margin:0;}
 
         .detail-section {
             .navigator {
-                z-index:10;
-                transition:all 0.3s ease;
+                z-index: 10;
+                transition: all 0.3s ease;
+
                 .item {
                     color: #00B5AD;
                     font-size: 1.2em;
@@ -1080,14 +1083,15 @@ ul{list-style-type:none;padding:0;margin:0;}
                     padding: 1rem 0 1rem 0
                 }
 
-                .data-container p {
-                    color: rgb(102,102,102)
+                .data-container {
+                    p {
+                        color: rgb(102,102,102)
+                    }
+                    .tag.label.scenery{margin-bottom:1rem}
                 }
             }
         }
     }
-
-    
 }
 /***********************************
     SceneryModal For TripDetail Page

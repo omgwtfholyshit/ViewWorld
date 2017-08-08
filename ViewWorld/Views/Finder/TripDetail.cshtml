@@ -218,9 +218,10 @@
                                             @{
                                                 if (schedule.Details.Any())
                                                 {
-                                                    <p>路过景点：</p>
+
                                                     foreach (var item in schedule.Details)
                                                     {
+                                                        <p>路过景点：</p>
                                                         var sceneries = item.Sceneries.Split('|');
                                                         foreach (var scene in sceneries)
                                                         {
@@ -230,12 +231,19 @@
                                                                 <a class="ui teal tag label scenery" data-id="@data[0]" href="javascript:void(0);">@data[1]</a>
                                                             }
                                                         }
+                                                        <p>活动时间：@item.ActivityTime</p>
+                                                        <p>活动安排：@MvcHtmlString.Create(Server.HtmlDecode(item.Arrangement))</p>
                                                     }
+                                                    
                                                 }
                                             }
+                                            <p>餐饮： @schedule.Meal</p>
+                                            <p>住宿： @schedule.Accommodation</p>
+                                            <p>团体免费接机： @schedule.GroupPickUp</p>
                                         </div>
-                                                    }
-                                                }
+                                        <hr />
+                                 }
+                              }
 
                         }
 
