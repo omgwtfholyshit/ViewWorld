@@ -158,10 +158,10 @@ namespace ViewWorld.Services.Trips
                             filteredTrips = filteredTrips.Where(t => t.CommonInfo.RegionName.Contains(model.Region));
                         if (model.Days > 0)
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.TotalDays >= model.Days);
-                        if (!string.IsNullOrWhiteSpace(model.ArrivalCity))
+                        if (!string.IsNullOrWhiteSpace(model.ArrivalCity) && model.ArrivalCity != "不限")
                             filteredTrips = filteredTrips.Where(t => t.ProductInfo.ArrivingCity.Contains(model.ArrivalCity));
-                        if (!string.IsNullOrWhiteSpace(model.FinishCity))
-                            filteredTrips = filteredTrips.Where(t => t.ProductInfo.FinishingCity.Contains(model.FinishCity));
+                        if (!string.IsNullOrWhiteSpace(model.FinishCity) && model.FinishCity!="不限")
+                            filteredTrips = filteredTrips.Where(t =>t.ProductInfo.FinishingCity.Contains(model.FinishCity));
                         if (!string.IsNullOrWhiteSpace(model.keyword))
                             filteredTrips = filteredTrips.Where(t => t.CommonInfo.Name.Contains(model.keyword) || t.CommonInfo.Keyword.Contains(model.keyword));
                         if (!string.IsNullOrWhiteSpace(model.Type))
@@ -489,13 +489,14 @@ namespace ViewWorld.Services.Trips
         }
         async Task<GetManyResult<TripArrangement>> GetCachedResult()
         {
-            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); ;
-            if (result == null || !result.Success)
-            {
-                result = await Repo.GetAllAsync<TripArrangement>();
-                cacheManager.Put("Trips", result, "Front");
-            }
-            return result;
+            //GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); ;
+            //if (result == null || !result.Success)
+            //{
+            //    result = await Repo.GetAllAsync<TripArrangement>();
+            //    cacheManager.Put("Trips", result, "Front");
+            //}
+            //return result;
+            return await Repo.GetAllAsync<TripArrangement>();
         }
         GetManyResult<TripArrangement> UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
         {
