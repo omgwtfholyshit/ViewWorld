@@ -35,7 +35,7 @@ namespace ViewWorld.Controllers
         public async Task<ActionResult> Index()
         {
             var vm = new HomeIndexViewModel();
-            var searchModel = new Core.Models.ViewModels.FinderViewModels() { DisplayOnFrontPageTripsOnly = true };
+            var searchModel = new Core.Models.ViewModels.FinderViewModels() { DisplayOnFrontPageTripsOnly = true,FinishCity=null };
             vm.RecommendationList = await TripService.RetrieveTripArrangementBySearchModel(searchModel);
             return View(vm);
         }
