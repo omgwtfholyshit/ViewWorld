@@ -366,7 +366,8 @@
             });
         },
         bindEvents: function () {
-            var _this = this;
+            var _this = this, $activityDropdown = $('.selfChooseActivities .vertical.menu');
+
             _this.productDetail
             .delegate('.product-detail .scenery', 'click', function (e) {
                 var id = $(e.target).data('id');
@@ -457,7 +458,28 @@
                 } else {
                     window.location.href = '/Account/Login?returnUrl=' + location.pathname + location.search;
                 }
-            })
+                })
+                .delegate('.content-container .selfChooseActivities input[name=SelfChooseActivities]', 'click', function (e) {
+                    $activityDropdown.transition('slide');
+                })
+                .delegate('.content-container .selfChooseActivities .menu .item:not(.item:last-child)', 'click', function (e) {
+                    $(e.target).siblings().removeClass('active');
+                    $(e.target).addClass('active');
+                })
+                .delegate('.content-container .selfChooseActivities .menu .item:last-child .confirm.button', 'click', function (e) {
+                    var selectedActivities = '';
+                    $('.selfChooseActivities .vertical.menu>.item:not(.item:last-child)').each(function (index,element) {
+                        var $element = $(element);
+                        selectedActivities += (+index + 1) + "." + $element.find('.main-category').text().trim() + " " + $element.find('.active.item').text().trim() + ', ';
+                    })
+                    selectedActivities = selectedActivities.substr(0, selectedActivities.length - 2);
+                    $('input[name=SelfChooseActivities]').val(selectedActivities);
+                    $activityDropdown.transition('slide out');
+                })
+                .delegate('.content-container .selfChooseActivities .menu .item:last-child .cancel.button', 'click', function (e) {
+                    $activityDropdown.transition('slide out');
+                })
+
             _this.stickyBar.detailNav
                 .delegate('>.item', 'click', function (e) {
                     var $target = $(e.target), index = $target.index(), headerPosition = _this.stickyBar.detailNavStickyHeight - _this.stickyBar.detailNav.height() + 4;
@@ -477,8 +499,7 @@
                 var name = $modal.find('input[name=name]').val(), phone = $modal.find('input[name=phone]').val();
                 var departTime = new Date(_this.tripSettings.departtime);
                 var finishTime = departTime.setDate(departTime.getDate() + ProductInfo.TotalDays);
-                var order = new Order(ProductInfo.TripId, ProductInfo.ProductName, name, phone, ProductInfo.ProviderName, _this.tripSettings.departtime, new Date(finishTime).toSimpleDateString(), "旅行团订单", JSON.stringify(_this.tripSettings.rooms), _this.tripSettings.price, _this.tripSettings.currencyType);
-                //console.log(order)
+                var order = new Order(ProductInfo.TripId, ProductInfo.ProductName, name, phone, ProductInfo.ProviderName, _this.tripSettings.departtime, new Date(finishTime).toSimpleDateString(), "旅行团订单", $('.content-container .selfChooseActivities input[name=SelfChooseActivities]').val() ,JSON.stringify(_this.tripSettings.rooms), _this.tripSettings.price, _this.tripSettings.currencyType);
                 _this.submitOrder($(e.target), order);
                 return false;
             })
@@ -494,7 +515,7 @@
         this.adults = adults;
         this.children = children;
     }
-    function Order(ItemId, ItemName, ContactName, ContactNumber, ProviderName, CommenceDate, FinishDate, Type, OrderDetail, Price, CurrencyType) {
+    function Order(ItemId, ItemName, ContactName, ContactNumber, ProviderName, CommenceDate, FinishDate, Type, SelfChooseActivities, OrderDetail, Price, CurrencyType) {
         this.ItemId = ItemId;
         this.ItemName = ItemName;
         this.ContactName = ContactName;
@@ -503,6 +524,7 @@
         this.CommenceDate = CommenceDate;
         this.FinishDate = FinishDate;
         this.Type = Type;
+        this.SelfChooseActivities = SelfChooseActivities;
         this.OrderDetail = OrderDetail;
         this.Price = Price;
         this.CurrencyType = CurrencyType;

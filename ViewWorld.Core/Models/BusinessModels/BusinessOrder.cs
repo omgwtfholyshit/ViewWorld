@@ -53,6 +53,7 @@ namespace ViewWorld.Core.Models.BusinessModels
         public OrderStatus Status { get; set; }
         //json string
         public string OrderDetail { get; set; }
+        public string SelfChooseActivities { get; set; }
         public double Price { get; set; }
         public CurrencyType CurrencyType { get; set; }
         public string PaymentSource { get; set; }
@@ -62,6 +63,7 @@ namespace ViewWorld.Core.Models.BusinessModels
         public string OrderStatus { get { return this.Status.ToString(); } }
         [NotMapped]
         public string OrderType { get { return this.Type.ToString(); } }
+        [NotMapped]
         public string OrderCurrency { get { return this.CurrencyType.ToString(); } }
     }
 

@@ -183,7 +183,7 @@ ul {
     width: 14.2%; }
   .fc-calendar-container .fc-calendar .fc-row > div {
     border-right: 1px solid #ddd;
-    padding: 4px;
+    padding: 4px 0 4px 0;
     overflow: hidden;
     position: relative; }
   .fc-calendar-container .fc-calendar .fc-head > div {
@@ -811,6 +811,25 @@ ul {
           .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .statistics .label {
             font-weight: 300;
             color: #999; }
+          .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field {
+            position: relative; }
+            .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu {
+              margin: 0;
+              width: 100%;
+              position: absolute;
+              z-index: 10;
+              display: none; }
+              .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu > .item {
+                padding-top: 0; }
+                .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu > .item .main-category {
+                  margin: 0em -1.14285714em 0;
+                  background-color: #00b5ad;
+                  color: white;
+                  padding: 0.5rem 0 0.5rem 0.5rem; }
+                .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu > .item .menu .active {
+                  color: #00b5ad; }
+                .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu > .item .right.floated.button {
+                  margin: 0.5rem; }
           .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .roomdetail-container {
             height: 196px;
             overflow-y: auto;

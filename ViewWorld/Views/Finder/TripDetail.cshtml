@@ -128,6 +128,51 @@
                                 </div>
                             </div>
                         </div>
+                        @{
+                            if (Model.Trip.TripProperty.SelfChooseActivities.Any())
+                            {
+                                <div class="thirteen wide field selfChooseActivities">
+                                    <label>自选行程</label>
+                                    <div class="ui icon input">
+                                        <input type="text" name="SelfChooseActivities" value="" placeholder="选择您想去的地方" readonly>
+                                        <i class="dropdown icon"></i>
+                                    </div>
+                                    <div class="ui vertical menu">
+                                        @{
+                                            foreach (var activity in Model.Trip.TripProperty.SelfChooseActivities)
+                                            {
+                                                string[] dataContainer = activity.Split('|');
+                                                string mainCategory = dataContainer[0];
+                                                string[] subCategories = dataContainer[1].Split(',');
+                                                <div class="item">
+                                                    <div class="main-category">@mainCategory</div>
+                                                    <div class="menu">
+                                                        @{
+                                                            foreach (var item in subCategories)
+                                                            {
+                                                                if (!string.IsNullOrWhiteSpace(item))
+                                                                {
+                                                                    <a class="item">@item</a>
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        
+                                        <div class="item">
+                                            <div class="ui right floated tiny basic teal confirm button">
+                                                确定
+                                            </div>
+                                            <div class="ui right floated tiny basic cancel button">
+                                                取消
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
                         
                         <div class="roomdetail-container">
                             <div class="calendar-message-container hidden">

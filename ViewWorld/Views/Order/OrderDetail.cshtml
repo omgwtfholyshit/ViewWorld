@@ -99,6 +99,10 @@
                         </div>
                     </div>
                     <div class="inline field">
+                        <label>自选项目:</label>
+                        <input type="text" name="SelfChooseActivities" value="@Model.Order.SelfChooseActivities" disabled="@(!Model.validUser)" />
+                    </div>
+                    <div class="inline field">
                         <label>出发时间:</label>
                         <input type="text" name="commenceDate" value="@Model.Order.CommenceDate.ToShortDateString()" disabled="@(!Model.validUser)"/>
                     </div>

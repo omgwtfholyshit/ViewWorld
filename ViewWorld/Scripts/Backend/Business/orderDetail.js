@@ -253,7 +253,8 @@
                 $target = $(e.target);
                 _this.loadOrderData();
                 //console.log(orderVar)
-                var businessOrder = new _this.BusinessOrder(orderVar.Id, orderVar.itemId, _this.orderData.itemName, _this.orderData.providerName, _this.orderData.contactName, _this.orderData.contactNumber, _this.orderData.salesId, _this.orderData.salesName, _this.orderData.price, _this.orderData.status, _this.orderData.commenceDate, _this.orderData.finishDate, _this.orderData.orderDetail);
+                var businessOrder = new _this.BusinessOrder(orderVar.Id, orderVar.itemId, _this.orderData.itemName, _this.orderData.providerName, _this.orderData.contactName, _this.orderData.contactNumber, _this.orderData.salesId, _this.orderData.salesName, _this.orderData.price, _this.orderData.status, _this.orderData.commenceDate, _this.orderData.finishDate, _this.orderData.orderDetail, $('input[name=SelfChooseActivities]').val());
+                console.log(businessOrder);
                 _this.submitOrder($target, businessOrder);
             })
             .delegate('#editTrip', 'click', function (e) {
@@ -290,7 +291,7 @@
             
             _this.bindEvents();
         },
-        BusinessOrder: function (Id, ItemId, ItemName, ProviderName, ContactName, ContactNumber, SalesId, SalesName, Price, Status, CommenceDate, FinishDate, OrderDetail) {
+        BusinessOrder: function (Id, ItemId, ItemName, ProviderName, ContactName, ContactNumber, SalesId, SalesName, Price, Status, CommenceDate, FinishDate, OrderDetail, SelfChooseActivities ) {
             this.Id = Id;
             this.ItemId = ItemId;
             this.ItemName = ItemName;
@@ -303,6 +304,7 @@
             this.Status = Status;
             this.CommenceDate = CommenceDate;
             this.FinishDate = FinishDate;
+            this.SelfChooseActivities = SelfChooseActivities;
             this.OrderDetail = JSON.stringify(OrderDetail);
             
         },

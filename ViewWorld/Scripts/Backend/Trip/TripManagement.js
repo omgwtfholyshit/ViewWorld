@@ -422,13 +422,13 @@
             var _this = this;
             _this.SetHotelUpgradeForJs();
             _this.DepartingLocation = $('#TripProperty .departure-selection input[name=DepartingLocation]').val();
-            _this.SetSelectableRouteForJs();
+            //_this.SetSelectableRouteForJs();
             _this.SetSelfChooseActivitiesForJs();
         },
         SyncPage: function () {
             var _this = this;
             _this.SetHotelUpgradeForPage();
-            _this.SetSelectableRouteForPage();
+            //_this.SetSelectableRouteForPage();
             _this.SetSelfChooseActivitiesForPage();
             if (typeof _this.DepartingLocation == 'string')
                 $('#TripProperty .departure-selection').dropdown("set selected", _this.DepartingLocation.split(','));

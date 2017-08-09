@@ -25,7 +25,7 @@ namespace ViewWorld.Services.Trips
         private readonly IMongoDbRepository Repo;
         ICacheManager<GetManyResult<TripArrangement>> cacheManager;
         const string dataDirectory = "/Upload/Trips/";
-        JavaScriptSerializer JSSerializer = new JavaScriptSerializer();
+        //JavaScriptSerializer JSSerializer = new JavaScriptSerializer();
         public TripService(IMongoDbRepository _Repo,ICacheManager<GetManyResult<TripArrangement>> _cacheManager)
         {
             this.Repo = _Repo;
@@ -489,13 +489,13 @@ namespace ViewWorld.Services.Trips
         }
         async Task<GetManyResult<TripArrangement>> GetCachedResult()
         {
-            GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); ;
-            if (result == null || !result.Success)
-            {
-                result = await Repo.GetAllAsync<TripArrangement>();
-                cacheManager.Put("Trips", result, "Front");
-            }
-            return result;
+            //GetManyResult<TripArrangement> result = cacheManager.Get("Trips", "Front"); 
+            //if (result == null || !result.Success)
+            //{
+            //    result = await Repo.GetAllAsync<TripArrangement>();
+            //    // cacheManager.Put("Trips", result, "Front");
+            //}
+            return await Repo.GetAllAsync<TripArrangement>();
         }
         GetManyResult<TripArrangement> UpdateCachedResult(GetManyResult<TripArrangement> cachedResult,TripArrangement entityToUpdate)
         {
@@ -582,15 +582,15 @@ namespace ViewWorld.Services.Trips
             return result.Entity.CommonInfo.PriceType + "|" + finalPrice.ToString();
         }
 
-        GetManyResult<TripArrangement> CacheStrToObj(string cacheStr)
-        {
-            GetManyResult<TripArrangement> result = new GetManyResult<TripArrangement>();
-            if (!string.IsNullOrWhiteSpace(cacheStr))
-            {
-                result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(cacheStr);
-            }
-            return result;
-        }
+        //GetManyResult<TripArrangement> CacheStrToObj(string cacheStr)
+        //{
+        //    GetManyResult<TripArrangement> result = new GetManyResult<TripArrangement>();
+        //    if (!string.IsNullOrWhiteSpace(cacheStr))
+        //    {
+        //        result = JSSerializer.Deserialize<GetManyResult<TripArrangement>>(cacheStr);
+        //    }
+        //    return result;
+        //}
 
         public List<object> ListTripType()
         {

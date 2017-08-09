@@ -136,7 +136,7 @@ ul{list-style-type:none;padding:0;margin:0;}
 
     .fc-calendar .fc-row > div {
 	    border-right: 1px solid #ddd;
-	    padding: 4px;
+	    padding: 4px 0 4px 0;
 	    overflow: hidden;
 	    position: relative;
     }
@@ -1036,6 +1036,36 @@ ul{list-style-type:none;padding:0;margin:0;}
                             }
                         }
 
+                        .thirteen.wide.field {
+                            position:relative;
+                            .vertical.menu {
+                                margin: 0;
+                                width: 100%;
+                                position:absolute;
+                                z-index:10;
+                                display:none;
+                                > .item {
+                                    padding-top: 0;
+
+                                    .main-category {
+                                        margin: 0em -1.14285714em 0;
+                                        background-color: #00b5ad;
+                                        color: white;
+                                        padding: 0.5rem 0 0.5rem 0.5rem;
+                                    }
+
+                                    .menu {
+                                        .active {
+                                            color: #00b5ad
+                                        }
+                                    }
+                                    .right.floated.button{
+                                        margin:0.5rem;
+                                    }
+                                }
+                            }
+                        }
+
                         .roomdetail-container {
                             height: 196px;
                             overflow-y: auto;
@@ -1087,7 +1117,10 @@ ul{list-style-type:none;padding:0;margin:0;}
                     p {
                         color: rgb(102,102,102)
                     }
-                    .tag.label.scenery{margin-bottom:1rem}
+
+                    .tag.label.scenery {
+                        margin-bottom: 1rem
+                    }
                 }
             }
         }
