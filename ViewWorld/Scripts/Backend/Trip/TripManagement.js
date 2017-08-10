@@ -184,7 +184,7 @@
             var _this = this, $table = $('#selfpayActivities tbody'), html = '', elementArray;
             $.each(_this.SelfPayActivities, function (index, ele) {
                 elementArray = ele.split('|');
-                html += '<tr><td><input type="text" class="selfpay-name" value="' + elementArray[0] + '" /></td><td><input type="text" class="selfpay-price" value="' + elementArray[1] + '" /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>'
+                html += '<tr><td><input type="text" class="selfpay-name" value="' + elementArray[0] + '" /></td><td><input type="text" class="selfpay-price" value="' + elementArray[1] + '" /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button><button class="ui primary icon button append"><i class="icon plus"></i></button></td></tr>'
             })
             $table.html(html);
         },
@@ -1000,9 +1000,14 @@
         $('#selfpayActivities').delegate('.button.delete', 'click', function (e) {
             $(e.target).parents('tr').remove();
             return false;
-        }).delegate('.button.add', 'click', function (e) {
-            var tmpl = '<tr><td><input type="text" class="selfpay-name" /></td><td><input type="text" class="selfpay-price" /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
-            $('#selfpayActivities tbody').append(tmpl);
+        }).delegate('.button.add,.button.append', 'click', function (e) {
+            var tmpl = '<tr><td><input type="text" class="selfpay-name" /></td><td><input type="text" class="selfpay-price" /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button><button class="ui primary icon button append"><i class="icon plus"></i></button></td></tr>';
+            var $target = $(e.currentTarget);
+            if ($target.hasClass('add')) {
+                $('#selfpayActivities tbody').append(tmpl);
+            } else if ($target.hasClass('append')) {
+                $target.parents('tr').after(tmpl);
+            }
 
             return false;
         })
