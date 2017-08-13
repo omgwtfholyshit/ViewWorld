@@ -1,27 +1,22 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
-<div id="div1">
-    <p>div1</p>
+<div class="user-center order-management">
+    <h3>我的订单</h3>
+    <div class="filter-container">
+        <a class="ui grey label" data-status="新创建订单">待确认订单</a>
+        <a class="ui teal label" data-status="行程已确认">待付款订单</a>
+        <a class="ui grey label" data-status="现金收讫">待出行订单</a>
+        <a class="ui grey label" data-status="订单已完成">已完成订单</a>
+        <a class="ui grey label" data-status="订单已关闭">已关闭订单</a>
+    </div>
+    <div class="order-container">
+        <hr />
+        <div class="order-list">
+
+        </div>
+    </div>
 </div>
-<div id="div2"></div>
-<div id="div3"></div>
-
-<!-- 引用js -->
-<script src="~/Scripts/WangEditor/wangEditor.min.js"></script>
-<script type="text/javascript">
-    var E = window.wangEditor;
-    var editorList = new Array();
-    for (i = 1; i <= 3; i++) {
-        var id = '#div' + i;
-        var editor = new E(id);
-        editor.create();
-        editorList[id] = editor;
-    }
-    var ed = editorList['#div2'];
-    console.log(ed.txt.html());
-</script>
-
- 
+<script src="~/Scripts/Frontend/UserCenter/orderManagement.js"></script>

@@ -5,20 +5,23 @@
 }
 .body-wrapper {
     padding-top: 5rem;
+    background-color: #eaefef;
 
-    .ui.container {
-        min-width: 933px
+    .ui.container.content-body {
+        min-width: 933px;
     }
 
     .subNav-wrapper {
         height: 8rem;
         background-color: #00b5ad;
-        .nav-divider{
-            width:2px;
-            height:80%;
-            background-color:white;
-            opacity:0.2;
+
+        .nav-divider {
+            width: 2px;
+            height: 80%;
+            background-color: white;
+            opacity: 0.2;
         }
+
         .ui.container {
             height: 100%;
         }
@@ -27,10 +30,10 @@
             float: left;
             width: 50%;
             height: 100%;
-            display:none;
-            padding-top:1rem;
-            color:white;
-            position:relative;
+            display: none;
+            padding-top: 1rem;
+            color: white;
+            position: relative;
         }
 
         .left-content-wrapper {
@@ -39,26 +42,65 @@
                 overflow: hidden;
                 border-radius: 6rem;
                 height: 6rem;
+
                 img {
                     width: 100%;
                 }
             }
-            .info-container{
-                padding-left:2rem;
-                >div{height:2rem;font-size:1.1rem}
+
+            .info-container {
+                padding-left: 2rem;
+
+                > div {
+                    height: 2rem;
+                    font-size: 1.1rem
+                }
             }
         }
 
         .right-content-wrapper {
             float: right;
-            .section{width:10rem;padding:0.3rem 1rem 0 1rem;text-align:center;vertical-align:middle;font-size:1.2rem}
+
+            .section {
+                width: 10rem;
+                padding: 0.3rem 1rem 0 1rem;
+                text-align: center;
+                vertical-align: middle;
+                font-size: 1.2rem
+            }
         }
     }
 
     .leftNav-wrapper, .content-wrapper {
         display: inline-block;
         vertical-align: top;
-        padding-top: 2rem;
+        margin-top: 1rem;
+    }
+
+    .leftNav-wrapper {
+        width: 20%;
+
+        .leftNav {
+            .vertical.menu {
+                z-index: 15;
+                width: auto;
+                max-width: 15rem;
+                min-width: 12rem;
+
+                .dropdown .menu > .item {
+                    z-index: 15;
+                }
+            }
+        }
+    }
+
+    .content-wrapper {
+        background: white;
+        width: 79.5%;
+        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+        border: 1px solid rgba(34,36,38,.15);
+        border-radius: .28571429rem;
+        padding:1rem;
     }
 }
 

@@ -42,6 +42,7 @@ namespace ViewWorld.Core.Models.BusinessModels
         //行程结束日期。(PaymentReceived&&DateTime.Now)>FinishDate.AddDays(14)关闭评论。(PaymentReceived&&DateTime.Now)>=>OrderCompleted
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime FinishDate { get; set; }
+        public string OrderImage { get; set; }
         public string ModificatorId { get; set; }
         public string ModificatorName { get; set; }
         //销售人员

@@ -140,6 +140,7 @@
                 animation: 'fade in',
                 displayType:'flex'
             });
+            $('.leftNav .dropdown').not('.icon.dropdown').dropdown();
         }
 
     }

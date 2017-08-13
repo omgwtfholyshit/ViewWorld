@@ -40,7 +40,6 @@ namespace ViewWorld.Core.Models.TripModels
         public int Popularity { get; set; } = 0;
         public int TripOrdered { get; set; } = 0;
         public int SortOrder { get; set; } = 0;
-        
         public bool DisplayOnFrontPage = false;
         public CommonInfo CommonInfo {
             get
@@ -119,6 +118,7 @@ namespace ViewWorld.Core.Models.TripModels
         public string GroupId { get; set; }
         public string RegionId { get; set; }
         public string RegionName { get; set; }
+        public bool BookingRequired { get; set; } = false;
         /// <summary>
         /// 0.出发地参团|1.目的地参团|2.自由行|3.目的地自由行|4.游轮|5.游学|6.私人定制|7.机票|
         /// </summary>
@@ -135,7 +135,7 @@ namespace ViewWorld.Core.Models.TripModels
         /// 1,2,3,4,5,6,7 代表周一到周日
         /// </summary>
         public string AvailableDates { get; set; }
-        public CurrencyType CurrencyType { get; set; }
+        public CurrencyType CurrencyType { get; set; } = CurrencyType.人民币;
         public string PriceType {
             get {
                 var priceType = "";

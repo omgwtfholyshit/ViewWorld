@@ -28,7 +28,7 @@ namespace ViewWorld.Core.Models.Identity
             {
                 if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    filterContext.Result = new RedirectResult("/Page/Login");
+                    filterContext.Result = new RedirectResult("/Account/Login");
                 }
                 else
                 {

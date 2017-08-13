@@ -25,6 +25,7 @@
         GroupId: '',//团号
         RegionId: '',
         RegionName: '',
+        BookingRequired: false,
         TripType:'',
         Promotion: '',//优惠政策。a.特价 b.限时促销 c.热卖 d.买二送二 e.买二送一 f.推荐 g.积分优惠 h.免费接机
         Theme: '',//主题。a.亲子游 b.自然风光 c.主题公园 d.都市名城 e.冒险之旅 f.毕业旅行 g.蜜月之旅 h.时尚购物 i.商务之旅 j.父母游 k.假期特惠 l.自由行 m.新年特惠 n.特色游
@@ -86,7 +87,12 @@
                             availabledates += $input.val() + ','; break;
                         case 'usepoints':
                             usepoints = true; break;
+                        case 'booking':
+                            CommonInfo.BookingRequired = true;break;
                     }
+                } else {
+                    if($input.attr('name') == 'booking')
+                        CommonInfo.BookingRequired = false;
                 }
             })
             CommonInfo.Theme = theme;
@@ -152,6 +158,9 @@
                         if (_this.UsePoints)
                             $input.parent().checkbox('check');
                         break;
+                    case 'booking':
+                        if (_this.BookingRequired)
+                            $input.parent().checkbox('check');
                 }
             })
         },
@@ -284,28 +293,35 @@
         SetFormDataForPage: function () {
             var _this = this, departure = new Array(), arrival = new Array(), finish = new Array(),sceneries = new Array();
             $('#productInfo input[name=TotalDays]').val(ProductInfo.TotalDays);
-            $.each(ProductInfo.DepartingCity.split('|'), function (index, element) {
-                departure.push(element.split(',')[0]);
-            })
-            $.each(ProductInfo.ArrivingCity.split('|'), function (index, element) {
-                arrival.push(element.split(',')[0]);
-            })
-            $.each(ProductInfo.FinishingCity.split('|'), function (index, element) {
-                finish.push(element.split(',')[0]);
+            function PendingQueue() {
+                var dfd = $.Deferred();
+                $.each(ProductInfo.DepartingCity.split('|'), function (index, element) {
+                    departure.push(element.split(',')[0]);
+                })
+                $.each(ProductInfo.ArrivingCity.split('|'), function (index, element) {
+                    arrival.push(element.split(',')[0]);
+                })
+                $.each(ProductInfo.FinishingCity.split('|'), function (index, element) {
+                    finish.push(element.split(',')[0]);
+                })
+                setTimeout(function () {
+                    dfd.resolve();
+                }, 150);
+                return dfd.promise();
+            }
+            PendingQueue().done(function () {
+                $('#departingCity').dropdown("set selected", departure);
+                $('#arrivingCity').dropdown("set selected", arrival);
+                $('#finishingCity').dropdown("set selected", finish);
+            }).then(function () {
+                pIntroEditor.txt.html($.htmlDecode(_this.Intro));
+                pFeatureEditor.txt.html($.htmlDecode(_this.Feature))
             })
             //if (ProductInfo.Sceneries != null) {
             //    $.each(ProductInfo.Sceneries.split('|'), function (index, element) {
             //        sceneries.push(element.split(',')[0]);
             //    })
             //}
-            setTimeout(function () {
-                $('#departingCity').dropdown("set selected", departure);
-                $('#arrivingCity').dropdown("set selected", arrival);
-                $('#finishingCity').dropdown("set selected", finish);
-                //$('#sceneries').dropdown("set selected", sceneries);
-            }, 150);
-            pIntroEditor.txt.html($.htmlDecode(_this.Intro));
-            pFeatureEditor.txt.html($.htmlDecode(_this.Feature))
         },
         SyncJs: function () {
             var _this = this, object = {};
@@ -448,6 +464,7 @@
             Trip.Id = $.getQueryStringByName('tripId');
             if (Trip.Id.length == 24) {
                 $.get(api.tripDataUrl, { tripId: Trip.Id }).done(function (data) {
+                    console.log(data);
                     if (data.Success) {
                         Trip.SyncLocalData(data, true);
                     } else {

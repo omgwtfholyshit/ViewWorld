@@ -1,4 +1,5 @@
 ﻿using CacheManager.Core;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,27 @@ namespace ViewWorld.Controllers.Frontend
             orderService = _order;
         }
         #endregion
+        #region pages
         // GET: User
         public ActionResult Index()
         {
             return View();
         }
+        public ActionResult OrderManagement()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<ActionResult> RenderOrderManagementPartial(string orderId, OrderStatus status = OrderStatus.行程已确认, ProductType type = ProductType.旅行团订单, int pageNum = 1)
+        {
+            var result = await orderService.GetOrder(status, type, orderId);
+            List<BusinessOrder> list = new List<BusinessOrder>();
+            if (result.Success)
+                list = result.Entities;
+
+            return PartialView("~/Views/PartialViews/_PartialOrderList.cshtml",list.OrderByDescending(o=>o.LastModifiedAt).ToPagedList(pageNum,4));
+        }
+        #endregion
         #region Collection
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -62,13 +79,21 @@ namespace ViewWorld.Controllers.Frontend
         #region Order
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddToOrder(BusinessOrder order)
+        public async Task<JsonResult> AddToOrder(BusinessOrder order, bool bookingRequired = false)
         {
             var result = new Result() { ErrorCode = 300, Message = "数据模型错误", Success = false };
             if (ModelState.IsValid)
             {
                 order.UserId = UserId;
                 order.Type = ProductType.旅行团订单;
+                if (bookingRequired)
+                {
+                    order.Status = OrderStatus.新创建订单;
+                }
+                else
+                {
+                    order.Status = OrderStatus.行程已确认;
+                }
                 result = await orderService.AddEntity(order);
             }
             return OriginJson(result);

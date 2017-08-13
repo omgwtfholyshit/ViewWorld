@@ -4,8 +4,9 @@
   opacity: 1; }
 
 .body-wrapper {
-  padding-top: 5rem; }
-  .body-wrapper .ui.container {
+  padding-top: 5rem;
+  background-color: #eaefef; }
+  .body-wrapper .ui.container.content-body {
     min-width: 933px; }
   .body-wrapper .subNav-wrapper {
     height: 8rem;
@@ -48,5 +49,21 @@
   .body-wrapper .leftNav-wrapper, .body-wrapper .content-wrapper {
     display: inline-block;
     vertical-align: top;
-    padding-top: 2rem; }
+    margin-top: 1rem; }
+  .body-wrapper .leftNav-wrapper {
+    width: 20%; }
+    .body-wrapper .leftNav-wrapper .leftNav .vertical.menu {
+      z-index: 15;
+      width: auto;
+      max-width: 15rem;
+      min-width: 12rem; }
+      .body-wrapper .leftNav-wrapper .leftNav .vertical.menu .dropdown .menu > .item {
+        z-index: 15; }
+  .body-wrapper .content-wrapper {
+    background: white;
+    width: 79.5%;
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
+    border: 1px solid rgba(34, 36, 38, 0.15);
+    border-radius: .28571429rem;
+    padding: 1rem; }
 

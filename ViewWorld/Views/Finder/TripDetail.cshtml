@@ -612,7 +612,9 @@
         TripId: '@Model.Trip.Id',
         ProductName: '@Model.Trip.CommonInfo.Name',
         TotalDays:@Model.Trip.ProductInfo.TotalDays,
-        ProviderName:'@Model.Trip.CommonInfo.ProviderName',
+        ProviderName: '@Model.Trip.CommonInfo.ProviderName',
+        FrontCover: '@Model.Trip.CommonInfo.FrontCover.FileLocation',
+        BookingRequired:'@Model.Trip.CommonInfo.BookingRequired'
     }
 </script>
 <script type="text/html" id="roomTmpl">

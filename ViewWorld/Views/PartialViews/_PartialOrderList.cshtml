@@ -1,0 +1,81 @@
+﻿@using PagedList;
+@model IPagedList<ViewWorld.Core.Models.BusinessModels.BusinessOrder>
+
+@{
+    if (Model.Any())
+    {
+        <div class="ui divided items">
+            @foreach (var order in Model)
+            {
+                <div class="item">
+                    <div class="image">
+                        <img src="~/Images/Logo/logo_352-172.svg" data-src="@order.OrderImage">
+                    </div>
+                    <div class="content">
+                        <a class="header">@order.ItemName</a>
+                        <div class="meta">
+                            <span class="cinema">订单号：@order.OrderId</span>
+                            <span class="cinema">出发日期：@order.CommenceDate.ToShortDateString()</span>
+                        </div>
+                        <div class="description">
+                            <p>订单金额：@order.OrderCurrency @order.Price 元</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui right floated teal button">
+                                查看详情
+                                <i class="right chevron icon"></i>
+                            </div>
+                            <div class="ui label">@order.Type</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="ui right floated pagination menu">
+            @{
+                if (Model.HasPreviousPage)
+                {
+                    <a class="icon item">
+                        <i class="left chevron icon"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="icon disabled item">
+                        <i class="left chevron icon"></i>
+                    </a>
+                }
+                for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <a class="active item">@i</a>
+                    }
+                    else
+                    {
+                        <a class="item">@i</a>
+                    }
+
+                }
+                if (Model.HasNextPage)
+                {
+                    <a class="icon item">
+                        <i class="right chevron icon"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="icon disabled item">
+                        <i class="right chevron icon"></i>
+                    </a>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="ui segment">
+            暂无该类型订单
+        </div>
+    }
+}

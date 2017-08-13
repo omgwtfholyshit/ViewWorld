@@ -817,7 +817,7 @@ ul {
               margin: 0;
               width: 100%;
               position: absolute;
-              z-index: 10;
+              z-index: 15;
               display: none; }
               .body-wrapper .trip-detail .booking-section .booking-container .content-container .ui.form .thirteen.wide.field .vertical.menu > .item {
                 padding-top: 0; }

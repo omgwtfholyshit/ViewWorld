@@ -31,7 +31,6 @@ namespace ViewWorld.Services.Order
             {
                 var uuid = ObjectId.GenerateNewId();
                 Entity.Id = uuid.ToString();
-                Entity.Status = OrderStatus.新创建订单;
                 Entity.OrderId = Utils.Tools.GenerateId_M3(uuid.Increment);
                 result = await Repo.AddOneAsync(Entity);
             }
@@ -245,6 +244,26 @@ namespace ViewWorld.Services.Order
                 filter = builder.Where(o => o.Status != OrderStatus.订单已删除);
             }
             return Repo.CountAsync(filter);
+        }
+
+        public async Task<GetListResult<BusinessOrder>> GetOrder(OrderStatus status, ProductType type, string id)
+        {
+            GetListResult<BusinessOrder> listResult = new GetListResult<BusinessOrder>();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var result = await RetrieveOrderById(id);
+                listResult.Success = result.Success;
+                listResult.Message = result.Message;
+                if(result.Entity is BusinessOrder)
+                    listResult.Entities.Add(result.Entity);
+            }
+            else
+            {
+                var builder = Builders<BusinessOrder>.Filter;
+                var filter = builder.Where(o => o.Status == status && o.Type == type);
+                listResult = (await Repo.GetManyAsync(filter)).ManyToListResult();
+            }
+            return listResult;
         }
     }
 }

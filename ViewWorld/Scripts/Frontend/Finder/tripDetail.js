@@ -349,7 +349,9 @@
                     $target.addClass('loading');
                 },
                 data: {
-                    order: order, __RequestVerificationToken: token
+                    order: order,
+                    bookingRequired: ProductInfo.BookingRequired,
+                    __RequestVerificationToken: token
                 },
                 success: function (data) {
                     if (data.Success) {
@@ -372,7 +374,7 @@
             .delegate('.product-detail .scenery', 'click', function (e) {
                 var id = $(e.target).data('id');
                 $.get(_this.api.getSceneryDetail, { sceneryId: id }).done(function (data) {
-                    //console.log(data);
+                    console.log(data);
                     var photoHtml = '';
                     if (data.status == 200) {
                         if (data.data.Photos.length > 0) {
@@ -381,6 +383,12 @@
                             })
                         } else {
                             photoHtml = '<div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>';
+                        }
+                    } else {
+                        photoHtml = '<div class="swiper-slide" style="background:url(/Images/Logo/logo_352-172.svg) no-repeat;background-size:contain"></div>';
+                        data.data = {
+                            Name: "找不到该景点",
+                            Description:"暂无描述"
                         }
                     }
                     _this.sceneryModal.find('.swiper-wrapper').html(photoHtml);
@@ -499,7 +507,7 @@
                 var name = $modal.find('input[name=name]').val(), phone = $modal.find('input[name=phone]').val();
                 var departTime = new Date(_this.tripSettings.departtime);
                 var finishTime = departTime.setDate(departTime.getDate() + ProductInfo.TotalDays);
-                var order = new Order(ProductInfo.TripId, ProductInfo.ProductName, name, phone, ProductInfo.ProviderName, _this.tripSettings.departtime, new Date(finishTime).toSimpleDateString(), "旅行团订单", $('.content-container .selfChooseActivities input[name=SelfChooseActivities]').val() ,JSON.stringify(_this.tripSettings.rooms), _this.tripSettings.price, _this.tripSettings.currencyType);
+                var order = new Order(ProductInfo.TripId, ProductInfo.ProductName, name, phone, ProductInfo.FrontCover, ProductInfo.ProviderName, _this.tripSettings.departtime, new Date(finishTime).toSimpleDateString(), "旅行团订单", $('.content-container .selfChooseActivities input[name=SelfChooseActivities]').val(), JSON.stringify(_this.tripSettings.rooms), _this.tripSettings.price, _this.tripSettings.currencyType);
                 _this.submitOrder($(e.target), order);
                 return false;
             })
@@ -515,11 +523,12 @@
         this.adults = adults;
         this.children = children;
     }
-    function Order(ItemId, ItemName, ContactName, ContactNumber, ProviderName, CommenceDate, FinishDate, Type, SelfChooseActivities, OrderDetail, Price, CurrencyType) {
+    function Order(ItemId, ItemName, ContactName, ContactNumber, OrderImage, ProviderName, CommenceDate, FinishDate, Type, SelfChooseActivities, OrderDetail, Price, CurrencyType) {
         this.ItemId = ItemId;
         this.ItemName = ItemName;
         this.ContactName = ContactName;
         this.ContactNumber = ContactNumber;
+        this.OrderImage = OrderImage;
         this.ProviderName = ProviderName;
         this.CommenceDate = CommenceDate;
         this.FinishDate = FinishDate;
