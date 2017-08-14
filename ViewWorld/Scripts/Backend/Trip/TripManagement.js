@@ -448,7 +448,11 @@
             _this.SetSelfChooseActivitiesForPage();
             if (typeof _this.DepartingLocation == 'string') {
                 var locations = _this.DepartingLocation.split(',');
-                $('#TripProperty .departure-selection').dropdown().dropdown("set selected", locations);
+                $('#TripProperty .departure-selection').dropdown();
+                setTimeout(function () {
+                    console.log('hit');
+                    $('#TripProperty .departure-selection').dropdown("set selected", locations);
+                },200)
             }
         }
     },
