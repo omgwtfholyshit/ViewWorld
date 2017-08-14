@@ -38,9 +38,9 @@ namespace ViewWorld.Controllers.Frontend
         // GET: User
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("MyOrders");
         }
-        public ActionResult OrderManagement()
+        public ActionResult MyOrders()
         {
             return View();
         }
@@ -53,6 +53,11 @@ namespace ViewWorld.Controllers.Frontend
                 list = result.Entities;
 
             return PartialView("~/Views/PartialViews/_PartialOrderList.cshtml",list.OrderByDescending(o=>o.LastModifiedAt).ToPagedList(pageNum,4));
+        }
+
+        public ActionResult MyCollections()
+        {
+            return View();
         }
         #endregion
         #region Collection

@@ -50,6 +50,7 @@
                         $element.removeClass('teal').addClass('grey');
                 })
                 $target.removeClass('grey').addClass('teal');
+                _this.pageNum = 1;
                 _this.renderOrderList();
             })
         },

@@ -446,8 +446,10 @@
             _this.SetHotelUpgradeForPage();
             //_this.SetSelectableRouteForPage();
             _this.SetSelfChooseActivitiesForPage();
-            if (typeof _this.DepartingLocation == 'string')
-                $('#TripProperty .departure-selection').dropdown("set selected", _this.DepartingLocation.split(','));
+            if (typeof _this.DepartingLocation == 'string') {
+                var locations = _this.DepartingLocation.split(',');
+                $('#TripProperty .departure-selection').dropdown("set selected", locations);
+            }
         }
     },
     TripPlans = new Array(),

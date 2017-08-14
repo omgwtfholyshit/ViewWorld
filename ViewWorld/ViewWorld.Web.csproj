@@ -1218,6 +1218,7 @@
     <Content Include="Scripts\WangEditor\fonts\icomoon.woff" />
     <Content Include="Scripts\WangEditor\wangEditor.min.js.map" />
     <Content Include="Views\PartialViews\_PartialOrderList.cshtml" />
+    <Content Include="Views\User\OrderManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
