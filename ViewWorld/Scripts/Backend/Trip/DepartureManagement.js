@@ -108,15 +108,15 @@
             inline: true,
             on    : 'blur',
             fields: {
-                landmark: {
-                    identifier: 'landmark',
-                    rules: [
-                        {
-                            type: 'empty',
-                            prompt: '地点不能为空'
-                        }
-                    ]
-                },
+                //landmark: {
+                //    identifier: 'landmark',
+                //    rules: [
+                //        {
+                //            type: 'empty',
+                //            prompt: '地点不能为空'
+                //        }
+                //    ]
+                //},
                 address: {
                     identifier: 'address',
                     rules: [
@@ -166,7 +166,8 @@
                 }
             })
             if (availabledates == '') {
-                return $.tip(".message-container", "请选择出发日期", "出发日期不能为空", "negative", 4);
+                availabledates = '1,2,3,4,5,6,7';
+                //return $.tip(".message-container", "请选择出发日期", "出发日期不能为空", "negative", 4);
             }
             $inputs.each(function (index, input) {
                 if (typeof $(input).data('db-key')!='undefined')
@@ -190,7 +191,7 @@
             model.ProviderAlias = text.split('----')[1];
             model.AvailableDays = availabledates;
             $submitButton.addClass('loading');
-            console.log(url);
+            //console.log(url);
             $.post(url, { point: model, __RequestVerificationToken: token }).done(function (result) {
                 $submitButton.removeClass('loading');
                 setTimeout(function () {

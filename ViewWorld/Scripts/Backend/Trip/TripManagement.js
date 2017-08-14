@@ -450,7 +450,7 @@
                 $('#TripProperty .departure-selection').dropdown("set selected", _this.DepartingLocation.split(','));
         }
     },
-    TripPlans=new Array(),
+    TripPlans = new Array(),
     Trip = {
         Id: '',
         IsVisible: false,
@@ -1168,7 +1168,7 @@
                         return $.tip('.message-container', "周信息没有选择", "总得选个出发的日子呀亲！！", "negative", 4)
                     }
                     tripPlan.WeekInfo = weekInfo;
-                    weekInfo = weekInfo.split(',');
+                    weekInfo = weekInfo.replaceAll('7', '0').split(',');
                     try {
                         if (typeof startDate != 'object') {
                             return $.tip('.message-container', "起始时间选择错误", "起始时间不能为空哦！！", "negative", 4);
