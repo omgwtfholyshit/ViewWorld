@@ -47,7 +47,7 @@ namespace ViewWorld.Controllers.Frontend
         [HttpGet]
         public async Task<ActionResult> RenderOrderManagementPartial(string orderId, OrderStatus status = OrderStatus.行程已确认, ProductType type = ProductType.旅行团订单, int pageNum = 1)
         {
-            var result = await orderService.GetOrder(status, type, orderId);
+            var result = await orderService.GetOrder(status, type, UserId, orderId);
             List<BusinessOrder> list = new List<BusinessOrder>();
             if (result.Success)
                 list = result.Entities;
@@ -59,13 +59,25 @@ namespace ViewWorld.Controllers.Frontend
         {
             return View();
         }
+        [HttpGet]
+        public async Task<ActionResult> RenderCollectionPartial(int pageNum = 1)
+        {
+            List<Collection> collectionList = new List<Collection>();
+            var result = await userService.GetCollection(UserId);
+            if (result.Success)
+            {
+                collectionList = result.Entities.ToList();
+            }
+            return PartialView("~/Views/PartialViews/_PartialCollection.cshtml", collectionList.OrderByDescending(c => c.CollectedAt).ToPagedList(pageNum, 4));
+
+        }
         #endregion
         #region Collection
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddToCollection(string itemId, string itemName, string memo, ProductType type)
+        public async Task<JsonResult> AddToCollection(string itemId, string itemName, string memo,string image, ProductType type)
         {
-            var result = await userService.AddToCollection(UserId, itemId, itemName, memo, type);
+            var result = await userService.AddToCollection(UserId, itemId, itemName, memo, image, type);
             return OriginJson(result);
         }
         [HttpGet]

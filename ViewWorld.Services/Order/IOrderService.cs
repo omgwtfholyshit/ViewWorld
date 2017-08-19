@@ -18,6 +18,6 @@ namespace ViewWorld.Services.Order
         Task<Result> UpdateOrderById(string salesId, BusinessOrder order, bool authorized);
         Task<Result> CreatePriceGapOrder(string orderId, double price, string salesId, bool authorized);
         Task<long> CountOrders(string userId, bool deletedOrders = false);
-        Task<GetListResult<BusinessOrder>> GetOrder(OrderStatus status, ProductType type, string id);
+        Task<GetListResult<BusinessOrder>> GetOrder(OrderStatus status, ProductType type,string userId, string id);
     }
 }

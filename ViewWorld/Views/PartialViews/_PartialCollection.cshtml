@@ -1,0 +1,82 @@
+﻿@using PagedList;
+@model IPagedList<ViewWorld.Core.Models.BusinessModels.Collection>
+
+@{
+    if (Model.Any())
+    {
+        <div class="ui divided items">
+            @foreach (var item in Model)
+            {
+                <div class="item" data-id="@item.Id" data-tripId="@item.ItemId">
+                    <div class="image">
+                        <img src="~/Images/Logo/logo_352-172.svg" data-src="@item.Image">
+                    </div>
+                    <div class="content">
+                        <a class="header">@item.ItemName</a>
+                        <div class="meta">
+                            <span class="cinema">收藏日期：@item.CollectedAt.ToShortDateString()</span>
+                        </div>
+                        <div class="extra">
+                            
+                            <div class="ui right floated red button">
+                                删除
+                                <i class="right delete icon"></i>
+                            </div>
+                            <div class="ui right floated teal button">
+                                详情
+                                <i class="right chevron icon"></i>
+                            </div>
+                            <div class="ui label">@item.Type</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="ui right floated pagination menu">
+            @{
+                if (Model.HasPreviousPage)
+                {
+                    <a class="icon item">
+                        <i class="left chevron icon"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="icon disabled item">
+                        <i class="left chevron icon"></i>
+                    </a>
+                }
+                for (int i = 1; i <= Model.PageCount; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <a class="active item">@i</a>
+                    }
+                    else
+                    {
+                        <a class="item">@i</a>
+                    }
+
+                }
+                if (Model.HasNextPage)
+                {
+                    <a class="icon item">
+                        <i class="right chevron icon"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="icon disabled item">
+                        <i class="right chevron icon"></i>
+                    </a>
+                }
+            }
+        </div>
+                }
+                else
+                {
+                    <div class="ui segment">
+                        暂无收藏的行程
+                    </div>
+                }
+}

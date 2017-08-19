@@ -10,7 +10,7 @@ namespace ViewWorld.Core.Dal
     public class ApplicationIdentityContext : IDisposable
     {
         static string dbName = "ViewWorld";
-        static string connectionStr = string.Format("mongodb://{0}:{1}", Config.DB_HostIP, Config.DB_Port);
+        static string connectionStr =$"mongodb://{Config.DB_HostIP}:{Config.DB_Port}";
         public IMongoClient Client { get; set; }
         public IMongoDatabase DB { get; set; }
         public IMongoCollection<IdentityRole> Roles { get; set; }

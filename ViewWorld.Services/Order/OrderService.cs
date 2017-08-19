@@ -246,7 +246,7 @@ namespace ViewWorld.Services.Order
             return Repo.CountAsync(filter);
         }
 
-        public async Task<GetListResult<BusinessOrder>> GetOrder(OrderStatus status, ProductType type, string id)
+        public async Task<GetListResult<BusinessOrder>> GetOrder(OrderStatus status, ProductType type,string userId, string id)
         {
             GetListResult<BusinessOrder> listResult = new GetListResult<BusinessOrder>();
             if (!string.IsNullOrWhiteSpace(id))
@@ -254,13 +254,13 @@ namespace ViewWorld.Services.Order
                 var result = await RetrieveOrderById(id);
                 listResult.Success = result.Success;
                 listResult.Message = result.Message;
-                if(result.Entity is BusinessOrder)
+                if(result.Entity is BusinessOrder && result.Entity.UserId == userId)
                     listResult.Entities.Add(result.Entity);
             }
             else
             {
                 var builder = Builders<BusinessOrder>.Filter;
-                var filter = builder.Where(o => o.Status == status && o.Type == type);
+                var filter = builder.Where(o => o.Status == status && o.Type == type && o.UserId == userId);
                 listResult = (await Repo.GetManyAsync(filter)).ManyToListResult();
             }
             return listResult;

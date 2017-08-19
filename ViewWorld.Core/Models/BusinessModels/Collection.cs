@@ -31,6 +31,8 @@ namespace ViewWorld.Core.Models.BusinessModels
         public string Memo { get; set; }
         [DataMember]
         public ProductType Type { get; set; }
+        [DataMember]
+        public string Image { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CollectedAt { get; set; }
     }

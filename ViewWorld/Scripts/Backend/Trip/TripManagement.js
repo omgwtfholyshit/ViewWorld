@@ -450,7 +450,6 @@
                 var locations = _this.DepartingLocation.split(',');
                 $('#TripProperty .departure-selection').dropdown();
                 setTimeout(function () {
-                    console.log('hit');
                     $('#TripProperty .departure-selection').dropdown("set selected", locations);
                 },200)
             }
