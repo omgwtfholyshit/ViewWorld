@@ -7,7 +7,7 @@
             pageNum: 1,
             orderId: '',
             status: '行程已确认',
-            type: '旅行团订单',
+            type: '不限',
         },
         orderContainer:$('.order-management'),
         orderListContainer: $('.order-list'),
@@ -80,11 +80,21 @@
                 })
             
         },
+        bindListEvents: function () {
+            var _this = this;
+            _this.orderListContainer
+                .delegate('.teal.button', 'click', function (e) {
+                    var orderId = $(e.target).parents('.item').data('orderid');
+                    if (typeof orderId == 'string')
+                        window.open('/User/OrderDetail?OrderId=' + orderId);
+                })
+        },
         init: function () {
             var _this = this;
             _this.renderOrderList();
             _this.bindFilterEvents();
             _this.bindPaginationEvents();
+            _this.bindListEvents();
         }
     }
     page.init();

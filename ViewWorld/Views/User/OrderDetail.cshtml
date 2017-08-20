@@ -1,0 +1,56 @@
+﻿@model ViewWorld.Core.Models.BusinessModels.BusinessOrder
+
+@{
+    ViewBag.Title = "订单详情";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+<div class="user-center order-detail">
+    <h3>订单详情</h3>
+    <div class="step-container">
+        <div class="ui steps">
+            <div class="completed step">
+                <i class="truck icon"></i>
+                <div class="content">
+                    <div class="title">填写信息</div>
+                    <div class="description">完善您的订单信息</div>
+                </div>
+            </div>
+            <div class="active step">
+                <i class="payment icon"></i>
+                <div class="content">
+                    <div class="title">确认行程</div>
+                    <div class="description">正在为您预约行程</div>
+                </div>
+            </div>
+            <div class="disabled step">
+                <i class="info icon"></i>
+                <div class="content">
+                    <div class="title">行程已确认</div>
+                    <div class="description">预约成功，请支付</div>
+                </div>
+            </div>
+            <div class="disabled step">
+                <i class="info icon"></i>
+                <div class="content">
+                    <div class="title">支付完成</div>
+                    <div class="description">订单已支付完成</div>
+                </div>
+            </div>
+            <div class="disabled step">
+                <i class="info icon"></i>
+                <div class="content">
+                    <div class="title">行程已结束</div>
+                    <div class="description">订单已支付完成</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    var orderData = {
+        orderStatus: @Convert.ToInt32(Model.Status),
+    }
+    console.log(orderData)
+</script>

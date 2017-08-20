@@ -1222,6 +1222,7 @@
     <Content Include="Views\User\MyOrders.cshtml" />
     <Content Include="Views\PartialViews\_PartialCollection.cshtml" />
     <Content Include="Views\User\MyCollections.cshtml" />
+    <Content Include="Views\User\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

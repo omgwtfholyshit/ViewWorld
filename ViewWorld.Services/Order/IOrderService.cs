@@ -12,7 +12,8 @@ namespace ViewWorld.Services.Order
 {
     public interface IOrderService:ICRUDable<BusinessOrder>
     {
-        Task<GetOneResult<BusinessOrder>> RetrieveOrderById(string id);
+        Task<GetOneResult<BusinessOrder>> RetrieveOrdersById(string id);
+        Task<GetManyResult<BusinessOrder>> RetrieveOrderByOrderId(string orderId);
         Task<GetListResult<BusinessOrder>> RetrieveOrdersByKeyword(string keyword, string salesId);
         Task<Result> AssignOrderToSales(string salesId, string orderId);
         Task<Result> UpdateOrderById(string salesId, BusinessOrder order, bool authorized);

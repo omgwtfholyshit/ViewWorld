@@ -3,6 +3,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -45,7 +46,7 @@ namespace ViewWorld.Controllers.Frontend
             return View();
         }
         [HttpGet]
-        public async Task<ActionResult> RenderOrderManagementPartial(string orderId, OrderStatus status = OrderStatus.行程已确认, ProductType type = ProductType.旅行团订单, int pageNum = 1)
+        public async Task<ActionResult> RenderOrderManagementPartial(string orderId, OrderStatus status = OrderStatus.行程已确认, ProductType type = ProductType.不限, int pageNum = 1)
         {
             var result = await orderService.GetOrder(status, type, UserId, orderId);
             List<BusinessOrder> list = new List<BusinessOrder>();
@@ -54,7 +55,26 @@ namespace ViewWorld.Controllers.Frontend
 
             return PartialView("~/Views/PartialViews/_PartialOrderList.cshtml",list.OrderByDescending(o=>o.LastModifiedAt).ToPagedList(pageNum,4));
         }
-
+        public async Task<ActionResult> OrderDetail(string orderId)
+        {
+            if (string.IsNullOrEmpty(orderId))
+            {
+                return Content("订单号不能为空");
+            }
+            var result = await orderService.RetrieveOrdersById(orderId);
+            if (result.Success)
+            {
+                if(result.Entity.UserId != UserId)
+                {
+                    return Content("您没有权限查看该订单");
+                }
+                else
+                {
+                    return View(result.Entity);
+                }
+            }
+            return Content("找不到该订单");
+        }
         public ActionResult MyCollections()
         {
             return View();

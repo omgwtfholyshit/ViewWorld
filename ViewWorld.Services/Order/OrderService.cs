@@ -125,7 +125,7 @@ namespace ViewWorld.Services.Order
             return !(result.Entities.Count() == 0);
         }
 
-        public Task<GetOneResult<BusinessOrder>> RetrieveOrderById(string id)
+        public Task<GetOneResult<BusinessOrder>> RetrieveOrdersById(string id)
         {
             return Repo.GetOneAsync<BusinessOrder>(id);
         }
@@ -251,7 +251,7 @@ namespace ViewWorld.Services.Order
             GetListResult<BusinessOrder> listResult = new GetListResult<BusinessOrder>();
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var result = await RetrieveOrderById(id);
+                var result = await RetrieveOrdersById(id);
                 listResult.Success = result.Success;
                 listResult.Message = result.Message;
                 if(result.Entity is BusinessOrder && result.Entity.UserId == userId)
@@ -260,10 +260,18 @@ namespace ViewWorld.Services.Order
             else
             {
                 var builder = Builders<BusinessOrder>.Filter;
-                var filter = builder.Where(o => o.Status == status && o.Type == type && o.UserId == userId);
+                var filter = builder.Where(o => o.Status == status && o.UserId == userId);
+                if (type != ProductType.不限)
+                    filter = builder.And(filter, builder.Where(o => o.Type == type));
                 listResult = (await Repo.GetManyAsync(filter)).ManyToListResult();
             }
             return listResult;
+        }
+
+        public Task<GetManyResult<BusinessOrder>> RetrieveOrderByOrderId(string orderId)
+        {
+            var filter = Builders<BusinessOrder>.Filter.Where(o => o.OrderId == orderId);
+            return Repo.GetManyAsync(filter);
         }
     }
 }

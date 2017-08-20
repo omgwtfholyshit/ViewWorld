@@ -8,7 +8,7 @@ namespace ViewWorld.Core.Enum
 {
     public enum OrderStatus
     {
-        新创建订单,//Pending to confirm
+        新创建订单 = 0,//Pending to confirm
         行程已确认,//Waiting for customers to pay
         现金收讫,//Waiting for the journey to start.
         现金已付给供应商,

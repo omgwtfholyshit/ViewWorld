@@ -7,7 +7,7 @@
         <div class="ui divided items">
             @foreach (var order in Model)
             {
-                <div class="item">
+                <div class="item" data-orderid="@order.Id">
                     <div class="image">
                         <img src="~/Images/Logo/logo_352-172.svg" data-src="@order.OrderImage">
                     </div>
