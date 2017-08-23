@@ -58,7 +58,7 @@ namespace ViewWorld.Services.Users
             return result;
         }
 
-        public async Task<Result> AddToCollection(string userId, string itemId, string itemName, string memo, ProductType type)
+        public async Task<Result> AddToCollection(string userId, string itemId, string itemName, string memo,string image, ProductType type=ProductType.导游服务)
         {
             var existed = await CheckIfItemCollected(userId, itemId);
             if (!existed)
@@ -70,6 +70,7 @@ namespace ViewWorld.Services.Users
                     ItemName = itemName,
                     Memo = memo,
                     Type = type,
+                    Image = image,
                     CollectedAt = DateTime.Now
                 };
                 return await Repo.AddOneAsync(collection);
@@ -80,21 +81,20 @@ namespace ViewWorld.Services.Users
 
         public async Task<bool> CheckIfItemCollected(string userId, string itemId)
         {
-            var filter = Builders<Collection>.Filter.Where(c => c.UserId == userId && c.ItemId == itemId); 
+            var filter = Builders<Collection>.Filter.Where(c => c.UserId == userId && c.ItemId == itemId);
             var result = await Repo.GetOneAsync<Collection>(filter);
             return result.Success;
         }
 
-        public async Task<Result> RemoveFromCollection(string userId, string itemId)
+        public async Task<Result> RemoveFromCollection(string userId, string id)
         {
-            var existed = await CheckIfItemCollected(userId, itemId);
-            var result = new Result() { Success = false, Message = "", ErrorCode = 300 };
-            if (existed)
-            {
-                var filter = Builders<Collection>.Filter.Where(c => c.UserId == userId && c.ItemId == itemId);
-                result = await Repo.DeleteOneAsync(filter);
-            }
-            return result;
+            var filter = Builders<Collection>.Filter.Where(c => c.UserId == userId && c.Id == id);
+            return await Repo.DeleteOneAsync(filter);
+        }
+        public async Task<GetManyResult<Collection>> GetCollection(string userId)
+        {
+            var filter = Builders<Collection>.Filter.Where(c => c.UserId == userId);
+            return await Repo.GetManyAsync(filter);
         }
     }
 }

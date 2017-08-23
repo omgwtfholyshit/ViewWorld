@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+
+<div class="user-center collection-management">
+    <h3>我的收藏</h3>
+    @*<div class="filter-container">
+        <a class="ui grey label" data-status="新创建订单">待确认订单</a>
+        <a class="ui teal label" data-status="行程已确认">待付款订单</a>
+        <a class="ui grey label" data-status="现金收讫">待出行订单</a>
+        <a class="ui grey label" data-status="订单已完成">已完成订单</a>
+        <a class="ui grey label" data-status="订单已关闭">已关闭订单</a>
+    </div>*@
+    <div class="collection-container">
+        <hr />
+        @Html.AntiForgeryToken()
+        <div class="collection-list">
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Frontend/UserCenter/collectionManagement.js"></script>

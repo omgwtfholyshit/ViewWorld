@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewWorld.Core.Dal;
 using ViewWorld.Core.Enum;
+using ViewWorld.Core.Models.BusinessModels;
 using ViewWorld.Core.Models.Identity;
 
 namespace ViewWorld.Services.Users
@@ -15,8 +16,9 @@ namespace ViewWorld.Services.Users
 
         Task<object> GetUserInfo(string UserId);
 
-        Task<Result> AddToCollection(string userId,string itemId, string itemName,string memo, ProductType type);
+        Task<Result> AddToCollection(string userId,string itemId, string itemName,string memo, string image, ProductType type);
         Task<bool> CheckIfItemCollected(string userId, string itemId);
-        Task<Result> RemoveFromCollection(string userId, string itemId);
+        Task<Result> RemoveFromCollection(string userId, string id);
+        Task<GetManyResult<Collection>> GetCollection(string userId);
     }
 }

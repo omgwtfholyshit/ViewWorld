@@ -1,31 +1,32 @@
 ﻿@using PagedList;
-@model IPagedList<ViewWorld.Core.Models.BusinessModels.BusinessOrder>
+@model IPagedList<ViewWorld.Core.Models.BusinessModels.Collection>
 
 @{
     if (Model.Any())
     {
         <div class="ui divided items">
-            @foreach (var order in Model)
+            @foreach (var item in Model)
             {
-                <div class="item" data-orderid="@order.Id">
+                <div class="item" data-id="@item.Id" data-tripId="@item.ItemId">
                     <div class="image">
-                        <img src="~/Images/Logo/logo_352-172.svg" data-src="@order.OrderImage">
+                        <img src="~/Images/Logo/logo_352-172.svg" data-src="@item.Image">
                     </div>
                     <div class="content">
-                        <a class="header">@order.ItemName</a>
+                        <a class="header">@item.ItemName</a>
                         <div class="meta">
-                            <span class="cinema">订单号：@order.OrderId</span>
-                            <span class="cinema">出发日期：@order.CommenceDate.ToShortDateString()</span>
-                        </div>
-                        <div class="description">
-                            <p>订单金额：@order.OrderCurrency @order.Price 元</p>
+                            <span class="cinema">收藏日期：@item.CollectedAt.ToShortDateString()</span>
                         </div>
                         <div class="extra">
+                            
+                            <div class="ui right floated red button">
+                                删除
+                                <i class="right delete icon"></i>
+                            </div>
                             <div class="ui right floated teal button">
-                                查看详情
+                                详情
                                 <i class="right chevron icon"></i>
                             </div>
-                            <div class="ui label">@order.Type</div>
+                            <div class="ui label">@item.Type</div>
                         </div>
                     </div>
                 </div>
@@ -71,11 +72,11 @@
                 }
             }
         </div>
-    }
-    else
-    {
-        <div class="ui segment">
-            暂无该类型订单
-        </div>
-    }
+                }
+                else
+                {
+                    <div class="ui segment">
+                        暂无收藏的行程
+                    </div>
+                }
 }

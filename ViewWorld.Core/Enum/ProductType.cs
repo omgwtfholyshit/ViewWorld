@@ -11,5 +11,6 @@ namespace ViewWorld.Core.Enum
         旅行团订单,
         补差价订单,
         导游服务,
+        不限
     }
 }

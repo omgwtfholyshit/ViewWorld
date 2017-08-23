@@ -133,6 +133,17 @@
                     })
             }
         },
+        bindLeftNavEvents: function () {
+            var $body = $('.body-wrapper .content-body');
+            $body.delegate('.leftNav a.item', 'click', function (e) {
+                var $target = $(e.currentTarget);
+                if (typeof $target.data('href') == 'string') {
+                    if (location.pathname != $target.data('href'))
+                        location.replace($target.data('href'));
+                }
+                    
+            })
+        },
         init: function () {
             var _this = this;
             _this.setProfile();
@@ -141,6 +152,7 @@
                 displayType:'flex'
             });
             $('.leftNav .dropdown').not('.icon.dropdown').dropdown();
+            _this.bindLeftNavEvents();
         }
 
     }

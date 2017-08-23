@@ -51,7 +51,7 @@ namespace ViewWorld.Controllers.Backend.Order
         }
         public async Task<ActionResult> OrderDetail(string id)
         {
-            var result = await orderService.RetrieveOrderById(id);
+            var result = await orderService.RetrieveOrdersById(id);
             if (!result.Success) {
                 return HttpNotFound();
             }
