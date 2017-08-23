@@ -246,7 +246,7 @@
                 var html = '';
                 if (data.status==200) {
                     $.each(data.data, function (index, element) {
-                        html += '<div class="item" data-value="' + element.Id + '" data-initial="' + element.Initial + '">' + element.Initial + "----" + element.Name + '</div>'
+                        html += '<div class="item" data-value="' + element.Id + '" data-initial="' + element.Initial + '">' + element.Name + '</div>'
                     })
                 }
                 $('.city-selection .menu').html(html);
