@@ -5,7 +5,7 @@
         calendarHeader: $('#calendarHeader'),
         smallCalendar: $('.toggleCalendar'),
         weekArray: ['周日', '周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-        tripData: JSON.parse(decodeURIComponent(calendarData)),
+        tripData: JSON.parse(decodeURIComponent(calendarData == '' ? calendarData = '[]' : calendarData = calendarData)),
         roomInfoContainer: $('#roomSelectModal .rooms-container'),
         roomSelectionModal: $('#roomSelectModal'),
         sceneryModal: $('#sceneryModal'),

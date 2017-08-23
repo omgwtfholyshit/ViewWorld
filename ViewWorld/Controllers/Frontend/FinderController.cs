@@ -108,6 +108,7 @@ namespace ViewWorld.Controllers.Frontend
                     vm.TripData = tripData.TrimEnd(',') + "}";
                     vm.UserName = "";
                     vm.Phone = "";
+                    vm.Trip.CommonInfo.FrontCover = vm.Trip.CommonInfo.FrontCover == null ? new CommonInfo.PhotoInfo() : vm.Trip.CommonInfo.FrontCover;
                     if (User.Identity.IsAuthenticated)
                     {
                         vm.UserName = GetClaimValue("NickName");
