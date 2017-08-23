@@ -5,7 +5,7 @@
         calendarHeader: $('#calendarHeader'),
         smallCalendar: $('.toggleCalendar'),
         weekArray: ['周日', '周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-        tripData: JSON.parse(decodeURIComponent(calendarData)),
+        tripData: JSON.parse(decodeURIComponent(calendarData == '' ? calendarData = '[]' : calendarData = calendarData)),
         roomInfoContainer: $('#roomSelectModal .rooms-container'),
         roomSelectionModal: $('#roomSelectModal'),
         sceneryModal: $('#sceneryModal'),
@@ -450,9 +450,14 @@
                                 $target.addClass('loading');
                             },
                             data: {
+<<<<<<< HEAD
+                                itemId: ProductInfo.TripId, itemName: ProductInfo.ProductName,
+                                type: '旅行团订单', __RequestVerificationToken: token
+=======
                                 itemId: ProductInfo.ProductId, itemName: ProductInfo.ProductName,
                                 type: '旅行团订单', image: ProductInfo.FrontCover,
                                 __RequestVerificationToken: token
+>>>>>>> 0afddffbd2fa89623103eff800cc1262e25cab30
                             },
                             success: function (data) {
                                 _this.updateCollectionStatus(data.Success);
