@@ -64,7 +64,8 @@ namespace ViewWorld.Services.Trips
             var result = await Repo.DeleteOneAsync<TripArrangement>(id);
             if (result.Success)
             {
-                cacheManager.Update("Trips", "Front", r => DeleteFromCachedResult(id));
+                var rst = new GetManyResult<TripArrangement>();
+                cacheManager.TryUpdate("Trips", "Front", r => DeleteFromCachedResult(id),out rst);
             }
             return result;
         }

@@ -606,7 +606,7 @@
                             $inputs.each(function (iterator, input) {
                                 $input = $(input);
                                 if ($input.data('db-key') == 'Sceneries') {
-                                    if ($input.val() == "" || $input.val() == "-1") {
+                                    if ($input.val() == "") {
                                         RemoveElementFromArray(correspondingSchedule.Details, item);
                                         return false;
                                     } else {

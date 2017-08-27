@@ -4,7 +4,7 @@
     {
         foreach (var item in Model)
         {
-            <tr class="center aligned" id="@item.Id">
+            <tr class="center aligned" id="@item.Id" data-productid="@item.ProductId">
                 <td class="two wide collapsing">
                     @item.ProductId
                 </td>
@@ -29,6 +29,9 @@
                 <td class="one wide">@item.PublishedAt.ToString()</td>
 
                 <td class="collapsing">
+                    <button class="ui circular blue icon button" data-content="查看">
+                        <i class="external icon"></i>
+                    </button>
                     <button class="ui circular blue icon button" data-content="编辑">
                         <i class="edit icon"></i>
                     </button>

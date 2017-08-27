@@ -450,14 +450,9 @@
                                 $target.addClass('loading');
                             },
                             data: {
-<<<<<<< HEAD
-                                itemId: ProductInfo.TripId, itemName: ProductInfo.ProductName,
-                                type: '旅行团订单', __RequestVerificationToken: token
-=======
                                 itemId: ProductInfo.ProductId, itemName: ProductInfo.ProductName,
                                 type: '旅行团订单', image: ProductInfo.FrontCover,
                                 __RequestVerificationToken: token
->>>>>>> 0afddffbd2fa89623103eff800cc1262e25cab30
                             },
                             success: function (data) {
                                 _this.updateCollectionStatus(data.Success);

@@ -42,9 +42,13 @@
         })
         $table.delegate('button.circular', 'click', function (e) {
             var $button = $(e.currentTarget)
-                , tripId = $button.parents('tr').attr('id');
+                , tripId = $button.parents('tr').attr('id'),
+                productId = $button.parents('tr').data('productid');
             var content = $button.data('content');
             switch (content) {
+                case '查看':
+                    window.open('/Finder/TripDetail?ProductId=' + productId);
+                    break;
                 case '编辑':
                     window.open('/Page/EditTripManagement?tripId=' + tripId);
                     break;
