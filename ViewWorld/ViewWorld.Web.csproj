@@ -1223,6 +1223,7 @@
     <Content Include="Views\PartialViews\_PartialCollection.cshtml" />
     <Content Include="Views\User\MyCollections.cshtml" />
     <Content Include="Views\User\OrderDetail.cshtml" />
+    <Content Include="Views\User\FillOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -55,6 +55,26 @@ namespace ViewWorld.Controllers.Frontend
 
             return PartialView("~/Views/PartialViews/_PartialOrderList.cshtml",list.OrderByDescending(o=>o.LastModifiedAt).ToPagedList(pageNum,4));
         }
+        public async Task<ActionResult> FillOrder(string orderId)
+        {
+            if (string.IsNullOrEmpty(orderId))
+            {
+                return Content("订单号不能为空");
+            }
+            var result = await orderService.RetrieveOrdersById(orderId);
+            if (result.Success)
+            {
+                if (result.Entity.UserId != UserId || result.Entity.Status != OrderStatus.新创建订单)
+                {
+                    return Content("您没有权限查看该订单");
+                }
+                else
+                {
+                    return View(result.Entity);
+                }
+            }
+            return Content("找不到该订单");
+        }
         public async Task<ActionResult> OrderDetail(string orderId)
         {
             if (string.IsNullOrEmpty(orderId))
@@ -70,6 +90,10 @@ namespace ViewWorld.Controllers.Frontend
                 }
                 else
                 {
+                    if(result.Entity.Status == OrderStatus.新创建订单)
+                    {
+                        return RedirectToAction("FillOrder", "User", new { orderId = orderId });
+                    }
                     return View(result.Entity);
                 }
             }

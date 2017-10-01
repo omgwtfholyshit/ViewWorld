@@ -1,0 +1,219 @@
+﻿@model ViewWorld.Core.Models.BusinessModels.BusinessOrder
+
+@{
+    ViewBag.Title = "FillOrder";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+
+<h2>FillOrder</h2>
+
+<div>
+    <h4>BusinessOrder</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ItemName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastModifiedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastModifiedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CommenceDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommenceDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinishDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinishDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderImage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderImage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModificatorId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModificatorId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModificatorName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModificatorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalesName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalesName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProviderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProviderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDetail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDetail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SelfChooseActivities)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SelfChooseActivities)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentSource)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentSource)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ThirdPartyPaymentId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ThirdPartyPaymentId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderCurrency)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderCurrency)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
