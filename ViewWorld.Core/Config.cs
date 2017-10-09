@@ -4,7 +4,7 @@ using System.Web;
 
 namespace ViewWorld.Core
 {
-    public class Config
+    internal sealed class Config
     {
         /// <summary>
         /// 日志文件路径
@@ -13,14 +13,16 @@ namespace ViewWorld.Core
         /// <summary>
         /// 数据库连接IP
         /// </summary>
-        public static string DB_HostIP { get; private set; }
-        public static int DB_Port { get; private set; }
-        public static string SMTPHost { get; private set; }
-        public static int SMTPPort { get; private set; }
-        public static string EmailAddress { get; private set; }
-        public static string EmailPass { get; private set; }
-        public static string QQAppId { get; private set; }
-        public static string QQAppKey { get; private set; }
+        public static string DB_HostIP { get; }
+        public static int DB_Port { get; }
+        public static string SMTPHost { get; }
+        public static int SMTPPort { get; }
+        public static string EmailAddress { get; }
+        public static string EmailPass { get; }
+        public static string QQAppId { get; }
+        public static string QQAppKey { get; }
+        public static string WechatAppId { get; }
+        public static string WechatAppKey { get; }
         static Config()
         {
             DB_HostIP = ConfigurationManager.AppSettings["dbHostIP"];
@@ -31,6 +33,8 @@ namespace ViewWorld.Core
             EmailPass = ConfigurationManager.AppSettings["FormEmailPassword"];
             QQAppId = ConfigurationManager.AppSettings["QQAppId"];
             QQAppKey = ConfigurationManager.AppSettings["QQAppKey"];
+            WechatAppId = ConfigurationManager.AppSettings["WechatAppId"];
+            WechatAppKey = ConfigurationManager.AppSettings["WechatAppKey"];
         }
     }
 }
