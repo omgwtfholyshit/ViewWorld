@@ -77,7 +77,7 @@ namespace ViewWorld
                 .And
                 .WithRedisConfiguration("redisConnection", config =>
                 config
-                .WithConnectionTimeout(10000)
+                .WithConnectionTimeout(5000)
                 .WithEndpoint(ConfigurationManager.AppSettings["cacheHostIP"],
                  Convert.ToInt32(ConfigurationManager.AppSettings["cachePort"])))
                 .WithJsonSerializer()
