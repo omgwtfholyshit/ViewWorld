@@ -429,7 +429,7 @@
             if (_this.SelfChooseActivities.length > 0) {
                 $.each(_this.SelfChooseActivities, function (index, element) {
                     data = element.split('|');
-                    html += '<tr><td><input type="text" name="name" value=' + data[0] + ' /></td><td><input type="text" name="price" value=' + data[1] + ' /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
+                    html += '<tr><td><input type="text" name="name" value=' + data[0] + ' /></td><td><input type="text" name="price" value=' + data[1].replaceAll(" ", "") + ' /></td><td><button class="ui red icon button delete"><i class="icon delete"></i></button></td></tr>';
                 })
             }
             $('#selfChooseActivities tbody').html(html);
